@@ -1,22 +1,47 @@
-# Fabric Example Mod
+# 🧩 Fabric Command Generator – Minecraft 1.21.7
 
-## Features
+A lightweight, portable command generator mod for Minecraft Fabric servers.  
+Designed to work entirely in JSON—no external functions, no dependencies, and no admin rights required.
 
-- Add custom command aliases in-game with `/addcommand <alias> <target command...>`.
-- Aliases are stored in `config/modid_aliases.json` and loaded on server start.
+---
 
-## Usage
+## 📚 Contents
 
-```
-/addcommand greet say Hello world!
-/greet
-```
-This will run `/say Hello world!` when you type `/greet`.
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Compile from Source](#compile-from-source)
+- [Bug Reports & Feedback](#bug-reports--feedback)
+- [Contributing](#contributing)
+- [Disclaimer](#disclaimer)
 
-## Setup
+---
 
-For setup instructions please see the [fabric documentation page](https://docs.fabricmc.net/develop/getting-started/setting-up-a-development-environment) that relates to the IDE that you are using.
+## ✨ Features
 
-## License
+- ✅ Vanilla-compatible `/crash` command (JSON-only logic)
+- 🧪 Modular command generation for Fabric 1.21.7
+- 🔒 Admin-free setup—no elevated permissions required
+- 📁 Portable structure for locked-down environments
+- 🛠️ Designed for reproducibility and community sharing
 
-This template is available under the CC0 license. Feel free to learn from it and incorporate it in your own projects.
+---
+
+## 📦 Installation
+
+1. Go to the [Releases tab](https://github.com/YOUR_USERNAME/YOUR_REPO/releases)
+2. Download the latest `.jar` file
+3. Drop it into your server’s `mods/` folder
+4. Make sure you’re running **Minecraft 1.21.7** with **Fabric Loader**
+5. Restart the server and test with `/crash` or other generated commands
+
+---
+
+## ⚙️ Usage
+
+This mod generates commands using Minecraft’s built-in JSON structure.  
+You can define custom behaviors without writing external functions.
+
+Example usage:
+```mcfunction
+/crash @p
