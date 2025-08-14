@@ -1,7 +1,7 @@
-# 🧩 Fabric Command Generator – Minecraft 1.21.7
+# 🧩 Minecraft Command Maker – Fabric 1.21.7
 
 A lightweight, portable command generator mod for Minecraft Fabric servers.  
-Designed to work entirely in JSON—no external functions, no dependencies, and no admin rights required.
+Built entirely in JSON—no external functions, no dependencies, and no admin rights required.
 
 ---
 
@@ -29,7 +29,7 @@ Designed to work entirely in JSON—no external functions, no dependencies, and 
 
 ## 📦 Installation
 
-1. Go to the [Releases tab](https://github.com/YOUR_USERNAME/YOUR_REPO/releases)
+1. Go to the [Releases tab](https://github.com/lucgei231/Minecraft-Command-Maker/releases)
 2. Download the latest `.jar` file
 3. Drop it into your server’s `mods/` folder
 4. Make sure you’re running **Minecraft 1.21.7** with **Fabric Loader**
