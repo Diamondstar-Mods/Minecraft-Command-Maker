@@ -1,1 +1,56 @@
+name: Bump Version and Tag
 
+on:
+  push:
+    branches:
+      - fabric-1.21.7
+
+jobs:
+  bump-version:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Bump version and create tag
+        id: bump
+        run: |
+          # If VERSION doesn't exist, create it
+          if [ ! -f VERSION ]; then
+            echo "1.0.0" > VERSION
+          fi
+
+          # Read version and bump
+          version=$(cat VERSION)
+          IFS='.' read -r major minor patch <<< "$version"
+          patch=$((patch + 1))
+          if [ $patch -ge 10 ]; then
+            patch=0
+            minor=$((minor + 1))
+          fi
+          if [ $minor -ge 10 ]; then
+            minor=0
+            major=$((major + 1))
+          fi
+          new_version="$major.$minor.$patch"
+          echo "$new_version" > VERSION
+          echo "new_version=$new_version" >> $GITHUB_OUTPUT
+
+          # Only commit if changed
+          if ! git diff --quiet VERSION; then
+            git add VERSION
+            git commit -m "Bump version to $new_version"
+            git push origin HEAD:${GITHUB_REF#refs/heads/}
+          fi
+
+          # Tag the commit and push the tag
+          git tag v$new_version
+          git push origin v$new_version
