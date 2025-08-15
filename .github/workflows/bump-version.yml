@@ -1,4 +1,4 @@
-name: Bump Version and Tag
+name: Bump Version
 
 on:
   push:
@@ -12,8 +12,7 @@ jobs:
       contents: write
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -22,13 +21,12 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Bump version and create tag
+      - name: Bump version
         id: bump
         run: |
           if [ ! -f VERSION ]; then
             echo "1.0.0" > VERSION
           fi
-
           version=$(cat VERSION)
           IFS='.' read -r major minor patch <<< "$version"
           patch=$((patch + 1))
@@ -42,18 +40,11 @@ jobs:
           fi
           new_version="$major.$minor.$patch"
           echo "$new_version" > VERSION
-          echo "new_version=$new_version" >> $GITHUB_OUTPUT
-
           git add VERSION
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else
             git commit -m "Bump version to $new_version"
-            # Pull remote changes (with rebase) to avoid non-fast-forward error
             git pull --rebase origin ${GITHUB_REF#refs/heads/}
             git push origin HEAD:${GITHUB_REF#refs/heads/}
           fi
-
-          # Always tag and push the tag
-          git tag v$new_version
-          git push origin v$new_version
