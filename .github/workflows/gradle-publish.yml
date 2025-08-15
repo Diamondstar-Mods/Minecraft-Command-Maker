@@ -2,14 +2,15 @@
 # They are provided by a third-party and are governed by
 # separate terms of service, privacy policy, and support
 # documentation.
-# This workflow will build a package using Gradle and then publish it to GitHub packages when a release is created
+# This workflow will build a package using Gradle and then publish it to GitHub packages when a commit is pushed
 # For more information see: https://github.com/actions/setup-java/blob/main/docs/advanced-usage.md#Publishing-using-gradle
 
 name: Gradle Package
 
 on:
-  release:
-    types: [created]
+  push:
+    branches:
+      - '**'
 
 jobs:
   build:
