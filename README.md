@@ -29,7 +29,7 @@ Built entirely in JSON—no external functions, no dependencies, and no admin ri
 
 ## Installation
 
-1. Go to the [Releases tab](https://github.com/lucgei231/Minecraft-Command-Maker/releases)
+1. Go to the [Releases tab](https://github.com/Diamondstar-Mods/Minecraft-Command-Maker/releases)
 2. Download the latest `.jar` file
 3. Drop it into your server’s `mods/` folder
 4. Make sure you’re running **Minecraft 1.21.7** with **Fabric Loader**
@@ -67,7 +67,7 @@ You can build this mod yourself using the included Gradle wrapper. Here's how:
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/lucgei231/Minecraft-Command-Maker.git
+   git clone https://github.com/Diamondstar-Mods/Minecraft-Command-Maker.git
    cd Minecraft-Command-Maker
    ```
 
@@ -98,7 +98,7 @@ You can build this mod yourself using the included Gradle wrapper. Here's how:
 ## Bug Reports & Feedback
 
 Found a bug? Have a suggestion?  
-Please [open an issue](https://github.com/lucgei231/Minecraft-Command-Maker/issues) with:
+Please [open an issue](https://github.com/Diamondstar-Mods/Minecraft-Command-Maker/issues) with:
 
 - Minecraft + Fabric version
 - Steps to reproduce
