@@ -4,7 +4,7 @@ plugins {
 }
 
 version = project.mod_version
-group = project.maven_group
+group = 'io.github.diamondstar_mods' // <-- update this to match your GitHub org/user
 
 base {
     archivesName = project.archives_base_name
