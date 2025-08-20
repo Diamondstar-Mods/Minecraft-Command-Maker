@@ -4,7 +4,7 @@ plugins {
 }
 
 version = project.mod_version
-group = project.maven_group
+group = 'io.github.diamondstar_mods' // <-- update this to match your GitHub org/user
 
 base {
     archivesName = project.archives_base_name
@@ -75,6 +75,13 @@ publishing {
         }
     }
     repositories {
-        // Add publishing targets here if needed
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/${System.getenv('GITHUB_REPOSITORY')}")
+            credentials {
+                username = System.getenv("USERNAME")
+                password = System.getenv("TOKEN")
+            }
+        }
     }
 }
