@@ -19,12 +19,13 @@ public class ExampleMod implements ModInitializer {
 	public static final String MOD_ID = "modid";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
-	private static final Path CONFIG_PATH = Paths.get("config", MOD_ID + "_aliases.json");
+	private static final Path CONFIG_PATH = Paths.get("config", "CommandMaker", "aliases.json");
 	private static final Map<String, String> aliases = new HashMap<>();
 	// Store per-player custom variables: player UUID -> (varName -> value)
 	private static final Map<UUID, Map<String, String>> playerVariables = new HashMap<>();
 	@Override
 	public void onInitialize() {
+		ensureConfigExists();
 		loadAliases();
 		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
 			registerAddCommand(dispatcher);
@@ -32,6 +33,30 @@ public class ExampleMod implements ModInitializer {
 			registerSetCmdVariable(dispatcher);
 		});
 		LOGGER.info("Alias mod initialized!");
+	}
+
+	// Ensure config folder and aliases.json exist, create with example if not
+	private void ensureConfigExists() {
+		try {
+			Path folder = CONFIG_PATH.getParent();
+			if (!Files.exists(folder)) {
+				Files.createDirectories(folder);
+			}
+			if (!Files.exists(CONFIG_PATH)) {
+				List<String> lines = new ArrayList<>();
+				lines.add("# CommandMaker Aliases Config");
+				lines.add("# Each entry is an alias and its command target.");
+				lines.add("# You can use variables like ${player}, ${x}, ${y}, ${z} in the command.");
+				lines.add("# Example:");
+				lines.add("#   teleport=tp ${player} 0 100 0");
+				lines.add("#   greet=say Hello, ${player}!");
+				lines.add("{");
+				lines.add("}");
+				Files.write(CONFIG_PATH, lines, StandardOpenOption.CREATE_NEW);
+			}
+		} catch (Exception e) {
+			LOGGER.error("Failed to create config folder or file", e);
+		}
 	}
 
 	// Register /addcommand (reload|add|del) ...
@@ -172,12 +197,20 @@ public class ExampleMod implements ModInitializer {
 	private void loadAliases() {
 		aliases.clear();
 		try {
-			if (Files.exists(CONFIG_PATH)) {
-				String json = Files.readString(CONFIG_PATH);
-				JsonObject obj = JsonParser.parseString(json).getAsJsonObject();
-				for (Map.Entry<String, JsonElement> entry : obj.entrySet()) {
-					aliases.put(entry.getKey(), entry.getValue().getAsString());
-				}
+			if (!Files.exists(CONFIG_PATH)) {
+				ensureConfigExists();
+			}
+			List<String> lines = Files.readAllLines(CONFIG_PATH);
+			StringBuilder jsonBuilder = new StringBuilder();
+			for (String line : lines) {
+				if (line.trim().startsWith("#")) continue;
+				jsonBuilder.append(line).append("\n");
+			}
+			String json = jsonBuilder.toString().trim();
+			if (json.isEmpty() || json.equals("{}")) return;
+			JsonObject obj = JsonParser.parseString(json).getAsJsonObject();
+			for (Map.Entry<String, JsonElement> entry : obj.entrySet()) {
+				aliases.put(entry.getKey(), entry.getValue().getAsString());
 			}
 		} catch (Exception e) {
 			LOGGER.error("Failed to load aliases config", e);
@@ -187,11 +220,19 @@ public class ExampleMod implements ModInitializer {
 	private void saveAliases() {
 		try {
 			Files.createDirectories(CONFIG_PATH.getParent());
+			List<String> lines = new ArrayList<>();
+			lines.add("# CommandMaker Aliases Config");
+			lines.add("# Each entry is an alias and its command target.");
+			lines.add("# You can use variables like ${player}, ${x}, ${y}, ${z} in the command.");
+			lines.add("# Example:");
+			lines.add("#   teleport=tp ${player} 0 100 0");
+			lines.add("#   greet=say Hello, ${player}!");
 			JsonObject obj = new JsonObject();
 			for (Map.Entry<String, String> entry : aliases.entrySet()) {
 				obj.addProperty(entry.getKey(), entry.getValue());
 			}
-			Files.writeString(CONFIG_PATH, obj.toString(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+			lines.add(obj.toString());
+			Files.write(CONFIG_PATH, lines, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
 		} catch (Exception e) {
 			LOGGER.error("Failed to save aliases config", e);
 		}
