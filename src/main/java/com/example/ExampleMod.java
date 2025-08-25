@@ -47,9 +47,13 @@ public class ExampleMod implements ModInitializer {
 				lines.add("# CommandMaker Aliases Config");
 				lines.add("# Each entry is an alias and its command target.");
 				lines.add("# You can use variables like ${player}, ${x}, ${y}, ${z} in the command.");
+				lines.add("# You can use argument variables like ${1}, ${2}, ... for user-supplied arguments.");
+				lines.add("# To run multiple commands, use a JSON array as the value for the alias.");
 				lines.add("# Example:");
-				lines.add("#   teleport=tp ${player} 0 100 0");
-				lines.add("#   greet=say Hello, ${player}!");
+				lines.add("#   teleport: 'tp ${player} 0 100 0'");
+				lines.add("#   greet: 'say Hello, ${player}!'");
+				lines.add("#   kit: ['give ${player} diamond_sword 1', 'give ${player} diamond_helmet 1']");
+				lines.add("#   giveme: 'give ${player} ${1} ${2}'");
 				lines.add("{");
 				lines.add("}");
 				Files.write(CONFIG_PATH, lines, StandardOpenOption.CREATE_NEW);
@@ -152,25 +156,71 @@ public class ExampleMod implements ModInitializer {
 		dispatcher.getRoot().getChildren().removeIf(node -> node.getName().equals(alias));
 		dispatcher.register(
 			net.minecraft.server.command.CommandManager.literal(alias)
-				.executes(ctx -> {
-					ServerCommandSource source = ctx.getSource();
-					String command = substituteVariables(target, ctx);
-					CommandDispatcher<ServerCommandSource> cmdDispatcher = source.getServer().getCommandManager().getDispatcher();
-					ParseResults<ServerCommandSource> parsed = cmdDispatcher.parse(command, source);
-					return cmdDispatcher.execute(parsed);
-				})
 				.then(net.minecraft.server.command.CommandManager.argument("args", StringArgumentType.greedyString())
-					.executes(ctx -> {
-						String args = StringArgumentType.getString(ctx, "args");
-						String full = target + " " + args;
-						String command = substituteVariables(full, ctx);
-						ServerCommandSource source = ctx.getSource();
-						CommandDispatcher<ServerCommandSource> cmdDispatcher = source.getServer().getCommandManager().getDispatcher();
-						ParseResults<ServerCommandSource> parsed = cmdDispatcher.parse(command, source);
-						return cmdDispatcher.execute(parsed);
-					})
+					.executes(ctx -> executeAlias(alias, ctx))
 				)
+				.executes(ctx -> executeAlias(alias, ctx))
 		);
+	}
+
+	// Execute an alias, supporting multiple commands and argument substitution
+	private int executeAlias(String alias, CommandContext<ServerCommandSource> ctx) {
+		ServerCommandSource source = ctx.getSource();
+		String raw = aliases.get(alias);
+		List<String> commands = new ArrayList<>();
+		try {
+			JsonElement el = JsonParser.parseString(raw);
+			if (el.isJsonArray()) {
+				for (JsonElement e : el.getAsJsonArray()) {
+					commands.add(e.getAsString());
+				}
+			} else if (el.isJsonPrimitive()) {
+				commands.add(el.getAsString());
+			}
+		} catch (Exception e) {
+			LOGGER.error("Failed to parse alias commands for " + alias, e);
+			return 0;
+		}
+		// Parse arguments
+		String args = "";
+		try { args = StringArgumentType.getString(ctx, "args"); } catch (Exception ignored) {}
+		String[] splitArgs = args.isEmpty() ? new String[0] : args.split("\\s+");
+		int result = 1;
+		for (String cmd : commands) {
+			String substituted = substituteVariablesWithArgs(cmd, ctx, splitArgs);
+			CommandDispatcher<ServerCommandSource> cmdDispatcher = source.getServer().getCommandManager().getDispatcher();
+			ParseResults<ServerCommandSource> parsed = cmdDispatcher.parse(substituted, source);
+			try {
+				result = cmdDispatcher.execute(parsed);
+			} catch (com.mojang.brigadier.exceptions.CommandSyntaxException e) {
+				LOGGER.error("Command execution failed for alias: " + alias, e);
+			}
+		}
+		return result;
+	}
+
+	// Substitute variables in the command string, including argument placeholders
+	private String substituteVariablesWithArgs(String command, CommandContext<ServerCommandSource> ctx, String[] splitArgs) {
+		ServerCommandSource source = ctx.getSource();
+		Map<String, String> vars = new HashMap<>();
+		try {
+			vars.put("player", source.getName());
+			vars.put("x", String.valueOf(source.getPosition().x));
+			vars.put("y", String.valueOf(source.getPosition().y));
+			vars.put("z", String.valueOf(source.getPosition().z));
+			UUID uuid = source.getPlayer() != null ? source.getPlayer().getUuid() : null;
+			if (uuid != null && playerVariables.containsKey(uuid)) {
+				vars.putAll(playerVariables.get(uuid));
+			}
+		} catch (Exception ignored) {}
+		// Add argument variables ${1}, ${2}, ...
+		for (int i = 0; i < splitArgs.length; i++) {
+			vars.put(String.valueOf(i + 1), splitArgs[i]);
+		}
+		for (Map.Entry<String, String> entry : vars.entrySet()) {
+			command = command.replace("${" + entry.getKey() + "}", entry.getValue());
+		}
+		return command;
 	}
 
 	// Substitute variables in the command string, e.g. ${player}, ${x}, etc. and custom variables
@@ -210,7 +260,8 @@ public class ExampleMod implements ModInitializer {
 			if (json.isEmpty() || json.equals("{}")) return;
 			JsonObject obj = JsonParser.parseString(json).getAsJsonObject();
 			for (Map.Entry<String, JsonElement> entry : obj.entrySet()) {
-				aliases.put(entry.getKey(), entry.getValue().getAsString());
+				// Store as stringified JSON for each alias (could be string or array)
+				aliases.put(entry.getKey(), entry.getValue().toString());
 			}
 		} catch (Exception e) {
 			LOGGER.error("Failed to load aliases config", e);
@@ -224,12 +275,17 @@ public class ExampleMod implements ModInitializer {
 			lines.add("# CommandMaker Aliases Config");
 			lines.add("# Each entry is an alias and its command target.");
 			lines.add("# You can use variables like ${player}, ${x}, ${y}, ${z} in the command.");
+			lines.add("# You can use argument variables like ${1}, ${2}, ... for user-supplied arguments.");
+			lines.add("# To run multiple commands, use a JSON array as the value for the alias.");
 			lines.add("# Example:");
-			lines.add("#   teleport=tp ${player} 0 100 0");
-			lines.add("#   greet=say Hello, ${player}!");
+			lines.add("#   teleport: 'tp ${player} 0 100 0'");
+			lines.add("#   greet: 'say Hello, ${player}!'");
+			lines.add("#   kit: ['give ${player} diamond_sword 1', 'give ${player} diamond_helmet 1']");
+			lines.add("#   giveme: 'give ${player} ${1} ${2}'");
 			JsonObject obj = new JsonObject();
 			for (Map.Entry<String, String> entry : aliases.entrySet()) {
-				obj.addProperty(entry.getKey(), entry.getValue());
+				JsonElement el = JsonParser.parseString(entry.getValue());
+				obj.add(entry.getKey(), el);
 			}
 			lines.add(obj.toString());
 			Files.write(CONFIG_PATH, lines, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);

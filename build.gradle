@@ -40,14 +40,23 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
+    // Quilt Loader and Quilted Fabric API (for Quilt compatibility)
+    modImplementation("org.quiltmc:quilt-loader:0.22.0") // Use latest compatible version
+    modImplementation("org.quiltmc.quilted-fabric-api:quilted-fabric-api:${project.fabric_version}")
+
     // Optional: JSON parsing
     implementation "com.google.code.gson:gson:2.10.1"
 }
+
 
 processResources {
     inputs.property "version", project.version
     filesMatching("fabric.mod.json") {
         expand "version": inputs.properties["version"]
+    }
+    // Copy quilt.mod.json to the output jar
+    from("src/main/resources/quilt.mod.json") {
+        into ""
     }
 }
 
