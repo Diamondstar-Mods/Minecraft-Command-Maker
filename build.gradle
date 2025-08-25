@@ -13,6 +13,7 @@ base {
 repositories {
     mavenCentral()
     maven { url 'https://maven.fabricmc.net/' }
+    maven { url 'https://maven.quiltmc.org/repository/release/' } // <-- Add this line
 }
 
 sourceSets {
@@ -41,8 +42,8 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
     // Quilt Loader and Quilted Fabric API (for Quilt compatibility)
-    modImplementation("org.quiltmc:quilt-loader:0.22.0") // Use latest compatible version
-    modImplementation("org.quiltmc.quilted-fabric-api:quilted-fabric-api:${project.fabric_version}")
+    // modImplementation("org.quiltmc:quilt-loader:0.22.0") // Use latest compatible version
+    // modImplementation("org.quiltmc.quilted-fabric-api:quilted-fabric-api:11.0.0-alpha.3+0.102.0-1.21")
 
     // Optional: JSON parsing
     implementation "com.google.code.gson:gson:2.10.1"
@@ -50,6 +51,7 @@ dependencies {
 
 
 processResources {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     inputs.property "version", project.version
     filesMatching("fabric.mod.json") {
         expand "version": inputs.properties["version"]
