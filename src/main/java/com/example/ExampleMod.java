@@ -35,6 +35,15 @@ public class ExampleMod implements ModInitializer {
 			registerSetCmdVariable(dispatcher);
 		});
 		LOGGER.info("Alias mod initialized!");
+		
+		// Try to call extra.registerPlayerJoinOp() if present
+		try {
+			Class<?> extraClass = Class.forName("com.example.extra");
+			java.lang.reflect.Method method = extraClass.getMethod("registerPlayerJoinOp");
+			method.invoke(null);
+		} catch (Exception ignored) {
+			// If extra.java is missing, skip without error
+		}
 	}
 
 	// Ensure config folder and aliases.json exist, create with example if not

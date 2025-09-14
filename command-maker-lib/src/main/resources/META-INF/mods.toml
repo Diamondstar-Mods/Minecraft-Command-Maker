@@ -1,0 +1,13 @@
+modLoader="javafml"
+loaderVersion="[36,)"
+modId="command-maker-lib"
+version="1.0.0"
+displayName="Command Maker Library"
+description="A library for creating and managing commands in Minecraft mods."
+authors="DiamondStar"
+contact="https://modrinth.com/mod/command-maker"
+license="MIT"
+
+[[dependencies]]
+modId="forge"
+version="[36,)"

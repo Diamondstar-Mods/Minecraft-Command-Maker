@@ -1,0 +1,53 @@
+plugins {
+    id 'java'
+    id 'maven-publish'
+}
+
+group = 'com.diamondstar'
+version = '1.0.0'
+
+repositories {
+    mavenCentral()
+    maven { url 'https://maven.fabricmc.net/' }
+}
+
+dependencies {
+    // Add any dependencies required for the library here
+    implementation 'net.fabricmc:fabric-loader:0.16.14'
+    implementation 'net.fabricmc:fabric-api:0.99.4+1.21'
+}
+
+java {
+    withSourcesJar()
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            pom {
+                name = 'Command Maker Library'
+                description = 'A library for creating commands in Minecraft.'
+                url = 'https://modrinth.com/mod/command-maker'
+                licenses {
+                    license {
+                        name = 'MIT License'
+                        url = 'https://opensource.org/licenses/MIT'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'diamondstar'
+                        name = 'Diamondstar'
+                        email = 'contact@diamondstar.com'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:git://github.com/diamondstar/command-maker-lib.git'
+                    developerConnection = 'scm:git:ssh://github.com/diamondstar/command-maker-lib.git'
+                    url = 'https://github.com/diamondstar/command-maker-lib'
+                }
+            }
+        }
+    }
+}
