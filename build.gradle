@@ -4,6 +4,7 @@ plugins {
 }
 
 version = project.mod_version
+description = "This is an example description! Compatible with Fabric and Quilt. Supports Minecraft 1.20 to 1.21.9."
 group = 'io.github.diamondstar_mods' // <-- update this to match your GitHub org/user
 
 base {
@@ -13,6 +14,7 @@ base {
 repositories {
     mavenCentral()
     maven { url 'https://maven.fabricmc.net/' }
+    maven { url 'https://maven.quiltmc.org/repository/release/' }
 }
 
 sourceSets {
@@ -39,6 +41,9 @@ dependencies {
     // Fabric Loader and API
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+    // Quilt Loader (optional, for compatibility)
+    modImplementation("org.quiltmc:quilt-loader:0.20.0")
 
     // Optional: JSON parsing
     implementation "com.google.code.gson:gson:2.10.1"

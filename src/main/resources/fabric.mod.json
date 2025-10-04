@@ -31,9 +31,10 @@
 	],
 	"depends": {
 		"fabricloader": ">=0.15.0",
-		"minecraft": ">=1.20 <=1.21.8",
+		"minecraft": ">=1.20 <=1.21.9",
 		"java": ">=21",
-		"fabric-api": "*"
+		"fabric-api": "*",
+		"quilt_loader": ">=0.20.0"
 	},
 	"suggests": {
 		"another-mod": "*"
