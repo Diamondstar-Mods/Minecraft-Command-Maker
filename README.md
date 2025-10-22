@@ -1,3 +1,5 @@
+#**RELEASES WILL NO LONGER BE RELEASED ON GITHUB. TO SEE LATEST RELEASES, VISIT THIS PAGE: https://modrinth.com/mod/command-maker/versions**
+
 # 🧩 Minecraft Command Maker – Fabric 1.21.7
 
 A lightweight, portable command generator mod for Minecraft Fabric servers.  
