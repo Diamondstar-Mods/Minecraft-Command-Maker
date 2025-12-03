@@ -2,6 +2,7 @@
 	"required": false,
 	"package": "com.example.mixin.client",
 	"compatibilityLevel": "JAVA_21",
+	"mixins": [],
 	"client": [
 	],
 	"injectors": {

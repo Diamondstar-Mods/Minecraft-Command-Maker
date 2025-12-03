@@ -31,6 +31,7 @@ public class ExampleMod implements ModInitializer {
 			registerAddCommand(dispatcher);
 			registerAliases(dispatcher);
 			registerSetCmdVariable(dispatcher);
+			registerDeleteAliasMenu(dispatcher);
 		});
 		LOGGER.info("Alias mod initialized!");
 	}
@@ -287,4 +288,44 @@ public class ExampleMod implements ModInitializer {
 		} catch (Exception e) {
 			LOGGER.error("Failed to save aliases config", e);
 		}
+	}
+
+	private void registerDeleteAliasMenu(CommandDispatcher<ServerCommandSource> dispatcher) {
+		dispatcher.register(
+			net.minecraft.server.command.CommandManager.literal("deletealias")
+				.executes(ctx -> {
+					ServerCommandSource source = ctx.getSource();
+					if (aliases.isEmpty()) {
+						source.sendFeedback(() -> net.minecraft.text.Text.literal("§cNo aliases to delete."), false);
+						return 0;
+					}
+					// Send a message listing all aliases with delete instructions
+					source.sendFeedback(() -> net.minecraft.text.Text.literal("§6Delete Aliases Menu:"), false);
+					final int[] index = {1};
+					for (String alias : aliases.keySet()) {
+						String cmd = aliases.get(alias);
+						int idx = index[0];
+						source.sendFeedback(() -> net.minecraft.text.Text.literal("  §f[" + idx + "] §6/" + alias + " §7-> §f" + cmd), false);
+						index[0]++;
+					}
+					source.sendFeedback(() -> net.minecraft.text.Text.literal("§7Use: §f/addcommand del <alias>§7 to delete"), false);
+					return 1;
+				})
+				.then(net.minecraft.server.command.CommandManager.argument("alias", StringArgumentType.word())
+					.executes(ctx -> {
+						String alias = StringArgumentType.getString(ctx, "alias");
+						ServerCommandSource source = ctx.getSource();
+						if (aliases.containsKey(alias)) {
+							aliases.remove(alias);
+							saveAliases();
+							dispatcher.getRoot().getChildren().removeIf(node -> node.getName().equals(alias));
+							source.sendFeedback(() -> net.minecraft.text.Text.literal("§6[" + alias + "] was deleted"), false);
+							return 1;
+						} else {
+							source.sendFeedback(() -> net.minecraft.text.Text.literal("§cAlias '§f" + alias + "§c' not found."), false);
+							return 0;
+						}
+					})
+				)
+		);
 	}}
