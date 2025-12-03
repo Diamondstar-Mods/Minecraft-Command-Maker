@@ -2,14 +2,14 @@
 	"schemaVersion": 1,
 	"id": "modid",
 	"version": "${version}",
-	"name": "Example mod",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"name": "Nek's Command Maker!",
+	"description": "NEKKY COMMAND MAKER",
 	"authors": [
-		"Me!"
+		"NekSheep9180 aka lucgei231"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://github.com/Diamondstar-Mods/Minecraft-Command-Maker",
+		"sources": "https://github.com/Diamondstar-Mods/Minecraft-Command-Maker"
 	},
 	"license": "CC0-1.0",
 	"icon": "assets/modid/icon.png",
@@ -31,10 +31,9 @@
 	],
 	"depends": {
 		"fabricloader": ">=0.15.0",
-		"minecraft": ">=1.20 <=1.21.11",
+		"minecraft": ">=1.20 <=1.22",
 		"java": ">=21",
-		"fabric-api": "*",
-		"quilt_loader": ">=0.20.0"
+		"fabric-api": "*"
 	},
 	"suggests": {
 		"another-mod": "*"
