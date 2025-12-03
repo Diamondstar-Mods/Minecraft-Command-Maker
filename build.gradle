@@ -4,7 +4,7 @@ plugins {
 }
 
 version = project.mod_version
-description = "This is an example description! Compatible with Fabric and Quilt. Supports Minecraft 1.20 to 1.21.9."
+description = "This is an example description! Compatible with Fabric and Quilt. Supports Minecraft 1.20 to 1.21.11."
 group = 'io.github.diamondstar_mods' // <-- update this to match your GitHub org/user
 
 base {

@@ -1,7 +1,10 @@
 package com.example;
 
-public class ExampleMod {
-	public void onInitialize() {
-		// This entrypoint is suitable for setting up mod initialization logic.
+import net.fabricmc.api.ClientModInitializer;
+
+public class ExampleModClient implements ClientModInitializer {
+	@Override
+	public void onInitializeClient() {
+		// Client-side initialization goes here
 	}
 }

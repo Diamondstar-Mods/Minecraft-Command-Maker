@@ -202,18 +202,69 @@ public class ExampleMod implements ModInitializer {
 			}
 			List<String> lines = Files.readAllLines(CONFIG_PATH);
 			StringBuilder jsonBuilder = new StringBuilder();
+			List<String> legacyLines = new ArrayList<>();
 			for (String line : lines) {
-				if (line.trim().startsWith("#")) continue;
+				String trimmed = line.trim();
+				// Skip comments and empty lines
+				if (trimmed.isEmpty() || trimmed.startsWith("#") || trimmed.startsWith("//")) continue;
+				// Collect for JSON parsing
 				jsonBuilder.append(line).append("\n");
+				// Also track potential legacy key=value lines
+				if (!trimmed.startsWith("{") && trimmed.contains("=") && !trimmed.contains("{") && !trimmed.contains("}")) {
+					legacyLines.add(line);
+				}
 			}
 			String json = jsonBuilder.toString().trim();
-			if (json.isEmpty() || json.equals("{}")) return;
-			JsonObject obj = JsonParser.parseString(json).getAsJsonObject();
-			for (Map.Entry<String, JsonElement> entry : obj.entrySet()) {
-				aliases.put(entry.getKey(), entry.getValue().getAsString());
+			boolean loaded = false;
+			
+			// Try JSON parsing first
+			if (!json.isEmpty() && !json.equals("{}")) {
+				try {
+					JsonElement pe = JsonParser.parseString(json);
+					if (pe != null && pe.isJsonObject()) {
+						JsonObject obj = pe.getAsJsonObject();
+						for (Map.Entry<String, JsonElement> entry : obj.entrySet()) {
+							try {
+								aliases.put(entry.getKey(), entry.getValue().getAsString());
+							} catch (Exception e) {
+								LOGGER.warn("Skipping malformed alias entry: " + entry.getKey(), e);
+							}
+						}
+						loaded = true;
+						LOGGER.info("Loaded " + aliases.size() + " aliases from JSON config");
+					}
+				} catch (Exception je) {
+					LOGGER.warn("JSON parse failed, attempting legacy key=value format", je);
+				}
+			}
+			
+			// Fallback to legacy key=value format if JSON failed
+			if (!loaded && !legacyLines.isEmpty()) {
+				for (String l : legacyLines) {
+					String trimmed = l.trim();
+					if (trimmed.startsWith("#") || trimmed.startsWith("//") || !trimmed.contains("=")) continue;
+					try {
+						int idx = trimmed.indexOf('=');
+						String key = trimmed.substring(0, idx).trim();
+						String val = trimmed.substring(idx + 1).trim();
+						if (!key.isEmpty()) {
+							aliases.put(key, val);
+						}
+					} catch (Exception e) {
+						LOGGER.warn("Skipping malformed legacy entry: " + l, e);
+					}
+				}
+				if (!aliases.isEmpty()) {
+					loaded = true;
+					LOGGER.info("Loaded " + aliases.size() + " aliases from legacy key=value format");
+				}
+			}
+			
+			if (!loaded) {
+				LOGGER.info("No aliases loaded (config empty or all entries malformed). Server will continue normally.");
 			}
 		} catch (Exception e) {
-			LOGGER.error("Failed to load aliases config", e);
+			LOGGER.error("Failed to load aliases config (server will continue without aliases)", e);
 		}
 	}
 
