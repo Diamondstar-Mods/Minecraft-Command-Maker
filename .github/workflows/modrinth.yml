@@ -36,7 +36,7 @@ jobs:
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
         run: |
           for file in artifacts/*.jar; do
-            curl -X POST https://api.modrinth.com/v2/project/mrp_cy3gUoym83tOQzwoI9lgZio8V1zkMVywFUfF8SozZAq5eM4s6Tq4eF52cFmF/version \
+            curl -X https://api.modrinth.com/projects/minecraft-command-maker/version
               -H "Authorization: Bearer $MODRINTH_TOKEN" \
               -F "file=@$file" \
               -F "name=${{ steps.commitmsg.outputs.message }}" \
