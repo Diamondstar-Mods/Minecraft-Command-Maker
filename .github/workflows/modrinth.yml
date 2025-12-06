@@ -1,1 +1,46 @@
- 
+ name: Build and Upload to Modrinth
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  build-and-upload:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: "temurin"
+
+      - name: Build with Gradle
+        run: ./gradlew build
+
+      - name: Find Jar Artifacts
+        run: |
+          mkdir -p artifacts
+          find build/libs -name "*.jar" -exec cp {} artifacts/ \;
+      
+      - name: Get Commit Message
+        id: commitmsg
+        run: echo "message=$(git log -1 --pretty=%B)" >> $GITHUB_OUTPUT
+
+      - name: Upload to Modrinth
+        env:
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+        run: |
+          for file in artifacts/*.jar; do
+            curl -X POST https://api.modrinth.com/v2/project/mrp_cy3gUoym83tOQzwoI9lgZio8V1zkMVywFUfF8SozZAq5eM4s6Tq4eF52cFmF/version \
+              -H "Authorization: Bearer $MODRINTH_TOKEN" \
+              -F "file=@$file" \
+              -F "name=${{ steps.commitmsg.outputs.message }}" \
+              -F "version_type=alpha" \
+              -F "changelog=${{ steps.commitmsg.outputs.message }}" \
+              -F "dependencies=[]"
+          done
