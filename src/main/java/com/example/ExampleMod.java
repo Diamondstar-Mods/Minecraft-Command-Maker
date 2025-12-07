@@ -50,7 +50,7 @@ public class ExampleMod implements ModInitializer {
 			if (!modLoadedMessageSent) {
 				// Send message to the joining player
 				handler.player.sendMessage(
-					Text.literal("§anek's Command Maker successfully loaded!"),
+					Text.literal("§aNek's Command Maker successfully loaded!"),
 					false
 				);
 				modLoadedMessageSent = true;
