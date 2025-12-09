@@ -368,4 +368,29 @@ public class ExampleMod implements ModInitializer {
 					})
 				)
 		);
-	}}
+	}
+
+	/**
+	 * Register /syntax command to view and test custom syntax definitions
+	 */
+	private void registerSyntaxCommand(CommandDispatcher<ServerCommandSource> dispatcher) {
+		dispatcher.register(
+			net.minecraft.server.command.CommandManager.literal("syntax")
+				.executes(ctx -> {
+					ServerCommandSource source = ctx.getSource();
+					Map<String, CommandSyntax> syntaxes = SyntaxManager.getAllSyntaxes();
+					if (syntaxes.isEmpty()) {
+						source.sendFeedback(() -> net.minecraft.text.Text.literal("§cNo custom syntaxes defined."), false);
+						return 0;
+					}
+					source.sendFeedback(() -> net.minecraft.text.Text.literal("§6Available Custom Syntaxes:"), false);
+					for (String name : syntaxes.keySet()) {
+						CommandSyntax syntax = syntaxes.get(name);
+						String desc = syntax.getDescription().isEmpty() ? "" : " - " + syntax.getDescription();
+						source.sendFeedback(() -> net.minecraft.text.Text.literal("  §f" + name + "§7: §e" + syntax.getPattern() + desc), false);
+					}
+					return 1;
+				})
+		);
+	}
+}
