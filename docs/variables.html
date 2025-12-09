@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Variables & Substitution - Command Maker Wiki</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo"><a href="index.html"><span class="logo-icon">⚙️</span> Command Maker Wiki</a></div>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="getting-started.html" class="nav-link">Getting Started</a>
+                <a href="commands.html" class="nav-link">Commands</a>
+                <a href="syntax-system.html" class="nav-link">Custom Syntax</a>
+                <a href="examples.html" class="nav-link">Examples</a>
+                <a href="faq.html" class="nav-link">FAQ</a>
+            </div>
+            <div class="nav-search"><input type="text" id="searchBox" placeholder="Search documentation..." class="search-input"></div>
+        </div>
+    </nav>
+
+    <div class="main-wrapper">
+        <aside class="sidebar">
+            <div class="sidebar-widget">
+                <h3 class="widget-title">⚡ Features</h3>
+                <ul class="widget-list">
+                    <li><a href="syntax-system.html">Custom Syntax System</a></li>
+                    <li><a href="variables.html">Variables & Substitution</a></li>
+                    <li><a href="gui-system.html">GUI System</a></li>
+                    <li><a href="chat-messages.html">Chat Messages</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-widget">
+                <h3 class="widget-title">📚 Documentation</h3>
+                <ul class="widget-list">
+                    <li><a href="getting-started.html">Getting Started</a></li>
+                    <li><a href="installation.html">Installation</a></li>
+                    <li><a href="configuration.html">Configuration</a></li>
+                    <li><a href="aliases.html">Creating Aliases</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-widget">
+                <h3 class="widget-title">🎮 Examples</h3>
+                <ul class="widget-list">
+                    <li><a href="tpa-system.html">TPA System</a></li>
+                    <li><a href="ban-system.html">Ban System</a></li>
+                    <li><a href="warp-system.html">Warp System</a></li>
+                    <li><a href="custom-commands.html">Custom Commands</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <main class="content">
+            <h1>Variables & Substitution</h1>
+            <p>Learn how to use variables to make your aliases dynamic and powerful.</p>
+
+            <h2>What are Variables?</h2>
+            <p>Variables are placeholders that get replaced with actual values when commands run.</p>
+            <p><strong>Example:</strong></p>
+            <pre><code>/addcommand add hello say Hello ${player}!</code></pre>
+            <p>When you run <code>/hello</code>, <code>${player}</code> gets replaced with your username.</p>
+
+            <h2>Built-in Variables</h2>
+
+            <p>These variables are always available:</p>
+
+            <table class="variables-table">
+                <thead>
+                    <tr>
+                        <th>Variable</th>
+                        <th>Description</th>
+                        <th>Example</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>${player}</code></td>
+                        <td>Your username</td>
+                        <td>Steve</td>
+                        <td>Always available</td>
+                    </tr>
+                    <tr>
+                        <td><code>${x}</code></td>
+                        <td>Your X coordinate</td>
+                        <td>123</td>
+                        <td>Precise location</td>
+                    </tr>
+                    <tr>
+                        <td><code>${y}</code></td>
+                        <td>Your Y coordinate</td>
+                        <td>65</td>
+                        <td>Elevation</td>
+                    </tr>
+                    <tr>
+                        <td><code>${z}</code></td>
+                        <td>Your Z coordinate</td>
+                        <td>-450</td>
+                        <td>Precise location</td>
+                    </tr>
+                    <tr>
+                        <td><code>${syntax_name_param}</code></td>
+                        <td>Custom syntax parameter</td>
+                        <td>${tpa_player}</td>
+                        <td>From patterns</td>
+                    </tr>
+                    <tr>
+                        <td><code>${custom_var}</code></td>
+                        <td>User-defined variable</td>
+                        <td>${server_ip}</td>
+                        <td>Create with /setcmdvariable</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>Using Variables</h2>
+
+            <h3>Player Variable</h3>
+            <pre><code>/addcommand add whoami say You are: ${player}
+/addcommand add greet say Hello, ${player}! Welcome back!</code></pre>
+
+            <h3>Coordinate Variables</h3>
+            <pre><code>/addcommand add here say ${player} is at X:${x} Y:${y} Z:${z}
+/addcommand add coords say Coordinates: ${x}, ${y}, ${z}</code></pre>
+
+            <h3>Combined</h3>
+            <pre><code>/addcommand add location say ${player} is at (${x}, ${y}, ${z})</code></pre>
+
+            <h2>Custom Variables</h2>
+
+            <p>Create your own variables that don't change frequently:</p>
+
+            <h3>Creating a Custom Variable</h3>
+            <pre><code>/setcmdvariable server_name "MyAwesomeServer"
+/setcmdvariable admin_discord "https://discord.gg/example"
+/setcmdvariable spawn_coords "0 65 0"</code></pre>
+
+            <h3>Using Custom Variables</h3>
+            <pre><code>/addcommand add discord say Join our Discord: ${admin_discord}
+/addcommand add about say Server: ${server_name}
+/addcommand add spawn tp ${player} ${spawn_coords}</code></pre>
+
+            <h2>Custom Syntax Variables</h2>
+
+            <p>Parameters from syntax patterns become variables:</p>
+
+            <h3>Pattern Definition</h3>
+            <pre><code>{
+  "tpa": {
+    "pattern": "/tpa &lt;player&gt;",
+    "description": "Teleport request"
+  }
+}</code></pre>
+
+            <h3>Creating the Variable</h3>
+            <p>The syntax name is <code>tpa</code> and parameter is <code>player</code>:</p>
+            <pre><code>${tpa_player}</code></pre>
+
+            <h3>Using in Alias</h3>
+            <pre><code>{
+  "tpa": "tellraw ${tpa_player} {\"text\":\"${player} requests TPA\",\"color\":\"yellow\"}"
+}</code></pre>
+
+            <h2>Multi-Parameter Variables</h2>
+
+            <h3>Pattern with Multiple Parameters</h3>
+            <pre><code>{
+  "ban": {
+    "pattern": "/ban &lt;player&gt; &lt;reason&gt;",
+    "description": "Ban a player"
+  }
+}</code></pre>
+
+            <h3>Variables Created</h3>
+            <ul>
+                <li><code>${ban_player}</code> - The player name</li>
+                <li><code>${ban_reason}</code> - The ban reason</li>
+            </ul>
+
+            <h3>Using Both</h3>
+            <pre><code>{
+  "ban": "ban-ip ${ban_player} && say [BAN] ${ban_player} banned for: ${ban_reason}"
+}</code></pre>
+
+            <h2>Three Parameter Example</h3>
+
+            <pre><code>{
+  "msg": {
+    "pattern": "/msg &lt;player&gt; &lt;color&gt; &lt;message&gt;",
+    "description": "Send colored message"
+  }
+}</code></pre>
+
+            <p>Variables:</p>
+            <ul>
+                <li><code>${msg_player}</code></li>
+                <li><code>${msg_color}</code></li>
+                <li><code>${msg_message}</code></li>
+            </ul>
+
+            <pre><code>{
+  "msg": "tellraw ${msg_player} {\"text\":\"${msg_message}\",\"color\":\"${msg_color}\"}"
+}</code></pre>
+
+            <h2>Variable Naming Rules</h2>
+
+            <ul>
+                <li>Variables are <strong>case-sensitive</strong></li>
+                <li><code>${Player}</code> and <code>${player}</code> are different</li>
+                <li>Use lowercase for consistency</li>
+                <li>Custom variables must not contain spaces</li>
+                <li>Use underscores instead: <code>${my_variable}</code></li>
+                <li>Names can contain letters, numbers, underscores</li>
+            </ul>
+
+            <h2>Advanced: Combining Variables</h2>
+
+            <h3>Multiple Variables in One Command</h3>
+            <pre><code>/addcommand add info say ${player} is at ${x} ${y} ${z} on ${server_name}</code></pre>
+
+            <h3>Variables with Text</h3>
+            <pre><code>/addcommand add status say Status: ${player} - OK (${server_name})</code></pre>
+
+            <h3>Variables in Selectors</h3>
+            <pre><code">/addcommand add heal effect give @s instant_health 1 && say Healed ${player}</code></pre>
+
+            <h2>Variable Examples</h2>
+
+            <h3>Welcome System</h3>
+            <pre><code>/setcmdvariable server_name "Adventure Server"
+/setcmdvariable rules_url "https://rules.example.com"
+
+/addcommand add welcome say Welcome to ${server_name}, ${player}!
+/addcommand add rules say Read our rules: ${rules_url}</code></pre>
+
+            <h3>Teleport System</h3>
+            <pre><code>/setcmdvariable spawn_point "0 65 0"
+/setcmdvariable pvp_arena "1000 100 1000"
+
+/addcommand add spawn tp ${player} ${spawn_point}
+/addcommand add arena tp ${player} ${pvp_arena}</code></pre>
+
+            <h3>Moderation System</h3>
+            <pre><code">/setcmdvariable kick_reason "Breaking server rules"
+/setcmdvariable ban_reason "Permanent ban for serious violations"
+
+/addcommand add kick kick ${player} ${kick_reason}
+/addcommand add ban ban ${player} ${ban_reason}</code></pre>
+
+            <h2>Viewing Custom Variables</h2>
+
+            <p>Custom variables are stored in:</p>
+            <pre><code>.minecraft/config/CommandMaker/variables.json</code></pre>
+
+            <p>You can edit this file directly or use commands:</p>
+            <pre><code>/setcmdvariable name "value"  # Create or update
+/setcmdvariable name delete   # Delete (for future versions)</code></pre>
+
+            <h2>Variable Performance</h2>
+
+            <ul>
+                <li>Built-in variables (<code>${player}</code>, <code>${x}</code>, etc.) have minimal impact</li>
+                <li>Custom variables are loaded once at startup</li>
+                <li>No performance penalty for using variables</li>
+                <li>Substitution happens instantly</li>
+            </ul>
+
+            <div class="info-box">
+                <h3>💡 Pro Tip</h3>
+                <p>Use meaningful variable names like <code>${server_ip}</code> instead of <code>${a}</code> for readability!</p>
+            </div>
+
+            <h2>Troubleshooting Variables</h2>
+
+            <h3>Variable not replacing?</h3>
+            <ul>
+                <li>Check spelling (case-sensitive!)</li>
+                <li>Use correct syntax: <code>${variable}</code></li>
+                <li>Make sure variable exists if custom</li>
+                <li>Reload with <code>/addcommand reload</code></li>
+            </ul>
+
+            <h3>Getting literal ${} in chat?</h3>
+            <pre><code>WRONG: /addcommand add test say $player
+RIGHT: /addcommand add test say ${player}</code></pre>
+
+            <h3>Custom variable returns nothing?</h3>
+            <pre><code>1. Create it first: /setcmdvariable myvar "value"
+2. Use in command: /addcommand add test say ${myvar}
+3. Reload: /addcommand reload</code></pre>
+        </main>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Features</h4>
+                <ul><li><a href="syntax-system.html">Custom Syntax</a></li><li><a href="variables.html">Variables</a></li><li><a href="gui-system.html">GUI System</a></li><li><a href="chat-messages.html">Chat Messages</a></li></ul>
+            </div>
+            <div class="footer-section">
+                <h4>Documentation</h4>
+                <ul><li><a href="getting-started.html">Getting Started</a></li><li><a href="installation.html">Installation</a></li><li><a href="configuration.html">Configuration</a></li></ul>
+            </div>
+            <div class="footer-section">
+                <h4>Community</h4>
+                <ul><li><a href="https://modrinth.com/mod/command-maker">Modrinth</a></li><li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">GitHub</a></li></ul>
+            </div>
+        </div>
+        <div class="footer-bottom"><p>&copy; 2025 Command Maker Wiki.</p></div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
