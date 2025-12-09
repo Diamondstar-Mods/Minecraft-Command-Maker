@@ -33,11 +33,13 @@ public class ExampleMod implements ModInitializer {
 	public void onInitialize() {
 		ensureConfigExists();
 		loadAliases();
+		SyntaxManager.loadSyntaxDefinitions();
 		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
 			registerAddCommand(dispatcher);
 			registerAliases(dispatcher);
 			registerSetCmdVariable(dispatcher);
 			registerDeleteAliasMenu(dispatcher);
+			registerSyntaxCommand(dispatcher);
 		});
 		
 		// Register server lifecycle event for singleplayer and server startup
@@ -187,8 +189,22 @@ public class ExampleMod implements ModInitializer {
 				.then(net.minecraft.server.command.CommandManager.argument("args", StringArgumentType.greedyString())
 					.executes(ctx -> {
 						String args = StringArgumentType.getString(ctx, "args");
-						String full = target + " " + args;
-						String command = substituteVariables(full, ctx);
+						String full = alias + " " + args;
+						
+						// Try to match against custom syntax definitions
+						SyntaxManager.SyntaxMatch match = SyntaxManager.matchInput(full);
+						String command;
+						
+						if (match != null) {
+							// Custom syntax matched - substitute syntax parameters
+							String substituted = match.syntax.substituteParameters(target, match.parameters);
+							command = substituteVariables(substituted, ctx);
+						} else {
+							// No syntax match - use default behavior
+							command = target + " " + args;
+							command = substituteVariables(command, ctx);
+						}
+						
 						ServerCommandSource source = ctx.getSource();
 						CommandDispatcher<ServerCommandSource> cmdDispatcher = source.getServer().getCommandManager().getDispatcher();
 						ParseResults<ServerCommandSource> parsed = cmdDispatcher.parse(command, source);
