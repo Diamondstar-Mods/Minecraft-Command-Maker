@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Messages - Command Maker Wiki</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html"><span class="logo-icon">⚙️</span> Command Maker Wiki</a>
+            </div>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="getting-started.html" class="nav-link">Getting Started</a>
+                <a href="commands.html" class="nav-link">Commands</a>
+                <a href="syntax-system.html" class="nav-link active">Custom Syntax</a>
+                <a href="examples.html" class="nav-link">Examples</a>
+                <a href="faq.html" class="nav-link">FAQ</a>
+            </div>
+            <div class="nav-search">
+                <input type="text" id="searchBox" placeholder="Search documentation..." class="search-input">
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-wrapper">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-widget">
+                <h3 class="widget-title">📚 Documentation</h3>
+                <ul class="widget-list">
+                    <li><a href="getting-started.html">Getting Started</a></li>
+                    <li><a href="installation.html">Installation</a></li>
+                    <li><a href="configuration.html">Configuration</a></li>
+                    <li><a href="aliases.html">Creating Aliases</a></li>
+                </ul>
+            </div>
+
+            <div class="sidebar-widget">
+                <h3 class="widget-title">⚡ Features</h3>
+                <ul class="widget-list">
+                    <li><a href="syntax-system.html">Custom Syntax System</a></li>
+                    <li><a href="variables.html">Variables & Substitution</a></li>
+                    <li><a href="gui-system.html">GUI System</a></li>
+                    <li><a href="chat-messages.html">Chat Messages</a></li>
+                </ul>
+            </div>
+
+            <div class="sidebar-widget">
+                <h3 class="widget-title">🎮 Examples</h3>
+                <ul class="widget-list">
+                    <li><a href="tpa-system.html">TPA System</a></li>
+                    <li><a href="ban-system.html">Ban System</a></li>
+                    <li><a href="warp-system.html">Warp System</a></li>
+                    <li><a href="custom-commands.html">Custom Commands</a></li>
+                </ul>
+            </div>
+
+            <div class="sidebar-widget">
+                <h3 class="widget-title">❓ Help</h3>
+                <ul class="widget-list">
+                    <li><a href="troubleshooting.html">Troubleshooting</a></li>
+                    <li><a href="faq.html">Frequently Asked Questions</a></li>
+                    <li><a href="best-practices.html">Best Practices</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Content Area -->
+        <main class="content">
+            <h1>Chat Messages</h1>
+            <p>Learn how to send formatted messages and feedback through your aliases.</p>
+
+            <section>
+                <h2>Overview</h2>
+                <p>Command Maker integrates with Minecraft's chat system, allowing you to send messages, display information, and provide feedback to players when they use your aliases.</p>
+            </section>
+
+            <section>
+                <h2>Basic Chat Commands</h2>
+
+                <h3>Say Command</h3>
+                <p>The most common way to send messages:</p>
+                <pre><code>"greet": "say Hello, everyone!"</code></pre>
+
+                <p>This sends a message that everyone on the server can see.</p>
+
+                <h3>Tell Command</h3>
+                <p>Send a private message to a specific player:</p>
+                <pre><code>"msg": "tell @s Your message here"</code></pre>
+
+                <p>Only the target player sees this message.</p>
+            </section>
+
+            <section>
+                <h2>Using Variables in Messages</h2>
+
+                <h3>Player Name Variable</h3>
+                <pre><code>"greet": "say Hello, ${player}!"</code></pre>
+
+                <p>When executed, displays: <code>Hello, Steve!</code> (if player is Steve)</p>
+
+                <h3>Coordinate Variables</h3>
+                <pre><code>"locate": "say I am at ${x}, ${y}, ${z}"</code></pre>
+
+                <p>Displays your current position in chat.</p>
+
+                <h3>Multiple Variables</h3>
+                <pre><code>"status": "say Player: ${player} | Location: ${x}, ${y}, ${z}"</code></pre>
+            </section>
+
+            <section>
+                <h2>Color Formatting (Advanced)</h2>
+
+                <h3>Text Components</h3>
+                <p>For colored and formatted text, use Minecraft's JSON text format:</p>
+                <pre><code>"fancy": "tellraw @s {\"text\":\"Hello!\",\"color\":\"green\"}"</code></pre>
+
+                <h3>Colors Available</h3>
+                <ul>
+                    <li><code>"color":"black"</code></li>
+                    <li><code>"color":"red"</code></li>
+                    <li><code>"color":"green"</code></li>
+                    <li><code>"color":"yellow"</code></li>
+                    <li><code>"color":"blue"</code></li>
+                    <li><code>"color":"light_purple"</code></li>
+                    <li><code>"color":"aqua"</code></li>
+                    <li><code>"color":"white"</code></li>
+                    <li><code>"color":"gray"</code></li>
+                    <li><code>"color":"dark_red"</code></li>
+                    <li><code>"color":"dark_green"</code></li>
+                    <li><code>"color":"dark_blue"</code></li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Text Formatting</h2>
+
+                <h3>JSON Formatting Options</h3>
+                <pre><code>{
+  "text": "Your text here",
+  "bold": true,
+  "italic": true,
+  "underlined": true,
+  "strikethrough": true,
+  "obfuscated": false,
+  "color": "green"
+}</code></pre>
+
+                <h3>Example: Bold Green Text</h3>
+                <pre><code>"success": "tellraw @s {\"text\":\"Command executed!\",\"bold\":true,\"color\":\"green\"}"</code></pre>
+
+                <h3>Example: Red Error Message</h3>
+                <pre><code>"error": "tellraw @s {\"text\":\"Error!\",\"bold\":true,\"color\":\"red\"}"</code></pre>
+            </section>
+
+            <section>
+                <h2>Practical Examples</h2>
+
+                <h3>Welcome Message</h3>
+                <pre><code>"welcome": "say Welcome to our server, ${player}!"</code></pre>
+
+                <h3>Status Report</h3>
+                <pre><code>"status": "say Location: ${x}, ${y}, ${z} | Player: ${player}"</code></pre>
+
+                <h3>Formatted Notification</h3>
+                <pre><code>"notify": "tellraw @s {\"text\":\"[Alert]\",\"bold\":true,\"color\":\"gold\",\"extra\":[{\"text\":\" Something happened\",\"color\":\"white\"}]}"</code></pre>
+
+                <h3>Command Confirmation</h3>
+                <pre><code>"confirm": "say Command executed successfully!"</code></pre>
+            </section>
+
+            <section>
+                <h2>Message Best Practices</h2>
+
+                <h3>✅ Do's</h3>
+                <ul>
+                    <li>Keep messages short and clear</li>
+                    <li>Use variables for personalization</li>
+                    <li>Provide feedback for command execution</li>
+                    <li>Use colors to highlight important information</li>
+                    <li>Test messages in-game to verify formatting</li>
+                </ul>
+
+                <h3>❌ Don'ts</h3>
+                <ul>
+                    <li>Don't send excessive messages on every command</li>
+                    <li>Don't use colors that are hard to read</li>
+                    <li>Don't forget to properly escape quotes in JSON</li>
+                    <li>Don't spam chat with the same message repeatedly</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Combining Commands</h2>
+
+                <h3>Execute + Say</h3>
+                <pre><code>"pickup": "say ${player} picked up diamonds! && give @s diamond 10"</code></pre>
+
+                <h3>Multiple Messages</h3>
+                <p>Use multiple say commands separated by <code>&&</code>:</p>
+                <pre><code>"announce": "say First message && say Second message"</code></pre>
+            </section>
+
+            <section>
+                <h2>Broadcasting Messages</h2>
+
+                <h3>Server-Wide Announcement</h3>
+                <pre><code>"broadcast": "say [ANNOUNCEMENT] Important server message here"</code></pre>
+
+                <p>Everyone on the server sees this in chat.</p>
+
+                <h3>Player-Specific Message</h3>
+                <pre><code>"whisper": "tell @s This is just for you"</code></pre>
+
+                <p>Only the executing player sees this.</p>
+            </section>
+
+            <section>
+                <h2>Troubleshooting</h2>
+
+                <p><strong>❌ Message not showing?</strong></p>
+                <ul>
+                    <li>Check that the <code>say</code> or <code>tell</code> command is valid</li>
+                    <li>Verify the alias is loaded with <code>/addcommand reload</code></li>
+                    <li>Make sure you're not using invalid characters</li>
+                </ul>
+
+                <p><strong>❌ Formatting looks weird?</strong></p>
+                <ul>
+                    <li>Check your JSON syntax</li>
+                    <li>Ensure all quotes are properly escaped with backslashes</li>
+                    <li>Test a simpler version first with just <code>say</code></li>
+                </ul>
+
+                <p><strong>❌ Variables not replacing?</strong></p>
+                <ul>
+                    <li>Make sure you use the correct variable names: <code>${player}</code>, <code>${x}</code>, <code>${y}</code>, <code>${z}</code></li>
+                    <li>Check your JSON encoding doesn't break the variable</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Related Pages</h2>
+                <ul>
+                    <li><a href="variables.html">Variables & Substitution</a></li>
+                    <li><a href="aliases.html">Creating Aliases</a></li>
+                    <li><a href="syntax-system.html">Custom Syntax System</a></li>
+                    <li><a href="examples.html">Examples</a></li>
+                </ul>
+            </section>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Documentation</h4>
+                <ul>
+                    <li><a href="getting-started.html">Getting Started</a></li>
+                    <li><a href="commands.html">Commands</a></li>
+                    <li><a href="syntax-system.html">Custom Syntax</a></li>
+                    <li><a href="examples.html">Examples</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="troubleshooting.html">Troubleshooting</a></li>
+                    <li><a href="faq.html">FAQ</a></li>
+                    <li><a href="best-practices.html">Best Practices</a></li>
+                    <li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">GitHub</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Community</h4>
+                <ul>
+                    <li><a href="https://modrinth.com/mod/command-maker">Modrinth</a></li>
+                    <li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">Report Issues</a></li>
+                    <li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">Contribute</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Command Maker Wiki. Built with ❤️ for Minecraft players.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
