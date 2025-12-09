@@ -559,7 +559,8 @@ a:hover {
 
 /* ========== Code Styling ========== */
 code {
-    background-color: #000000;
+    background-color: #f4f4f4;
+    color: black;
     padding: 2px 6px;
     border-radius: 3px;
     font-family: 'Courier New', monospace;
