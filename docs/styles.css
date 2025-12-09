@@ -13,7 +13,7 @@
     --danger-color: #d9534f;
     --text-color: #202122;
     --text-light: #666;
-    --bg-color: #000000;
+    --bg-color: #f8f9fa;
     --bg-light: #ffffff;
     --border-color: #a2a9b1;
     --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -559,7 +559,7 @@ a:hover {
 
 /* ========== Code Styling ========== */
 code {
-    background-color: #f4f4f4;
+    background-color: #000000;
     padding: 2px 6px;
     border-radius: 3px;
     font-family: 'Courier New', monospace;
