@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Getting Started - Command Maker Wiki</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html"><span class="logo-icon">⚙️</span> Command Maker Wiki</a>
+            </div>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="getting-started.html" class="nav-link active">Getting Started</a>
+                <a href="commands.html" class="nav-link">Commands</a>
+                <a href="syntax-system.html" class="nav-link">Custom Syntax</a>
+                <a href="examples.html" class="nav-link">Examples</a>
+                <a href="faq.html" class="nav-link">FAQ</a>
+            </div>
+            <div class="nav-search">
+                <input type="text" id="searchBox" placeholder="Search documentation..." class="search-input">
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-wrapper">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-widget">
+                <h3 class="widget-title">📚 Documentation</h3>
+                <ul class="widget-list">
+                    <li><a href="getting-started.html">Getting Started</a></li>
+                    <li><a href="installation.html">Installation</a></li>
+                    <li><a href="configuration.html">Configuration</a></li>
+                    <li><a href="aliases.html">Creating Aliases</a></li>
+                </ul>
+            </div>
+
+            <div class="sidebar-widget">
+                <h3 class="widget-title">⚡ Features</h3>
+                <ul class="widget-list">
+                    <li><a href="syntax-system.html">Custom Syntax System</a></li>
+                    <li><a href="variables.html">Variables & Substitution</a></li>
+                    <li><a href="gui-system.html">GUI System</a></li>
+                    <li><a href="chat-messages.html">Chat Messages</a></li>
+                </ul>
+            </div>
+
+            <div class="sidebar-widget">
+                <h3 class="widget-title">🎮 Examples</h3>
+                <ul class="widget-list">
+                    <li><a href="tpa-system.html">TPA System</a></li>
+                    <li><a href="ban-system.html">Ban System</a></li>
+                    <li><a href="warp-system.html">Warp System</a></li>
+                    <li><a href="custom-commands.html">Custom Commands</a></li>
+                </ul>
+            </div>
+
+            <div class="sidebar-widget">
+                <h3 class="widget-title">❓ Help</h3>
+                <ul class="widget-list">
+                    <li><a href="troubleshooting.html">Troubleshooting</a></li>
+                    <li><a href="faq.html">Frequently Asked Questions</a></li>
+                    <li><a href="best-practices.html">Best Practices</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Content Area -->
+        <main class="content">
+            <h1>Getting Started with Command Maker</h1>
+            
+            <p>Welcome to Command Maker! This guide will walk you through everything you need to get started with the mod.</p>
+
+            <h2>What is Command Maker?</h2>
+            <p>Command Maker is a powerful Minecraft mod for Fabric servers that allows you to:</p>
+            <ul style="margin-left: 20px; margin-bottom: 20px;">
+                <li><strong>Create command aliases:</strong> Turn long commands into short, easy-to-remember aliases</li>
+                <li><strong>Define custom syntax:</strong> Create your own command patterns with parameters</li>
+                <li><strong>Use variables:</strong> Automatically substitute player names, coordinates, and custom values</li>
+                <li><strong>Build complex systems:</strong> Create TPA, ban, warp, and custom command systems</li>
+            </ul>
+
+            <h2>Requirements</h2>
+            <ul style="margin-left: 20px; margin-bottom: 20px;">
+                <li>Minecraft 1.21.9 or later</li>
+                <li>Fabric Loader 0.16.14+</li>
+                <li>Fabric API 0.134.0+</li>
+                <li>Java 21 or later</li>
+            </ul>
+
+            <h2>Installation</h2>
+            <ol style="margin-left: 20px; margin-bottom: 20px;">
+                <li><strong>Download the mod:</strong> Get the latest JAR from <a href="https://modrinth.com/mod/command-maker">Modrinth</a></li>
+                <li><strong>Locate mods folder:</strong> Open <code>.minecraft/mods</code></li>
+                <li><strong>Drop the JAR:</strong> Copy the downloaded JAR into the mods folder</li>
+                <li><strong>Launch Minecraft:</strong> Start with the Fabric profile</li>
+            </ol>
+
+            <p>On first launch, Command Maker will automatically create configuration files in <code>config/CommandMaker/</code></p>
+
+            <h2>First Steps</h2>
+
+            <h3>Step 1: Launch Minecraft</h3>
+            <p>Start your Minecraft world or server. You should see the message: <code style="background: #e8f4f8;">Nek's Command Maker successfully loaded!</code> in green.</p>
+
+            <h3>Step 2: Create Your First Alias</h3>
+            <p>In-game, type:</p>
+            <pre><code>/addcommand add hello say Hello ${player}!</code></pre>
+            <p>This creates an alias named <code>hello</code> that says a greeting message.</p>
+
+            <h3>Step 3: Use Your Alias</h3>
+            <p>Now you can use your new alias:</p>
+            <pre><code>/hello</code></pre>
+            <p>This will execute: <code>say Hello [YourName]!</code></p>
+
+            <h3>Step 4: Delete an Alias</h3>
+            <p>To remove an alias, use:</p>
+            <pre><code>/addcommand del hello</code></pre>
+
+            <h2>Understanding Configuration</h2>
+
+            <p>Command Maker uses JSON configuration files located in <code>config/CommandMaker/</code>:</p>
+
+            <h3>aliases.json</h3>
+            <p>Stores all your command aliases:</p>
+            <pre><code>{
+  "hello": "say Hello ${player}!",
+  "spawn": "tp ${player} 0 100 0",
+  "greet": "say Welcome, ${player}!"
+}</code></pre>
+
+            <h3>syntax.json</h3>
+            <p>Defines custom command patterns (NEW in v2.1.0+):</p>
+            <pre><code>{
+  "tpa": {
+    "pattern": "/tpa &lt;player&gt;",
+    "description": "Teleport request to a player"
+  }
+}</code></pre>
+
+            <h2>Key Concepts</h2>
+
+            <h3>Variables</h3>
+            <p>Variables are placeholders that get replaced when you execute a command:</p>
+            <ul style="margin-left: 20px; margin-bottom: 20px;">
+                <li><code>${player}</code> - Your username</li>
+                <li><code>${x}</code>, <code>${y}</code>, <code>${z}</code> - Your coordinates</li>
+                <li><code>${custom_var}</code> - Custom variables you set</li>
+                <li><code>${syntax_name_param}</code> - Custom syntax parameters</li>
+            </ul>
+
+            <h3>Aliases vs Syntax</h3>
+            <table>
+                <tr>
+                    <th>Feature</th>
+                    <th>Aliases</th>
+                    <th>Custom Syntax</th>
+                </tr>
+                <tr>
+                    <td>Purpose</td>
+                    <td>Shorten commands</td>
+                    <td>Create custom patterns</td>
+                </tr>
+                <tr>
+                    <td>Parameters</td>
+                    <td>Optional</td>
+                    <td>Required in pattern</td>
+                </tr>
+                <tr>
+                    <td>Example</td>
+                    <td><code>/hello</code></td>
+                    <td><code>/tpa steve</code></td>
+                </tr>
+            </table>
+
+            <h2>Common Tasks</h2>
+
+            <h3>Set a Custom Variable</h3>
+            <pre><code>/setcmdvariable myvar myvalue</code></pre>
+            <p>Use it in aliases with: <code>${myvar}</code></p>
+
+            <h3>Reload Configuration</h3>
+            <pre><code>/addcommand reload</code></pre>
+            <p>Updates aliases and syntax definitions from files</p>
+
+            <h3>List All Syntax Patterns</h3>
+            <pre><code>/syntax</code></pre>
+
+            <h3>View Aliases</h3>
+            <pre><code>/deletealias</code></pre>
+            <p>Lists all defined aliases</p>
+
+            <h2>Next Steps</h2>
+            <ul style="margin-left: 20px;">
+                <li>Read <a href="aliases.html">Creating Aliases</a> for more detailed alias creation</li>
+                <li>Learn about <a href="syntax-system.html">Custom Syntax System</a></li>
+                <li>Check out <a href="examples.html">Examples</a> like TPA, Ban, and Warp systems</li>
+                <li>Browse <a href="faq.html">FAQ</a> for common questions</li>
+            </ul>
+
+            <div class="info-box">
+                <h3>💡 Pro Tip</h3>
+                <p>Visit your server's <code>config/CommandMaker/</code> folder to directly edit JSON files for faster configuration without in-game commands.</p>
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Documentation</h4>
+                <ul>
+                    <li><a href="getting-started.html">Getting Started</a></li>
+                    <li><a href="commands.html">Commands</a></li>
+                    <li><a href="syntax-system.html">Custom Syntax</a></li>
+                    <li><a href="examples.html">Examples</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="troubleshooting.html">Troubleshooting</a></li>
+                    <li><a href="faq.html">FAQ</a></li>
+                    <li><a href="best-practices.html">Best Practices</a></li>
+                    <li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">GitHub</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Community</h4>
+                <ul>
+                    <li><a href="https://modrinth.com/mod/command-maker">Modrinth</a></li>
+                    <li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">Report Issues</a></li>
+                    <li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">Contribute</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Command Maker Wiki. Built with ❤️ for Minecraft players.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Command Maker Wiki - Minecraft Mod Documentation</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html"><span class="logo-icon">⚙️</span> Command Maker Wiki</a>
+            </div>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link active">Home</a>
+                <a href="getting-started.html" class="nav-link">Getting Started</a>
+                <a href="commands.html" class="nav-link">Commands</a>
+                <a href="syntax-system.html" class="nav-link">Custom Syntax</a>
+                <a href="examples.html" class="nav-link">Examples</a>
+                <a href="faq.html" class="nav-link">FAQ</a>
+            </div>
+            <div class="nav-search">
+                <input type="text" id="searchBox" placeholder="Search documentation..." class="search-input">
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-wrapper">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-widget">
+                <h3 class="widget-title">📚 Documentation</h3>
+                <ul class="widget-list">
+                    <li><a href="getting-started.html">Getting Started</a></li>
+                    <li><a href="installation.html">Installation</a></li>
+                    <li><a href="configuration.html">Configuration</a></li>
+                    <li><a href="aliases.html">Creating Aliases</a></li>
+                </ul>
+            </div>
+
+            <div class="sidebar-widget">
+                <h3 class="widget-title">⚡ Features</h3>
+                <ul class="widget-list">
+                    <li><a href="syntax-system.html">Custom Syntax System</a></li>
+                    <li><a href="variables.html">Variables & Substitution</a></li>
+                    <li><a href="gui-system.html">GUI System</a></li>
+                    <li><a href="chat-messages.html">Chat Messages</a></li>
+                </ul>
+            </div>
+
+            <div class="sidebar-widget">
+                <h3 class="widget-title">🎮 Examples</h3>
+                <ul class="widget-list">
+                    <li><a href="tpa-system.html">TPA System</a></li>
+                    <li><a href="ban-system.html">Ban System</a></li>
+                    <li><a href="warp-system.html">Warp System</a></li>
+                    <li><a href="custom-commands.html">Custom Commands</a></li>
+                </ul>
+            </div>
+
+            <div class="sidebar-widget">
+                <h3 class="widget-title">❓ Help</h3>
+                <ul class="widget-list">
+                    <li><a href="troubleshooting.html">Troubleshooting</a></li>
+                    <li><a href="faq.html">Frequently Asked Questions</a></li>
+                    <li><a href="best-practices.html">Best Practices</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Content Area -->
+        <main class="content">
+            <!-- Hero Section -->
+            <div class="hero">
+                <div class="hero-content">
+                    <h1 class="hero-title">Command Maker</h1>
+                    <p class="hero-subtitle">The Ultimate Minecraft Command Alias & Custom Syntax Mod</p>
+                    <div class="hero-buttons">
+                        <a href="getting-started.html" class="btn btn-primary">Get Started</a>
+                        <a href="#features" class="btn btn-secondary">Learn More</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feature Cards -->
+            <section id="features" class="features-section">
+                <h2 class="section-title">What You Can Do</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">📝</div>
+                        <h3>Create Aliases</h3>
+                        <p>Turn long commands into short, easy-to-use aliases. Perfect for frequently used commands.</p>
+                        <a href="aliases.html" class="card-link">Learn →</a>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">🧩</div>
+                        <h3>Custom Syntax</h3>
+                        <p>Define your own command patterns with parameters. Create commands exactly the way you want them.</p>
+                        <a href="syntax-system.html" class="card-link">Explore →</a>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">🔤</div>
+                        <h3>Variables</h3>
+                        <p>Use built-in variables like ${player}, ${x}, ${y}, ${z} and create custom variables.</p>
+                        <a href="variables.html" class="card-link">Discover →</a>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">🎨</div>
+                        <h3>GUI System</h3>
+                        <p>Manage your aliases with an intuitive graphical interface. Delete and organize with ease.</p>
+                        <a href="gui-system.html" class="card-link">View →</a>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">💬</div>
+                        <h3>Chat Integration</h3>
+                        <p>Send colored messages, confirmations, and feedback directly to players in chat.</p>
+                        <a href="chat-messages.html" class="card-link">Read →</a>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">⚙️</div>
+                        <h3>Configuration</h3>
+                        <p>Simple JSON-based configuration. No code required, just edit and reload.</p>
+                        <a href="configuration.html" class="card-link">Configure →</a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quick Start -->
+            <section class="quick-start">
+                <h2 class="section-title">Quick Start</h2>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <h3>Download & Install</h3>
+                        <p>Download the mod JAR and drop it into your .minecraft/mods folder.</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <h3>Launch Minecraft</h3>
+                        <p>Start Minecraft with Fabric. Config files auto-create on first load.</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <h3>Edit Config</h3>
+                        <p>Edit config/CommandMaker/ JSON files to create your aliases.</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <h3>Reload & Play</h3>
+                        <p>Use /addcommand reload and your aliases are ready to use!</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Popular Pages -->
+            <section class="popular-section">
+                <h2 class="section-title">Popular Pages</h2>
+                <div class="articles-grid">
+                    <article class="article-card">
+                        <h3><a href="tpa-system.html">TPA System</a></h3>
+                        <p>Learn how to create a complete teleport request system with custom syntax.</p>
+                        <span class="article-meta">⭐ Most Popular</span>
+                    </article>
+
+                    <article class="article-card">
+                        <h3><a href="syntax-system.html">Custom Syntax System</a></h3>
+                        <p>Master the powerful custom syntax system for unlimited possibilities.</p>
+                        <span class="article-meta">🆕 New Feature</span>
+                    </article>
+
+                    <article class="article-card">
+                        <h3><a href="commands.html">Complete Command Reference</a></h3>
+                        <p>Full documentation of all available commands and their usage.</p>
+                        <span class="article-meta">📖 Reference</span>
+                    </article>
+
+                    <article class="article-card">
+                        <h3><a href="faq.html">Frequently Asked Questions</a></h3>
+                        <p>Common questions and answers about the mod and its features.</p>
+                        <span class="article-meta">❓ Help</span>
+                    </article>
+                </div>
+            </section>
+
+            <!-- Info Box -->
+            <section class="info-box">
+                <h3>💡 Did You Know?</h3>
+                <p>With the Custom Syntax System, you can create commands like <code>/tpa steve</code> that automatically substitute into your aliases. No coding required!</p>
+            </section>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Documentation</h4>
+                <ul>
+                    <li><a href="getting-started.html">Getting Started</a></li>
+                    <li><a href="commands.html">Commands</a></li>
+                    <li><a href="syntax-system.html">Custom Syntax</a></li>
+                    <li><a href="examples.html">Examples</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="troubleshooting.html">Troubleshooting</a></li>
+                    <li><a href="faq.html">FAQ</a></li>
+                    <li><a href="best-practices.html">Best Practices</a></li>
+                    <li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">GitHub</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Community</h4>
+                <ul>
+                    <li><a href="https://modrinth.com/mod/command-maker">Modrinth</a></li>
+                    <li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">Report Issues</a></li>
+                    <li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">Contribute</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Command Maker Wiki. Built with ❤️ for Minecraft players.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

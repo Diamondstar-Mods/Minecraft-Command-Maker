@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Syntax System - Command Maker Wiki</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html"><span class="logo-icon">⚙️</span> Command Maker Wiki</a>
+            </div>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="getting-started.html" class="nav-link">Getting Started</a>
+                <a href="commands.html" class="nav-link">Commands</a>
+                <a href="syntax-system.html" class="nav-link active">Custom Syntax</a>
+                <a href="examples.html" class="nav-link">Examples</a>
+                <a href="faq.html" class="nav-link">FAQ</a>
+            </div>
+            <div class="nav-search">
+                <input type="text" id="searchBox" placeholder="Search documentation..." class="search-input">
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-wrapper">
+        <aside class="sidebar">
+            <div class="sidebar-widget">
+                <h3 class="widget-title">📚 Documentation</h3>
+                <ul class="widget-list">
+                    <li><a href="getting-started.html">Getting Started</a></li>
+                    <li><a href="installation.html">Installation</a></li>
+                    <li><a href="configuration.html">Configuration</a></li>
+                    <li><a href="aliases.html">Creating Aliases</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-widget">
+                <h3 class="widget-title">⚡ Features</h3>
+                <ul class="widget-list">
+                    <li><a href="syntax-system.html">Custom Syntax System</a></li>
+                    <li><a href="variables.html">Variables & Substitution</a></li>
+                    <li><a href="gui-system.html">GUI System</a></li>
+                    <li><a href="chat-messages.html">Chat Messages</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-widget">
+                <h3 class="widget-title">🎮 Examples</h3>
+                <ul class="widget-list">
+                    <li><a href="tpa-system.html">TPA System</a></li>
+                    <li><a href="ban-system.html">Ban System</a></li>
+                    <li><a href="warp-system.html">Warp System</a></li>
+                    <li><a href="custom-commands.html">Custom Commands</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-widget">
+                <h3 class="widget-title">❓ Help</h3>
+                <ul class="widget-list">
+                    <li><a href="troubleshooting.html">Troubleshooting</a></li>
+                    <li><a href="faq.html">Frequently Asked Questions</a></li>
+                    <li><a href="best-practices.html">Best Practices</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <main class="content">
+            <h1>Custom Syntax System</h1>
+            <p>The Custom Syntax System allows you to define your own command patterns with parameters that automatically substitute into aliases. This is the most powerful feature of Command Maker!</p>
+
+            <h2>How It Works</h2>
+            <p>Define a pattern → Create an alias using syntax variables → Users type the command → Variables auto-substitute!</p>
+
+            <h3>Example: TPA System</h3>
+            <p><strong>Step 1: Define Pattern</strong></p>
+            <pre><code>{
+  "tpa": {
+    "pattern": "/tpa &lt;player&gt;",
+    "description": "Teleport request to a player"
+  }
+}</code></pre>
+
+            <p><strong>Step 2: Create Alias</strong></p>
+            <pre><code>{
+  "tpa_request": "say ${tpa_player} wants to TP to you!"
+}</code></pre>
+
+            <p><strong>Step 3: Use In-Game</strong></p>
+            <pre><code>/tpa_request steve</code></pre>
+            <p><strong>Result:</strong> <code>say steve wants to TP to you!</code></p>
+
+            <h2>Pattern Syntax</h2>
+            <table>
+                <tr>
+                    <th>Element</th>
+                    <th>Format</th>
+                    <th>Example</th>
+                </tr>
+                <tr>
+                    <td>Pattern Name</td>
+                    <td>Key in syntax.json</td>
+                    <td><code>"tpa"</code></td>
+                </tr>
+                <tr>
+                    <td>Pattern String</td>
+                    <td><code>/command &lt;param&gt;</code></td>
+                    <td><code>"/tpa &lt;player&gt;"</code></td>
+                </tr>
+                <tr>
+                    <td>Parameter</td>
+                    <td>Inside &lt; and &gt;</td>
+                    <td><code>&lt;player&gt;</code></td>
+                </tr>
+                <tr>
+                    <td>Variable in Alias</td>
+                    <td><code>${pattern_param}</code></td>
+                    <td><code>${tpa_player}</code></td>
+                </tr>
+            </table>
+
+            <h2>Multi-Parameter Examples</h2>
+
+            <h3>Ban System</h3>
+            <pre><code>{
+  "ban": {
+    "pattern": "/ban &lt;player&gt; &lt;reason&gt;",
+    "description": "Ban a player with reason"
+  }
+}</code></pre>
+
+            <p>Use in alias: <code>ban ${ban_player} ${ban_reason}</code></p>
+
+            <h3>Message System</h3>
+            <pre><code>{
+  "msg": {
+    "pattern": "/msg &lt;player&gt; &lt;message&gt;",
+    "description": "Send a message to a player"
+  }
+}</code></pre>
+
+            <p>Last parameter is greedy and captures everything to the end!</p>
+
+            <h2>Viewing Defined Patterns</h2>
+            <p>In-game, use:</p>
+            <pre><code>/syntax</code></pre>
+            <p>Shows all defined custom syntax patterns and their descriptions.</p>
+
+            <h2>Best Practices</h2>
+            <ul>
+                <li>Use clear pattern names: <code>"tpa"</code>, <code>"ban"</code>, <code>"warp"</code></li>
+                <li>Keep patterns simple and intuitive</li>
+                <li>Document descriptions for players</li>
+                <li>Match real Minecraft command conventions when possible</li>
+                <li>Test patterns before deploying on servers</li>
+            </ul>
+
+            <div class="info-box">
+                <h3>💡 Advanced Tip</h3>
+                <p>Combine syntax parameters with built-in variables! Example: <code>say ${player} sent TPA to ${tpa_player} from ${x} ${y} ${z}</code></p>
+            </div>
+        </main>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Documentation</h4>
+                <ul>
+                    <li><a href="getting-started.html">Getting Started</a></li>
+                    <li><a href="commands.html">Commands</a></li>
+                    <li><a href="syntax-system.html">Custom Syntax</a></li>
+                    <li><a href="examples.html">Examples</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="troubleshooting.html">Troubleshooting</a></li>
+                    <li><a href="faq.html">FAQ</a></li>
+                    <li><a href="best-practices.html">Best Practices</a></li>
+                    <li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">GitHub</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Community</h4>
+                <ul>
+                    <li><a href="https://modrinth.com/mod/command-maker">Modrinth</a></li>
+                    <li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">Report Issues</a></li>
+                    <li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">Contribute</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Command Maker Wiki. Built with ❤️ for Minecraft players.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
