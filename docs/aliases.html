@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creating Aliases - Command Maker Wiki</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html"><span class="logo-icon">⚙️</span> Command Maker Wiki</a>
+            </div>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="getting-started.html" class="nav-link active">Getting Started</a>
+                <a href="commands.html" class="nav-link">Commands</a>
+                <a href="syntax-system.html" class="nav-link">Custom Syntax</a>
+                <a href="examples.html" class="nav-link">Examples</a>
+                <a href="faq.html" class="nav-link">FAQ</a>
+            </div>
+            <div class="nav-search">
+                <input type="text" id="searchBox" placeholder="Search documentation..." class="search-input">
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-wrapper">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-widget">
+                <h3 class="widget-title">📚 Documentation</h3>
+                <ul class="widget-list">
+                    <li><a href="getting-started.html">Getting Started</a></li>
+                    <li><a href="installation.html">Installation</a></li>
+                    <li><a href="configuration.html">Configuration</a></li>
+                    <li><a href="aliases.html">Creating Aliases</a></li>
+                </ul>
+            </div>
+
+            <div class="sidebar-widget">
+                <h3 class="widget-title">⚡ Features</h3>
+                <ul class="widget-list">
+                    <li><a href="syntax-system.html">Custom Syntax System</a></li>
+                    <li><a href="variables.html">Variables & Substitution</a></li>
+                    <li><a href="gui-system.html">GUI System</a></li>
+                    <li><a href="chat-messages.html">Chat Messages</a></li>
+                </ul>
+            </div>
+
+            <div class="sidebar-widget">
+                <h3 class="widget-title">🎮 Examples</h3>
+                <ul class="widget-list">
+                    <li><a href="tpa-system.html">TPA System</a></li>
+                    <li><a href="ban-system.html">Ban System</a></li>
+                    <li><a href="warp-system.html">Warp System</a></li>
+                    <li><a href="custom-commands.html">Custom Commands</a></li>
+                </ul>
+            </div>
+
+            <div class="sidebar-widget">
+                <h3 class="widget-title">❓ Help</h3>
+                <ul class="widget-list">
+                    <li><a href="troubleshooting.html">Troubleshooting</a></li>
+                    <li><a href="faq.html">Frequently Asked Questions</a></li>
+                    <li><a href="best-practices.html">Best Practices</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Content Area -->
+        <main class="content">
+            <h1>Creating Aliases</h1>
+            <p>Learn how to create command aliases that will save you time and make complex commands simple.</p>
+
+            <section>
+                <h2>What is an Alias?</h2>
+                <p>An alias is a short name for a command (or group of commands) that you use frequently. Instead of typing the full command every time, you can create a shortcut.</p>
+
+                <p><strong>Example:</strong><br>
+                Instead of: <code>/teleport @s 0 64 0</code><br>
+                Type: <code>/home</code></p>
+            </section>
+
+            <section>
+                <h2>Basic Alias Format</h2>
+                <pre><code>{
+  "alias_name": "actual command"
+}</code></pre>
+
+                <p>In your <code>aliases.json</code> file:</p>
+                <ul>
+                    <li><strong>Key</strong> (left side): The short name you'll type</li>
+                    <li><strong>Value</strong> (right side): The command that will execute</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Simple Examples</h2>
+
+                <h3>Greeting Alias</h3>
+                <pre><code>"greet": "say Hello, everyone!"</code></pre>
+                <p>Type: <code>/greet</code><br>
+                Executes: <code>say Hello, everyone!</code></p>
+
+                <h3>Creative Mode Alias</h3>
+                <pre><code>"creative": "gamemode creative @s"</code></pre>
+                <p>Type: <code>/creative</code><br>
+                Executes: <code>gamemode creative @s</code></p>
+
+                <h3>Give Items Alias</h3>
+                <pre><code>"sword": "give @s diamond_sword 1"</code></pre>
+                <p>Type: <code>/sword</code><br>
+                Executes: <code>give @s diamond_sword 1</code></p>
+            </section>
+
+            <section>
+                <h2>Aliases with Variables</h2>
+                <p>Make your aliases even more powerful with built-in variables that get replaced with actual values:</p>
+
+                <h3>Supported Variables</h3>
+                <ul>
+                    <li><code>${player}</code> - Current player's name</li>
+                    <li><code>${x}</code> - Player's X coordinate</li>
+                    <li><code>${y}</code> - Player's Y coordinate</li>
+                    <li><code>${z}</code> - Player's Z coordinate</li>
+                </ul>
+
+                <h3>Variable Examples</h3>
+                <pre><code>"home": "tp ${player} 0 64 0"</code></pre>
+                <p>When you type <code>/home</code>, it replaces <code>${player}</code> with your actual name.</p>
+
+                <pre><code>"coord": "say I am at ${x}, ${y}, ${z}"</code></pre>
+                <p>Displays your current coordinates in chat.</p>
+
+                <pre><code>"tp_steve": "tp Steve ${x} ${y} ${z}"</code></pre>
+                <p>Teleports Steve to your current location.</p>
+            </section>
+
+            <section>
+                <h2>Creating an Alias File</h2>
+
+                <h3>Method 1: Edit aliases.json</h3>
+                <ol>
+                    <li>Open <code>config/CommandMaker/aliases.json</code> in a text editor</li>
+                    <li>Add your alias: <code>"myalias": "my command"</code></li>
+                    <li>Make sure JSON is valid (proper commas, quotes)</li>
+                    <li>Save the file</li>
+                    <li>Run <code>/addcommand reload</code> in-game</li>
+                </ol>
+
+                <h3>Method 2: Use In-Game Command</h3>
+                <p>Add aliases without editing files:</p>
+                <pre><code>/addcommand add myalias "my command"</code></pre>
+
+                <p>The alias is immediately available to use.</p>
+
+                <h3>Method 3: Custom Syntax</h3>
+                <p>For advanced aliases with parameters, use the Custom Syntax System:</p>
+                <p><a href="syntax-system.html">Learn about Custom Syntax →</a></p>
+            </section>
+
+            <section>
+                <h2>Complete Example Configuration</h2>
+                <pre><code>{
+  "home": "tp ${player} 0 64 0",
+  "spawn": "tp ${player} 100 100 100",
+  "creative": "gamemode creative @s",
+  "survival": "gamemode survival @s",
+  "greet": "say Hello, ${player}!",
+  "getcoords": "say I am at ${x}, ${y}, ${z}",
+  "day": "time set day",
+  "night": "time set night",
+  "rain": "weather rain",
+  "clear": "weather clear",
+  "stop": "stop"
+}</code></pre>
+            </section>
+
+            <section>
+                <h2>Naming Conventions</h2>
+                <p><strong>Best Practices:</strong></p>
+                <ul>
+                    <li>Use lowercase names: <code>home</code> instead of <code>Home</code></li>
+                    <li>Use underscores for multi-word aliases: <code>pet_heal</code></li>
+                    <li>Keep names short and memorable</li>
+                    <li>Avoid special characters except underscores</li>
+                    <li>Don't use existing Minecraft command names</li>
+                </ul>
+
+                <p><strong>❌ Poor Names:</strong> <code>H</code>, <code>tp_player_to_coords_123</code><br>
+                <strong>✅ Good Names:</strong> <code>home</code>, <code>pvp_arena</code></p>
+            </section>
+
+            <section>
+                <h2>Managing Your Aliases</h2>
+
+                <h3>List All Aliases</h3>
+                <p>Look in your <code>aliases.json</code> file to see all defined aliases.</p>
+
+                <h3>Edit an Alias</h3>
+                <p>Edit the value in <code>aliases.json</code> and reload:</p>
+                <pre><code>/addcommand reload</code></pre>
+
+                <h3>Delete an Alias</h3>
+                <p>Use the in-game command:</p>
+                <pre><code>/addcommand del myalias</code></pre>
+
+                <p>Or open the GUI:</p>
+                <pre><code>/deletealiases-gui</code></pre>
+            </section>
+
+            <section>
+                <h2>Common Issues</h2>
+
+                <p><strong>❌ Alias not working?</strong></p>
+                <ul>
+                    <li>Did you reload with <code>/addcommand reload</code>?</li>
+                    <li>Is the command valid Minecraft syntax?</li>
+                    <li>Check for typos in the alias name</li>
+                </ul>
+
+                <p><strong>❌ Syntax error message?</strong></p>
+                <ul>
+                    <li>Check your JSON formatting</li>
+                    <li>Ensure quotes are matched correctly</li>
+                    <li>Use a <a href="https://jsonlint.com/" target="_blank" rel="noopener">JSON validator</a></li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Next Steps</h2>
+                <ol>
+                    <li>Create your first simple alias</li>
+                    <li>Try using variables like <code>${player}</code></li>
+                    <li>Learn about <a href="syntax-system.html">Custom Syntax</a> for parameters</li>
+                    <li>Check out <a href="examples.html">Examples</a> for inspiration</li>
+                </ol>
+            </section>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Documentation</h4>
+                <ul>
+                    <li><a href="getting-started.html">Getting Started</a></li>
+                    <li><a href="commands.html">Commands</a></li>
+                    <li><a href="syntax-system.html">Custom Syntax</a></li>
+                    <li><a href="examples.html">Examples</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="troubleshooting.html">Troubleshooting</a></li>
+                    <li><a href="faq.html">FAQ</a></li>
+                    <li><a href="best-practices.html">Best Practices</a></li>
+                    <li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">GitHub</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Community</h4>
+                <ul>
+                    <li><a href="https://modrinth.com/mod/command-maker">Modrinth</a></li>
+                    <li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">Report Issues</a></li>
+                    <li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">Contribute</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Command Maker Wiki. Built with ❤️ for Minecraft players.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

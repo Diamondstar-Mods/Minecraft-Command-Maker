@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GUI System - Command Maker Wiki</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html"><span class="logo-icon">⚙️</span> Command Maker Wiki</a>
+            </div>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="getting-started.html" class="nav-link">Getting Started</a>
+                <a href="commands.html" class="nav-link">Commands</a>
+                <a href="syntax-system.html" class="nav-link active">Custom Syntax</a>
+                <a href="examples.html" class="nav-link">Examples</a>
+                <a href="faq.html" class="nav-link">FAQ</a>
+            </div>
+            <div class="nav-search">
+                <input type="text" id="searchBox" placeholder="Search documentation..." class="search-input">
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-wrapper">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-widget">
+                <h3 class="widget-title">📚 Documentation</h3>
+                <ul class="widget-list">
+                    <li><a href="getting-started.html">Getting Started</a></li>
+                    <li><a href="installation.html">Installation</a></li>
+                    <li><a href="configuration.html">Configuration</a></li>
+                    <li><a href="aliases.html">Creating Aliases</a></li>
+                </ul>
+            </div>
+
+            <div class="sidebar-widget">
+                <h3 class="widget-title">⚡ Features</h3>
+                <ul class="widget-list">
+                    <li><a href="syntax-system.html">Custom Syntax System</a></li>
+                    <li><a href="variables.html">Variables & Substitution</a></li>
+                    <li><a href="gui-system.html">GUI System</a></li>
+                    <li><a href="chat-messages.html">Chat Messages</a></li>
+                </ul>
+            </div>
+
+            <div class="sidebar-widget">
+                <h3 class="widget-title">🎮 Examples</h3>
+                <ul class="widget-list">
+                    <li><a href="tpa-system.html">TPA System</a></li>
+                    <li><a href="ban-system.html">Ban System</a></li>
+                    <li><a href="warp-system.html">Warp System</a></li>
+                    <li><a href="custom-commands.html">Custom Commands</a></li>
+                </ul>
+            </div>
+
+            <div class="sidebar-widget">
+                <h3 class="widget-title">❓ Help</h3>
+                <ul class="widget-list">
+                    <li><a href="troubleshooting.html">Troubleshooting</a></li>
+                    <li><a href="faq.html">Frequently Asked Questions</a></li>
+                    <li><a href="best-practices.html">Best Practices</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Content Area -->
+        <main class="content">
+            <h1>GUI System</h1>
+            <p>Manage your aliases graphically with the Command Maker GUI system.</p>
+
+            <section>
+                <h2>Overview</h2>
+                <p>Command Maker includes a graphical interface for managing aliases without needing to edit JSON files. The GUI makes it easy to delete aliases and organize your commands.</p>
+            </section>
+
+            <section>
+                <h2>Opening the GUI</h2>
+                <p>To open the alias management GUI, use this command in-game:</p>
+                <pre><code>/deletealiases-gui</code></pre>
+
+                <p>A window will appear showing all your currently active aliases in a grid layout.</p>
+            </section>
+
+            <section>
+                <h2>GUI Features</h2>
+
+                <h3>Viewing Aliases</h3>
+                <p>The GUI displays all aliases as clickable blocks, similar to Minecraft's inventory system.</p>
+                <ul>
+                    <li>Each alias shows its name and command</li>
+                    <li>Aliases are displayed in a grid format</li>
+                    <li>Scroll through aliases if you have many of them</li>
+                </ul>
+
+                <h3>Deleting Aliases</h3>
+                <ol>
+                    <li>Open the GUI with <code>/deletealiases-gui</code></li>
+                    <li>Click on any alias to delete it</li>
+                    <li>The alias is immediately removed from your configuration</li>
+                    <li>Close the GUI by pressing <kbd>ESC</kbd></li>
+                </ol>
+
+                <h3>Scrolling Through Aliases</h3>
+                <p>If you have many aliases:</p>
+                <ul>
+                    <li>Use your <strong>mouse wheel</strong> to scroll up and down</li>
+                    <li>The grid will show different aliases as you scroll</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>GUI Layout</h2>
+                <p>The GUI displays aliases in a stone-textured grid:</p>
+                <ul>
+                    <li><strong>Width:</strong> 9 columns (like an inventory)</li>
+                    <li><strong>Height:</strong> 5 visible rows</li>
+                    <li><strong>Total visible:</strong> 45 aliases at a time</li>
+                </ul>
+
+                <p>Each alias block shows:</p>
+                <ul>
+                    <li>Alias name (in white text)</li>
+                    <li>Command being executed (in gray text)</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Comparison: GUI vs. Commands vs. Files</h2>
+                <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+                    <thead>
+                        <tr style="background-color: #f0f0f0;">
+                            <th style="border: 1px solid #ccc; padding: 8px;">Method</th>
+                            <th style="border: 1px solid #ccc; padding: 8px;">Best For</th>
+                            <th style="border: 1px solid #ccc; padding: 8px;">Ease</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="border: 1px solid #ccc; padding: 8px;"><strong>GUI</strong></td>
+                            <td style="border: 1px solid #ccc; padding: 8px;">Deleting aliases quickly</td>
+                            <td style="border: 1px solid #ccc; padding: 8px;">⭐⭐⭐⭐⭐</td>
+                        </tr>
+                        <tr style="background-color: #f9f9f9;">
+                            <td style="border: 1px solid #ccc; padding: 8px;"><strong>Commands</strong></td>
+                            <td style="border: 1px solid #ccc; padding: 8px;">Adding simple aliases</td>
+                            <td style="border: 1px solid #ccc; padding: 8px;">⭐⭐⭐⭐</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #ccc; padding: 8px;"><strong>JSON Files</strong></td>
+                            <td style="border: 1px solid #ccc; padding: 8px;">Bulk editing, complex setup</td>
+                            <td style="border: 1px solid #ccc; padding: 8px;">⭐⭐⭐</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section>
+                <h2>Workflow Example</h2>
+                <ol>
+                    <li>Create aliases by editing <code>aliases.json</code></li>
+                    <li>Run <code>/addcommand reload</code> to load them</li>
+                    <li>Use <code>/deletealiases-gui</code> to manage and delete aliases quickly</li>
+                    <li>Or use <code>/addcommand add</code> for simple additions</li>
+                </ol>
+            </section>
+
+            <section>
+                <h2>Tips & Tricks</h2>
+
+                <h3>Bulk Deletion</h3>
+                <p>To delete many aliases:</p>
+                <ol>
+                    <li>Open the GUI</li>
+                    <li>Click each alias you want to remove</li>
+                    <li>Reload aliases with <code>/addcommand reload</code></li>
+                </ol>
+
+                <h3>Backup Before Deleting</h3>
+                <p>Before deleting aliases through the GUI, consider:</p>
+                <ul>
+                    <li>Making a backup of your <code>aliases.json</code></li>
+                    <li>Deleting directly from the file if you need to undo changes</li>
+                </ul>
+
+                <h3>Hotkey Access</h3>
+                <p>Create an alias for the GUI command:</p>
+                <pre><code>"gui": "/deletealiases-gui"</code></pre>
+                <p>Now you can type <code>/gui</code> to quickly access the interface.</p>
+            </section>
+
+            <section>
+                <h2>Troubleshooting</h2>
+
+                <p><strong>❌ GUI not opening?</strong></p>
+                <ul>
+                    <li>Make sure you're in single-player or on a server with the mod</li>
+                    <li>Ensure the mod is installed correctly</li>
+                    <li>Try using <code>/addcommand reload</code> first</li>
+                </ul>
+
+                <p><strong>❌ Can't see all my aliases?</strong></p>
+                <ul>
+                    <li>Scroll using your mouse wheel to see more</li>
+                    <li>The GUI shows up to 45 aliases at once</li>
+                </ul>
+
+                <p><strong>❌ Deleted an alias by mistake?</strong></p>
+                <ul>
+                    <li>Re-add it with <code>/addcommand add</code></li>
+                    <li>Or restore it from your backup</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Related Pages</h2>
+                <ul>
+                    <li><a href="aliases.html">Creating Aliases</a></li>
+                    <li><a href="configuration.html">Configuration</a></li>
+                    <li><a href="commands.html">Command Reference</a></li>
+                </ul>
+            </section>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Documentation</h4>
+                <ul>
+                    <li><a href="getting-started.html">Getting Started</a></li>
+                    <li><a href="commands.html">Commands</a></li>
+                    <li><a href="syntax-system.html">Custom Syntax</a></li>
+                    <li><a href="examples.html">Examples</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="troubleshooting.html">Troubleshooting</a></li>
+                    <li><a href="faq.html">FAQ</a></li>
+                    <li><a href="best-practices.html">Best Practices</a></li>
+                    <li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">GitHub</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Community</h4>
+                <ul>
+                    <li><a href="https://modrinth.com/mod/command-maker">Modrinth</a></li>
+                    <li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">Report Issues</a></li>
+                    <li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">Contribute</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Command Maker Wiki. Built with ❤️ for Minecraft players.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
