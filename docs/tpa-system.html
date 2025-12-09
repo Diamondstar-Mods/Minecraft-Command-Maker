@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TPA System - Command Maker Wiki</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo"><a href="index.html"><span class="logo-icon">⚙️</span> Command Maker Wiki</a></div>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="getting-started.html" class="nav-link">Getting Started</a>
+                <a href="commands.html" class="nav-link">Commands</a>
+                <a href="syntax-system.html" class="nav-link">Custom Syntax</a>
+                <a href="examples.html" class="nav-link">Examples</a>
+                <a href="faq.html" class="nav-link">FAQ</a>
+            </div>
+            <div class="nav-search"><input type="text" id="searchBox" placeholder="Search documentation..." class="search-input"></div>
+        </div>
+    </nav>
+
+    <div class="main-wrapper">
+        <aside class="sidebar">
+            <div class="sidebar-widget">
+                <h3 class="widget-title">🎮 Examples</h3>
+                <ul class="widget-list">
+                    <li><a href="tpa-system.html">TPA System</a></li>
+                    <li><a href="ban-system.html">Ban System</a></li>
+                    <li><a href="warp-system.html">Warp System</a></li>
+                    <li><a href="custom-commands.html">Custom Commands</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-widget">
+                <h3 class="widget-title">📚 Documentation</h3>
+                <ul class="widget-list">
+                    <li><a href="getting-started.html">Getting Started</a></li>
+                    <li><a href="installation.html">Installation</a></li>
+                    <li><a href="configuration.html">Configuration</a></li>
+                    <li><a href="aliases.html">Creating Aliases</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-widget">
+                <h3 class="widget-title">⚡ Features</h3>
+                <ul class="widget-list">
+                    <li><a href="syntax-system.html">Custom Syntax System</a></li>
+                    <li><a href="variables.html">Variables & Substitution</a></li>
+                    <li><a href="gui-system.html">GUI System</a></li>
+                    <li><a href="chat-messages.html">Chat Messages</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <main class="content">
+            <h1>TPA (Teleport Request) System</h1>
+            <p>Learn how to create a complete TPA system with Request, Accept, and Deny functionality!</p>
+
+            <h2>What is TPA?</h2>
+            <p>A Teleport Request system allows players to request teleportation to other players with an accept/deny mechanism.</p>
+
+            <h2>Setup Instructions</h2>
+
+            <h3>Step 1: Define Syntax Patterns</h3>
+            <p>Edit <code>config/CommandMaker/syntax.json</code>:</p>
+            <pre><code>{
+  "tpa": {
+    "pattern": "/tpa &lt;player&gt;",
+    "description": "Send teleport request"
+  },
+  "tpaccept": {
+    "pattern": "/tpaccept &lt;player&gt;",
+    "description": "Accept teleport request"
+  },
+  "tpadeny": {
+    "pattern": "/tpadeny &lt;player&gt;",
+    "description": "Deny teleport request"
+  }
+}</code></pre>
+
+            <h3>Step 2: Create Aliases</h3>
+            <p>Edit <code>config/CommandMaker/aliases.json</code>:</p>
+            <pre><code>{
+  "tpa": "tellraw ${tpa_player} {\"text\":\"${player} wants to teleport to you! Type /tpaccept ${player} or /tpadeny ${player}\",\"color\":\"yellow\"}",
+  "tpaccept": "execute as ${tpaccept_player} at @s run tp ${player} @s",
+  "tpadeny": "tellraw ${tpadeny_player} {\"text\":\"Teleport request from ${player} denied.\",\"color\":\"red\"}"
+}</code></pre>
+
+            <h3>Step 3: Reload</h3>
+            <p>In-game, run:</p>
+            <pre><code>/addcommand reload</code></pre>
+
+            <h2>Usage Example</h2>
+
+            <p><strong>Player A requests TP to Player B:</strong></p>
+            <pre><code>/tpa B</code></pre>
+            <p>→ Player B receives: "A wants to teleport to you! Type /tpaccept A or /tpadeny A"</p>
+
+            <p><strong>Player B accepts:</strong></p>
+            <pre><code>/tpaccept A</code></pre>
+            <p>→ Player A is teleported to Player B</p>
+
+            <p><strong>Or Player B denies:</strong></p>
+            <pre><code>/tpadeny A</code></pre>
+            <p>→ Player A receives: "Teleport request from B denied."</p>
+
+            <h2>Advanced Variations</h2>
+
+            <h3>With Delay</h3>
+            <pre><code>{
+  "tpa": "schedule function my_namespace:tpa_delay 5t"
+}</code></pre>
+
+            <h3>With Confirmation Sound</h3>
+            <pre><code>{
+  "tpaccept": "playsound entity.player.teleport neutral @s && execute as ${tpaccept_player} at @s run tp ${player} @s"
+}</code></pre>
+
+            <h3>With Toast Notification</h3>
+            <pre><code>{
+  "tpa": "tellraw ${tpa_player} {\"text\":\"${player} sent TPA\",\"color\":\"yellow\"} && playsound ui.button.click master ${tpa_player}"
+}</code></pre>
+
+            <div class="info-box">
+                <h3>💡 Pro Tip</h3>
+                <p>Use JSON formatting in the tellraw command for colored messages and better formatting!</p>
+            </div>
+
+            <h2>Customization Ideas</h2>
+            <ul>
+                <li>Add cooldown with <code>schedule</code> command</li>
+                <li>Add permission checks with <code>execute if predicate</code></li>
+                <li>Add sound effects on accept/deny</li>
+                <li>Track requests with custom variables</li>
+                <li>Send different messages to different players</li>
+            </ul>
+        </main>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Examples</h4>
+                <ul><li><a href="tpa-system.html">TPA System</a></li><li><a href="ban-system.html">Ban System</a></li><li><a href="warp-system.html">Warp System</a></li><li><a href="custom-commands.html">Custom Commands</a></li></ul>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul><li><a href="troubleshooting.html">Troubleshooting</a></li><li><a href="faq.html">FAQ</a></li><li><a href="best-practices.html">Best Practices</a></li></ul>
+            </div>
+            <div class="footer-section">
+                <h4>Community</h4>
+                <ul><li><a href="https://modrinth.com/mod/command-maker">Modrinth</a></li><li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">GitHub</a></li></ul>
+            </div>
+        </div>
+        <div class="footer-bottom"><p>&copy; 2025 Command Maker Wiki.</p></div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

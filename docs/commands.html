@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Commands - Command Maker Wiki</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo"><a href="index.html"><span class="logo-icon">⚙️</span> Command Maker Wiki</a></div>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="getting-started.html" class="nav-link">Getting Started</a>
+                <a href="commands.html" class="nav-link active">Commands</a>
+                <a href="syntax-system.html" class="nav-link">Custom Syntax</a>
+                <a href="examples.html" class="nav-link">Examples</a>
+                <a href="faq.html" class="nav-link">FAQ</a>
+            </div>
+            <div class="nav-search"><input type="text" id="searchBox" placeholder="Search documentation..." class="search-input"></div>
+        </div>
+    </nav>
+
+    <div class="main-wrapper">
+        <aside class="sidebar">
+            <div class="sidebar-widget">
+                <h3 class="widget-title">📚 Documentation</h3>
+                <ul class="widget-list">
+                    <li><a href="getting-started.html">Getting Started</a></li>
+                    <li><a href="installation.html">Installation</a></li>
+                    <li><a href="configuration.html">Configuration</a></li>
+                    <li><a href="aliases.html">Creating Aliases</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-widget">
+                <h3 class="widget-title">⚡ Features</h3>
+                <ul class="widget-list">
+                    <li><a href="syntax-system.html">Custom Syntax System</a></li>
+                    <li><a href="variables.html">Variables & Substitution</a></li>
+                    <li><a href="gui-system.html">GUI System</a></li>
+                    <li><a href="chat-messages.html">Chat Messages</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-widget">
+                <h3 class="widget-title">🎮 Examples</h3>
+                <ul class="widget-list">
+                    <li><a href="tpa-system.html">TPA System</a></li>
+                    <li><a href="ban-system.html">Ban System</a></li>
+                    <li><a href="warp-system.html">Warp System</a></li>
+                    <li><a href="custom-commands.html">Custom Commands</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-widget">
+                <h3 class="widget-title">❓ Help</h3>
+                <ul class="widget-list">
+                    <li><a href="troubleshooting.html">Troubleshooting</a></li>
+                    <li><a href="faq.html">Frequently Asked Questions</a></li>
+                    <li><a href="best-practices.html">Best Practices</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <main class="content">
+            <h1>Complete Command Reference</h1>
+
+            <h2>/addcommand</h2>
+            <p><strong>Description:</strong> Manage command aliases</p>
+            
+            <h3>Subcommands</h3>
+            <table>
+                <tr><th>Command</th><th>Description</th><th>Example</th></tr>
+                <tr>
+                    <td><code>/addcommand reload</code></td>
+                    <td>Reload aliases and syntax from config files</td>
+                    <td><code>/addcommand reload</code></td>
+                </tr>
+                <tr>
+                    <td><code>/addcommand add</code></td>
+                    <td>Create a new alias</td>
+                    <td><code>/addcommand add hello say Hello!</code></td>
+                </tr>
+                <tr>
+                    <td><code>/addcommand del</code></td>
+                    <td>Delete an alias</td>
+                    <td><code>/addcommand del hello</code></td>
+                </tr>
+            </table>
+
+            <h2>/setcmdvariable</h2>
+            <p><strong>Description:</strong> Set custom variables for your player</p>
+            <p><strong>Usage:</strong> <code>/setcmdvariable &lt;variable&gt; &lt;value&gt;</code></p>
+            <p><strong>Example:</strong> <code>/setcmdvariable home 100 64 -200</code></p>
+            <p><strong>Use in alias:</strong> <code>${home}</code></p>
+
+            <h2>/deletealias</h2>
+            <p><strong>Description:</strong> List all aliases or delete a specific one</p>
+            <p><strong>Usage:</strong></p>
+            <ul>
+                <li><code>/deletealias</code> - Lists all aliases</li>
+                <li><code>/deletealias &lt;alias&gt;</code> - Delete specific alias</li>
+            </ul>
+
+            <h2>/deletealiases-gui</h2>
+            <p><strong>Description:</strong> Opens GUI for managing aliases</p>
+            <p><strong>Features:</strong></p>
+            <ul>
+                <li>View all aliases as clickable stone blocks</li>
+                <li>Hover to see alias name and target command</li>
+                <li>Click to delete</li>
+                <li>Scroll with mouse wheel</li>
+            </ul>
+
+            <h2>/syntax</h2>
+            <p><strong>Description:</strong> View all custom syntax patterns</p>
+            <p><strong>Usage:</strong> <code>/syntax</code></p>
+            <p><strong>Shows:</strong> All defined custom syntax patterns with descriptions</p>
+
+            <h2>Built-in Variables</h2>
+            <table>
+                <tr><th>Variable</th><th>Description</th><th>Example</th></tr>
+                <tr>
+                    <td><code>${player}</code></td>
+                    <td>Your player name</td>
+                    <td>steve</td>
+                </tr>
+                <tr>
+                    <td><code>${x}</code></td>
+                    <td>Your X coordinate</td>
+                    <td>100</td>
+                </tr>
+                <tr>
+                    <td><code>${y}</code></td>
+                    <td>Your Y coordinate</td>
+                    <td>64</td>
+                </tr>
+                <tr>
+                    <td><code>${z}</code></td>
+                    <td>Your Z coordinate</td>
+                    <td>-200</td>
+                </tr>
+                <tr>
+                    <td><code>${custom_var}</code></td>
+                    <td>Custom variable you set</td>
+                    <td>myvalue</td>
+                </tr>
+                <tr>
+                    <td><code>${syntax_param}</code></td>
+                    <td>Custom syntax parameter</td>
+                    <td>steve</td>
+                </tr>
+            </table>
+
+            <div class="info-box">
+                <h3>💡 Tip</h3>
+                <p>All aliases you create are also commands! Type <code>/alias_name [args]</code> to execute them.</p>
+            </div>
+        </main>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Documentation</h4>
+                <ul><li><a href="getting-started.html">Getting Started</a></li><li><a href="commands.html">Commands</a></li><li><a href="syntax-system.html">Custom Syntax</a></li><li><a href="examples.html">Examples</a></li></ul>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul><li><a href="troubleshooting.html">Troubleshooting</a></li><li><a href="faq.html">FAQ</a></li><li><a href="best-practices.html">Best Practices</a></li><li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">GitHub</a></li></ul>
+            </div>
+            <div class="footer-section">
+                <h4>Community</h4>
+                <ul><li><a href="https://modrinth.com/mod/command-maker">Modrinth</a></li><li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">Report Issues</a></li><li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">Contribute</a></li></ul>
+            </div>
+        </div>
+        <div class="footer-bottom"><p>&copy; 2025 Command Maker Wiki. Built with ❤️ for Minecraft players.</p></div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
