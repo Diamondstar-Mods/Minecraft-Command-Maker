@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Troubleshooting - Command Maker Wiki</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo"><a href="index.html"><span class="logo-icon">⚙️</span> Command Maker Wiki</a></div>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="getting-started.html" class="nav-link">Getting Started</a>
+                <a href="commands.html" class="nav-link">Commands</a>
+                <a href="syntax-system.html" class="nav-link">Custom Syntax</a>
+                <a href="examples.html" class="nav-link">Examples</a>
+                <a href="faq.html" class="nav-link">FAQ</a>
+            </div>
+            <div class="nav-search"><input type="text" id="searchBox" placeholder="Search documentation..." class="search-input"></div>
+        </div>
+    </nav>
+
+    <div class="main-wrapper">
+        <aside class="sidebar">
+            <div class="sidebar-widget">
+                <h3 class="widget-title">❓ Help</h3>
+                <ul class="widget-list">
+                    <li><a href="faq.html">FAQ</a></li>
+                    <li><a href="troubleshooting.html">Troubleshooting</a></li>
+                    <li><a href="best-practices.html">Best Practices</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-widget">
+                <h3 class="widget-title">📚 Documentation</h3>
+                <ul class="widget-list">
+                    <li><a href="getting-started.html">Getting Started</a></li>
+                    <li><a href="installation.html">Installation</a></li>
+                    <li><a href="configuration.html">Configuration</a></li>
+                    <li><a href="aliases.html">Creating Aliases</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-widget">
+                <h3 class="widget-title">⚡ Features</h3>
+                <ul class="widget-list">
+                    <li><a href="syntax-system.html">Custom Syntax System</a></li>
+                    <li><a href="variables.html">Variables & Substitution</a></li>
+                    <li><a href="gui-system.html">GUI System</a></li>
+                    <li><a href="chat-messages.html">Chat Messages</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <main class="content">
+            <h1>Troubleshooting Guide</h1>
+            <p>Common issues and how to fix them.</p>
+
+            <h2>Installation Issues</h2>
+
+            <h3>❌ "Command Maker mod won't load"</h3>
+            <p><strong>Symptoms:</strong> Mod doesn't appear in mod list</p>
+            <p><strong>Solution:</strong> Check these requirements:</p>
+            <ul>
+                <li>✓ Fabric Loader installed correctly</li>
+                <li>✓ Fabric API present in mods folder</li>
+                <li>✓ Java 21+ installed</li>
+                <li>✓ Minecraft version 1.21.9+</li>
+                <li>✓ CMDMaker JAR in correct mods folder</li>
+            </ul>
+            <p><strong>Quick Fix:</strong></p>
+            <pre><code>1. Delete the mod from mods folder
+2. Restart launcher
+3. Re-download mod from Modrinth
+4. Place in mods folder
+5. Restart Minecraft</code></pre>
+
+            <h3>❌ "Failed to download Fabric API"</h3>
+            <p><strong>Solution:</strong></p>
+            <ul>
+                <li>Download Fabric API manually from <a href="https://modrinth.com/mod/fabric-api">Modrinth</a></li>
+                <li>Place JAR directly in <code>.minecraft/mods</code></li>
+                <li>Restart Minecraft</li>
+            </ul>
+
+            <h3>❌ Crash on startup</h3>
+            <p><strong>Check:</strong> Look at the crash log for the specific error</p>
+            <ul>
+                <li><code>java.lang.UnsupportedClassVersionError</code> → Need Java 21+</li>
+                <li><code>net.fabricmc.loader.impl.FabricLoaderImpl.load()</code> → Fabric not installed</li>
+                <li><code>Mixin</code> errors → Corrupted mod download</li>
+            </ul>
+
+            <h2>Alias & Command Issues</h2>
+
+            <h3>❌ "Command doesn't work / No response"</h3>
+            <p><strong>Troubleshooting steps:</strong></p>
+            <ol>
+                <li>Check spelling of command/alias</li>
+                <li>Run <code>/addcommand list</code> to verify alias exists</li>
+                <li>Make sure you have permission to run the command</li>
+                <li>Check if the underlying command works directly</li>
+                <li>Run <code>/addcommand reload</code> to refresh</li>
+            </ol>
+
+            <h3>❌ "Variable not substituting / Still shows ${player}"</h3>
+            <p><strong>Causes:</strong></p>
+            <ul>
+                <li>Typo in variable name (case-sensitive!)</li>
+                <li><code>${PLAYER}</code> should be <code>${player}</code></li>
+                <li>Custom variable not created with <code>/setcmdvariable</code></li>
+            </ul>
+            <p><strong>Fix:</strong></p>
+            <pre><code>/setcmdvariable myvar "my value"
+/addcommand add test say ${myvar}</code></pre>
+
+            <h3>❌ "Alias worked once, then stopped"</h3>
+            <p><strong>Solution:</strong> Reload the config</p>
+            <pre><code>/addcommand reload</code></pre>
+            <p>If still broken, check config files for errors.</p>
+
+            <h3>❌ "Command returns weird symbols or errors"</h3>
+            <p><strong>Example output:</strong> <code>{"text":"error"}</code></p>
+            <p><strong>Cause:</strong> JSON syntax error in command</p>
+            <p><strong>Fix:</strong> Use proper JSON escaping:</p>
+            <pre><code>say "Use double quotes for strings"
+say \'Use single quotes inside\'</code></pre>
+
+            <h2>Syntax Pattern Issues</h2>
+
+            <h3>❌ "Syntax pattern not matching / Not recognized"</h3>
+            <p><strong>Check:</strong></p>
+            <ul>
+                <li>JSON syntax is valid (use <a href="https://jsonlint.com">JSONLint</a>)</li>
+                <li>You ran <code>/addcommand reload</code> after editing syntax.json</li>
+                <li>Pattern format is correct: <code>/tpa &lt;player&gt;</code></li>
+                <li>Parameter names are in angle brackets</li>
+            </ul>
+
+            <h3>❌ "Getting parameter in wrong variable name"</h3>
+            <p><strong>Example:</strong> Pattern <code>/tpa &lt;player&gt;</code> creates wrong variable</p>
+            <p><strong>Fix:</strong> Use correct naming: <code>${syntax_name_parameter}</code></p>
+            <ul>
+                <li>Syntax name: <code>tpa</code></li>
+                <li>Parameter name: <code>player</code></li>
+                <li>Variable: <code>${tpa_player}</code> ✓</li>
+            </ul>
+
+            <h3>❌ "Multiple parameters aren't working"</h3>
+            <p><strong>Correct pattern:</strong></p>
+            <pre><code>/ban &lt;player&gt; &lt;reason&gt;</code></pre>
+            <p><strong>Correct alias:</strong></p>
+            <pre><code>ban-ip ${ban_player} && say Banned ${ban_player} for: ${ban_reason}</code></pre>
+
+            <h2>GUI Issues</h2>
+
+            <h3>❌ "/deletealiases-gui shows empty / No aliases listed"</h3>
+            <p><strong>Cause:</strong> Aliases map not synced from server</p>
+            <p><strong>Solution:</strong></p>
+            <ul>
+                <li>Run: <code>/deletealias</code> (without parameters) to sync</li>
+                <li>Then run: <code>/deletealiases-gui</code></li>
+                <li>This synchronizes the client with server aliases</li>
+            </ul>
+
+            <h3>❌ "GUI won't open / Crashes when opening"</h3>
+            <p><strong>Check:</strong></p>
+            <ul>
+                <li>Try a simple command first to ensure mod is working</li>
+                <li>Restart Minecraft completely</li>
+                <li>Check if you have permission to run the command</li>
+            </ul>
+
+            <h3>❌ "Can't delete alias from GUI"</h3>
+            <p><strong>Solution:</strong> Use command instead</p>
+            <pre><code>/deletealias alias_name</code></pre>
+
+            <h2>Configuration File Issues</h2>
+
+            <h3>❌ "JSON Parse Error / Config won't load"</h3>
+            <p><strong>Common mistakes:</strong></p>
+            <pre><code>WRONG: { "key": "value", }  (trailing comma)
+RIGHT: { "key": "value" }
+
+WRONG: { key: "value" }  (unquoted key)
+RIGHT: { "key": "value" }
+
+WRONG: { "key": 'value' }  (single quotes)
+RIGHT: { "key": "value" }</code></pre>
+
+            <p><strong>Validator:</strong> Use <a href="https://jsonlint.com">JSONLint</a> to check your JSON</p>
+
+            <h3>❌ "Aliases.json won't save changes"</h3>
+            <p><strong>Solution:</strong></p>
+            <ol>
+                <li>Completely close Minecraft</li>
+                <li>Edit the JSON file</li>
+                <li>Save and close the editor</li>
+                <li>Restart Minecraft</li>
+                <li>Run <code>/addcommand reload</code></li>
+            </ol>
+
+            <h3>❌ "Where's the config folder?"</h3>
+            <p><strong>Location:</strong> <code>.minecraft/config/CommandMaker/</code></p>
+            <p>Files:</p>
+            <ul>
+                <li><code>aliases.json</code></li>
+                <li><code>syntax.json</code></li>
+                <li><code>variables.json</code></li>
+            </ul>
+
+            <h2>Performance Issues</h2>
+
+            <h3>❌ "Server lagging when running alias"</h3>
+            <p><strong>Causes:</strong></p>
+            <ul>
+                <li>Command is too complex</li>
+                <li>Using selectors like <code>@a</code> with large player count</li>
+                <li>Multiple chained commands</li>
+            </ul>
+            <p><strong>Solution:</strong> Simplify the command or split into multiple steps</p>
+
+            <h3>❌ "Too many aliases / Mod freezes on load"</h3>
+            <p><strong>Solution:</strong> Remove unused aliases</p>
+            <pre><code>/deletealias old_alias
+/addcommand reload</code></pre>
+
+            <h2>Advanced Troubleshooting</h2>
+
+            <h3>❌ "Still doesn't work / I'm stuck"</h3>
+            <p><strong>Debug steps:</strong></p>
+            <ol>
+                <li>Open <code>.minecraft/logs/latest.log</code></li>
+                <li>Search for "CommandMaker" or "error"</li>
+                <li>Look for red error messages</li>
+                <li>Note the full error text</li>
+                <li>Share error on GitHub issues</li>
+            </ol>
+
+            <h3>Test Basic Function:</h3>
+            <pre><code>1. Run: /addcommand add test say Works!
+2. Run: /test
+3. Should see: "Works!" in chat
+4. If not → mod not loading properly</code></pre>
+
+            <h3>Test Variables:</h3>
+            <pre><code>1. Run: /addcommand add playertest say ${player}
+2. Run: /playertest
+3. Should see: your username in chat
+4. If not → variable system broken</code></pre>
+
+            <h3>Test Syntax:</h3>
+            <pre><code>1. Create pattern /hello &lt;name&gt; in syntax.json
+2. Create alias: hello = say Hello ${hello_name}!
+3. Run: /addcommand reload
+4. Run: /hello Steve
+5. Should see: Hello Steve!
+6. If not → syntax system broken</code></pre>
+
+            <div class="info-box">
+                <h3>🆘 Need Help?</h3>
+                <p>If none of these solutions work:</p>
+                <ul>
+                    <li>Check the <a href="faq.html">FAQ</a> page</li>
+                    <li>Review <a href="best-practices.html">Best Practices</a></li>
+                    <li>Visit our <a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">GitHub</a> to report issues</li>
+                </ul>
+            </div>
+        </main>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Help & Support</h4>
+                <ul><li><a href="faq.html">FAQ</a></li><li><a href="troubleshooting.html">Troubleshooting</a></li><li><a href="best-practices.html">Best Practices</a></li></ul>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul><li><a href="getting-started.html">Getting Started</a></li><li><a href="installation.html">Installation</a></li><li><a href="syntax-system.html">Custom Syntax</a></li></ul>
+            </div>
+            <div class="footer-section">
+                <h4>Community</h4>
+                <ul><li><a href="https://modrinth.com/mod/command-maker">Modrinth</a></li><li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">GitHub</a></li></ul>
+            </div>
+        </div>
+        <div class="footer-bottom"><p>&copy; 2025 Command Maker Wiki.</p></div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

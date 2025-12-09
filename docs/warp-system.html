@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warp System - Command Maker Wiki</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo"><a href="index.html"><span class="logo-icon">⚙️</span> Command Maker Wiki</a></div>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="getting-started.html" class="nav-link">Getting Started</a>
+                <a href="commands.html" class="nav-link">Commands</a>
+                <a href="syntax-system.html" class="nav-link">Custom Syntax</a>
+                <a href="examples.html" class="nav-link">Examples</a>
+                <a href="faq.html" class="nav-link">FAQ</a>
+            </div>
+            <div class="nav-search"><input type="text" id="searchBox" placeholder="Search documentation..." class="search-input"></div>
+        </div>
+    </nav>
+
+    <div class="main-wrapper">
+        <aside class="sidebar">
+            <div class="sidebar-widget">
+                <h3 class="widget-title">🎮 Examples</h3>
+                <ul class="widget-list">
+                    <li><a href="tpa-system.html">TPA System</a></li>
+                    <li><a href="ban-system.html">Ban System</a></li>
+                    <li><a href="warp-system.html">Warp System</a></li>
+                    <li><a href="custom-commands.html">Custom Commands</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-widget">
+                <h3 class="widget-title">📚 Documentation</h3>
+                <ul class="widget-list">
+                    <li><a href="getting-started.html">Getting Started</a></li>
+                    <li><a href="installation.html">Installation</a></li>
+                    <li><a href="configuration.html">Configuration</a></li>
+                    <li><a href="aliases.html">Creating Aliases</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-widget">
+                <h3 class="widget-title">⚡ Features</h3>
+                <ul class="widget-list">
+                    <li><a href="syntax-system.html">Custom Syntax System</a></li>
+                    <li><a href="variables.html">Variables & Substitution</a></li>
+                    <li><a href="gui-system.html">GUI System</a></li>
+                    <li><a href="chat-messages.html">Chat Messages</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <main class="content">
+            <h1>Warp System</h1>
+            <p>Create named teleport points for quick navigation around your world or server.</p>
+
+            <h2>What is a Warp?</h2>
+            <p>Warps are named locations that players can instantly teleport to. Perfect for:</p>
+            <ul>
+                <li>Spawn locations</li>
+                <li>Hub worlds</li>
+                <li>PvP arenas</li>
+                <li>Mini-games</li>
+                <li>Shopping districts</li>
+            </ul>
+
+            <h2>Basic Warp Setup</h2>
+
+            <h3>Method 1: Simple Aliases (Quick)</h3>
+            <p>The fastest way to create warps:</p>
+            <pre><code>/addcommand add spawn tp ${player} 0 65 0
+/addcommand add hub tp ${player} 500 100 -500
+/addcommand add arena tp ${player} 1000 65 1000
+/addcommand add shop tp ${player} -500 65 250</code></pre>
+
+            <h3>Method 2: Using Custom Syntax (Flexible)</h3>
+            <p>For a more elegant system, use custom syntax patterns:</p>
+            <p>Edit <code>config/CommandMaker/syntax.json</code>:</p>
+            <pre><code>{
+  "warp": {
+    "pattern": "/warp &lt;name&gt;",
+    "description": "Teleport to a named warp point"
+  },
+  "setwarp": {
+    "pattern": "/setwarp &lt;name&gt;",
+    "description": "Create a warp at your current location"
+  }
+}</code></pre>
+
+            <p>Edit <code>config/CommandMaker/aliases.json</code>:</p>
+            <pre><code>{
+  "spawn": "tp ${player} 0 65 0",
+  "hub": "tp ${player} 500 100 -500",
+  "arena": "tp ${player} 1000 65 1000",
+  "shop": "tp ${player} -500 65 250"
+}</code></pre>
+
+            <h2>Advanced: Warp with Particles</h2>
+
+            <p>Make warping more visually impressive:</p>
+            <pre><code>{
+  "spawn": "particle end_rod ~ ~ ~ 0.5 0.5 0.5 0.1 50 normal && tp ${player} 0 65 0 && particle end_rod ~ ~ ~ 0.5 0.5 0.5 0.1 50 normal"
+}</code></pre>
+
+            <h3>Alternative Particle Effects</h3>
+            <table class="particle-table">
+                <thead>
+                    <tr>
+                        <th>Particle</th>
+                        <th>Effect</th>
+                        <th>Use Case</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>end_rod</code></td>
+                        <td>Purple rods</td>
+                        <td>Mystical warping</td>
+                    </tr>
+                    <tr>
+                        <td><code>flame</code></td>
+                        <td>Fire/flames</td>
+                        <td>Hot lava world</td>
+                    </tr>
+                    <tr>
+                        <td><code>white_smoke</code></td>
+                        <td>Smoke puff</td>
+                        <td>Magical disappear</td>
+                    </tr>
+                    <tr>
+                        <td><code>soul_fire_flame</code></td>
+                        <td>Blue flames</td>
+                        <td>Nether theme</td>
+                    </tr>
+                    <tr>
+                        <td><code>enchant</code></td>
+                        <td>Magic sparkles</td>
+                        <td>Enchanted feel</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>Warp with Sound Effects</h2>
+
+            <pre><code>{
+  "spawn": "playsound entity.enderman.teleport master @s && tp ${player} 0 65 0"
+}</code></pre>
+
+            <h3>Popular Teleport Sounds</h3>
+            <ul>
+                <li><code>entity.enderman.teleport</code> - Classic teleport sound</li>
+                <li><code>entity.ender_pearl.sound</code> - Pearl throw sound</li>
+                <li><code>entity.player.levelup</code> - Magic/success</li>
+                <li><code>ui.button.click</code> - UI confirmation</li>
+                <li><code>block.portal.ambient</code> - Portal opening</li>
+            </ul>
+
+            <h2>Complete Warp System Example</h2>
+
+            <pre><code>{
+  "spawn": "say Warping to Spawn... && playsound entity.enderman.teleport master @s && particle end_rod ~ ~ ~ 0.5 0.5 0.5 0.1 30 && tp ${player} 0 65 0 && particle end_rod ~ ~ ~ 0.5 0.5 0.5 0.1 30",
+  "hub": "say Warping to Hub... && playsound entity.enderman.teleport master @s && tp ${player} 500 100 -500",
+  "arena": "say Warping to Arena... && playsound entity.enderman.teleport master @s && tp ${player} 1000 65 1000"
+}</code></pre>
+
+            <h2>Warp Permissions</h2>
+
+            <p>Restrict warps to specific players:</p>
+            <pre><code>{
+  "vip_area": "execute if entity @s[name=VIPPlayer] run tp ${player} 2000 100 2000 || say You don't have permission to warp here"
+}</code></pre>
+
+            <h2>List Warps Command</h2>
+
+            <p>Create a command that lists available warps:</p>
+            <pre><code>/addcommand add warps say Available warps: spawn, hub, arena, shop</code></pre>
+
+            <h2>Warp Descriptions</h2>
+
+            <p>Give players information about warps:</p>
+            <pre><code>/addcommand add spawn say [SPAWN] Main spawn point for all players
+/addcommand add hub say [HUB] Central hub world with games and shops
+/addcommand add arena say [ARENA] PvP fighting arena for battles</code></pre>
+
+            <h2>Multi-World Warping</h2>
+
+            <p>For servers with multiple worlds:</p>
+            <pre><code>{
+  "spawn_nether": "execute in the_nether run tp ${player} 0 65 0",
+  "spawn_end": "execute in the_end run tp ${player} 0 65 0"
+}</code></pre>
+
+            <h2>Safe Warp (Checks for blocks)</h2>
+
+            <p>Advanced: Teleport to a safe location near the warp:</p>
+            <pre><code>{
+  "spawn": "execute at 0 65 0 unless block ~ ~ ~ #replaceable unless block ~ ~1 ~ #replaceable run tp ${player} ~1 65 ~ || tp ${player} 0 65 0"
+}</code></pre>
+
+            <div class="info-box">
+                <h3>💡 Pro Tip</h3>
+                <p>Use <code>/addcommand reload</code> to instantly apply changes without restarting!</p>
+            </div>
+
+            <h2>Warp System Ideas</h2>
+
+            <ul>
+                <li><strong>Hub system:</strong> Central location connecting to all areas</li>
+                <li><strong>Game worlds:</strong> Separate warps for each mini-game</li>
+                <li><strong>Skyblock:</strong> Quick access to different islands</li>
+                <li><strong>Survival:</strong> Warp to claimed land or dungeons</li>
+                <li><strong>Creative:</strong> Navigate between builder plots</li>
+                <li><strong>Roleplay:</strong> Warp to named locations in the story</li>
+            </ul>
+        </main>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Examples</h4>
+                <ul><li><a href="tpa-system.html">TPA System</a></li><li><a href="ban-system.html">Ban System</a></li><li><a href="warp-system.html">Warp System</a></li><li><a href="custom-commands.html">Custom Commands</a></li></ul>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul><li><a href="troubleshooting.html">Troubleshooting</a></li><li><a href="faq.html">FAQ</a></li><li><a href="best-practices.html">Best Practices</a></li></ul>
+            </div>
+            <div class="footer-section">
+                <h4>Community</h4>
+                <ul><li><a href="https://modrinth.com/mod/command-maker">Modrinth</a></li><li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">GitHub</a></li></ul>
+            </div>
+        </div>
+        <div class="footer-bottom"><p>&copy; 2025 Command Maker Wiki.</p></div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

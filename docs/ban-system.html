@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ban System - Command Maker Wiki</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo"><a href="index.html"><span class="logo-icon">⚙️</span> Command Maker Wiki</a></div>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="getting-started.html" class="nav-link">Getting Started</a>
+                <a href="commands.html" class="nav-link">Commands</a>
+                <a href="syntax-system.html" class="nav-link">Custom Syntax</a>
+                <a href="examples.html" class="nav-link">Examples</a>
+                <a href="faq.html" class="nav-link">FAQ</a>
+            </div>
+            <div class="nav-search"><input type="text" id="searchBox" placeholder="Search documentation..." class="search-input"></div>
+        </div>
+    </nav>
+
+    <div class="main-wrapper">
+        <aside class="sidebar">
+            <div class="sidebar-widget">
+                <h3 class="widget-title">🎮 Examples</h3>
+                <ul class="widget-list">
+                    <li><a href="tpa-system.html">TPA System</a></li>
+                    <li><a href="ban-system.html">Ban System</a></li>
+                    <li><a href="warp-system.html">Warp System</a></li>
+                    <li><a href="custom-commands.html">Custom Commands</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-widget">
+                <h3 class="widget-title">📚 Documentation</h3>
+                <ul class="widget-list">
+                    <li><a href="getting-started.html">Getting Started</a></li>
+                    <li><a href="installation.html">Installation</a></li>
+                    <li><a href="configuration.html">Configuration</a></li>
+                    <li><a href="aliases.html">Creating Aliases</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-widget">
+                <h3 class="widget-title">⚡ Features</h3>
+                <ul class="widget-list">
+                    <li><a href="syntax-system.html">Custom Syntax System</a></li>
+                    <li><a href="variables.html">Variables & Substitution</a></li>
+                    <li><a href="gui-system.html">GUI System</a></li>
+                    <li><a href="chat-messages.html">Chat Messages</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <main class="content">
+            <h1>Ban System</h1>
+            <p>Create a professional moderation system with ban commands that include reasons and notifications.</p>
+
+            <h2>What is a Ban System?</h2>
+            <p>A ban system lets moderators quickly remove disruptive players with documented reasons. This example includes:</p>
+            <ul>
+                <li>Ban players with a custom reason</li>
+                <li>Notify the player they were banned</li>
+                <li>Log bans to chat for visibility</li>
+                <li>Kick immediately</li>
+            </ul>
+
+            <h2>Setup Instructions</h2>
+
+            <h3>Step 1: Define Ban Patterns</h3>
+            <p>Edit <code>config/CommandMaker/syntax.json</code>:</p>
+            <pre><code>{
+  "ban": {
+    "pattern": "/ban &lt;player&gt; &lt;reason&gt;",
+    "description": "Ban a player with a reason"
+  },
+  "unban": {
+    "pattern": "/unban &lt;player&gt;",
+    "description": "Unban a player"
+  }
+}</code></pre>
+
+            <h3>Step 2: Create Ban Aliases</h3>
+            <p>Edit <code>config/CommandMaker/aliases.json</code>:</p>
+            <pre><code>{
+  "ban": "ban-ip ${ban_player} && say [BAN] ${ban_player} has been banned. Reason: ${ban_reason}",
+  "unban": "pardon-ip ${unban_player} && say [UNBAN] ${unban_player} has been unbanned."
+}</code></pre>
+
+            <h3>Step 3: Reload Configuration</h3>
+            <pre><code>/addcommand reload</code></pre>
+
+            <h2>Usage</h2>
+
+            <h3>Banning a Player</h3>
+            <pre><code>/ban Steve Griefing</code></pre>
+            <p>Effect:</p>
+            <ul>
+                <li>Steve is kicked from the server</li>
+                <li>Server announces: "[BAN] Steve has been banned. Reason: Griefing"</li>
+                <li>Steve cannot rejoin the server</li>
+            </ul>
+
+            <h3>Unbanning a Player</h3>
+            <pre><code>/unban Steve</code></pre>
+            <p>Effect:</p>
+            <ul>
+                <li>Server announces: "[UNBAN] Steve has been unbanned."</li>
+                <li>Steve can now rejoin the server</li>
+            </ul>
+
+            <h2>Advanced: Temporary Bans</h2>
+
+            <p>For temporary bans using schedule:</p>
+            <pre><code>{
+  "ban": "ban-ip ${ban_player} && say [BAN] ${ban_player} banned for: ${ban_reason} && schedule function my_namespace:unban_player 4320000t"
+}</code></pre>
+            <p>This would unban the player after 3 days (4,320,000 ticks)</p>
+
+            <h2>Advanced: Ban Logging</h2>
+
+            <p>Create a log of bans with custom variables:</p>
+            <pre><code>/setcmdvariable ban_log "Ban Log: Check /say for history"
+/addcommand add ban ban-ip ${ban_player} && say [BAN] ${ban_player} | Reason: ${ban_reason}</code></pre>
+
+            <h2>Ban Types Available</h2>
+
+            <table class="ban-table">
+                <thead>
+                    <tr>
+                        <th>Ban Command</th>
+                        <th>Type</th>
+                        <th>Effect</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>ban &lt;name&gt;</code></td>
+                        <td>UUID-based</td>
+                        <td>Bans the player account</td>
+                    </tr>
+                    <tr>
+                        <td><code>ban-ip &lt;address&gt;</code></td>
+                        <td>IP-based</td>
+                        <td>Bans the IP address (prevents alts)</td>
+                    </tr>
+                    <tr>
+                        <td><code>pardon &lt;name&gt;</code></td>
+                        <td>UUID unban</td>
+                        <td>Unbans player account</td>
+                    </tr>
+                    <tr>
+                        <td><code>pardon-ip &lt;address&gt;</code></td>
+                        <td>IP unban</td>
+                        <td>Unbans IP address</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>Reason Templates</h2>
+
+            <p>Use consistent reason messages:</p>
+
+            <h3>Griefing</h3>
+            <pre><code>/ban Player Griefing</code></pre>
+
+            <h3>Hacking/Cheating</h3>
+            <pre><code>/ban Player Unfair advantage / Hacking</code></pre>
+
+            <h3>Harassment</h3>
+            <pre><code>/ban Player Harassment of other players</code></pre>
+
+            <h3>Spam</h3>
+            <pre><code>/ban Player Spam / Advertising</code></pre>
+
+            <h3>Exploit</h3>
+            <pre><code>/ban Player Abuse of game mechanics</code></pre>
+
+            <h2>Moderation Best Practices</h2>
+
+            <ul>
+                <li><strong>Always provide a reason</strong> - Players deserve to know why they were banned</li>
+                <li><strong>Be consistent</strong> - Similar infractions should get similar punishments</li>
+                <li><strong>Log bans publicly</strong> - Shows players that moderation is active</li>
+                <li><strong>Allow appeals</strong> - Have a process for players to dispute bans</li>
+                <li><strong>Use IP bans for alts</strong> - Prevents ban evasion</li>
+                <li><strong>Keep records</strong> - Document ban reasons for reference</li>
+            </ul>
+
+            <div class="info-box">
+                <h3>⚠️ Important</h3>
+                <p>Bans are permanent until reversed. Always verify the correct player is banned before executing the command!</p>
+            </div>
+
+            <h2>Enhanced Ban System</h2>
+
+            <p>For more control, create a tiered system:</p>
+
+            <h3>Temporary Mute (1 hour)</h3>
+            <pre><code">/mute Player && schedule function my_namespace:unmute_player 72000t"</code></pre>
+
+            <h3>Kick (No ban)</h3>
+            <pre><code>/kick Player "Kicked by staff"</code></pre>
+
+            <h3>Permanent Ban</h3>
+            <pre><code>/ban Player Serious violation - permanent</code></pre>
+
+            <h2>Integration with Chat Filter</h2>
+
+            <p>Combine with custom syntax for auto-responses:</p>
+            <pre><code>{
+  "warn": {
+    "pattern": "/warn &lt;player&gt; &lt;reason&gt;",
+    "description": "Warn a player (first step)"
+  }
+}</code></pre>
+
+            <pre><code>{
+  "warn": "say @${warn_player} has been warned: ${warn_reason}"
+}</code></pre>
+        </main>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Examples</h4>
+                <ul><li><a href="tpa-system.html">TPA System</a></li><li><a href="ban-system.html">Ban System</a></li><li><a href="warp-system.html">Warp System</a></li><li><a href="custom-commands.html">Custom Commands</a></li></ul>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul><li><a href="troubleshooting.html">Troubleshooting</a></li><li><a href="faq.html">FAQ</a></li><li><a href="best-practices.html">Best Practices</a></li></ul>
+            </div>
+            <div class="footer-section">
+                <h4>Community</h4>
+                <ul><li><a href="https://modrinth.com/mod/command-maker">Modrinth</a></li><li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">GitHub</a></li></ul>
+            </div>
+        </div>
+        <div class="footer-bottom"><p>&copy; 2025 Command Maker Wiki.</p></div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

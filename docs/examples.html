@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examples - Command Maker Wiki</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo"><a href="index.html"><span class="logo-icon">⚙️</span> Command Maker Wiki</a></div>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="getting-started.html" class="nav-link">Getting Started</a>
+                <a href="commands.html" class="nav-link">Commands</a>
+                <a href="syntax-system.html" class="nav-link">Custom Syntax</a>
+                <a href="examples.html" class="nav-link active">Examples</a>
+                <a href="faq.html" class="nav-link">FAQ</a>
+            </div>
+            <div class="nav-search"><input type="text" id="searchBox" placeholder="Search documentation..." class="search-input"></div>
+        </div>
+    </nav>
+
+    <div class="main-wrapper">
+        <aside class="sidebar">
+            <div class="sidebar-widget">
+                <h3 class="widget-title">🎮 Examples</h3>
+                <ul class="widget-list">
+                    <li><a href="tpa-system.html">TPA System</a></li>
+                    <li><a href="ban-system.html">Ban System</a></li>
+                    <li><a href="warp-system.html">Warp System</a></li>
+                    <li><a href="custom-commands.html">Custom Commands</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-widget">
+                <h3 class="widget-title">📚 Documentation</h3>
+                <ul class="widget-list">
+                    <li><a href="getting-started.html">Getting Started</a></li>
+                    <li><a href="installation.html">Installation</a></li>
+                    <li><a href="configuration.html">Configuration</a></li>
+                    <li><a href="aliases.html">Creating Aliases</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-widget">
+                <h3 class="widget-title">⚡ Features</h3>
+                <ul class="widget-list">
+                    <li><a href="syntax-system.html">Custom Syntax System</a></li>
+                    <li><a href="variables.html">Variables & Substitution</a></li>
+                    <li><a href="gui-system.html">GUI System</a></li>
+                    <li><a href="chat-messages.html">Chat Messages</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <main class="content">
+            <h1>Command Maker Examples</h1>
+            <p>Explore real-world examples and complete system implementations using Command Maker.</p>
+
+            <h2>Featured Examples</h2>
+
+            <div class="examples-grid">
+                <div class="example-card">
+                    <div class="example-header">
+                        <h3>🔄 TPA System</h3>
+                        <span class="example-tag">Advanced</span>
+                    </div>
+                    <p>Create a complete teleport request system with accept/deny functionality. Players can request teleportation with confirmation.</p>
+                    <ul class="example-features">
+                        <li>Request notifications</li>
+                        <li>Accept/Deny commands</li>
+                        <li>Multi-parameter syntax</li>
+                        <li>Chat feedback</li>
+                    </ul>
+                    <a href="tpa-system.html" class="example-link">Learn TPA →</a>
+                </div>
+
+                <div class="example-card">
+                    <div class="example-header">
+                        <h3>🚫 Ban System</h3>
+                        <span class="example-tag">Intermediate</span>
+                    </div>
+                    <p>Implement a ban command system with reasons and logging. Staff can ban players with documented reasons.</p>
+                    <ul class="example-features">
+                        <li>Ban with reason</li>
+                        <li>Kick message</li>
+                        <li>Multiple parameters</li>
+                        <li>Chat logging</li>
+                    </ul>
+                    <a href="ban-system.html" class="example-link">Learn Ban →</a>
+                </div>
+
+                <div class="example-card">
+                    <div class="example-header">
+                        <h3>🌍 Warp System</h3>
+                        <span class="example-tag">Intermediate</span>
+                    </div>
+                    <p>Create warp points that players can teleport to instantly. Perfect for hub worlds and spawn locations.</p>
+                    <ul class="example-features">
+                        <li>Set/Go to warps</li>
+                        <li>List warps</li>
+                        <li>Coordinate storage</li>
+                        <li>Player feedback</li>
+                    </ul>
+                    <a href="warp-system.html" class="example-link">Learn Warp →</a>
+                </div>
+
+                <div class="example-card">
+                    <div class="example-header">
+                        <h3>📝 Custom Commands</h3>
+                        <span class="example-tag">Beginner</span>
+                    </div>
+                    <p>Build your own custom commands without programming knowledge. Simple aliases to powerful multi-parameter systems.</p>
+                    <ul class="example-features">
+                        <li>Simple aliases</li>
+                        <li>Chat commands</li>
+                        <li>Custom syntax</li>
+                        <li>Variable substitution</li>
+                    </ul>
+                    <a href="custom-commands.html" class="example-link">Learn Custom →</a>
+                </div>
+            </div>
+
+            <h2>Quick Examples</h2>
+
+            <h3>Simple Welcome Command</h3>
+            <p>Create a welcome message that includes the player's name:</p>
+            <pre><code>/addcommand add welcome say Welcome to our server, ${player}! Use /help for commands.</code></pre>
+
+            <h3>Teleport Hub</h3>
+            <p>Create a hub system using aliases:</p>
+            <pre><code>/addcommand add hub tp ${player} 0 100 0
+/addcommand add spawn tp ${player} -100 64 500</code></pre>
+
+            <h3>Broadcast with Prefix</h3>
+            <p>Send messages to everyone with a custom prefix:</p>
+            <pre><code>/addcommand add broadcast say [BROADCAST] ${player} says: </code></pre>
+
+            <h3>Healing Command</h3>
+            <p>Give items to heal players:</p>
+            <pre><code>/addcommand add heal effect give @s instant_health 1 1</code></pre>
+
+            <h3>Night Toggle</h3>
+            <p>Toggle between day and night:</p>
+            <pre><code>/addcommand add night time set night
+/addcommand add day time set day</code></pre>
+
+            <h3>Player Counter</h3>
+            <p>Count online players using scoreboards:</p>
+            <pre><code>/addcommand add count say Players online: </code></pre>
+
+            <h2>Pattern Examples</h2>
+
+            <h3>Single Parameter</h3>
+            <p>Pattern: <code>/tpa &lt;player&gt;</code></p>
+            <p>Usage: <code>/tpa Steve</code> → Extracts "Steve" as <code>${tpa_player}</code></p>
+
+            <h3>Two Parameters</h3>
+            <p>Pattern: <code>/ban &lt;player&gt; &lt;reason&gt;</code></p>
+            <p>Usage: <code>/ban Hacker Unfair advantage</code> → Extracts "Hacker" and "Unfair advantage"</p>
+
+            <h3>Three Parameters</h3>
+            <p>Pattern: <code>/msg &lt;player&gt; &lt;color&gt; &lt;message&gt;</code></p>
+            <p>Usage: <code>/msg Admin red Alert message</code> → Creates formatted message</p>
+
+            <h2>Community Examples</h2>
+
+            <p>Here are some popular examples from the community:</p>
+
+            <table class="examples-table">
+                <thead>
+                    <tr>
+                        <th>System</th>
+                        <th>Complexity</th>
+                        <th>Use Case</th>
+                        <th>Link</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>TPA Request</td>
+                        <td>Advanced</td>
+                        <td>Player-to-player teleport with acceptance</td>
+                        <td><a href="tpa-system.html">View</a></td>
+                    </tr>
+                    <tr>
+                        <td>Ban System</td>
+                        <td>Intermediate</td>
+                        <td>Moderation with reason logging</td>
+                        <td><a href="ban-system.html">View</a></td>
+                    </tr>
+                    <tr>
+                        <td>Warp System</td>
+                        <td>Intermediate</td>
+                        <td>Named teleport locations</td>
+                        <td><a href="warp-system.html">View</a></td>
+                    </tr>
+                    <tr>
+                        <td>Shop System</td>
+                        <td>Advanced</td>
+                        <td>NPC-based item trading</td>
+                        <td><a href="custom-commands.html">View</a></td>
+                    </tr>
+                    <tr>
+                        <td>Rank System</td>
+                        <td>Advanced</td>
+                        <td>Player tier management</td>
+                        <td><a href="custom-commands.html">View</a></td>
+                    </tr>
+                    <tr>
+                        <td>Welcome Script</td>
+                        <td>Beginner</td>
+                        <td>New player greeting</td>
+                        <td><a href="custom-commands.html">View</a></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>Learning Path</h2>
+
+            <p><strong>If you're new:</strong></p>
+            <ol>
+                <li>Start with <a href="getting-started.html">Getting Started</a></li>
+                <li>Create simple <a href="custom-commands.html">Custom Commands</a></li>
+                <li>Learn about <a href="variables.html">Variables</a></li>
+                <li>Try <a href="tpa-system.html">TPA System</a> tutorial</li>
+            </ol>
+
+            <p><strong>If you're experienced:</strong></p>
+            <ol>
+                <li>Review <a href="syntax-system.html">Custom Syntax</a> system</li>
+                <li>Explore <a href="ban-system.html">Ban System</a> advanced patterns</li>
+                <li>Build your own <a href="custom-commands.html">Custom Commands</a></li>
+                <li>Share your examples!</li>
+            </ol>
+
+            <div class="info-box">
+                <h3>🎯 Want to Contribute?</h3>
+                <p>Have an awesome example or system? Share it with the community on GitHub or submit it for the docs!</p>
+            </div>
+        </main>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Examples</h4>
+                <ul><li><a href="tpa-system.html">TPA System</a></li><li><a href="ban-system.html">Ban System</a></li><li><a href="warp-system.html">Warp System</a></li><li><a href="custom-commands.html">Custom Commands</a></li></ul>
+            </div>
+            <div class="footer-section">
+                <h4>Documentation</h4>
+                <ul><li><a href="getting-started.html">Getting Started</a></li><li><a href="syntax-system.html">Custom Syntax</a></li><li><a href="variables.html">Variables</a></li></ul>
+            </div>
+            <div class="footer-section">
+                <h4>Community</h4>
+                <ul><li><a href="https://modrinth.com/mod/command-maker">Modrinth</a></li><li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">GitHub</a></li></ul>
+            </div>
+        </div>
+        <div class="footer-bottom"><p>&copy; 2025 Command Maker Wiki.</p></div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
