@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creating Custom Commands - Command Maker Wiki</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo"><a href="index.html"><span class="logo-icon">⚙️</span> Command Maker Wiki</a></div>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="getting-started.html" class="nav-link">Getting Started</a>
+                <a href="commands.html" class="nav-link">Commands</a>
+                <a href="syntax-system.html" class="nav-link">Custom Syntax</a>
+                <a href="examples.html" class="nav-link">Examples</a>
+                <a href="faq.html" class="nav-link">FAQ</a>
+            </div>
+            <div class="nav-search"><input type="text" id="searchBox" placeholder="Search documentation..." class="search-input"></div>
+        </div>
+    </nav>
+
+    <div class="main-wrapper">
+        <aside class="sidebar">
+            <div class="sidebar-widget">
+                <h3 class="widget-title">🎮 Examples</h3>
+                <ul class="widget-list">
+                    <li><a href="tpa-system.html">TPA System</a></li>
+                    <li><a href="ban-system.html">Ban System</a></li>
+                    <li><a href="warp-system.html">Warp System</a></li>
+                    <li><a href="custom-commands.html">Custom Commands</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-widget">
+                <h3 class="widget-title">📚 Documentation</h3>
+                <ul class="widget-list">
+                    <li><a href="getting-started.html">Getting Started</a></li>
+                    <li><a href="installation.html">Installation</a></li>
+                    <li><a href="aliases.html">Creating Aliases</a></li>
+                    <li><a href="configuration.html">Configuration</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-widget">
+                <h3 class="widget-title">⚡ Features</h3>
+                <ul class="widget-list">
+                    <li><a href="syntax-system.html">Custom Syntax System</a></li>
+                    <li><a href="variables.html">Variables & Substitution</a></li>
+                    <li><a href="gui-system.html">GUI System</a></li>
+                    <li><a href="chat-messages.html">Chat Messages</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <main class="content">
+            <h1>Creating Custom Commands</h1>
+            <p>Learn how to create custom commands from simple aliases to advanced multi-parameter systems.</p>
+
+            <h2>Three Ways to Create Commands</h2>
+
+            <h3>1️⃣ Simple Aliases (Easiest)</h3>
+            <p>Quick shortcuts to existing commands:</p>
+            <pre><code>/addcommand add hello say Hello ${player}!</code></pre>
+
+            <h3>2️⃣ Custom Syntax (Intermediate)</h3>
+            <p>Add parameters to your commands:</p>
+            <pre><code">Pattern: /tpa &lt;player&gt;
+Command: /tpa Steve</code></pre>
+
+            <h3>3️⃣ Complex Systems (Advanced)</h3>
+            <p>Multi-step commands with multiple parameters and effects.</p>
+
+            <h2>Step-by-Step: Creating Your First Command</h2>
+
+            <h3>Step 1: Plan Your Command</h3>
+            <p>What do you want it to do?</p>
+            <ul>
+                <li>Name: <code>hello</code></li>
+                <li>Purpose: Greet the player</li>
+                <li>Action: Say a message</li>
+            </ul>
+
+            <h3>Step 2: Create the Alias</h3>
+            <p>In-game, run:</p>
+            <pre><code>/addcommand add hello say Hello ${player}! Welcome to our server!</code></pre>
+
+            <h3>Step 3: Test It</h3>
+            <p>Run your new command:</p>
+            <pre><code">/hello</code></pre>
+            <p>Expected output: "Hello [YourName]! Welcome to our server!"</p>
+
+            <h3>Step 4: Perfect It</h3>
+            <p>Add effects or improve the message:</p>
+            <pre><code>/addcommand add hello say Hello ${player}! && playsound entity.player.levelup</code></pre>
+
+            <h2>Common Command Types</h2>
+
+            <h3>Chat Commands</h3>
+            <pre><code>/addcommand add hello say Hello world!
+/addcommand add rules say Read the rules at /rules-site
+/addcommand add staff say Contact staff at support@example.com</code></pre>
+
+            <h3>Teleport Commands</h3>
+            <pre><code>/addcommand add spawn tp ${player} 0 65 0
+/addcommand add home tp ${player} 100 65 100
+/addcommand add arena tp ${player} 500 100 500</code></pre>
+
+            <h3>Item Commands</h3>
+            <pre><code>/addcommand add heal effect give @s instant_health 1
+/addcommand add feed effect give @s saturation 1
+/addcommand add night_vision effect give @s night_vision 1000</code></pre>
+
+            <h3>Permission-Based Commands</h3>
+            <pre><code>/addcommand add admin execute if entity @s[gamemode=creative] run say Admin mode
+/addcommand add staff execute if entity @s[gamemode=creative] run say Staff panel</code></pre>
+
+            <h3>Multiple Action Commands</h3>
+            <pre><code>/addcommand add party playsound music_disc.pigstep && say Party started!
+/addcommand add lights effect give @a glowing 120
+/addcommand add announce say [ANNOUNCEMENT] Server maintenance in 10 minutes</code></pre>
+
+            <h2>Using Variables</h2>
+
+            <h3>Player Name</h3>
+            <pre><code>/addcommand add greet say Hi ${player}!
+/addcommand add location say ${player} is at ${x} ${y} ${z}</code></pre>
+
+            <h3>Custom Variables</h3>
+            <pre><code">/setcmdvariable server_ip mc.example.com:25565
+/setcmdvariable discord https://discord.gg/example
+/setcmdvariable version 1.0.0
+
+/addcommand add ip say Connect to: ${server_ip}
+/addcommand add discord say Join: ${discord}
+/addcommand add version say Server version: ${version}</code></pre>
+
+            <h3>Coordinates</h3>
+            <pre><code">/addcommand add coords say You are at: ${x}, ${y}, ${z}
+/addcommand add home_set setblock ${x} ${y} ${z} diamond_block
+/addcommand add place_marker setblock ${x} ~ ${z} oak_sign</code></pre>
+
+            <h2>Creating Command Groups</h2>
+
+            <p>Organize related commands:</p>
+
+            <h3>Help System</h3>
+            <pre><code>/addcommand add help say Commands: /hello /rules /staff /version
+/addcommand add help_admin say Admin: /ban /kick /announce /shutdown</code></pre>
+
+            <h3>Hub Commands</h3>
+            <pre><code"/addcommand add spawn tp ${player} 0 65 0
+/addcommand add hub tp ${player} 500 100 -500
+/addcommand add main tp ${player} 1000 64 1000
+/addcommand add lobby tp ${player} -500 64 -500</code></pre>
+
+            <h3>Game Commands</h3>
+            <pre><code>/addcommand add arena_join tp ${player} 1000 100 1000
+/addcommand add arena_leave tp ${player} 0 65 0
+/addcommand add arena_reset setblock 1000 100 1000 air
+/addcommand add arena_start say Arena starting!
+/addcommand add arena_end say Arena ended!</code></pre>
+
+            <h2>Advanced: Multi-Parameter Commands</h2>
+
+            <h3>Define the Pattern</h3>
+            <p>Edit <code>config/CommandMaker/syntax.json</code>:</p>
+            <pre><code>{
+  "give_item": {
+    "pattern": "/give_item &lt;player&gt; &lt;amount&gt;",
+    "description": "Give items to a player"
+  }
+}</code></pre>
+
+            <h3>Create the Alias</h3>
+            <p>Edit <code>config/CommandMaker/aliases.json</code>:</p>
+            <pre><code>{
+  "give_item": "give ${give_item_player} diamond ${give_item_amount} && say Gave ${give_item_amount} diamonds to ${give_item_player}"
+}</code></pre>
+
+            <h3>Use It</h3>
+            <pre><code>/give_item Steve 10
+Output: "Gave 10 diamonds to Steve"</code></pre>
+
+            <h2>Tips & Tricks</h2>
+
+            <h3>Use Feedback Messages</h3>
+            <p><strong>Good:</strong></p>
+            <pre><code>/addcommand add teleport tp ${player} 1000 100 1000 && say Teleported to Arena!</code></pre>
+            <p><strong>Avoid:</strong></p>
+            <pre><code>/addcommand add teleport tp ${player} 1000 100 1000</code></pre>
+
+            <h3>Chain Commands with &&</h3>
+            <pre><code">/addcommand add party say Party started! && playsound music_disc.pigstep</code></pre>
+
+            <h3>Use Colors in Messages</h3>
+            <pre><code>/addcommand add success say {"text":"Success!","color":"green"}
+/addcommand add error say {"text":"Error!","color":"red"}</code></pre>
+
+            <h3>Add Sound Effects</h3>
+            <pre><code">/addcommand add levelup playsound entity.player.levelup
+/addcommand add click playsound ui.button.click
+/addcommand add success playsound entity.ender_pearl.sound</code></pre>
+
+            <h3>Combine Effects</h3>
+            <pre><code">/addcommand add epic particle end_rod ~ ~ ~ 1 1 1 0.1 20 && playsound entity.enderman.teleport && say Epic!</code></pre>
+
+            <h2>Testing Commands</h2>
+
+            <h3>Test Template</h3>
+            <p>For each command:</p>
+            <ol>
+                <li>Create it: <code>/addcommand add test_cmd ...</code></li>
+                <li>Run it: <code>/test_cmd</code></li>
+                <li>Check output: Does it work?</li>
+                <li>Reload: <code>/addcommand reload</code></li>
+                <li>Test again: <code>/test_cmd</code></li>
+                <li>Check with other players (multiplayer)</li>
+            </ol>
+
+            <h3>Debugging</h3>
+            <p>If command doesn't work:</p>
+            <ul>
+                <li>Verify alias exists: <code>/addcommand list</code></li>
+                <li>Check for typos</li>
+                <li>Reload config: <code>/addcommand reload</code></li>
+                <li>Test underlying command directly</li>
+                <li>Check JSON syntax if using syntax.json</li>
+            </ul>
+
+            <h2>Real-World Examples</h2>
+
+            <h3>Welcome Command</h3>
+            <pre><code">/addcommand add welcome say Welcome to ${server_name}, ${player}!
+/addcommand add welcome_advanced say Welcome ${player}! && say Type /help for commands && playsound entity.player.levelup</code></pre>
+
+            <h3>Shop System</h3>
+            <pre><code">/addcommand add shop_sell execute at ${player} run particle glow_ink_sac ~ ~ ~ 0.5 0.5 0.5 0.1 20
+/addcommand add shop_open say Opening shop...</code></pre>
+
+            <h3>Rank System</h3>
+            <pre><code">/addcommand add vip say ${player} is VIP level 1
+/addcommand add admin_panel execute if entity @s[gamemode=creative] run say Admin controls active
+/addcommand add become_vip execute if entity @s[name=Owner] run say ${player} is now VIP</code></pre>
+
+            <h3>Minigame Setup</h3>
+            <pre><code">/addcommand add start_game say Game starting! && effect give @a speed 600 2
+/addcommand add end_game say Game over! && effect clear @a speed
+/addcommand add reset_game say Resetting arena... && setblock 0 0 0 air</code></pre>
+
+            <h2>Best Practices</h2>
+
+            <ul>
+                <li><strong>Keep it simple:</strong> One command, one purpose</li>
+                <li><strong>Give feedback:</strong> Always tell users if the command worked</li>
+                <li><strong>Test thoroughly:</strong> Try it in different scenarios</li>
+                <li><strong>Use variables:</strong> Make commands dynamic</li>
+                <li><strong>Document:</strong> Remember what each command does</li>
+                <li><strong>Backup:</strong> Keep copies of working configs</li>
+            </ul>
+
+            <div class="info-box">
+                <h3>💡 Pro Tip</h3>
+                <p>Start simple and build up. Create a basic command first, test it, then add effects and features!</p>
+            </div>
+
+            <h2>Next Steps</h2>
+
+            <ul>
+                <li><a href="examples.html">See more examples</a> of popular systems</li>
+                <li><a href="syntax-system.html">Learn custom syntax</a> for parameters</li>
+                <li><a href="variables.html">Master variables</a> for dynamic commands</li>
+                <li><a href="troubleshooting.html">Troubleshoot issues</a> if commands don't work</li>
+            </ul>
+        </main>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Examples</h4>
+                <ul><li><a href="tpa-system.html">TPA System</a></li><li><a href="ban-system.html">Ban System</a></li><li><a href="warp-system.html">Warp System</a></li><li><a href="custom-commands.html">Custom Commands</a></li></ul>
+            </div>
+            <div class="footer-section">
+                <h4>Documentation</h4>
+                <ul><li><a href="getting-started.html">Getting Started</a></li><li><a href="syntax-system.html">Custom Syntax</a></li><li><a href="variables.html">Variables</a></li></ul>
+            </div>
+            <div class="footer-section">
+                <h4>Community</h4>
+                <ul><li><a href="https://modrinth.com/mod/command-maker">Modrinth</a></li><li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">GitHub</a></li></ul>
+            </div>
+        </div>
+        <div class="footer-bottom"><p>&copy; 2025 Command Maker Wiki.</p></div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

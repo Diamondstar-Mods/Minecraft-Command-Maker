@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Best Practices - Command Maker Wiki</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo"><a href="index.html"><span class="logo-icon">⚙️</span> Command Maker Wiki</a></div>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="getting-started.html" class="nav-link">Getting Started</a>
+                <a href="commands.html" class="nav-link">Commands</a>
+                <a href="syntax-system.html" class="nav-link">Custom Syntax</a>
+                <a href="examples.html" class="nav-link">Examples</a>
+                <a href="faq.html" class="nav-link">FAQ</a>
+            </div>
+            <div class="nav-search"><input type="text" id="searchBox" placeholder="Search documentation..." class="search-input"></div>
+        </div>
+    </nav>
+
+    <div class="main-wrapper">
+        <aside class="sidebar">
+            <div class="sidebar-widget">
+                <h3 class="widget-title">❓ Help</h3>
+                <ul class="widget-list">
+                    <li><a href="faq.html">FAQ</a></li>
+                    <li><a href="troubleshooting.html">Troubleshooting</a></li>
+                    <li><a href="best-practices.html">Best Practices</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-widget">
+                <h3 class="widget-title">📚 Documentation</h3>
+                <ul class="widget-list">
+                    <li><a href="getting-started.html">Getting Started</a></li>
+                    <li><a href="installation.html">Installation</a></li>
+                    <li><a href="configuration.html">Configuration</a></li>
+                    <li><a href="aliases.html">Creating Aliases</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-widget">
+                <h3 class="widget-title">⚡ Features</h3>
+                <ul class="widget-list">
+                    <li><a href="syntax-system.html">Custom Syntax System</a></li>
+                    <li><a href="variables.html">Variables & Substitution</a></li>
+                    <li><a href="gui-system.html">GUI System</a></li>
+                    <li><a href="chat-messages.html">Chat Messages</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <main class="content">
+            <h1>Best Practices</h1>
+            <p>Guidelines for creating effective and maintainable commands with Command Maker.</p>
+
+            <h2>Naming Conventions</h2>
+
+            <h3>Alias Names</h3>
+            <ul>
+                <li><strong>Use lowercase:</strong> <code>/hello</code> instead of <code>/Hello</code></li>
+                <li><strong>Single word:</strong> <code>/teleport</code> not <code>/t p</code></li>
+                <li><strong>Descriptive:</strong> <code>/warp_home</code> better than <code>/w1</code></li>
+                <li><strong>Avoid conflicts:</strong> Don't name alias same as Minecraft command</li>
+                <li><strong>Use underscores:</strong> <code>/set_spawn</code> for multi-word names</li>
+            </ul>
+
+            <h3>Variable Names</h3>
+            <pre><code>GOOD:
+${server_name}
+${player_count}
+${spawn_coordinates}
+
+AVOID:
+${s}
+${pcount}
+${SpawnCoords}</code></pre>
+
+            <h3>Syntax Pattern Names</h3>
+            <pre><code>{
+  "teleport_player": {
+    "pattern": "/tp &lt;player&gt;",
+    "description": "Teleport to a player"
+  },
+  "ban_with_reason": {
+    "pattern": "/ban &lt;player&gt; &lt;reason&gt;",
+    "description": "Ban a player with reason"
+  }
+}</code></pre>
+
+            <h2>Organization</h2>
+
+            <h3>Group Related Aliases</h3>
+            <p>In your <code>aliases.json</code>, organize by category:</p>
+            <pre><code">{
+  // === TELEPORT COMMANDS ===
+  "spawn": "tp ${player} 0 65 0",
+  "home": "tp ${player} ${home_coords}",
+  "arena": "tp ${player} ${arena_coords}",
+  
+  // === PLAYER COMMANDS ===
+  "heal": "effect give @s instant_health 1",
+  "feed": "effect give @s saturation 1",
+  
+  // === ADMIN COMMANDS ===
+  "announce": "say [ANNOUNCEMENT] ",
+  "shutdown": "say Server shutting down..."
+}</code></pre>
+
+            <h3>Comment Your Config</h3>
+            <pre><code>// Spawn and home teleport system
+"spawn": "tp ${player} 0 65 0",
+"home": "tp ${player} ${home_coords}",
+
+// Healing items
+"heal": "effect give @s instant_health 1",</code></pre>
+
+            <h2>JSON Configuration Quality</h2>
+
+            <h3>Valid JSON</h3>
+            <ul>
+                <li>Use a JSON validator like <a href="https://jsonlint.com">JSONLint</a></li>
+                <li>No trailing commas</li>
+                <li>Always quote keys: <code>"key"</code></li>
+                <li>Always quote string values</li>
+                <li>Escape quotes inside strings: <code>\"</code></li>
+            </ul>
+
+            <h3>JSON Formatting</h3>
+            <pre><code>// CORRECT:
+{
+  "key": "value",
+  "nested": {
+    "inner": "data"
+  }
+}
+
+// WRONG:
+{
+  key: value,
+  nested: { inner: data }
+}</code></pre>
+
+            <h3>File Encoding</h3>
+            <ul>
+                <li>Save as UTF-8 (default in most editors)</li>
+                <li>Never use BOM (Byte Order Mark)</li>
+                <li>Use consistent indentation (2 or 4 spaces)</li>
+            </ul>
+
+            <h2>Security & Permissions</h2>
+
+            <h3>Restrict Dangerous Commands</h3>
+            <pre><code>// Only give admin permissions to these
+/addcommand add ban ban-ip ${ban_player}
+/addcommand add stop stop
+/addcommand add pardon pardon ${player}</code></pre>
+
+            <h3>Use Operator Permission Checks</h3>
+            <pre><code">{
+  "admin_command": "execute if entity @s[gamemode=creative] run say Admin mode active"
+}</code></pre>
+
+            <h3>Validate Input</h3>
+            <p>Be careful with user-provided parameters:</p>
+            <pre><code">{
+  "safe_tp": "execute in overworld run tp ${player} ${tp_player}"
+}</code></pre>
+
+            <h2>Usability</h2>
+
+            <h3>Clear Feedback</h3>
+            <p>Always tell users the command worked:</p>
+            <pre><code>GOOD: 
+"spawn": "tp ${player} 0 65 0 && say Teleported to spawn!"
+
+AVOID:
+"spawn": "tp ${player} 0 65 0"</code></pre>
+
+            <h3>Help Text</h3>
+            <p>Create a help command:</p>
+            <pre><code">/addcommand add help say Available commands: /spawn /home /arena /heal
+/addcommand add help_admin say Admin: /ban /kick /stop /announce</code></pre>
+
+            <h3>Error Handling</h3>
+            <p>Use || for fallback commands:</p>
+            <pre><code">{
+  "teleport_safe": "execute at ${tp_player} run tp ${player} @s || say Player not found"
+}</code></pre>
+
+            <h2>Command Design</h2>
+
+            <h3>Keep Commands Simple</h3>
+            <p><strong>Good:</strong> One clear purpose</p>
+            <pre><code">/heal - Heals the player
+/feed - Feeds the player
+/speed 2 - Sets speed level</code></pre>
+
+            <p><strong>Avoid:</strong> Too many features in one alias</p>
+            <pre><code>// DON'T do this:
+"do_everything": "kill @e && give @a diamond && ban @a && tp @a 0 0 0"</code></pre>
+
+            <h3>Consistency</h3>
+            <ul>
+                <li>Use same format for similar commands</li>
+                <li>If teleport commands use coordinates, use format everywhere</li>
+                <li>If ban includes reason, always include reason</li>
+                <li>Consistent feedback messages</li>
+            </ul>
+
+            <h3>Testing</h3>
+            <p>Test each command before deployment:</p>
+            <ol>
+                <li>Create simple test: <code>/addcommand add test say Works</code></li>
+                <li>Run <code>/test</code> to verify</li>
+                <li>Run <code>/addcommand reload</code></li>
+                <li>Test all aliases after reload</li>
+                <li>Test with different users if possible</li>
+            </ol>
+
+            <h2>Performance</h2>
+
+            <h3>Avoid Heavy Selector Usage</h3>
+            <pre><code>GOOD:
+"broadcast": "say ${message}" (targeted)
+
+AVOID:
+"broadcast": "say @a ${message}" (affects all players each time)</code></pre>
+
+            <h3>Limit Particle Effects</h3>
+            <pre><code">GOOD: 5-10 particles per command
+"warp": "particle end_rod ~ ~ ~ 0.5 0.5 0.5 0.1 5 && tp ${player} 1000 100 1000"
+
+AVOID: 100+ particles
+"warp": "particle end_rod ~ ~ ~ 1 1 1 0.5 100 && tp ${player} 1000 100 1000"</code></pre>
+
+            <h3>Chain vs Schedule</h3>
+            <pre><code">// Immediate execution:
+"fast_cmd": "say 1 && say 2 && say 3"
+
+// Delayed execution:
+"delayed_cmd": "say Starting && schedule function my_ns:delayed_tasks 60t"</code></pre>
+
+            <h2>Maintenance</h2>
+
+            <h3>Backup Configuration</h3>
+            <ul>
+                <li>Keep backup of <code>config/CommandMaker/</code> folder</li>
+                <li>Before major changes, copy the folder</li>
+                <li>Date backup folders: <code>backup_2025-01-15</code></li>
+            </ul>
+
+            <h3>Documentation</h3>
+            <p>Document your custom syntax patterns:</p>
+            <pre><code">// TPA System - Allows players to request teleportation
+// Usage: /tpa <player_name>
+// The target player receives a message with /tpaccept and /tpadeny commands
+"tpa": {
+  "pattern": "/tpa &lt;player&gt;",
+  "description": "Send teleport request to another player"
+}</code></pre>
+
+            <h3>Version Control</h3>
+            <p>If using version control:</p>
+            <pre><code>.gitignore:
+config/CommandMaker/variables.json
+config/CommandMaker/*.tmp</code></pre>
+
+            <h2>Common Mistakes to Avoid</h2>
+
+            <table class="mistakes-table">
+                <thead>
+                    <tr>
+                        <th>Mistake</th>
+                        <th>Problem</th>
+                        <th>Solution</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>${Player}</code> vs <code>${player}</code></td>
+                        <td>Case sensitivity error</td>
+                        <td>Always use lowercase</td>
+                    </tr>
+                    <tr>
+                        <td>Trailing commas in JSON</td>
+                        <td>JSON parse error</td>
+                        <td>Remove last comma in objects</td>
+                    </tr>
+                    <tr>
+                        <td>Single quotes in JSON</td>
+                        <td>Invalid JSON</td>
+                        <td>Use double quotes only</td>
+                    </tr>
+                    <tr>
+                        <td>Forgetting to reload</td>
+                        <td>Changes don't apply</td>
+                        <td>Run <code>/addcommand reload</code></td>
+                    </tr>
+                    <tr>
+                        <td>Too complex commands</td>
+                        <td>Hard to debug/maintain</td>
+                        <td>Split into multiple aliases</td>
+                    </tr>
+                    <tr>
+                        <td>No feedback messages</td>
+                        <td>Confusing for users</td>
+                        <td>Add <code>say</code> feedback</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>Server Administration</h2>
+
+            <h3>Moderation Commands</h3>
+            <ul>
+                <li>Always include reason for bans/kicks</li>
+                <li>Log actions to console/chat</li>
+                <li>Allow staff to appeal decisions</li>
+                <li>Keep consistent punishment levels</li>
+            </ul>
+
+            <h3>User Experience</h3>
+            <ul>
+                <li>Make commands intuitive</li>
+                <li>Use <code>/help</code> to show available commands</li>
+                <li>Provide feedback for every action</li>
+                <li>Avoid destructive aliases without confirmation</li>
+            </ul>
+
+            <h3>Public vs Private</h3>
+            <p>Use operator permission checks:</p>
+            <pre><code">{
+  "admin_say": "execute if entity @s[gamemode=creative] run say ${message} || say No permission"
+}</code></pre>
+
+            <div class="info-box">
+                <h3>✨ Summary</h3>
+                <p>Follow these practices for maintainable, user-friendly commands:</p>
+                <ul>
+                    <li>✓ Use clear naming conventions</li>
+                    <li>✓ Keep commands simple and focused</li>
+                    <li>✓ Provide user feedback</li>
+                    <li>✓ Test thoroughly</li>
+                    <li>✓ Document your work</li>
+                    <li>✓ Backup configurations</li>
+                    <li>✓ Prioritize security</li>
+                </ul>
+            </div>
+        </main>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Help & Support</h4>
+                <ul><li><a href="faq.html">FAQ</a></li><li><a href="troubleshooting.html">Troubleshooting</a></li><li><a href="best-practices.html">Best Practices</a></li></ul>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul><li><a href="getting-started.html">Getting Started</a></li><li><a href="syntax-system.html">Custom Syntax</a></li><li><a href="examples.html">Examples</a></li></ul>
+            </div>
+            <div class="footer-section">
+                <h4>Community</h4>
+                <ul><li><a href="https://modrinth.com/mod/command-maker">Modrinth</a></li><li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">GitHub</a></li></ul>
+            </div>
+        </div>
+        <div class="footer-bottom"><p>&copy; 2025 Command Maker Wiki.</p></div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

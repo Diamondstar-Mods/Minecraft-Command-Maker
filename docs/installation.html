@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Installation - Command Maker Wiki</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html"><span class="logo-icon">⚙️</span> Command Maker Wiki</a>
+            </div>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="getting-started.html" class="nav-link active">Getting Started</a>
+                <a href="commands.html" class="nav-link">Commands</a>
+                <a href="syntax-system.html" class="nav-link">Custom Syntax</a>
+                <a href="examples.html" class="nav-link">Examples</a>
+                <a href="faq.html" class="nav-link">FAQ</a>
+            </div>
+            <div class="nav-search">
+                <input type="text" id="searchBox" placeholder="Search documentation..." class="search-input">
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-wrapper">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-widget">
+                <h3 class="widget-title">📚 Documentation</h3>
+                <ul class="widget-list">
+                    <li><a href="getting-started.html">Getting Started</a></li>
+                    <li><a href="installation.html">Installation</a></li>
+                    <li><a href="configuration.html">Configuration</a></li>
+                    <li><a href="aliases.html">Creating Aliases</a></li>
+                </ul>
+            </div>
+
+            <div class="sidebar-widget">
+                <h3 class="widget-title">⚡ Features</h3>
+                <ul class="widget-list">
+                    <li><a href="syntax-system.html">Custom Syntax System</a></li>
+                    <li><a href="variables.html">Variables & Substitution</a></li>
+                    <li><a href="gui-system.html">GUI System</a></li>
+                    <li><a href="chat-messages.html">Chat Messages</a></li>
+                </ul>
+            </div>
+
+            <div class="sidebar-widget">
+                <h3 class="widget-title">🎮 Examples</h3>
+                <ul class="widget-list">
+                    <li><a href="tpa-system.html">TPA System</a></li>
+                    <li><a href="ban-system.html">Ban System</a></li>
+                    <li><a href="warp-system.html">Warp System</a></li>
+                    <li><a href="custom-commands.html">Custom Commands</a></li>
+                </ul>
+            </div>
+
+            <div class="sidebar-widget">
+                <h3 class="widget-title">❓ Help</h3>
+                <ul class="widget-list">
+                    <li><a href="troubleshooting.html">Troubleshooting</a></li>
+                    <li><a href="faq.html">Frequently Asked Questions</a></li>
+                    <li><a href="best-practices.html">Best Practices</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Content Area -->
+        <main class="content">
+            <h1>Installation Guide</h1>
+            <p>Get Command Maker installed and ready to use in just a few minutes!</p>
+
+            <section>
+                <h2>Prerequisites</h2>
+                <ul>
+                    <li><strong>Minecraft 1.20+</strong> (tested up to 1.21.11)</li>
+                    <li><strong>Fabric Loader</strong> (download from <a href="https://fabricmc.net/" target="_blank">fabricmc.net</a>)</li>
+                    <li><strong>Fabric API</strong> (required for Fabric compatibility)</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Installation Steps</h2>
+
+                <h3>Step 1: Download the Mod</h3>
+                <ol>
+                    <li>Visit <a href="https://modrinth.com/mod/command-maker" target="_blank">Modrinth - Command Maker</a></li>
+                    <li>Click the download button for your desired version</li>
+                    <li>The JAR file will be saved to your Downloads folder</li>
+                </ol>
+
+                <h3>Step 2: Locate Your Mods Folder</h3>
+                <p>The location depends on your launcher:</p>
+                <ul>
+                    <li><strong>Prism Launcher:</strong> <code>instance-name/minecraft/mods/</code></li>
+                    <li><strong>MultiMC:</strong> <code>instance-name/minecraft/mods/</code></li>
+                    <li><strong>Official Launcher:</strong> <code>.minecraft/mods/</code></li>
+                    <li><strong>Linux:</strong> <code>~/.minecraft/mods/</code></li>
+                </ul>
+
+                <h3>Step 3: Install the JAR</h3>
+                <ol>
+                    <li>Copy the downloaded <code>command-maker-*.jar</code> file</li>
+                    <li>Paste it into your mods folder</li>
+                    <li>Make sure <strong>Fabric API</strong> is also in the mods folder</li>
+                </ol>
+
+                <h3>Step 4: Launch Minecraft</h3>
+                <ol>
+                    <li>Open your launcher</li>
+                    <li>Select a profile with Fabric Loader</li>
+                    <li>Click Play</li>
+                    <li>Wait for Minecraft to fully load</li>
+                </ol>
+
+                <h3>Step 5: Verify Installation</h3>
+                <ol>
+                    <li>Once in-game, open the chat with <kbd>T</kbd></li>
+                    <li>Type <code>/addcommand reload</code> and press Enter</li>
+                    <li>You should see a confirmation message</li>
+                </ol>
+            </section>
+
+            <section>
+                <h2>First-Time Setup</h2>
+                <p>On first launch, Command Maker automatically creates:</p>
+                <ul>
+                    <li><code>config/CommandMaker/</code> folder</li>
+                    <li><code>aliases.json</code> configuration file</li>
+                    <li>Example aliases to get you started</li>
+                </ul>
+                <p>You can now edit the aliases and start creating commands!</p>
+            </section>
+
+            <section>
+                <h2>Troubleshooting Installation</h2>
+                <p><strong>❌ Mod doesn't appear in-game?</strong></p>
+                <ul>
+                    <li>Verify Fabric Loader is installed correctly</li>
+                    <li>Ensure Fabric API mod is also in the mods folder</li>
+                    <li>Check that the JAR filename is correct</li>
+                    <li>Try deleting the mod, restarting the launcher, and re-adding it</li>
+                </ul>
+
+                <p><strong>❌ Error on startup?</strong></p>
+                <ul>
+                    <li>Check your launcher's console for error messages</li>
+                    <li>Make sure you're using Java 21 or higher</li>
+                    <li>Visit the <a href="troubleshooting.html">Troubleshooting</a> page for more help</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Next Steps</h2>
+                <p>After installation:</p>
+                <ol>
+                    <li>Read the <a href="getting-started.html">Getting Started</a> guide</li>
+                    <li>Learn about <a href="aliases.html">Creating Aliases</a></li>
+                    <li>Explore the <a href="examples.html">Examples</a> section</li>
+                </ol>
+            </section>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Documentation</h4>
+                <ul>
+                    <li><a href="getting-started.html">Getting Started</a></li>
+                    <li><a href="commands.html">Commands</a></li>
+                    <li><a href="syntax-system.html">Custom Syntax</a></li>
+                    <li><a href="examples.html">Examples</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="troubleshooting.html">Troubleshooting</a></li>
+                    <li><a href="faq.html">FAQ</a></li>
+                    <li><a href="best-practices.html">Best Practices</a></li>
+                    <li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">GitHub</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Community</h4>
+                <ul>
+                    <li><a href="https://modrinth.com/mod/command-maker">Modrinth</a></li>
+                    <li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">Report Issues</a></li>
+                    <li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">Contribute</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Command Maker Wiki. Built with ❤️ for Minecraft players.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
