@@ -79,11 +79,19 @@ tasks.register('fabricJar', Jar) {
     archiveBaseName.set(project.archives_base_name)
     archiveVersion.set(project.version.toString())
     archiveClassifier.set('FABRIC')
+    // Ensure the FABRIC jar filename and output directory are in the root build/libs
+    archiveFileName.set("${project.archives_base_name}-${project.version}-FABRIC.jar")
+    destinationDirectory.set(rootProject.layout.buildDirectory.dir('libs'))
     from(sourceSets.main.output)
     from("LICENSE") {
         rename { "${it}_${project.archives_base_name}" }
     }
     dependsOn(tasks.named('classes'))
+}
+
+// Ensure fabric subproject `assemble` produces the fabricJar (and places it in root build/libs)
+tasks.named('assemble') {
+    dependsOn(tasks.named('fabricJar'))
 }
 
 publishing {

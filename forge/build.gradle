@@ -33,10 +33,31 @@ tasks.register('forgeJar', Jar) {
     archiveBaseName.set(project.name)
     archiveVersion.set(project.version.toString())
     archiveClassifier.set('FORGE')
-    from(sourceSets.main.output)
-    from(rootProject.file('LICENSE')) {
-        rename { "${it}_${rootProject.name}" }
-    }
+        // Explicit filename and place into root build/libs
+        archiveFileName.set("${project.archives_base_name}-${project.version}-FORGE.jar")
+        destinationDirectory.set(rootProject.layout.buildDirectory.dir('libs'))
+        from(sourceSets.main.output)
+        from(rootProject.file('LICENSE')) {
+            // rename the included LICENSE to identify the module
+            rename { "${it}_${project.archives_base_name}" }
+        }
 }
 
 // Make root assemble pick this up when configured
+// Ensure the forgeJar is produced as part of the forge project's assemble lifecycle
+tasks.named('assemble') {
+    dependsOn tasks.named('forgeJar')
+}
+
+// Process resources: expand simple tokens in META-INF/mods.toml so we can inject
+// the project version and archive name into the generated mods metadata. This
+// lets the Forge metadata declare compatibility ranges (see mods.toml below).
+tasks.processResources {
+    filesMatching('META-INF/mods.toml') {
+        expand(
+            'version': project.version,
+            'modid': 'cmdmaker',
+            'name': project.archives_base_name
+        )
+    }
+}
