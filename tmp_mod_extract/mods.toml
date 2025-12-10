@@ -4,16 +4,12 @@ license="CC0-1.0"
 
 [[mods]]
 modId="cmdmaker"
-version="${version}"
+version="2.1.0alpha6"
 displayName="Command Maker"
 credits="NekSheep9180 aka lucgei231"
 description = """
 A mod that allows server owners to define command aliases and custom syntax in JSON.
 """
-
-entrypoints {
-	"main" = ["com.example.forge.ForgeModMain"]
-}
 
 [[dependencies.cmdmaker]]
 modId="minecraft"
