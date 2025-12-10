@@ -1,0 +1,42 @@
+plugins {
+    id 'java'
+}
+
+version = project.mod_version
+group = 'io.github.diamondstar_mods'
+
+repositories {
+    mavenCentral()
+}
+
+sourceSets {
+    main {
+        java {
+            // Forge source will live here when ported
+            srcDirs = ['src/main/java']
+        }
+        resources {
+            srcDirs = ['src/main/resources']
+        }
+    }
+}
+
+java {
+    withSourcesJar()
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+// Basic FORGE jar task: produces a jar with classifier FORGE. This is a placeholder
+// and does not wire ForgeGradle; porting to real Forge build is next step.
+tasks.register('forgeJar', Jar) {
+    archiveBaseName.set(project.name)
+    archiveVersion.set(project.version.toString())
+    archiveClassifier.set('FORGE')
+    from(sourceSets.main.output)
+    from(rootProject.file('LICENSE')) {
+        rename { "${it}_${rootProject.name}" }
+    }
+}
+
+// Make root assemble pick this up when configured

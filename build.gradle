@@ -1,92 +1,33 @@
+// Root aggregator build for multi-project (fabric + forge)
+
 plugins {
-    id 'fabric-loom' version "${loom_version}"
-    id 'maven-publish'
+    id 'base'
 }
 
-version = project.mod_version
-description = "This is an example description! Compatible with Fabric and Quilt. Supports Minecraft 1.20 to 1.21.11."
-group = 'io.github.diamondstar_mods' // <-- update this to match your GitHub org/user
-
-base {
-    archivesName = project.archives_base_name
-}
-
-repositories {
-    mavenCentral()
-    maven { url 'https://maven.fabricmc.net/' }
-    
-}
-
-sourceSets {
-    main {
-        resources {
-            srcDirs = ['src/main/resources']
-        }
-    }
-}
-
-loom {
-    mods {
-        "modid" {
-            sourceSet sourceSets.main
-        }
-    }
-}
-
-dependencies {
-    // Minecraft and mappings
-    minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-
-    // Fabric Loader and API
-    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-
-
-
-    // Optional: JSON parsing
-    implementation "com.google.code.gson:gson:2.10.1"
-}
-
-processResources {
-    inputs.property "version", project.version
-    filesMatching("fabric.mod.json") {
-        expand "version": inputs.properties["version"]
-    }
-}
-
-tasks.withType(JavaCompile).configureEach {
-    it.options.release = 21
-}
-
-java {
-    withSourcesJar()
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
-}
-
-jar {
-    from("LICENSE") {
-        rename { "${it}_${project.archives_base_name}" }
-    }
-}
-
-
-publishing {
-    publications {
-        create("mavenJava", MavenPublication) {
-            artifactId = project.archives_base_name
-            from components.java
-        }
-    }
+// Configure common repositories and Java for all subprojects
+subprojects {
     repositories {
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/${System.getenv('GITHUB_REPOSITORY')}")
-            credentials {
-                username = System.getenv("USERNAME")
-                password = System.getenv("TOKEN")
-            }
+        mavenCentral()
+    }
+
+    apply plugin: 'java'
+
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(21)
         }
     }
+}
+
+// Root-level tasks to build both subprojects
+tasks.register('assembleAll') {
+    group = 'build'
+    description = 'Assemble fabric and forge builds'
+    dependsOn(':fabric:build')
+    dependsOn(':forge:build')
+}
+
+// Make the default build run both
+tasks.named('build') {
+    dependsOn(tasks.named('assembleAll'))
 }
