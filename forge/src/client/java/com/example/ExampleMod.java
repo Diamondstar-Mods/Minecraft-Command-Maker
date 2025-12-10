@@ -1,7 +1,10 @@
 package com.example;
 
+/**
+ * Placeholder client ExampleMod in the forge subproject.
+ */
 public class ExampleMod {
 	public void onInitialize() {
-		// This entrypoint is suitable for setting up mod initialization logic.
+		// No-op placeholder
 	}
 }

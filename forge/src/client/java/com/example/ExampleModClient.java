@@ -1,10 +1,10 @@
 package com.example;
 
-import net.fabricmc.api.ClientModInitializer;
-
-public class ExampleModClient implements ClientModInitializer {
-	@Override
+/**
+ * Placeholder client ExampleModClient in the forge subproject.
+ */
+public class ExampleModClient {
 	public void onInitializeClient() {
-		// Client-side initialization goes here
+		// No-op placeholder
 	}
 }
