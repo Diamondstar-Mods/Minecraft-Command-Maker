@@ -186,7 +186,7 @@ Documentation/
 
 **Build Status:** ✅ BUILD SUCCESSFUL in 34s
 
-**Compiled Mod:** `CMDMaker-2.1.0alpha2.jar` (31,347 bytes)
+**Compiled Mod:** `CMDMaker-2.1.1alpha.jar` (31,347 bytes)
 
 **Includes:**
 - All source files compiled
@@ -198,7 +198,7 @@ Documentation/
 
 ## Next Steps for Users
 
-1. **Download:** Get `CMDMaker-2.1.0alpha2.jar` from `build/libs/`
+1. **Download:** Get `CMDMaker-2.1.1alpha.jar` from `build/libs/`
 2. **Install:** Drop into `.minecraft/mods/` folder
 3. **Launch:** Start Minecraft (creates `syntax.json` automatically)
 4. **Configure:** Edit `config/CommandMaker/syntax.json`

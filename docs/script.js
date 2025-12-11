@@ -131,3 +131,26 @@ window.addEventListener('load', function() {
     highlightCode();
     addCopyButtons();
 });
+
+// Inject an "Edit" button in the top-right that opens the GitHub edit page for the current file
+window.addEventListener('load', function() {
+    try {
+        // Determine the filename (fallback to index.html)
+        const filename = (window.location.pathname.split('/').pop() || 'index.html');
+        const branch = '1.21.10';
+        const editUrl = `https://github.com/Diamondstar-Mods/Minecraft-Command-Maker/edit/${branch}/docs/${filename}`;
+
+        const link = document.createElement('a');
+        link.className = 'edit-button';
+        link.href = editUrl;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.textContent = 'Edit';
+
+        // Append to body so it floats over page content in the top-right
+        document.body.appendChild(link);
+    } catch (err) {
+        // Fail silently but log to console for debugging
+        console.error('Failed to inject edit button:', err);
+    }
+});
