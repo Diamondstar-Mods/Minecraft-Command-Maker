@@ -3,6 +3,17 @@ document.addEventListener('DOMContentLoaded', function() {
     const searchBox = document.getElementById('searchBox');
 
     if (searchBox) {
+        // Reduce interference from browser extensions/OS autofill/spellcheck by disabling these features
+        try {
+            searchBox.setAttribute('autocomplete', 'off');
+            searchBox.setAttribute('autocorrect', 'off');
+            searchBox.setAttribute('autocapitalize', 'off');
+            searchBox.setAttribute('spellcheck', 'false');
+            searchBox.setAttribute('role', 'search');
+        } catch (e) {
+            // ignore attribute setting failures in older browsers
+            console.debug('Could not set search input attributes:', e);
+        }
         // Search index: visible label => filename
         const pages = {
             'Getting Started': 'getting-started.html',
@@ -70,7 +81,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // Show suggestions on input
-        searchBox.addEventListener('input', function (e) {
+        try {
+            searchBox.addEventListener('input', function (e) {
             const q = e.target.value.trim();
             if (q.length === 0) {
                 renderResults([]);
@@ -78,10 +90,14 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             const matches = findMatches(q);
             renderResults(matches);
-        });
+            });
+        } catch (err) {
+            console.warn('Failed to attach input handler for searchBox:', err);
+        }
 
         // Handle keyboard navigation and enter
-        searchBox.addEventListener('keydown', function (e) {
+        try {
+            searchBox.addEventListener('keydown', function (e) {
             const visible = results.style.display === 'block';
             const items = Array.from(results.querySelectorAll('.search-result-item'));
             const active = results.querySelector('.active');
@@ -118,14 +134,25 @@ document.addEventListener('DOMContentLoaded', function() {
             } else if (e.key === 'Escape') {
                 renderResults([]);
             }
-        });
+            });
+        } catch (err) {
+            console.warn('Failed to attach keydown handler for searchBox:', err);
+        }
 
         // Close when clicking outside
-        document.addEventListener('click', function (ev) {
-            if (!searchBox.contains(ev.target) && !results.contains(ev.target)) {
-                renderResults([]);
-            }
-        });
+        try {
+            document.addEventListener('click', function (ev) {
+                try {
+                    if (!searchBox.contains(ev.target) && !results.contains(ev.target)) {
+                        renderResults([]);
+                    }
+                } catch (inner) {
+                    // defensive: ignore errors coming from third-party content scripts
+                }
+            });
+        } catch (err) {
+            console.warn('Failed to attach global click handler for search results:', err);
+        }
     }
 
     // Set active navigation link based on current page
