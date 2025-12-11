@@ -1,37 +1,129 @@
 // Search functionality
 document.addEventListener('DOMContentLoaded', function() {
     const searchBox = document.getElementById('searchBox');
-    
+
     if (searchBox) {
-        searchBox.addEventListener('input', function(e) {
-            const query = e.target.value.toLowerCase();
-            
-            // Simple search - in production this would be more sophisticated
-            const pages = {
-                'getting started': 'getting-started.html',
-                'installation': 'installation.html',
-                'configuration': 'configuration.html',
-                'aliases': 'aliases.html',
-                'syntax': 'syntax-system.html',
-                'variables': 'variables.html',
-                'gui': 'gui-system.html',
-                'chat': 'chat-messages.html',
-                'tpa': 'tpa-system.html',
-                'ban': 'ban-system.html',
-                'warp': 'warp-system.html',
-                'commands': 'commands.html',
-                'examples': 'examples.html',
-                'faq': 'faq.html',
-                'troubleshooting': 'troubleshooting.html',
-            };
-            
-            if (query.length > 0) {
-                for (let [term, url] of Object.entries(pages)) {
-                    if (term.includes(query)) {
-                        console.log(`Found match: ${term}`);
-                        // Could redirect or show results here
+        // Search index: visible label => filename
+        const pages = {
+            'Getting Started': 'getting-started.html',
+            'Installation': 'installation.html',
+            'Configuration': 'configuration.html',
+            'Creating Aliases': 'aliases.html',
+            'Custom Syntax': 'syntax-system.html',
+            'Variables & Substitution': 'variables.html',
+            'GUI System': 'gui-system.html',
+            'Chat Messages': 'chat-messages.html',
+            'TPA System': 'tpa-system.html',
+            'Ban System': 'ban-system.html',
+            'Warp System': 'warp-system.html',
+            'Commands': 'commands.html',
+            'Examples': 'examples.html',
+            'FAQ': 'faq.html',
+            'Troubleshooting': 'troubleshooting.html',
+            'Best Practices': 'best-practices.html',
+            'Custom Commands': 'custom-commands.html'
+        };
+
+        // Create results container
+        const results = document.createElement('div');
+        results.id = 'searchResults';
+        results.className = 'search-results';
+        results.style.display = 'none';
+
+        // Insert after the search input
+        searchBox.parentNode.style.position = 'relative';
+        searchBox.parentNode.appendChild(results);
+
+        function renderResults(matches) {
+            results.innerHTML = '';
+            if (!matches || matches.length === 0) {
+                results.style.display = 'none';
+                return;
+            }
+
+            matches.forEach(match => {
+                const item = document.createElement('div');
+                item.className = 'search-result-item';
+                item.textContent = match.label;
+                item.onclick = () => { window.location.href = match.url; };
+                results.appendChild(item);
+            });
+            results.style.display = 'block';
+        }
+
+        function findMatches(query) {
+            if (!query) return [];
+            const q = query.toLowerCase();
+            const matches = [];
+            for (const [label, file] of Object.entries(pages)) {
+                const labelLower = label.toLowerCase();
+                const fileLower = file.toLowerCase();
+                if (labelLower.includes(q) || fileLower.includes(q)) {
+                    matches.push({ label, url: file });
+                } else {
+                    // also allow splitting words
+                    const parts = labelLower.split(/\s+/);
+                    if (parts.some(p => p.startsWith(q))) matches.push({ label, url: file });
+                }
+            }
+            return matches.slice(0, 8);
+        }
+
+        // Show suggestions on input
+        searchBox.addEventListener('input', function (e) {
+            const q = e.target.value.trim();
+            if (q.length === 0) {
+                renderResults([]);
+                return;
+            }
+            const matches = findMatches(q);
+            renderResults(matches);
+        });
+
+        // Handle keyboard navigation and enter
+        searchBox.addEventListener('keydown', function (e) {
+            const visible = results.style.display === 'block';
+            const items = Array.from(results.querySelectorAll('.search-result-item'));
+            const active = results.querySelector('.active');
+
+            if (e.key === 'ArrowDown' && visible) {
+                e.preventDefault();
+                if (!active && items.length) {
+                    items[0].classList.add('active');
+                } else if (active) {
+                    const idx = items.indexOf(active);
+                    if (idx < items.length - 1) {
+                        active.classList.remove('active');
+                        items[idx + 1].classList.add('active');
                     }
                 }
+            } else if (e.key === 'ArrowUp' && visible) {
+                e.preventDefault();
+                if (active) {
+                    const idx = items.indexOf(active);
+                    active.classList.remove('active');
+                    if (idx > 0) items[idx - 1].classList.add('active');
+                }
+            } else if (e.key === 'Enter') {
+                const q = searchBox.value.trim();
+                const matches = findMatches(q);
+                if (visible && active) {
+                    active.click();
+                } else if (matches.length === 1) {
+                    window.location.href = matches[0].url;
+                } else if (matches.length > 0) {
+                    // go to the first match
+                    window.location.href = matches[0].url;
+                }
+            } else if (e.key === 'Escape') {
+                renderResults([]);
+            }
+        });
+
+        // Close when clicking outside
+        document.addEventListener('click', function (ev) {
+            if (!searchBox.contains(ev.target) && !results.contains(ev.target)) {
+                renderResults([]);
             }
         });
     }
