@@ -161,7 +161,7 @@ config/CommandMaker/aliases.json     Updated with syntax variable examples
 
 ✅ **BUILD SUCCESSFUL in 34s**
 
-**Output JAR:** `CMDMaker-2.1.0alpha6.jar` (31,347 bytes)
+**Output JAR:** `CMDMaker-2.1.0alpha2.jar` (31,347 bytes)
 
 Ready to use!
 
@@ -169,7 +169,7 @@ Ready to use!
 
 ## Installation
 
-1. Download `CMDMaker-2.1.0alpha6.jar` from `build/libs/`
+1. Download `CMDMaker-2.1.0alpha2.jar` from `build/libs/`
 2. Drop into `.minecraft/mods/`
 3. Launch Minecraft
 4. Auto-creates `config/CommandMaker/syntax.json` with examples!
@@ -251,7 +251,7 @@ From a useful tool to a **game-changing feature** that lets users create any com
 
 ## Next Steps
 
-1. Download the jar: `CMDMaker-2.1.0alpha6.jar`
+1. Download the jar: `CMDMaker-2.1.0alpha2.jar`
 2. Install to mods folder
 3. Read `SYNTAX_QUICK_START.md` for 5-minute overview
 4. Read `SYNTAX_GUIDE.md` for comprehensive documentation
