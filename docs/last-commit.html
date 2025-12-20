@@ -2,57 +2,49 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>GitHub File Last Commit Date</title>
 <style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    #commit-date { font-weight: bold; color: #2c3e50; }
+    body { margin: 0; padding: 0; font-family: Arial, sans-serif; background: transparent; }
+    .commit-date { font-style: italic; color: #8c8c8c; }
 </style>
 </head>
 <body>
-
-<p>File: <span id="file-path"></span></p>
-<p>Last Commit Date: <span id="commit-date">Loading...</span></p>
-
+<!-- Last Commit Date for File -->
+<p>Last Edited: <span id="commit-date">Loading...</span></p>
 <script>
 // ====== CONFIGURATION ======
-const owner = "diamondstar-mods";
-const repo = "minecraft-command-maker";
-const branch = "26.1";
+const owner = "diamondstar-mods"; // GitHub username/org
+const repo = "minecraft-command-maker"; // Repository name
+const branch = "26.1"; // Branch name
 
-// ====== READ SUBPATH FROM PARENT PAGE ======
-let subPath = "";
-
-// Only works if embedded in an iframe
-try {
-    const parentHeader = window.parent.document.getElementById("docs-path");
-    if (parentHeader) {
-        subPath = parentHeader.getAttribute("data-subpath") || "";
-    }
-} catch (e) {
-    console.warn("Not embedded or cross-origin restrictions.");
+// Get path from URL parameter
+const urlParams = new URLSearchParams(window.location.search);
+const path = urlParams.get('path');
+let filePath = "docs/";
+if (path) {
+    filePath = "docs/" + path;
 }
 
-// Final file path inside the repo
-const filePath = "docs/" + subPath;
-
-// Display file path
-document.getElementById("file-path").textContent = filePath;
-
-// GitHub API endpoint
+// GitHub API endpoint for commits affecting a specific file
 const apiUrl = `https://api.github.com/repos/${owner}/${repo}/commits?path=${encodeURIComponent(filePath)}&sha=${branch}&per_page=1`;
 
 fetch(apiUrl)
-    .then(r => r.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`GitHub API error: ${response.status}`);
+        }
+        return response.json();
+    })
     .then(data => {
-        if (!data.length) {
-            document.getElementById("commit-date").textContent = "No commits found.";
+        if (data.length === 0) {
+            document.getElementById("commit-date").textContent = "No commits found for this file.";
             return;
         }
+        // Extract commit date
         const commitDate = new Date(data[0].commit.committer.date);
         document.getElementById("commit-date").textContent = commitDate.toLocaleString();
     })
-    .catch(err => {
-        console.error(err);
+    .catch(error => {
+        console.error(error);
         document.getElementById("commit-date").textContent = "Error fetching commit date.";
     });
 </script>

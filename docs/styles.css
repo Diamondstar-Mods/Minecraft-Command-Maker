@@ -821,3 +821,7 @@ tr:hover {
     font-weight: bold;
     color: #333;
 }
+
+#docs-path {
+    display: none;
+}
