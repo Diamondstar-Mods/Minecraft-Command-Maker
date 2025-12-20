@@ -77,7 +77,7 @@ a:hover {
 }
 
 .nav-container {
-    max-width: 1400px;
+    /*max-width: 1400px;*/
     margin: 0 auto;
     padding: 0 20px;
     display: flex;
@@ -587,7 +587,7 @@ a:hover {
     .nav-container {
         flex-direction: column;
         height: auto;
-        padding: 15px 20px;
+        padding: 15px 25px;
         gap: 10px;
     }
 
