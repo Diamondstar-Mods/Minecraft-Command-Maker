@@ -723,7 +723,10 @@ tr:hover {
 
 /* Download page styles */
 .download-page .main-wrapper {
-    padding: 0 0 0 20px;
+    padding: 0 20px 0 0;
+    max-width: none;
+    margin: 20px 0;
+    grid-template-columns: 1fr;
 }
 
 .version {
@@ -732,6 +735,8 @@ tr:hover {
     margin-bottom: 15px;
     border-radius: 8px;
     border: 1px solid #333;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .version h2 {

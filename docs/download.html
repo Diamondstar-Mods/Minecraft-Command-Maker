@@ -30,7 +30,7 @@
 
     <!-- Main Content -->
     <div class="main-wrapper">
-        <h1>Modrinth Versions for Project 3cwbW4UB</h1>
+        <h1>Modrinth Versions for Command Maker</h1>
         <p>Automatically loaded from the Modrinth API.</p>
 
         <div id="versions">Loading…</div>
@@ -57,10 +57,10 @@
                         <h2>${v.name}</h2>
                         <div class="meta"><strong>Version Number:</strong> ${v.version_number}</div>
                         <div class="meta"><strong>Release Type:</strong> ${v.version_type}</div>
-                        <div class="meta"><strong>Loaders:</strong> ${v.loaders.join(", ")}</div>
-                        <div class="meta"><strong>Game Versions:</strong> <span class="collapsible">${v.game_versions.length} versions</span></div>
+                        <div class="meta"><strong>SSupported Loaders:</strong> ${v.loaders.join(", ")}</div>
+                        <div class="meta collapsible"><strong>Supported Minecraft Versions:</strong> (${v.game_versions.length} versions)</div>
                         <div class="collapsible-content">${v.game_versions.join(", ")}</div>
-                        <div class="meta"><strong>Changelog:</strong> <span class="collapsible">Show changelog</span></div>
+                        <div class="meta collapsible"><strong>Changelog:</strong> (Click to expand)</div>
                         <div class="collapsible-content">${v.changelog || "No changelog provided."}</div>
                         <a class="download-btn" href="${primaryFile.url}" download>
                             Download (${primaryFile.filename})
