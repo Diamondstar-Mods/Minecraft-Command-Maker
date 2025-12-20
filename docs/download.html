@@ -136,9 +136,9 @@
                     <div class="meta"><strong>Version Number:</strong> ${v.version_number}</div>
                     <div class="meta"><strong>Release Type:</strong> ${v.version_type}</div>
                     <div class="meta"><strong>Supported Loaders:</strong> ${v.loaders.join(", ")}</div>
-                    <div class="meta collapsible">^<strong>Supported Minecraft Versions:</strong> (${v.game_versions.length} versions)</div>
+                    <div class="meta collapsible"><strong>Supported Minecraft Versions:</strong> (${v.game_versions.length} versions)</div>
                     <div class="collapsible-content">${v.game_versions.join(", ")}</div>
-                    <div class="meta collapsible">^<strong>Changelog:</strong> (Click to expand)</div>
+                    <div class="meta collapsible"><strong>Changelog:</strong> (Click to expand)</div>
                     <div class="collapsible-content">${v.changelog || "No changelog provided."}</div>
                     <a class="download-btn" href="${primaryFile.url}" download>
                         Download (${primaryFile.filename})
