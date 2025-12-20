@@ -1,6 +1,6 @@
 /* ========== Global Styles ========== */
 .version {
-            background: #1b1b1b;
+            background: #ffffff;
             padding: 15px;
             margin-bottom: 15px;
             border-radius: 8px;
@@ -12,7 +12,7 @@
         }
         .meta {
             margin: 5px 0;
-            color: #ccc;
+            color: #4ade80;
         }
         .download-btn {
             display: inline-block;
@@ -726,11 +726,10 @@ tr:hover {
     padding: 0 20px 0 0;
     max-width: none;
     margin: 20px 0;
-    grid-template-columns: 1fr;
 }
 
 .version {
-    background: #1b1b1b;
+    background: #ffffff;
     padding: 15px;
     margin-bottom: 15px;
     border-radius: 8px;
@@ -746,7 +745,7 @@ tr:hover {
 
 .meta {
     margin: 5px 0;
-    color: #ccc;
+    color: #4ade80;
 }
 
 .collapsible {
@@ -789,4 +788,36 @@ tr:hover {
 
 .download-btn:hover {
     background: #22c55e;
+}
+
+#pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin: 20px 0;
+}
+
+#pagination button {
+    padding: 10px 15px;
+    background: #4ade80;
+    color: #000;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#pagination button:hover:not(:disabled) {
+    background: #22c55e;
+}
+
+#pagination button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+#pageInfo {
+    font-weight: bold;
+    color: #333;
 }

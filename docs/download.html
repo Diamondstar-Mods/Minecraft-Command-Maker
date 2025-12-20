@@ -30,60 +30,184 @@
 
     <!-- Main Content -->
     <div class="main-wrapper">
-        <h1>Modrinth Versions for Command Maker</h1>
-        <p>Automatically loaded from the Modrinth API.</p>
+        <div class="sidebar">
+            <div class="sidebar-widget">
+                <div class="widget-title">Navigation</div>
+                <ul class="widget-list">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="getting-started.html">Getting Started</a></li>
+                    <li><a href="commands.html">Commands</a></li>
+                    <li><a href="syntax-system.html">Custom Syntax</a></li>
+                    <li><a href="examples.html">Examples</a></li>
+                    <li><a href="faq.html">FAQ</a></li>
+                    <li><a href="download.html">Downloads</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="content">
+            <h1>Modrinth Versions for Command Maker</h1>
+            <p>Automatically loaded from the Modrinth API.</p>
 
-        <div id="versions">Loading…</div>
+            <div id="versions">Loading…</div>
+
+            <div id="pagination">
+                <button id="prevBtn">Previous</button>
+                <span id="pageInfo">Page 1 of 1</span>
+                <button id="nextBtn">Next</button>
+            </div>
+        </div>
     </div>
+
+    <section class="popular-section">
+        <div class="container">
+            <h2>Related Documentation</h2>
+            <div class="articles-grid">
+                <div class="article-card">
+                    <h3><a href="getting-started.html">Getting Started</a></h3>
+                    <p>Learn how to install and configure Command Maker for your Minecraft server.</p>
+                </div>
+                <div class="article-card">
+                    <h3><a href="commands.html">Commands Guide</a></h3>
+                    <p>Explore the full list of commands and their usage in Command Maker.</p>
+                </div>
+                <div class="article-card">
+                    <h3><a href="syntax-system.html">Custom Syntax</a></h3>
+                    <p>Understand how to create and use custom command syntax.</p>
+                </div>
+                <div class="article-card">
+                    <h3><a href="examples.html">Examples</a></h3>
+                    <p>See practical examples of Command Maker in action.</p>
+                </div>
+                <div class="article-card">
+                    <h3><a href="faq.html">FAQ</a></h3>
+                    <p>Find answers to frequently asked questions.</p>
+                </div>
+                <div class="article-card">
+                    <h3><a href="troubleshooting.html">Troubleshooting</a></h3>
+                    <p>Get help with common issues and problems.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <script src="script.js"></script>
     <script>
+        let versions = [];
+        let currentPage = 1;
+        let totalPages = 1;
+        const itemsPerPage = 5;
+
         async function loadVersions() {
             const container = document.getElementById("versions");
 
             try {
                 const response = await fetch("https://api.modrinth.com/v2/project/3cwbW4UB/version");
-                const versions = await response.json();
-
-                container.innerHTML = "";
-
-                versions.forEach(v => {
-                    const primaryFile = v.files.find(f => f.primary) || v.files[0];
-
-                    const div = document.createElement("div");
-                    div.className = "version";
-
-                    div.innerHTML = `
-                        <h2>${v.name}</h2>
-                        <div class="meta"><strong>Version Number:</strong> ${v.version_number}</div>
-                        <div class="meta"><strong>Release Type:</strong> ${v.version_type}</div>
-                        <div class="meta"><strong>SSupported Loaders:</strong> ${v.loaders.join(", ")}</div>
-                        <div class="meta collapsible"><strong>Supported Minecraft Versions:</strong> (${v.game_versions.length} versions)</div>
-                        <div class="collapsible-content">${v.game_versions.join(", ")}</div>
-                        <div class="meta collapsible"><strong>Changelog:</strong> (Click to expand)</div>
-                        <div class="collapsible-content">${v.changelog || "No changelog provided."}</div>
-                        <a class="download-btn" href="${primaryFile.url}" download>
-                            Download (${primaryFile.filename})
-                        </a>
-                    `;
-
-                    container.appendChild(div);
-                });
-
-                // Add event listeners for collapsible elements
-                document.querySelectorAll('.collapsible').forEach(el => {
-                    el.addEventListener('click', function() {
-                        this.classList.toggle('active');
-                    });
-                });
-
+                versions = await response.json();
+                totalPages = Math.ceil(versions.length / itemsPerPage);
+                displayPage(1);
+                updatePagination();
             } catch (err) {
                 container.innerHTML = "Failed to load versions.";
                 console.error(err);
             }
         }
 
+        function displayPage(page) {
+            const container = document.getElementById("versions");
+            container.innerHTML = "";
+            const start = (page - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const pageVersions = versions.slice(start, end);
+
+            pageVersions.forEach(v => {
+                const primaryFile = v.files.find(f => f.primary) || v.files[0];
+
+                const div = document.createElement("div");
+                div.className = "version";
+
+                div.innerHTML = `
+                    <h2>${v.name}</h2>
+                    <div class="meta"><strong>Version Number:</strong> ${v.version_number}</div>
+                    <div class="meta"><strong>Release Type:</strong> ${v.version_type}</div>
+                    <div class="meta"><strong>Supported Loaders:</strong> ${v.loaders.join(", ")}</div>
+                    <div class="meta collapsible"><strong>Supported Minecraft Versions:</strong> (${v.game_versions.length} versions)</div>
+                    <div class="collapsible-content">${v.game_versions.join(", ")}</div>
+                    <div class="meta collapsible"><strong>Changelog:</strong> (Click to expand)</div>
+                    <div class="collapsible-content">${v.changelog || "No changelog provided."}</div>
+                    <a class="download-btn" href="${primaryFile.url}" download>
+                        Download (${primaryFile.filename})
+                    </a>
+                `;
+
+                container.appendChild(div);
+            });
+
+            // Add event listeners for collapsible elements
+            document.querySelectorAll('.collapsible').forEach(el => {
+                el.addEventListener('click', function() {
+                    this.classList.toggle('active');
+                });
+            });
+        }
+
+        function updatePagination() {
+            const prevBtn = document.getElementById("prevBtn");
+            const nextBtn = document.getElementById("nextBtn");
+            const pageInfo = document.getElementById("pageInfo");
+            prevBtn.disabled = currentPage === 1;
+            nextBtn.disabled = currentPage === totalPages;
+            pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+        }
+
+        document.getElementById("prevBtn").addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                displayPage(currentPage);
+                updatePagination();
+            }
+        });
+
+        document.getElementById("nextBtn").addEventListener('click', () => {
+            if (currentPage < totalPages) {
+                currentPage++;
+                displayPage(currentPage);
+                updatePagination();
+            }
+        });
+
         loadVersions();
     </script>
+
+    <div class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Documentation</h4>
+                <ul>
+                    <li><a href="getting-started.html">Getting Started</a></li>
+                    <li><a href="commands.html">Commands</a></li>
+                    <li><a href="syntax-system.html">Custom Syntax</a></li>
+                    <li><a href="examples.html">Examples</a></li>
+                    <li><a href="faq.html">FAQ</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Community</h4>
+                <ul>
+                    <li><a href="https://modrinth.com/mod/command-maker" target="_blank">Modrinth</a></li>
+                    <li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker" target="_blank">GitHub</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Support</h4>
+                <ul>
+                    <li><a href="troubleshooting.html">Troubleshooting</a></li>
+                    <li><a href="faq.html">FAQ</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Command Maker. All rights reserved.</p>
+        </div>
+    </div>
 </body>
 </html>
