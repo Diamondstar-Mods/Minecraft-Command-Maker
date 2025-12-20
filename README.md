@@ -1,6 +1,6 @@
 # **RELEASES WILL NO LONGER BE RELEASED ON GITHUB. TO SEE LATEST RELEASES, VISIT THIS PAGE: https://modrinth.com/mod/command-maker/versions**
 
-# 🧩 Minecraft Command Maker – Fabric 1.21.7
+# 🧩 Minecraft Command Maker – Fabric 26.1
 
 A lightweight, portable command generator mod for Minecraft Fabric servers.  
 Built entirely in JSON—no external functions, no dependencies, and no admin rights required.
@@ -34,7 +34,7 @@ Built entirely in JSON—no external functions, no dependencies, and no admin ri
 1. Go to the [Releases tab](https://github.com/Diamondstar-Mods/Minecraft-Command-Maker/releases)
 2. Download the latest `.jar` file
 3. Drop it into your server’s `mods/` folder
-4. Make sure you’re running **Minecraft 1.21.7** with **Fabric Loader**
+4. Make sure you’re running **Minecraft 26.1** with **Fabric Loader**
 5. Restart the server and test with `/crash` or other generated commands
 
 ---
