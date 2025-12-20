@@ -6,7 +6,7 @@
     <title>Downloads - Command Maker Wiki</title>
     <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body class="download-page">
     <!-- Navigation Bar -->
     <nav class="navbar">
         <div class="nav-container">
@@ -57,15 +57,24 @@
                         <h2>${v.name}</h2>
                         <div class="meta"><strong>Version Number:</strong> ${v.version_number}</div>
                         <div class="meta"><strong>Release Type:</strong> ${v.version_type}</div>
-                        <div class="meta"><strong>Game Versions:</strong> ${v.game_versions.join(", ")}</div>
                         <div class="meta"><strong>Loaders:</strong> ${v.loaders.join(", ")}</div>
-                        <div class="meta"><strong>Changelog:</strong><br>${v.changelog || "No changelog provided."}</div>
+                        <div class="meta"><strong>Game Versions:</strong> <span class="collapsible">${v.game_versions.length} versions</span></div>
+                        <div class="collapsible-content">${v.game_versions.join(", ")}</div>
+                        <div class="meta"><strong>Changelog:</strong> <span class="collapsible">Show changelog</span></div>
+                        <div class="collapsible-content">${v.changelog || "No changelog provided."}</div>
                         <a class="download-btn" href="${primaryFile.url}" download>
                             Download (${primaryFile.filename})
                         </a>
                     `;
 
                     container.appendChild(div);
+                });
+
+                // Add event listeners for collapsible elements
+                document.querySelectorAll('.collapsible').forEach(el => {
+                    el.addEventListener('click', function() {
+                        this.classList.toggle('active');
+                    });
                 });
 
             } catch (err) {

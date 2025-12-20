@@ -722,6 +722,10 @@ tr:hover {
 }
 
 /* Download page styles */
+.download-page .main-wrapper {
+    padding: 0 0 0 20px;
+}
+
 .version {
     background: #1b1b1b;
     padding: 15px;
@@ -738,6 +742,33 @@ tr:hover {
 .meta {
     margin: 5px 0;
     color: #ccc;
+}
+
+.collapsible {
+    cursor: pointer;
+    user-select: none;
+    color: #4ade80;
+}
+
+.collapsible::before {
+    content: "▶ ";
+    display: inline-block;
+    transition: transform 0.2s;
+}
+
+.collapsible.active::before {
+    transform: rotate(90deg);
+}
+
+.collapsible-content {
+    display: none;
+    margin-left: 15px;
+    margin-top: 5px;
+    color: #ccc;
+}
+
+.collapsible.active + .collapsible-content {
+    display: block;
 }
 
 .download-btn {
