@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Downloads - Command Maker Wiki</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html"><img class="logo-icon" src="https://cdn.modrinth.com/data/3cwbW4UB/e1a03ea3f7b4f07f1e1ce92f82b14adcab1b3c18_96.webp" alt="Command Maker Icon"> Command Maker Wiki</a>
+            </div>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="getting-started.html" class="nav-link">Getting Started</a>
+                <a href="commands.html" class="nav-link">Commands</a>
+                <a href="syntax-system.html" class="nav-link">Custom Syntax</a>
+                <a href="examples.html" class="nav-link">Examples</a>
+                <a href="faq.html" class="nav-link">FAQ</a>
+                <a href="download.html" class="nav-link active">Downloads</a>
+            </div>
+            <div class="nav-search">
+                <input type="text" id="searchBox" placeholder="Search documentation..." class="search-input">
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-wrapper">
+        <h1>Modrinth Versions for Project 3cwbW4UB</h1>
+        <p>Automatically loaded from the Modrinth API.</p>
+
+        <div id="versions">Loading…</div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        async function loadVersions() {
+            const container = document.getElementById("versions");
+
+            try {
+                const response = await fetch("https://api.modrinth.com/v2/project/3cwbW4UB/version");
+                const versions = await response.json();
+
+                container.innerHTML = "";
+
+                versions.forEach(v => {
+                    const primaryFile = v.files.find(f => f.primary) || v.files[0];
+
+                    const div = document.createElement("div");
+                    div.className = "version";
+
+                    div.innerHTML = `
+                        <h2>${v.name}</h2>
+                        <div class="meta"><strong>Version Number:</strong> ${v.version_number}</div>
+                        <div class="meta"><strong>Release Type:</strong> ${v.version_type}</div>
+                        <div class="meta"><strong>Game Versions:</strong> ${v.game_versions.join(", ")}</div>
+                        <div class="meta"><strong>Loaders:</strong> ${v.loaders.join(", ")}</div>
+                        <div class="meta"><strong>Changelog:</strong><br>${v.changelog || "No changelog provided."}</div>
+                        <a class="download-btn" href="${primaryFile.url}" download>
+                            Download (${primaryFile.filename})
+                        </a>
+                    `;
+
+                    container.appendChild(div);
+                });
+
+            } catch (err) {
+                container.innerHTML = "Failed to load versions.";
+                console.error(err);
+            }
+        }
+
+        loadVersions();
+    </script>
+</body>
+</html>
