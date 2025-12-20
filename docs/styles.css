@@ -1,4 +1,32 @@
 /* ========== Global Styles ========== */
+.version {
+            background: #1b1b1b;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border: 1px solid #333;
+        }
+        .version h2 {
+            margin: 0 0 10px 0;
+            color: #4ade80;
+        }
+        .meta {
+            margin: 5px 0;
+            color: #ccc;
+        }
+        .download-btn {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 14px;
+            background: #4ade80;
+            color: #000;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+        .download-btn:hover {
+            background: #22c55e;
+        }
 * {
     margin: 0;
     padding: 0;
