@@ -28,11 +28,7 @@
         </div>
     </nav>
 
-    <h1 id="docs-path" data-subpath="installation.html"></h1>
-    <iframe id="last-commit-iframe" src="" width="400" height="50"></iframe>
-    <script>
-        document.getElementById('last-commit-iframe').src = 'last-commit.html?path=' + document.getElementById('docs-path').dataset.subpath;
-    </script>
+
 
     <!-- Main Content -->
     <div class="main-wrapper">
@@ -80,6 +76,11 @@
 
         <!-- Content Area -->
         <main class="content">
+                <h1 id="docs-path" data-subpath="installation.html"></h1>
+    <iframe style="border: none; font-style: italic;" id="last-commit-iframe" src="" width="400" height="50"></iframe>
+    <script>
+        document.getElementById('last-commit-iframe').src = 'last-commit.html?path=' + document.getElementById('docs-path').dataset.subpath;
+    </script>
             <h1>Installation Guide</h1>
             <p>Get Command Maker installed and ready to use in just a few minutes!</p>
 

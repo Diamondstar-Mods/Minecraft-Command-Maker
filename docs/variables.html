@@ -23,12 +23,6 @@
         </div>
     </nav>
 
-    <h1 id="docs-path" data-subpath="variables.html"></h1>
-    <iframe id="last-commit-iframe" src="" width="400" height="50"></iframe>
-    <script>
-        document.getElementById('last-commit-iframe').src = 'last-commit.html?path=' + document.getElementById('docs-path').dataset.subpath;
-    </script>
-
     <div class="main-wrapper">
         <aside class="sidebar">
             <div class="sidebar-widget">
@@ -61,6 +55,11 @@
         </aside>
 
         <main class="content">
+            <h1 id="docs-path" data-subpath="variables.html"></h1>
+            <iframe style="border: none; font-style: italic;" id="last-commit-iframe" src="" width="400" height="50"></iframe>
+            <script>
+                document.getElementById('last-commit-iframe').src = 'last-commit.html?path=' + document.getElementById('docs-path').dataset.subpath;
+            </script>
             <h1>Variables & Substitution</h1>
             <p>Learn how to use variables to make your aliases dynamic and powerful.</p>
 
