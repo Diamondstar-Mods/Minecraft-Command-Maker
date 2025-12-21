@@ -9,6 +9,7 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
+import net.minecraft.util.Identifier;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.text.Text;
@@ -40,6 +41,7 @@ public class ExampleMod implements ModInitializer {
 			registerSetCmdVariable(dispatcher);
 			registerDeleteAliasMenu(dispatcher);
 			registerSyntaxCommand(dispatcher);
+			registerCmdCommand(dispatcher);
 		});
 		
 		// Register server lifecycle event for singleplayer and server startup
@@ -391,6 +393,122 @@ public class ExampleMod implements ModInitializer {
 					}
 					return 1;
 				})
+		);
+	}
+
+	private int addCommand(ServerCommandSource source, String alias, String command, CommandDispatcher<ServerCommandSource> dispatcher) {
+		if (aliases.containsKey(alias)) {
+			source.sendFeedback(() -> net.minecraft.text.Text.literal("§cAlias '§f" + alias + "§c' already exists. Use /deletealias " + alias + " first."), false);
+			return 0;
+		}
+		aliases.put(alias, command);
+		saveAliases();
+		registerAlias(dispatcher, alias, command);
+		source.sendFeedback(() -> net.minecraft.text.Text.literal("§6Added alias: §f/" + alias + " §7-> §f" + command), false);
+		return 1;
+	}
+
+	private int deleteAlias(ServerCommandSource source, String alias, CommandDispatcher<ServerCommandSource> dispatcher) {
+		if (aliases.containsKey(alias)) {
+			aliases.remove(alias);
+			saveAliases();
+			dispatcher.getRoot().getChildren().removeIf(node -> node.getName().equals(alias));
+			source.sendFeedback(() -> net.minecraft.text.Text.literal("§6[" + alias + "] was deleted"), false);
+			return 1;
+		} else {
+			source.sendFeedback(() -> net.minecraft.text.Text.literal("§cAlias '§f" + alias + "§c' not found."), false);
+			return 0;
+		}
+	}
+
+	private int reloadCommands(ServerCommandSource source, CommandDispatcher<ServerCommandSource> dispatcher) {
+		loadAliases();
+		SyntaxManager.loadSyntaxDefinitions();
+		// Re-register aliases
+		for (Map.Entry<String, String> entry : aliases.entrySet()) {
+			registerAlias(dispatcher, entry.getKey(), entry.getValue());
+		}
+		source.sendFeedback(() -> net.minecraft.text.Text.literal("§6Reloaded aliases and syntax definitions."), false);
+		return 1;
+	}
+
+	private int listSyntax(ServerCommandSource source) {
+		Map<String, CommandSyntax> syntaxes = SyntaxManager.getAllSyntaxes();
+		if (syntaxes.isEmpty()) {
+			source.sendFeedback(() -> net.minecraft.text.Text.literal("§cNo custom syntaxes defined."), false);
+			return 0;
+		}
+		source.sendFeedback(() -> net.minecraft.text.Text.literal("§6Available Custom Syntaxes:"), false);
+		for (String name : syntaxes.keySet()) {
+			CommandSyntax syntax = syntaxes.get(name);
+			String desc = syntax.getDescription().isEmpty() ? "" : " - " + syntax.getDescription();
+			source.sendFeedback(() -> net.minecraft.text.Text.literal("  §f" + name + "§7: §e" + syntax.getPattern() + desc), false);
+		}
+		return 1;
+	}
+
+	private int setVariable(ServerCommandSource source, String key, String value) {
+		UUID uuid = null;
+		try {
+			uuid = source.getPlayer().getUuid();
+		} catch (Exception e) {
+			source.sendFeedback(() -> net.minecraft.text.Text.literal("Only players can set variables."), false);
+			return 0;
+		}
+		playerVariables.computeIfAbsent(uuid, k -> new HashMap<>()).put(key, value);
+		source.sendFeedback(() -> net.minecraft.text.Text.literal("Set variable ${" + key + "} = " + value), false);
+		return 1;
+	}
+
+	/**
+	 * Register /cmd command with subcommands
+	 */
+	private void registerCmdCommand(CommandDispatcher<ServerCommandSource> dispatcher) {
+		dispatcher.register(
+			net.minecraft.server.command.CommandManager.literal("cmd")
+				.then(net.minecraft.server.command.CommandManager.literal("add")
+					.then(net.minecraft.server.command.CommandManager.argument("alias", StringArgumentType.word())
+						.then(net.minecraft.server.command.CommandManager.argument("command", StringArgumentType.greedyString())
+							.executes(ctx -> {
+								String alias = StringArgumentType.getString(ctx, "alias");
+								String command = StringArgumentType.getString(ctx, "command");
+								return addCommand(ctx.getSource(), alias, command, dispatcher);
+							})
+						)
+					)
+				)
+				.then(net.minecraft.server.command.CommandManager.literal("del")
+					.then(net.minecraft.server.command.CommandManager.argument("alias", StringArgumentType.word())
+						.executes(ctx -> {
+							String alias = StringArgumentType.getString(ctx, "alias");
+							return deleteAlias(ctx.getSource(), alias, dispatcher);
+						})
+					)
+				)
+				.then(net.minecraft.server.command.CommandManager.literal("reload")
+					.executes(ctx -> reloadCommands(ctx.getSource(), dispatcher))
+				)
+				.then(net.minecraft.server.command.CommandManager.literal("gui")
+					.executes(ctx -> {
+						ServerCommandSource source = ctx.getSource();
+						source.sendFeedback(() -> net.minecraft.text.Text.literal("§6Use §f/deletealiases-gui §6to open the GUI"), false);
+						return 1;
+					})
+				)
+				.then(net.minecraft.server.command.CommandManager.literal("syntax")
+					.executes(ctx -> listSyntax(ctx.getSource()))
+				)
+				.then(net.minecraft.server.command.CommandManager.literal("setvar")
+					.then(net.minecraft.server.command.CommandManager.argument("key", StringArgumentType.word())
+						.then(net.minecraft.server.command.CommandManager.argument("value", StringArgumentType.greedyString())
+							.executes(ctx -> {
+								String key = StringArgumentType.getString(ctx, "key");
+								String value = StringArgumentType.getString(ctx, "value");
+								return setVariable(ctx.getSource(), key, value);
+							})
+						)
+					)
+				)
 		);
 	}
 }

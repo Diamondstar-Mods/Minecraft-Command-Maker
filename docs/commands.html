@@ -124,6 +124,44 @@
             <p><strong>Usage:</strong> <code>/syntax</code></p>
             <p><strong>Shows:</strong> All defined custom syntax patterns with descriptions</p>
 
+            <h2>/cmd</h2>
+            <p><strong>Description:</strong> Shortcut command for common operations</p>
+            
+            <h3>Subcommands</h3>
+            <table>
+                <tr><th>Command</th><th>Description</th><th>Example</th></tr>
+                <tr>
+                    <td><code>/cmd add &lt;alias&gt; &lt;command&gt;</code></td>
+                    <td>Create a new alias</td>
+                    <td><code>/cmd add hello say Hello!</code></td>
+                </tr>
+                <tr>
+                    <td><code>/cmd del &lt;alias&gt;</code></td>
+                    <td>Delete an alias</td>
+                    <td><code>/cmd del hello</code></td>
+                </tr>
+                <tr>
+                    <td><code>/cmd reload</code></td>
+                    <td>Reload aliases and syntax from config files</td>
+                    <td><code>/cmd reload</code></td>
+                </tr>
+                <tr>
+                    <td><code>/cmd gui</code></td>
+                    <td>Open GUI for managing aliases</td>
+                    <td><code>/cmd gui</code></td>
+                </tr>
+                <tr>
+                    <td><code>/cmd syntax</code></td>
+                    <td>View all custom syntax patterns</td>
+                    <td><code>/cmd syntax</code></td>
+                </tr>
+                <tr>
+                    <td><code>/cmd setvar &lt;key&gt; &lt;value&gt;</code></td>
+                    <td>Set a custom variable</td>
+                    <td><code>/cmd setvar home 100 64 -200</code></td>
+                </tr>
+            </table>
+
             <h2>Built-in Variables</h2>
             <table>
                 <tr><th>Variable</th><th>Description</th><th>Example</th></tr>
