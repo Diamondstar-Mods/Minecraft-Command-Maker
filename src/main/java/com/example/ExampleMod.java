@@ -7,8 +7,6 @@ import com.mojang.brigadier.ParseResults;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.util.Identifier;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.MinecraftServer;
@@ -28,7 +26,6 @@ public class ExampleMod implements ModInitializer {
 	private static final Map<String, String> aliases = new HashMap<>();
 	// Store per-player custom variables: player UUID -> (varName -> value)
 	private static final Map<UUID, Map<String, String>> playerVariables = new HashMap<>();
-	private static boolean modLoadedMessageSent = false;
 
 	@Override
 	public void onInitialize() {
@@ -42,23 +39,6 @@ public class ExampleMod implements ModInitializer {
 			registerDeleteAliasMenu(dispatcher);
 			registerSyntaxCommand(dispatcher);
 			registerCmdCommand(dispatcher);
-		});
-		
-		// Register server lifecycle event for singleplayer and server startup
-		ServerLifecycleEvents.SERVER_STARTED.register(server -> {
-			modLoadedMessageSent = false;
-		});
-		
-		// Register player join event to send message
-		ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
-			if (!modLoadedMessageSent) {
-				// Send message to the joining player
-				handler.player.sendMessage(
-					Text.literal("§aNek's Command Maker successfully loaded!"),
-					false
-				);
-				modLoadedMessageSent = true;
-			}
 		});
 		
 		LOGGER.info("Alias mod initialized!");
