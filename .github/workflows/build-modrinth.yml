@@ -16,7 +16,7 @@ jobs:
           cache: 'gradle'
 
       - name: Build with Gradle
-        id: build,
+        id: build
         run: chmod +x gradlew && ./gradlew build
 
       - name: Find correct JAR
