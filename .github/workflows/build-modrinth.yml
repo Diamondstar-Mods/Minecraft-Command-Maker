@@ -26,7 +26,7 @@ jobs:
           path: build/libs/
       - name: Find correct JAR
         id: findjar
-        run: output="build/libs/CMDMakerFabric.jar"
+        run: output="build/libs/CMDMaker-Fabric-latest.jar"
 
 
 
