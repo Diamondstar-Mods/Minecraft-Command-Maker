@@ -8,18 +8,18 @@
         }
         .version h2 {
             margin: 0 0 10px 0;
-            color: #4ade80;
+            color: black;
         }
         .meta {
             margin: 5px 0;
-            color: #4ade80;
+            color: black;
         }
         .download-btn {
             display: inline-block;
             margin-top: 10px;
             padding: 10px 14px;
-            background: #4ade80;
-            color: #000;
+            background: green;
+            color: black;
             text-decoration: none;
             border-radius: 6px;
             font-weight: bold;
@@ -740,12 +740,12 @@ tr:hover {
 
 .version h2 {
     margin: 0 0 10px 0;
-    color: #4ade80;
+    color: black;
 }
 
 .meta {
     margin: 5px 0;
-    color: #4ade80;
+    color: black;
 }
 
 .collapsible {

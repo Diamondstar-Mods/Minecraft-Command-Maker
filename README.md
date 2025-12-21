@@ -1,9 +1,12 @@
 # **RELEASES WILL NO LONGER BE RELEASED ON GITHUB. TO SEE LATEST RELEASES, VISIT THIS PAGE: https://modrinth.com/mod/command-maker/versions**
+or this page:
+https://diamondstar-mods.github.io/Minecraft-Command-Maker/download.html
 
 # 🧩 Minecraft Command Maker – Fabric 26.1
 
 A lightweight, portable command generator mod for Minecraft Fabric servers.  
-Built entirely in JSON—no external functions, no dependencies, and no admin rights required.
+Built entirely in Java—no external functions, no dependencies (besides Fabric API), and no admin rights required.
+Visit the [**wiki**](https://diamondstar-mods.github.io/Minecraft-Command-Maker/) for more information.
 
 ---
 
@@ -21,8 +24,8 @@ Built entirely in JSON—no external functions, no dependencies, and no admin ri
 
 ## Features
 
-- ✅ Vanilla-compatible `/crash` command (JSON-only logic)
-- 🧪 Modular command generation for Fabric 1.21.7
+- ✅ Vanilla-compatible `/addcommand` command (JSON-only logic)
+- 🧪 Modular command generation for Fabric 26.1
 - 🔒 Admin-free setup—no elevated permissions required
 - 📁 Portable structure for locked-down environments
 - 🛠️ Designed for reproducibility and community sharing
@@ -31,11 +34,11 @@ Built entirely in JSON—no external functions, no dependencies, and no admin ri
 
 ## Installation
 
-1. Go to the [Releases tab](https://github.com/Diamondstar-Mods/Minecraft-Command-Maker/releases)
+1. Go to the [Releases page](https://diamondstar-mods.github.io/Minecraft-Command-Maker/download)
 2. Download the latest `.jar` file
 3. Drop it into your server’s `mods/` folder
-4. Make sure you’re running **Minecraft 26.1** with **Fabric Loader**
-5. Restart the server and test with `/crash` or other generated commands
+4. Make sure you’re running **Minecraft 26.1+** with **Fabric Loader**
+5. Restart the server and test with `/addcommand` or other generated commands
 
 ---
 
@@ -46,11 +49,12 @@ You can define custom behaviors without writing external functions.
 
 Example usage:
 ```mcfunction
-/crash @p
+/addcommand add hello say hello
 ```
 
-This command triggers a crash effect using only in-line JSON logic.  
-More commands and templates coming soon!
+This command triggers a "hello" message sent in chat using only in-line JSON logic.  
+
+Visit the [**wiki**](https://diamondstar-mods.github.io/Minecraft-Command-Maker/) for more information.
 
 ---
 
