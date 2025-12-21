@@ -251,15 +251,20 @@
                     <div class="collapsible-content">${v.changelog || "No changelog provided."}</div>
                     <div class="meta"><strong>Published:</strong> ${publishedHtml}</div>
                     <div class="meta"><strong>Downloads:</strong> <span id="${downloadsPlaceholderId}">Loading…</span></div>
-                    <a class="download-btn" href="${primaryFile?.url || '#'}" download>
-                    Download (${primaryFile?.filename || 'file'} • ${formatFileSize(primaryFile?.size)})
-                    </a>
+                    <div class="download-group">
+    <a class="download-btn" href="${primaryFile?.url || '#'}" download>
+        Download (${primaryFile?.filename || 'file'} • ${formatFileSize(primaryFile?.size)})
+    </a>
 
-                    ${Array.isArray(v.files) ? v.files.filter(f => !f.primary).map(f =>
-    `<a class="additional-download-btn" href="${f.url}" download>
-        Download ${f.filename} • ${formatFileSize(f.size)}
-     </a>`
-).join('') : ''}
+    ${Array.isArray(v.files) ? v.files
+        .filter(f => !f.primary)
+        .map(f => `
+            <a class="additional-download-btn" href="${f.url}" download>
+                Download ${f.filename} • ${formatFileSize(f.size)}
+            </a>
+        `).join('') : ''}
+</div>
+
 
                 `;
 
