@@ -1,0 +1,8 @@
+[
+  {
+    "workflow": "build-modrinth.yml",
+    "command": "act push -W .github\\workflows\\build-modrinth.yml",
+    "success": true,
+    "timestamp": "2025-12-21T18:41:13.621Z"
+  }
+]

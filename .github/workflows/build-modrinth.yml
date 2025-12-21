@@ -21,9 +21,8 @@ jobs:
 
       - name: Find correct JAR
         id: findjar
-        run: |
-          output="build/libs/CMDMakerFabric.jar"
-          echo "jarname=$output" >> $GITHUB_OUTPUT
+        run: output="build/libs/CMDMakerFabric.jar"
+
 
 
       - name: Upload to Modrinth
