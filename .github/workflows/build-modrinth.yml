@@ -34,7 +34,7 @@ jobs:
         uses: RubixDev/modrinth-upload@v1
         with:
           token: ${{ secrets.MODRINTH_TOKEN }}
-          file_path: build/libs/CMDMakerFabric.jar
+          file_path: build/libs/CMDMaker-Fabric-latest.jar
           name: Command Maker Nightly ${{ github.run_number }} (Fabric)
           version: Nightly-${{ github.run_number }}
           changelog: ${{ github.event.release.body }}
