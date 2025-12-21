@@ -775,16 +775,18 @@ tr:hover {
     display: block;
 }
 
-.download-btn {
-    display: inline-block;
-    margin-top: 10px;
+.additional-download-btn {
+    display: block;
+    width: fit-content;
     padding: 10px 14px;
-    background: #4ade80;
+    background: transparent;
     color: #000;
     text-decoration: none;
+    border: 2px solid #000;
     border-radius: 6px;
     font-weight: bold;
 }
+
 
 .download-btn:hover {
     background: #22c55e;
