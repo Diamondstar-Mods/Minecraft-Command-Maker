@@ -243,6 +243,7 @@
                     <a class="download-btn" href="${primaryFile?.url || '#'}" download>
                         Download (${primaryFile?.filename || 'file'})
                     </a>
+                    ${Array.isArray(v.files) ? v.files.filter(f => !f.primary).map(f => `<a class="additional-download-btn" href="${f.url}" download>Download ${f.filename}</a>`).join('') : ''}
                 `;
 
                 container.appendChild(div);
