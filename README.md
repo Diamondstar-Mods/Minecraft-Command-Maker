@@ -51,7 +51,8 @@ Example usage:
 
 This command triggers a crash effect using only in-line JSON logic.  
 More commands and templates coming soon!
-
+Visit the **wiki** for more information:
+https://diamondstar-mods.github.io/Minecraft-Command-Maker/
 ---
 
 ## Compile from Source
