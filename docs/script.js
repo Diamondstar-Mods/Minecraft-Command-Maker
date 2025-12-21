@@ -32,7 +32,8 @@ document.addEventListener('DOMContentLoaded', function() {
             'FAQ': 'faq.html',
             'Troubleshooting': 'troubleshooting.html',
             'Best Practices': 'best-practices.html',
-            'Custom Commands': 'custom-commands.html'
+            'Custom Commands': 'custom-commands.html',
+            'Download': 'downloads.html'
         };
 
         // Create results container
