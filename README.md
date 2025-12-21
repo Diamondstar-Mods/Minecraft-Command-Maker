@@ -1,4 +1,6 @@
 # **RELEASES WILL NO LONGER BE RELEASED ON GITHUB. TO SEE LATEST RELEASES, VISIT THIS PAGE: https://modrinth.com/mod/command-maker/versions**
+or this page:
+https://diamondstar-mods.github.io/Minecraft-Command-Maker/downloads.html
 
 # 🧩 Minecraft Command Maker – Fabric 26.1
 
