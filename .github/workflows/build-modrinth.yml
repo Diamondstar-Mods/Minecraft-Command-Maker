@@ -22,7 +22,7 @@ jobs:
       - name: Find correct JAR
         id: findjar
         run: |
-          output="$(find build/libs/ ! -name "*-dev.jar" ! -name "*-sources.jar" -type f -printf "%f\n")"
+          output="build/libs/CMDMakerFabric.jar"
           echo "jarname=$output" >> $GITHUB_OUTPUT
 
 
