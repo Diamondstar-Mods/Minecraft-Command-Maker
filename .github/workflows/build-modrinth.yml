@@ -28,7 +28,7 @@ jobs:
       - name: Upload to the GitHub release
         uses: actions/upload-release-asset@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
         with:
           upload_url: ${{ github.event.release.upload_url }}
           asset_path: build/libs/${{ steps.findjar.outputs.jarname }}
@@ -38,7 +38,7 @@ jobs:
       - name: Upload to Modrinth
         uses: RubixDev/modrinth-upload@v1
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.MODRINTH_TOKEN }}
           file_path: build/libs/CMDMakerFabric.jar
           name: Command Maker Nightly ${{ github.run_number }} (Fabric)
           version: Nightly-${{ github.run_number }}
