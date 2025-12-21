@@ -114,7 +114,7 @@
                 displayPage(1);
                 updatePagination();
             } catch (err) {
-                container.innerHTML = "Failed to load versions.";
+                container.innerHTML = "Failed to load versions:", err;
                 console.error(err);
             }
         }
