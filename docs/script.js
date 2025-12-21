@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
             'Troubleshooting': 'troubleshooting.html',
             'Best Practices': 'best-practices.html',
             'Custom Commands': 'custom-commands.html',
-            'Download': 'downloads.html'
+            'Download': 'download.html'
         };
 
         // Create results container
