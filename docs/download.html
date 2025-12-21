@@ -112,6 +112,19 @@
             return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         }
 
+        // Format ISO date string into a readable local timestamp.
+        function formatDate(iso) {
+            if (!iso) return "Unknown";
+            const d = new Date(iso);
+            if (isNaN(d)) return iso; // if it's not a valid date, return raw value
+            // Use the user's locale and show both date and time
+            try {
+                return d.toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' });
+            } catch (e) {
+                return d.toString();
+            }
+        }
+
         // Try to get downloads for a version. Many Modrinth endpoints include downloads either
         // on the version object or on each file. If those aren't present in the list endpoint,
         // fetch the detailed version object.
@@ -205,7 +218,7 @@
             const versionElements = [];
 
             for (const v of pageVersions) {
-                const primaryFile = v.files.find(f => f.primary) || v.files[0];
+                const primaryFile = (Array.isArray(v.files) && (v.files.find(f => f.primary) || v.files[0])) || null;
 
                 const div = document.createElement("div");
                 div.className = "version";
@@ -213,15 +226,19 @@
                 // downloads placeholder; will be replaced when resolved
                 const downloadsPlaceholderId = `downloads-${v.id}`;
 
+                // published time (use <time> element with datetime attr)
+                const publishedHtml = v.date_published ? `<time datetime="${v.date_published}" title="${v.date_published}">${formatDate(v.date_published)}</time>` : "Unknown";
+
                 div.innerHTML = `
                     <h2>${v.name}</h2>
                     <div class="meta"><strong>Version Number:</strong> ${v.version_number}</div>
                     <div class="meta"><strong>Release Type:</strong> ${v.version_type}</div>
-                    <div class="meta"><strong>Supported Loaders:</strong> ${v.loaders.join(", ")}</div>
-                    <div class="meta collapsible"><strong>Supported Minecraft Versions:</strong> (${v.game_versions.length} versions)</div>
-                    <div class="collapsible-content">${v.game_versions.join(", ")}</div>
+                    <div class="meta"><strong>Supported Loaders:</strong> ${Array.isArray(v.loaders) ? v.loaders.join(", ") : ""}</div>
+                    <div class="meta collapsible"><strong>Supported Minecraft Versions:</strong> (${Array.isArray(v.game_versions) ? v.game_versions.length : 0} versions)</div>
+                    <div class="collapsible-content">${Array.isArray(v.game_versions) ? v.game_versions.join(", ") : ""}</div>
                     <div class="meta collapsible"><strong>Changelog:</strong> (Click to expand)</div>
                     <div class="collapsible-content">${v.changelog || "No changelog provided."}</div>
+                    <div class="meta"><strong>Published:</strong> ${publishedHtml}</div>
                     <div class="meta"><strong>Downloads:</strong> <span id="${downloadsPlaceholderId}">Loading…</span></div>
                     <a class="download-btn" href="${primaryFile?.url || '#'}" download>
                         Download (${primaryFile?.filename || 'file'})
@@ -336,4 +353,4 @@
         </div>
     </div>
 </body>
-</html>
+    </html>
