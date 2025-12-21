@@ -11,7 +11,7 @@
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-logo">
-                <a href="index.html"><img class="logo-icon" src="https://cdn.modrinth.com/data/3cwbW4UB/e1a03ea3f7b4f07f1e1ce92f82b14adcab1b3c18_96.webp" alt="Command Maker Icon"> Command Maker Wiki</a>
+                <a href="index.html"><img class="logo-icon" src="https://cdn.modrinth.com/data/3cwbW4UB/e1a03ea3f7b4f07f1e1ce92f82b14adcab1b3c18_96.webp" alt="Command Maker Icon"> Command Maker Wiki</[...]
             </div>
             <div class="nav-menu">
                 <a href="index.html" class="nav-link">Home</a>
@@ -104,14 +104,88 @@
         let totalPages = 1;
         const itemsPerPage = 5;
 
+        // Cache to avoid refetching details for versions already seen
+        const versionDownloadsCache = {};
+
+        function formatNumber(n) {
+            if (typeof n !== 'number' || isNaN(n)) return n;
+            return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        // Try to get downloads for a version. Many Modrinth endpoints include downloads either
+        // on the version object or on each file. If those aren't present in the list endpoint,
+        // fetch the detailed version object.
+        async function getVersionDownloads(version) {
+            // Use cached value if available
+            if (versionDownloadsCache[version.id] !== undefined) {
+                return versionDownloadsCache[version.id];
+            }
+
+            // Check direct fields first (if present)
+            if (typeof version.downloads === 'number') {
+                versionDownloadsCache[version.id] = version.downloads;
+                return version.downloads;
+            }
+
+            // Sum file-level downloads if available
+            if (Array.isArray(version.files)) {
+                let sum = 0;
+                let found = false;
+                for (const f of version.files) {
+                    if (typeof f.downloads === 'number') {
+                        sum += f.downloads;
+                        found = true;
+                    }
+                }
+                if (found) {
+                    versionDownloadsCache[version.id] = sum;
+                    return sum;
+                }
+            }
+
+            // Fallback: fetch detailed version info from the Modrinth API
+            try {
+                const resp = await fetch(`https://api.modrinth.com/v2/version/${version.id}`);
+                if (resp.ok) {
+                    const detailed = await resp.json();
+                    // detailed.downloads or sum detailed.files[*].downloads
+                    if (typeof detailed.downloads === 'number') {
+                        versionDownloadsCache[version.id] = detailed.downloads;
+                        return detailed.downloads;
+                    }
+                    if (Array.isArray(detailed.files)) {
+                        let sum = 0;
+                        let found = false;
+                        for (const f of detailed.files) {
+                            if (typeof f.downloads === 'number') {
+                                sum += f.downloads;
+                                found = true;
+                            }
+                        }
+                        if (found) {
+                            versionDownloadsCache[version.id] = sum;
+                            return sum;
+                        }
+                    }
+                }
+            } catch (err) {
+                console.warn('Failed to fetch detailed version info for', version.id, err);
+            }
+
+            // If all else fails, mark as unknown (null) and cache it
+            versionDownloadsCache[version.id] = null;
+            return null;
+        }
+
         async function loadVersions() {
             const container = document.getElementById("versions");
 
             try {
                 const response = await fetch("https://api.modrinth.com/v2/project/3cwbW4UB/version");
                 versions = await response.json();
-                totalPages = Math.ceil(versions.length / itemsPerPage);
-                displayPage(1);
+                totalPages = Math.max(1, Math.ceil(versions.length / itemsPerPage));
+                currentPage = 1;
+                await displayPage(1);
                 updatePagination();
             } catch (err) {
                 container.innerHTML = "Failed to load versions.";
@@ -119,18 +193,25 @@
             }
         }
 
-        function displayPage(page) {
+        // Make displayPage async because it may fetch per-version download counts
+        async function displayPage(page) {
             const container = document.getElementById("versions");
             container.innerHTML = "";
             const start = (page - 1) * itemsPerPage;
             const end = start + itemsPerPage;
             const pageVersions = versions.slice(start, end);
 
-            pageVersions.forEach(v => {
+            // For better UX, create the DOM first with placeholders then fill counts
+            const versionElements = [];
+
+            for (const v of pageVersions) {
                 const primaryFile = v.files.find(f => f.primary) || v.files[0];
 
                 const div = document.createElement("div");
                 div.className = "version";
+
+                // downloads placeholder; will be replaced when resolved
+                const downloadsPlaceholderId = `downloads-${v.id}`;
 
                 div.innerHTML = `
                     <h2>${v.name}</h2>
@@ -141,20 +222,58 @@
                     <div class="collapsible-content">${v.game_versions.join(", ")}</div>
                     <div class="meta collapsible"><strong>Changelog:</strong> (Click to expand)</div>
                     <div class="collapsible-content">${v.changelog || "No changelog provided."}</div>
-                    <a class="download-btn" href="${primaryFile.url}" download>
-                        Download (${primaryFile.filename})
+                    <div class="meta"><strong>Downloads:</strong> <span id="${downloadsPlaceholderId}">Loading…</span></div>
+                    <a class="download-btn" href="${primaryFile?.url || '#'}" download>
+                        Download (${primaryFile?.filename || 'file'})
                     </a>
                 `;
 
                 container.appendChild(div);
-            });
+                versionElements.push({ version: v, downloadsId: downloadsPlaceholderId });
+            }
 
-            // Add event listeners for collapsible elements
+            // Add event listeners for collapsible elements (re-run for newly added elements)
             document.querySelectorAll('.collapsible').forEach(el => {
                 el.addEventListener('click', function() {
                     this.classList.toggle('active');
                 });
             });
+
+            // Now resolve downloads for each version concurrently (but limited to the page items)
+            await Promise.all(versionElements.map(async ({ version, downloadsId }) => {
+                const span = document.getElementById(downloadsId);
+                try {
+                    const count = await getVersionDownloads(version);
+                    if (count === null) {
+                        // If unknown, show fallback from available fields or "Unknown"
+                        if (typeof version.downloads === 'number') {
+                            span.textContent = formatNumber(version.downloads);
+                        } else {
+                            // try file-level sums if present
+                            if (Array.isArray(version.files)) {
+                                let sum = 0;
+                                let found = false;
+                                for (const f of version.files) {
+                                    if (typeof f.downloads === 'number') {
+                                        sum += f.downloads;
+                                        found = true;
+                                    }
+                                }
+                                if (found) {
+                                    span.textContent = formatNumber(sum);
+                                    return;
+                                }
+                            }
+                            span.textContent = "Unknown";
+                        }
+                    } else {
+                        span.textContent = formatNumber(count);
+                    }
+                } catch (err) {
+                    console.error('Error getting downloads for', version.id, err);
+                    span.textContent = "Unknown";
+                }
+            }));
         }
 
         function updatePagination() {
@@ -166,18 +285,18 @@
             pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
         }
 
-        document.getElementById("prevBtn").addEventListener('click', () => {
+        document.getElementById("prevBtn").addEventListener('click', async () => {
             if (currentPage > 1) {
                 currentPage--;
-                displayPage(currentPage);
+                await displayPage(currentPage);
                 updatePagination();
             }
         });
 
-        document.getElementById("nextBtn").addEventListener('click', () => {
+        document.getElementById("nextBtn").addEventListener('click', async () => {
             if (currentPage < totalPages) {
                 currentPage++;
-                displayPage(currentPage);
+                await displayPage(currentPage);
                 updatePagination();
             }
         });
