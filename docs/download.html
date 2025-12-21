@@ -255,7 +255,12 @@
                     Download (${primaryFile?.filename || 'file'} • ${formatFileSize(primaryFile?.size)})
                     </a>
 
-                    ${Array.isArray(v.files) ? v.files.filter(f => !f.primary).map(f => `<a class="additional-download-btn" href="${f.url}" download>Download ${f.filename}</a>`).join('') : ''}
+                    ${Array.isArray(v.files) ? v.files.filter(f => !f.primary).map(f =>
+    `<a class="additional-download-btn" href="${f.url}" download>
+        Download ${f.filename} • ${formatFileSize(f.size)}
+     </a>`
+).join('') : ''}
+
                 `;
 
                 container.appendChild(div);
