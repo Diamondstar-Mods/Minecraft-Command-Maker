@@ -256,7 +256,7 @@ window.addEventListener('load', function() {
     try {
         // Determine the filename (fallback to index.html)
         const filename = (window.location.pathname.split('/').pop() || 'index.html');
-        const branch = '1.21.10';
+        const branch = '26.1';
         const editUrl = `https://github.com/Diamondstar-Mods/Minecraft-Command-Maker/edit/${branch}/docs/${filename}`;
 
         const link = document.createElement('a');
