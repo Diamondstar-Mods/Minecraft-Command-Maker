@@ -39,7 +39,7 @@ jobs:
           version: Nightly-${{ github.run_number }}
           changelog: ${{ github.event.head_commit.message }}
           relations: P7dR8mSH:required
-          game_versions: 26.1-snapshot-1
+          game_versions: 1.21.10
           release_type: alpha
           loaders: fabric
           featured: false
