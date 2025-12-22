@@ -42,5 +42,5 @@ jobs:
           game_versions: 26.1-snapshot-1
           release_type: alpha
           loaders: fabric
-          featured: true
+          featured: false
           project_id: 3cwbW4UB
