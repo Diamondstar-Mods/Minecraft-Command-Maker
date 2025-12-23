@@ -1,12 +1,12 @@
 # **RELEASES WILL NO LONGER BE RELEASED ON GITHUB. TO SEE LATEST RELEASES, VISIT THIS PAGE: https://modrinth.com/mod/command-maker/versions**
 or this page:
-https://diamondstar-mods.github.io/Minecraft-Command-Maker/download.html
+commandmakerwiki.lucasgeitgey.com/download.html
 
 # 🧩 Minecraft Command Maker – Fabric 26.1
 
 A lightweight, portable command generator mod for Minecraft Fabric servers.  
 Built entirely in Java—no external functions, no dependencies (besides Fabric API), and no admin rights required.
-Visit the [**wiki**](https://diamondstar-mods.github.io/Minecraft-Command-Maker/) for more information.
+Visit the [**wiki**](https://commandmakerwiki.lucasgeitgey.com) for more information.
 
 ---
 
@@ -34,7 +34,7 @@ Visit the [**wiki**](https://diamondstar-mods.github.io/Minecraft-Command-Maker/
 
 ## Installation
 
-1. Go to the [Releases page](https://diamondstar-mods.github.io/Minecraft-Command-Maker/download)
+1. Go to the [Releases page](commandmakerwiki.lucasgeitgey.com/download)
 2. Download the latest `.jar` file
 3. Drop it into your server’s `mods/` folder
 4. Make sure you’re running **Minecraft 26.1+** with **Fabric Loader**
@@ -54,7 +54,7 @@ Example usage:
 
 This command triggers a "hello" message sent in chat using only in-line JSON logic.  
 
-Visit the [**wiki**](https://diamondstar-mods.github.io/Minecraft-Command-Maker/) for more information.
+Visit the [**wiki**](commandmakerwiki.lucasgeitgey.com/) for more information.
 
 ---
 
