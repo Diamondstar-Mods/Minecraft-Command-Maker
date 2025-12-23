@@ -524,7 +524,8 @@ a:hover {
 }
 
 .info-box code {
-    background-color: var(--text-color);
+    background-color: var(--bg-color);
+    color: var(--text-color);
     padding: 2px 6px;
     border-radius: 3px;
     font-family: 'Courier New', monospace;
@@ -669,7 +670,7 @@ pre {
     font-family: 'Courier New', monospace;
     font-size: 13px;
     line-height: 1.5;
-    border-color: var(--bg-light);
+    border-color: white;
 }
 
 /* ========== Tables ========== */
