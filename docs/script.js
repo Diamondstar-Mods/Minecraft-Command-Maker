@@ -1,5 +1,42 @@
 // Search functionality
 document.addEventListener('DOMContentLoaded', function() {
+    // Theme switching
+    const themeSelect = document.getElementById('theme-select');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const savedTheme = localStorage.getItem('theme');
+
+    // Determine initial theme
+    let currentTheme = savedTheme || (prefersDark ? 'dark' : 'light');
+
+    // Apply theme
+    function applyTheme(theme) {
+        document.body.className = theme + '-theme';
+        if (themeSelect) {
+            themeSelect.value = theme;
+        }
+        localStorage.setItem('theme', theme);
+    }
+
+    applyTheme(currentTheme);
+
+    // Show dropdown only if user prefers dark mode
+    if (prefersDark && !savedTheme) {
+        if (themeSelect) {
+            themeSelect.style.display = 'block';
+        }
+    } else if (savedTheme) {
+        if (themeSelect) {
+            themeSelect.style.display = 'block';
+        }
+    }
+
+    // Handle theme change
+    if (themeSelect) {
+        themeSelect.addEventListener('change', function() {
+            applyTheme(this.value);
+        });
+    }
+
     const searchBox = document.getElementById('searchBox');
 
     if (searchBox) {

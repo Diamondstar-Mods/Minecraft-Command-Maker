@@ -34,7 +34,9 @@
     box-sizing: border-box;
 }
 
-:root {
+}
+
+.light-theme {
     --primary-color: #0645ad;
     --primary-dark: #0645ad;
     --secondary-color: #f0ad4e;
@@ -49,21 +51,19 @@
     --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-@media (prefers-color-scheme: dark) {
-    :root {
-        --primary-color: #4a9eff;
-        --primary-dark: #4a9eff;
-        --secondary-color: #f0ad4e;
-        --accent-color: #5cb85c;
-        --danger-color: #ff6b6b;
-        --text-color: #e0e0e0;
-        --text-light: #b0b0b0;
-        --bg-color: #1a1a1a;
-        --bg-light: #2a2a2a;
-        --border-color: #444444;
-        --shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-        --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.4);
-    }
+.dark-theme {
+    --primary-color: #4a9eff;
+    --primary-dark: #4a9eff;
+    --secondary-color: #f0ad4e;
+    --accent-color: #5cb85c;
+    --danger-color: #ff6b6b;
+    --text-color: #e0e0e0;
+    --text-light: #b0b0b0;
+    --bg-color: #1a1a1a;
+    --bg-light: #2a2a2a;
+    --border-color: #444444;
+    --shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
 body {
@@ -143,6 +143,17 @@ a:hover {
 
 .nav-search {
     display: flex;
+}
+
+#theme-select {
+    padding: 8px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background: var(--bg-light);
+    color: var(--text-color);
+    font-size: 14px;
+    margin-left: 10px;
+    cursor: pointer;
 }
 
 .search-input {
