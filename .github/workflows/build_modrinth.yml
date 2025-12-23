@@ -1,6 +1,10 @@
 name: "Build and Publish"
 on:
-    push
+    push:
+        paths:
+            - 'src/**'
+            - 'settings.gradle'
+            - 'build.gradle'
 
 jobs:
   build-and-publish:
