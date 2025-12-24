@@ -1,7 +1,7 @@
 {
 	"required": false,
 	"package": "com.example.mixin",
-	"compatibilityLevel": "JAVA_22",
+	"compatibilityLevel": "JAVA_21",
 	"mixins": [
 	],
 	"injectors": {
