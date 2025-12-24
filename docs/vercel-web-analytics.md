@@ -79,7 +79,11 @@ export default function RootLayout({
       <body>
         {children}
         <Analytics />
-      </body>
+      <script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</body>
     </html>
   );
 }
@@ -117,7 +121,11 @@ export default function App() {
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
-      </body>
+      <script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</body>
     </html>
   );
 }
@@ -173,7 +181,11 @@ import Analytics from '@vercel/analytics/astro';
 	</head>
 	<body>
 		<slot />
-    </body>
+    <script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</body>
 </html>
 ```
 
