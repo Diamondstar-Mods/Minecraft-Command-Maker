@@ -23,6 +23,7 @@ public class ExampleMod implements ModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
 	private static final Path CONFIG_PATH = Paths.get("config", "CommandMaker", "aliases.json");
+	private static final Path TELEMETRY_CONFIG_PATH = Paths.get("config", "CommandMaker", "telementry.yml");
 	private static final Map<String, String> aliases = new HashMap<>();
 	// Store per-player custom variables: player UUID -> (varName -> value)
 	private static final Map<UUID, Map<String, String>> playerVariables = new HashMap<>();
@@ -32,6 +33,7 @@ public class ExampleMod implements ModInitializer {
 		ensureConfigExists();
 		loadAliases();
 		SyntaxManager.loadSyntaxDefinitions();
+		loadTelemetryConfig();
 		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
 			registerAddCommand(dispatcher);
 			registerAliases(dispatcher);
@@ -44,7 +46,7 @@ public class ExampleMod implements ModInitializer {
 		LOGGER.info("Alias mod initialized!");
 	}
 
-	// Ensure config folder and aliases.json exist, create with example if not
+	// Ensure config folder and config files exist, create with defaults if not
 	private void ensureConfigExists() {
 		try {
 			Path folder = CONFIG_PATH.getParent();
@@ -63,9 +65,56 @@ public class ExampleMod implements ModInitializer {
 				lines.add("}");
 				Files.write(CONFIG_PATH, lines, StandardOpenOption.CREATE_NEW);
 			}
+			if (!Files.exists(TELEMETRY_CONFIG_PATH)) {
+				List<String> lines = new ArrayList<>();
+				lines.add("# CommandMaker Telemetry Config");
+				lines.add("# Set to true to allow anonymous telemetry (helps improve the mod)");
+				lines.add("# Set to false to disable");
+				lines.add("allow-telementry=true");
+				Files.write(TELEMETRY_CONFIG_PATH, lines, StandardOpenOption.CREATE_NEW);
+			}
 		} catch (Exception e) {
-			LOGGER.error("Failed to create config folder or file", e);
+			LOGGER.error("Failed to create config folder or files", e);
 		}
+	}
+
+	// Load telemetry config and send request if enabled
+	private void loadTelemetryConfig() {
+		try {
+			if (Files.exists(TELEMETRY_CONFIG_PATH)) {
+				List<String> lines = Files.readAllLines(TELEMETRY_CONFIG_PATH);
+				for (String line : lines) {
+					line = line.trim();
+					if (line.startsWith("allow-telementry=")) {
+						String value = line.substring("allow-telementry=".length());
+						if ("true".equalsIgnoreCase(value)) {
+							sendTelemetryRequest();
+							break;
+						}
+					}
+				}
+			}
+		} catch (Exception e) {
+			LOGGER.warn("Failed to load telemetry config", e);
+		}
+	}
+
+	// Send anonymous telemetry request in background
+	private void sendTelemetryRequest() {
+		new Thread(() -> {
+			try {
+				java.net.URL url = new java.net.URL("https://commandmakerwiki.lucasgeitgey.com/redirects/telementry.html");
+				java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
+				conn.setRequestMethod("GET");
+				conn.setConnectTimeout(5000);
+				conn.setReadTimeout(5000);
+				int responseCode = conn.getResponseCode();
+				LOGGER.debug("Telemetry request sent, response: " + responseCode);
+				conn.disconnect();
+			} catch (Exception e) {
+				LOGGER.debug("Telemetry request failed", e);
+			}
+		}).start();
 	}
 
 	// Register /addcommand (reload|add|del) ...
