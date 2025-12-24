@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "@vercel/analytics": "^1.6.1",
-    "prettier": "^3.7.4"
+    "prettier": "^3.7.4",
+    "yarn": "^1.22.22"
   }
 }
