@@ -238,8 +238,91 @@ This guide will help you get started with using Vercel Web Analytics on your pro
   }
   ```
 
-  > For ['nuxt']:
-  > The `Analytics` component is a wrapper around the tracking script, offering more seamless integration with Nuxt, including route support.
+function MyApp({ Component, pageProps }: AppProps) {
+  return (
+    <>
+      <Component {...pageProps} />
+      <Analytics />
+    </>
+  );
+}
+
+export default MyApp;
+```
+
+### Next.js (App Directory)
+
+The `Analytics` component is a wrapper around the tracking script, offering more seamless integration with Next.js, including route support.
+
+Add the following code to the root layout:
+
+```tsx
+import { Analytics } from "@vercel/analytics/next";
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en">
+      <head>
+        <title>Next.js</title>
+      </head>
+      <body>
+        {children}
+        <Analytics />
+      <script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</body>
+    </html>
+  );
+}
+```
+
+### Remix
+
+The `Analytics` component is a wrapper around the tracking script, offering a seamless integration with Remix, including route detection.
+
+Add the following code to your root file:
+
+```tsx
+import {
+  Links,
+  LiveReload,
+  Meta,
+  Outlet,
+  Scripts,
+  ScrollRestoration,
+} from "@remix-run/react";
+import { Analytics } from "@vercel/analytics/remix";
+
+export default function App() {
+  return (
+    <html lang="en">
+      <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <Meta />
+        <Links />
+      </head>
+      <body>
+        <Analytics />
+        <Outlet />
+        <ScrollRestoration />
+        <Scripts />
+        <LiveReload />
+      <script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</body>
+    </html>
+  );
+}
+```
 
   Add the following code to your main component.
 
@@ -300,12 +383,18 @@ This guide will help you get started with using Vercel Web Analytics on your pro
       <meta charset="utf-8" />
       <!-- ... -->
       <Analytics />
-  	</head>
-  	<body>
-  		<slot />
-    </body>
-  </html>
-  ```
+	</head>
+	<body>
+		<slot />
+    <script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</body>
+</html>
+```
+
+> **Note:** The `Analytics` component is available in version `@vercel/analytics@1.4.0` and later. If you are using an earlier version, you must configure the `webAnalytics` property of the Vercel adapter in your `astro.config.mjs` file:
 
   ```jsx {2, 10}  filename="src/layouts/Base.astro" framework=astro
   ---
