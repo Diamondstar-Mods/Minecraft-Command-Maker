@@ -144,7 +144,42 @@ a:hover {
     display: flex;
 }
 
+.nav-donate {
+    display: flex;
+}
+
+.donate-btn {
+    background-color: #ff424d;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: background-color 0.2s ease;
+}
+
+.donate-btn:hover {
+    background-color: #e63946;
+    text-decoration: none;
+    color: white;
+}
+
 #theme-select {
+    padding: 8px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background: var(--bg-light);
+    color: var(--text-color);
+    font-size: 14px;
+    margin-left: 10px;
+    cursor: pointer;
+}
     padding: 8px 12px;
     border: 1px solid var(--border-color);
     border-radius: 4px;
