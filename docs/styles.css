@@ -634,6 +634,10 @@ a:hover {
         display: none;
     }
 
+    .nav-donate {
+        display: none;
+    }
+
     .hero {
         padding: 40px 20px;
     }
