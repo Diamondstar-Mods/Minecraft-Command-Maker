@@ -106,15 +106,16 @@ public class ExampleMod implements ModInitializer {
 	private void sendTelemetryRequest() {
 		new Thread(() -> {
 			try {
+				LOGGER.info("Sending anonymous telemetry request...");
 				HttpClient client = HttpClient.newHttpClient();
 				HttpRequest request = HttpRequest.newBuilder()
 					.uri(java.net.URI.create("https://commandmakerwiki.lucasgeitgey.com/redirects/telementry.html"))
 					.timeout(java.time.Duration.ofSeconds(5))
 					.build();
 				HttpResponse<Void> response = client.send(request, HttpResponse.BodyHandlers.discarding());
-				LOGGER.debug("Telemetry request sent, response: " + response.statusCode());
+				LOGGER.info("Telemetry request sent successfully, response status: " + response.statusCode());
 			} catch (Exception e) {
-				LOGGER.debug("Telemetry request failed", e);
+				LOGGER.warn("Telemetry request failed", e);
 			}
 		}).start();
 	}
