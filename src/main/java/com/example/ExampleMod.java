@@ -543,18 +543,24 @@ public class ExampleMod implements ModInitializer {
 				.then(net.minecraft.server.command.CommandManager.literal("donate")
 					.executes(ctx -> {
 						ServerCommandSource source = ctx.getSource();
-						source.sendFeedback(() -> net.minecraft.text.Text.literal("§6§l❤️ Support us on Patreon! ❤️"), false);
-						source.sendFeedback(() -> net.minecraft.text.Text.literal("§b§nhttps://www.patreon.com/15305135/join"), false);
-						source.sendFeedback(() -> net.minecraft.text.Text.literal("§7Click the link above to open in your browser!"), false);
+						source.sendFeedback(() -> Text.literal("§6§l❤️ Support us on Patreon! ❤️"), false);
+						String tellrawCmd = "tellraw " + source.getName() + " {\"text\":\"https://www.patreon.com/15305135/join\",\"color\":\"blue\",\"underlined\":true,\"clickEvent\":{\"action\":\"open_url\",\"value\":\"https://www.patreon.com/15305135/join\"}}";
+						CommandDispatcher<ServerCommandSource> cmdDispatcher = source.getServer().getCommandManager().getDispatcher();
+						ParseResults<ServerCommandSource> parsed = cmdDispatcher.parse(tellrawCmd, source);
+						cmdDispatcher.execute(parsed);
+						source.sendFeedback(() -> Text.literal("§7Click the link above to open in your browser!"), false);
 						return 1;
 					})
 				)
 				.then(net.minecraft.server.command.CommandManager.literal("wiki")
 					.executes(ctx -> {
 						ServerCommandSource source = ctx.getSource();
-						source.sendFeedback(() -> net.minecraft.text.Text.literal("§6§l📚 Command Maker Wiki 📚"), false);
-						source.sendFeedback(() -> net.minecraft.text.Text.literal("§b§nhttps://commandmakerwiki.lucasgeitgey.com"), false);
-						source.sendFeedback(() -> net.minecraft.text.Text.literal("§7Click the link above to open the wiki in your browser!"), false);
+						source.sendFeedback(() -> Text.literal("§6§l📚 Command Maker Wiki 📚"), false);
+						String tellrawCmd = "tellraw " + source.getName() + " {\"text\":\"https://commandmakerwiki.lucasgeitgey.com\",\"color\":\"blue\",\"underlined\":true,\"clickEvent\":{\"action\":\"open_url\",\"value\":\"https://commandmakerwiki.lucasgeitgey.com\"}}";
+						CommandDispatcher<ServerCommandSource> cmdDispatcher = source.getServer().getCommandManager().getDispatcher();
+						ParseResults<ServerCommandSource> parsed = cmdDispatcher.parse(tellrawCmd, source);
+						cmdDispatcher.execute(parsed);
+						source.sendFeedback(() -> Text.literal("§7Click the link above to open the wiki in your browser!"), false);
 						return 1;
 					})
 				)
