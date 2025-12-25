@@ -1,6 +1,6 @@
 {
 	"schemaVersion": 1,
-	"id": "CMDMaker",
+	"id": "nekkycommandmaker",
 	"version": "${version}",
 	"name": "Nek's Command Maker!",
 	"description": "NEKKY COMMAND MAKER",
