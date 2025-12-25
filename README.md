@@ -54,7 +54,7 @@ Example usage:
 
 This command triggers a "hello" message sent in chat using only in-line JSON logic.  
 
-Visit the [**wiki**](commandmakerwiki.lucasgeitgey.com/) for more information.
+Visit the [**wiki**](https://commandmakerwiki.lucasgeitgey.com/) for more information.
 
 ---
 
