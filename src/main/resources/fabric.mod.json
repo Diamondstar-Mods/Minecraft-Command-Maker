@@ -1,15 +1,18 @@
 {
 	"schemaVersion": 1,
-	"id": "modid",
+	"id": "CMDMaker",
 	"version": "${version}",
 	"name": "Nek's Command Maker!",
 	"description": "NEKKY COMMAND MAKER",
 	"authors": [
-		"NekSheep9180 aka lucgei231"
+		"NekSheep9180 aka lucgei231",
+		"PRR628"
+
 	],
 	"contact": {
 		"homepage": "https://github.com/Diamondstar-Mods/Minecraft-Command-Maker",
-		"sources": "https://github.com/Diamondstar-Mods/Minecraft-Command-Maker"
+		"sources": "https://github.com/Diamondstar-Mods/Minecraft-Command-Maker",
+		"issues": "https://github.com/Diamondstar-Mods/Minecraft-Command-Maker/issues"
 	},
 	"license": "CC0-1.0",
 	"icon": "assets/modid/icon.png",
@@ -27,7 +30,7 @@
 	],
 	"depends": {
 		"fabricloader": ">=0.15.0",
-		"minecraft": ">=1.20 <=26.1",
+		"minecraft": ">=1.20",
 		"java": ">=21",
 		"fabric-api": "*"
 	},

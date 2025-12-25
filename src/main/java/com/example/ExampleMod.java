@@ -1,5 +1,6 @@
 package com.example;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
@@ -11,12 +12,14 @@ import net.minecraft.util.Identifier;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.text.Text;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 
 import java.nio.file.*;
 import java.util.*;
 import com.google.gson.*;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 
 public class ExampleMod implements ModInitializer {
 	public static final String MOD_ID = "cmdmaker";
@@ -103,14 +106,13 @@ public class ExampleMod implements ModInitializer {
 	private void sendTelemetryRequest() {
 		new Thread(() -> {
 			try {
-				java.net.URL url = new java.net.URL("https://commandmakerwiki.lucasgeitgey.com/redirects/telementry.html");
-				java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
-				conn.setRequestMethod("GET");
-				conn.setConnectTimeout(5000);
-				conn.setReadTimeout(5000);
-				int responseCode = conn.getResponseCode();
-				LOGGER.debug("Telemetry request sent, response: " + responseCode);
-				conn.disconnect();
+				HttpClient client = HttpClient.newHttpClient();
+				HttpRequest request = HttpRequest.newBuilder()
+					.uri(java.net.URI.create("https://commandmakerwiki.lucasgeitgey.com/redirects/telementry.html"))
+					.timeout(java.time.Duration.ofSeconds(5))
+					.build();
+				HttpResponse<Void> response = client.send(request, HttpResponse.BodyHandlers.discarding());
+				LOGGER.debug("Telemetry request sent, response: " + response.statusCode());
 			} catch (Exception e) {
 				LOGGER.debug("Telemetry request failed", e);
 			}
@@ -537,6 +539,24 @@ public class ExampleMod implements ModInitializer {
 							})
 						)
 					)
+				)
+				.then(net.minecraft.server.command.CommandManager.literal("donate")
+					.executes(ctx -> {
+						ServerCommandSource source = ctx.getSource();
+						source.sendFeedback(() -> net.minecraft.text.Text.literal("§6§l❤️ Support us on Patreon! ❤️"), false);
+						source.sendFeedback(() -> net.minecraft.text.Text.literal("§b§nhttps://www.patreon.com/15305135/join"), false);
+						source.sendFeedback(() -> net.minecraft.text.Text.literal("§7Click the link above to open in your browser!"), false);
+						return 1;
+					})
+				)
+				.then(net.minecraft.server.command.CommandManager.literal("wiki")
+					.executes(ctx -> {
+						ServerCommandSource source = ctx.getSource();
+						source.sendFeedback(() -> net.minecraft.text.Text.literal("§6§l📚 Command Maker Wiki 📚"), false);
+						source.sendFeedback(() -> net.minecraft.text.Text.literal("§b§nhttps://commandmakerwiki.lucasgeitgey.com"), false);
+						source.sendFeedback(() -> net.minecraft.text.Text.literal("§7Click the link above to open the wiki in your browser!"), false);
+						return 1;
+					})
 				)
 		);
 	}
