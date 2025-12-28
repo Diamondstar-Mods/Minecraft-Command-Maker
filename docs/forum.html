@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Forum - Command Maker Wiki</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="https://diamondstar-mods.github.io/Minecraft-Command-Maker/favicon.ico">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html"><img class="logo-icon" src="https://cdn.modrinth.com/data/3cwbW4UB/e1a03ea3f7b4f07f1e1ce92f82b14adcab1b3c18_96.webp" alt="Command Maker Icon"> Command Maker Wiki</a>
+            </div>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="getting-started.html" class="nav-link">Getting Started</a>
+                <a href="commands.html" class="nav-link">Commands</a>
+                <a href="syntax-system.html" class="nav-link">Custom Syntax</a>
+                <a href="functions.html" class="nav-link">Functions</a>
+                <a href="examples.html" class="nav-link">Examples</a>
+                <a href="faq.html" class="nav-link">FAQ</a>
+                <a href="forum.html" class="nav-link active">Forum</a>
+                <a href="download.html" class="nav-link">Downloads</a>
+            </div>
+            <div class="nav-donate">
+                <a href="https://www.patreon.com/15305135/join" class="nav-link" target="_blank">❤️ Donate</a>
+            </div>
+            <select id="theme-select" style="display: none;">
+                <option value="light">Light (default)</option>
+                <option value="dark">Dark (beta)</option>
+            </select>
+            <div class="nav-search">
+                <input type="text" id="searchBox" placeholder="Search documentation..." class="search-input">
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-wrapper">
+        <aside class="sidebar">
+            <div class="sidebar-widget">
+                <h3 class="widget-title">📚 Documentation</h3>
+                <ul class="widget-list">
+                    <li><a href="getting-started.html">Getting Started</a></li>
+                    <li><a href="installation.html">Installation</a></li>
+                    <li><a href="configuration.html">Configuration</a></li>
+                    <li><a href="aliases.html">Creating Aliases</a></li>
+                </ul>
+            </div>
+
+            <div class="sidebar-widget">
+                <h3 class="widget-title">⚡ Features</h3>
+                <ul class="widget-list">
+                    <li><a href="syntax-system.html">Custom Syntax System</a></li>
+                    <li><a href="functions.html">Functions System</a></li>
+                    <li><a href="variables.html">Variables & Substitution</a></li>
+                    <li><a href="gui-system.html">GUI System</a></li>
+                    <li><a href="chat-messages.html">Chat Messages</a></li>
+                </ul>
+            </div>
+
+            <div class="sidebar-widget">
+                <h3 class="widget-title">🎮 Examples</h3>
+                <ul class="widget-list">
+                    <li><a href="tpa-system.html">TPA System</a></li>
+                    <li><a href="ban-system.html">Ban System</a></li>
+                    <li><a href="warp-system.html">Warp System</a></li>
+                    <li><a href="custom-commands.html">Custom Commands</a></li>
+                </ul>
+            </div>
+
+            <div class="sidebar-widget">
+                <h3 class="widget-title">❓ Help</h3>
+                <ul class="widget-list">
+                    <li><a href="troubleshooting.html">Troubleshooting</a></li>
+                    <li><a href="faq.html">Frequently Asked Questions</a></li>
+                    <li><a href="best-practices.html">Best Practices</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <main class="content">
+            <h1 id="docs-path" data-subpath="forum.html"></h1>
+            <iframe style="border: none; font-style: italic;" id="last-commit-iframe" src="" width="400" height="50"></iframe>
+            <script>
+                document.getElementById('last-commit-iframe').src = 'last-commit.html?path=' + document.getElementById('docs-path').dataset.subpath;
+            </script>
+
+            <h1>Community Forum</h1>
+            <p class="lead">Join the discussion! Share ideas, ask questions, and connect with other Command Maker users.</p>
+
+            <section>
+                <h2>Discussion & Support</h2>
+                <p>Use the comments below to:</p>
+                <ul>
+                    <li>Ask questions about Command Maker</li>
+                    <li>Share your custom command setups</li>
+                    <li>Report bugs or suggest features</li>
+                    <li>Help other community members</li>
+                    <li>Show off your server configurations</li>
+                </ul>
+
+                <div class="info-box">
+                    <h3>💡 Community Guidelines</h3>
+                    <ul>
+                        <li>Be respectful and helpful to other users</li>
+                        <li>Search existing discussions before posting</li>
+                        <li>Include relevant details when asking for help</li>
+                        <li>Share your solutions when you find them</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section>
+                <h2>Comments</h2>
+                <p>Join the conversation below!</p>
+
+                <script src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/js/giscus.js"
+                        data-repo="Diamondstar-Mods/Minecraft-Command-Maker"
+                        data-repo-id="R_kgDOPefx1Q"
+                        data-mapping="number"
+                        data-term="15"
+                        data-reactions-enabled="1"
+                        data-emit-metadata="0"
+                        data-input-position="bottom"
+                        data-theme="light"
+                        data-lang="en"
+                        crossorigin="anonymous"
+                        async>
+                </script>
+            </section>
+        </main>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Documentation</h4>
+                <ul>
+                    <li><a href="getting-started.html">Getting Started</a></li>
+                    <li><a href="commands.html">Commands</a></li>
+                    <li><a href="syntax-system.html">Custom Syntax</a></li>
+                    <li><a href="examples.html">Examples</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="troubleshooting.html">Troubleshooting</a></li>
+                    <li><a href="faq.html">FAQ</a></li>
+                    <li><a href="best-practices.html">Best Practices</a></li>
+                    <li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">GitHub</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Community</h4>
+                <ul>
+                    <li><a href="https://modrinth.com/mod/command-maker">Modrinth</a></li>
+                    <li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">Report Issues</a></li>
+                    <li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">Contribute</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Command Maker Wiki. Built with ❤️ for Minecraft players.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+<script>
+  window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/speed-insights/script.js"></script>
+</body>
+</html>
