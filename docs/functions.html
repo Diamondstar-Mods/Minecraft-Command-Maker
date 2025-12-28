@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Functions System - Command Maker Wiki</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="https://diamondstar-mods.github.io/Minecraft-Command-Maker/favicon.ico">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html"><img class="logo-icon" src="https://cdn.modrinth.com/data/3cwbW4UB/e1a03ea3f7b4f07f1e1ce92f82b14adcab1b3c18_96.webp" alt="Command Maker Icon"> Command Maker Wiki</a>
+            </div>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="getting-started.html" class="nav-link">Getting Started</a>
+                <a href="commands.html" class="nav-link">Commands</a>
+                <a href="syntax-system.html" class="nav-link">Custom Syntax</a>
+                <a href="functions.html" class="nav-link active">Functions</a>
+                <a href="examples.html" class="nav-link">Examples</a>
+                <a href="faq.html" class="nav-link">FAQ</a>
+                <a href="download.html" class="nav-link">Downloads</a>
+            </div>
+            <div class="nav-donate">
+                <a href="https://www.patreon.com/15305135/join" class="nav-link" target="_blank">❤️ Donate</a>
+            </div>
+            <select id="theme-select" style="display: none;">
+                <option value="light">Light (default)</option>
+                <option value="dark">Dark (beta)</option>
+            </select>
+            <div class="nav-search">
+                <input type="text" id="searchBox" placeholder="Search documentation..." class="search-input">
+            </div>
+        </div>
+    </nav>
+
+    </nav>
+
+    <div class="main-wrapper">
+        <aside class="sidebar">
+            <div class="sidebar-widget">
+                <h3 class="widget-title">📚 Documentation</h3>
+                <ul class="widget-list">
+                    <li><a href="getting-started.html">Getting Started</a></li>
+                    <li><a href="installation.html">Installation</a></li>
+                    <li><a href="configuration.html">Configuration</a></li>
+                    <li><a href="aliases.html">Creating Aliases</a></li>
+                </ul>
+            </div>
+
+            <div class="sidebar-widget">
+                <h3 class="widget-title">⚡ Features</h3>
+                <ul class="widget-list">
+                    <li><a href="syntax-system.html">Custom Syntax System</a></li>
+                    <li><a href="functions.html">Functions System</a></li>
+                    <li><a href="variables.html">Variables & Substitution</a></li>
+                    <li><a href="gui-system.html">GUI System</a></li>
+                    <li><a href="chat-messages.html">Chat Messages</a></li>
+                </ul>
+            </div>
+
+            <div class="sidebar-widget">
+                <h3 class="widget-title">🎮 Examples</h3>
+                <ul class="widget-list">
+                    <li><a href="tpa-system.html">TPA System</a></li>
+                    <li><a href="ban-system.html">Ban System</a></li>
+                    <li><a href="warp-system.html">Warp System</a></li>
+                    <li><a href="custom-commands.html">Custom Commands</a></li>
+                </ul>
+            </div>
+
+            <div class="sidebar-widget">
+                <h3 class="widget-title">❓ Help</h3>
+                <ul class="widget-list">
+                    <li><a href="troubleshooting.html">Troubleshooting</a></li>
+                    <li><a href="faq.html">Frequently Asked Questions</a></li>
+                    <li><a href="best-practices.html">Best Practices</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <main class="content">
+            <h1 id="docs-path" data-subpath="functions.html"></h1>
+            <iframe style="border: none; font-style: italic;" id="last-commit-iframe" src="" width="400" height="50"></iframe>
+            <script>
+                document.getElementById('last-commit-iframe').src = 'last-commit.html?path=' + document.getElementById('docs-path').dataset.subpath;
+            </script>
+
+            <h1>Functions System</h1>
+            <p class="lead">Chain multiple commands together using .mcfunction files for complex command sequences.</p>
+
+            <section>
+                <h2>What Are Functions?</h2>
+                <p>Functions allow you to execute multiple commands in sequence from a single alias. Instead of running one command, your alias can reference a .mcfunction file that contains a list of commands to run one after another.</p>
+
+                <p>This is perfect for complex operations like:</p>
+                <ul>
+                    <li>Server announcements with multiple effects</li>
+                    <li>Multi-step setup processes</li>
+                    <li>Chained game mechanics</li>
+                    <li>Automated sequences</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>How It Works</h2>
+
+                <p>The Functions folder (<code>config/CommandMaker/Functions/</code>) is automatically created when the mod loads. An example function file is also created for you.</p>
+
+                <div class="highlight-box">
+                    <h3>✨ Automatic Alias Creation</h3>
+                    <p><strong>NEW:</strong> Aliases are now automatically created for any .mcfunction file! If you create <code>mobsoff.mcfunction</code>, the command <code>/mobsoff</code> will automatically work without needing to edit aliases.json.</p>
+                </div>
+
+                <h3>Step 1: Create a Function File</h3>
+                <p>Create a .mcfunction file in <code>config/CommandMaker/Functions/</code></p>
+                <p><strong>Example:</strong> <code>mobsoff.mcfunction</code></p>
+                <pre><code>spawn rates monster 0
+say Monster spawns disabled!</code></pre>
+
+                <h3>Step 2: Use It In-Game (Automatic!)</h3>
+                <pre><code>/mobsoff</code></pre>
+                <p>The alias is automatically created - no manual configuration needed!</p>
+
+                <h4>Manual Alias Creation (Optional)</h4>
+                <p>If you want custom alias names or additional configuration, you can still manually add aliases in <code>aliases.json</code>:</p>
+                <pre><code>{
+  "mobsoff": "function:mobsoff",
+  "disable_mobs": "function:mobsoff"  // Custom alias name
+}</code></pre>
+            </section>
+
+            <section>
+                <h2>Function File Format</h2>
+                <ul>
+                    <li>Each line is a separate command</li>
+                    <li>Empty lines and lines starting with # are ignored</li>
+                    <li>Variables like ${player}, ${x}, ${y}, ${z} work in functions</li>
+                    <li>Commands execute in the order they appear</li>
+                </ul>
+
+                <h3>Example Function: server_restart.mcfunction</h3>
+                <pre><code># Announce the restart
+say §c[SERVER] Server restarting in 30 seconds!
+
+# Save the world
+save-all
+
+# Wait 30 seconds (using schedule if available)
+schedule function minecraft:restart_warning 25s
+
+# Actually restart (this would need a restart command or plugin)
+# stop</code></pre>
+            </section>
+
+            <section>
+                <h2>Advanced Usage</h2>
+
+                <h3>Variables in Functions</h3>
+                <p>All variables work in function files:</p>
+                <pre><code>tp ${player} 0 100 0
+say ${player} has been teleported to spawn!</code></pre>
+
+                <h3>Conditional Logic</h3>
+                <p>Use Minecraft's conditional commands:</p>
+                <pre><code>execute if entity @a[name=Admin] run say Admin is online!
+execute unless entity @a[name=Admin] run say Admin is offline!</code></pre>
+            </section>
+
+            <section>
+                <h2>Troubleshooting</h2>
+                <ul>
+                    <li>Make sure the .mcfunction file exists in the Functions folder</li>
+                    <li>Check that the filename matches exactly (case-sensitive)</li>
+                    <li>Verify commands are valid Minecraft commands</li>
+                    <li>Use <code>/addcommand reload</code> after editing files</li>
+                </ul>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Documentation</h4>
+                    <ul>
+                        <li><a href="getting-started.html">Getting Started</a></li>
+                        <li><a href="commands.html">Commands</a></li>
+                        <li><a href="syntax-system.html">Custom Syntax</a></li>
+                        <li><a href="functions.html">Functions</a></li>
+                        <li><a href="examples.html">Examples</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="troubleshooting.html">Troubleshooting</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="best-practices.html">Best Practices</a></li>
+                        <li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">GitHub</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Community</h4>
+                    <ul>
+                        <li><a href="https://modrinth.com/mod/command-maker">Modrinth</a></li>
+                        <li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">Report Issues</a></li>
+                        <li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">Contribute</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Command Maker Wiki. Built with ❤️ for Minecraft players.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</body>
+</html>

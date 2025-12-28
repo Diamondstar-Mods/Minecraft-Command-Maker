@@ -27,6 +27,7 @@ public class ExampleMod implements ModInitializer {
 
 	private static final Path CONFIG_PATH = Paths.get("config", "CommandMaker", "aliases.json");
 	private static final Path TELEMETRY_CONFIG_PATH = Paths.get("config", "CommandMaker", "telementry.yml");
+	private static final Path FUNCTIONS_PATH = Paths.get("config", "CommandMaker", "Functions");
 	private static final Map<String, String> aliases = new HashMap<>();
 	// Store per-player custom variables: player UUID -> (varName -> value)
 	private static final Map<UUID, Map<String, String>> playerVariables = new HashMap<>();
@@ -56,14 +57,29 @@ public class ExampleMod implements ModInitializer {
 			if (!Files.exists(folder)) {
 				Files.createDirectories(folder);
 			}
+			if (!Files.exists(FUNCTIONS_PATH)) {
+				Files.createDirectories(FUNCTIONS_PATH);
+				// Create example function file
+				Path exampleFunction = FUNCTIONS_PATH.resolve("mobsoff.mcfunction");
+				if (!Files.exists(exampleFunction)) {
+					List<String> functionLines = Arrays.asList(
+						"# Example function: Disable monster spawns",
+						"spawn rates monster 0",
+						"say Monster spawns disabled!"
+					);
+					Files.write(exampleFunction, functionLines, StandardOpenOption.CREATE_NEW);
+				}
+			}
 			if (!Files.exists(CONFIG_PATH)) {
 				List<String> lines = new ArrayList<>();
 				lines.add("# CommandMaker Aliases Config");
 				lines.add("# Each entry is an alias and its command target.");
 				lines.add("# You can use variables like ${player}, ${x}, ${y}, ${z} in the command.");
+				lines.add("# For functions, use \"function:name\" to reference config/CommandMaker/Functions/name.mcfunction");
 				lines.add("# Example:");
 				lines.add("#   teleport=tp ${player} 0 100 0");
 				lines.add("#   greet=say Hello, ${player}!");
+				lines.add("#   mobsoff=function:mobsoff");
 				lines.add("{");
 				lines.add("}");
 				Files.write(CONFIG_PATH, lines, StandardOpenOption.CREATE_NEW);
@@ -215,13 +231,22 @@ public class ExampleMod implements ModInitializer {
 			net.minecraft.server.command.CommandManager.literal(alias)
 				.executes(ctx -> {
 					ServerCommandSource source = ctx.getSource();
-					String command = substituteVariables(target, ctx);
-					CommandDispatcher<ServerCommandSource> cmdDispatcher = source.getServer().getCommandManager().getDispatcher();
-					ParseResults<ServerCommandSource> parsed = cmdDispatcher.parse(command, source);
-					return cmdDispatcher.execute(parsed);
+					if (target.startsWith("function:")) {
+						String functionName = target.substring("function:".length());
+						return executeFunction(functionName, ctx);
+					} else {
+						String command = substituteVariables(target, ctx);
+						CommandDispatcher<ServerCommandSource> cmdDispatcher = source.getServer().getCommandManager().getDispatcher();
+						ParseResults<ServerCommandSource> parsed = cmdDispatcher.parse(command, source);
+						return cmdDispatcher.execute(parsed);
+					}
 				})
 				.then(net.minecraft.server.command.CommandManager.argument("args", StringArgumentType.greedyString())
 					.executes(ctx -> {
+						if (target.startsWith("function:")) {
+							String functionName = target.substring("function:".length());
+							return executeFunction(functionName, ctx);
+						}
 						String args = StringArgumentType.getString(ctx, "args");
 						String full = alias + " " + args;
 						
@@ -267,6 +292,33 @@ public class ExampleMod implements ModInitializer {
 			command = command.replace("${" + entry.getKey() + "}", entry.getValue());
 		}
 		return command;
+	}
+
+	// Execute a function from config/CommandMaker/Functions/<functionName>.mcfunction
+	private int executeFunction(String functionName, CommandContext<ServerCommandSource> ctx) {
+		try {
+			Path functionFile = FUNCTIONS_PATH.resolve(functionName + ".mcfunction");
+			if (!Files.exists(functionFile)) {
+				ctx.getSource().sendFeedback(() -> Text.literal("Function '" + functionName + "' not found."), false);
+				return 0;
+			}
+			List<String> lines = Files.readAllLines(functionFile);
+			CommandDispatcher<ServerCommandSource> cmdDispatcher = ctx.getSource().getServer().getCommandManager().getDispatcher();
+			int executed = 0;
+			for (String line : lines) {
+				line = line.trim();
+				if (line.isEmpty() || line.startsWith("#")) continue;
+				String command = substituteVariables(line, ctx);
+				ParseResults<ServerCommandSource> parsed = cmdDispatcher.parse(command, ctx.getSource());
+				cmdDispatcher.execute(parsed);
+				executed++;
+			}
+			return executed;
+		} catch (Exception e) {
+			LOGGER.error("Failed to execute function '" + functionName + "'", e);
+			ctx.getSource().sendFeedback(() -> Text.literal("Failed to execute function '" + functionName + "'."), false);
+			return 0;
+		}
 	}
 
 	private void loadAliases() {
@@ -338,8 +390,42 @@ public class ExampleMod implements ModInitializer {
 			if (!loaded) {
 				LOGGER.info("No aliases loaded (config empty or all entries malformed). Server will continue normally.");
 			}
+			
+			// Auto-load function aliases for any .mcfunction files
+			loadFunctionAliases();
 		} catch (Exception e) {
 			LOGGER.error("Failed to load aliases config (server will continue without aliases)", e);
+		}
+	}
+
+	private void loadFunctionAliases() {
+		try {
+			if (!Files.exists(FUNCTIONS_PATH)) {
+				return; // No functions folder, nothing to load
+			}
+			
+			int functionAliasesAdded = 0;
+			try (DirectoryStream<Path> stream = Files.newDirectoryStream(FUNCTIONS_PATH, "*.mcfunction")) {
+				for (Path functionFile : stream) {
+					String fileName = functionFile.getFileName().toString();
+					if (fileName.endsWith(".mcfunction")) {
+						String aliasName = fileName.substring(0, fileName.length() - 11); // Remove .mcfunction
+						String functionTarget = "function:" + aliasName;
+						
+						// Only add if not already defined in config (config takes priority)
+						if (!aliases.containsKey(aliasName)) {
+							aliases.put(aliasName, functionTarget);
+							functionAliasesAdded++;
+						}
+					}
+				}
+			}
+			
+			if (functionAliasesAdded > 0) {
+				LOGGER.info("Auto-loaded " + functionAliasesAdded + " function aliases from Functions folder");
+			}
+		} catch (Exception e) {
+			LOGGER.error("Failed to auto-load function aliases", e);
 		}
 	}
 
@@ -350,9 +436,11 @@ public class ExampleMod implements ModInitializer {
 			lines.add("# CommandMaker Aliases Config");
 			lines.add("# Each entry is an alias and its command target.");
 			lines.add("# You can use variables like ${player}, ${x}, ${y}, ${z} in the command.");
+			lines.add("# For functions, use \"function:name\" to reference config/CommandMaker/Functions/name.mcfunction");
 			lines.add("# Example:");
 			lines.add("#   teleport=tp ${player} 0 100 0");
 			lines.add("#   greet=say Hello, ${player}!");
+			lines.add("#   mobsoff=function:mobsoff");
 			JsonObject obj = new JsonObject();
 			for (Map.Entry<String, String> entry : aliases.entrySet()) {
 				obj.addProperty(entry.getKey(), entry.getValue());
