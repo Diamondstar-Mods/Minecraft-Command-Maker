@@ -633,7 +633,7 @@ public class ExampleMod implements ModInitializer {
 					.executes(ctx -> {
 						ServerCommandSource source = ctx.getSource();
 						source.sendFeedback(() -> Text.literal("§6§l❤️ Support us on Patreon! ❤️"), false);
-						String tellrawCmd = "tellraw " + source.getName() + " {\"text\":\"https://www.patreon.com/15305135/join\",\"color\":\"blue\",\"underlined\":true,\"clickEvent\":{\"action\":\"open_url\",\"value\":\"https://www.patreon.com/15305135/join\"}}";
+						String tellrawCmd = "tellraw " + source.getName() + " {\"text\":\"https://commandmakerwiki.lucasgeitgey.com/donate.html\",\"color\":\"blue\",\"underlined\":true,\"clickEvent\":{\"action\":\"open_url\",\"value\":\"https://commandmakerwiki.lucasgeitgey.com/donate.html\"}}";
 						CommandDispatcher<ServerCommandSource> cmdDispatcher = source.getServer().getCommandManager().getDispatcher();
 						ParseResults<ServerCommandSource> parsed = cmdDispatcher.parse(tellrawCmd, source);
 						cmdDispatcher.execute(parsed);
