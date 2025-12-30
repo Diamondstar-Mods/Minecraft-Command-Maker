@@ -72,11 +72,13 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         // Search index: visible label => filename
         const pages = {
+            'Home': 'index.html',
             'Getting Started': 'getting-started.html',
             'Installation': 'installation.html',
             'Configuration': 'configuration.html',
             'Creating Aliases': 'aliases.html',
             'Custom Syntax': 'syntax-system.html',
+            'Functions': 'functions.html',
             'Variables & Substitution': 'variables.html',
             'GUI System': 'gui-system.html',
             'Chat Messages': 'chat-messages.html',
@@ -84,6 +86,7 @@ document.addEventListener('DOMContentLoaded', function() {
             'Ban System': 'ban-system.html',
             'Warp System': 'warp-system.html',
             'Commands': 'commands.html',
+            'Examples': 'examples.html',
             'Economy System': 'economy-system.html',
             'Kit System': 'kit-system.html',
             'Home System': 'home-system.html',
@@ -98,7 +101,15 @@ document.addEventListener('DOMContentLoaded', function() {
             'Troubleshooting': 'troubleshooting.html',
             'Best Practices': 'best-practices.html',
             'Custom Commands': 'custom-commands.html',
-            'Download': 'download.html'
+            'Download': 'download.html',
+            'Forum': 'forum.html',
+            'Donate': 'donate.html',
+            'License': 'license.html',
+            'Last Commit': 'last-commit.html',
+            'Template': 'template.html',
+            'Vercel Analytics': 'vercel-web-analytics.html',
+            'Modrinth Redirect': 'redirects/modrinth.html',
+            'Telemetry Redirect': 'redirects/telementry.html'
         };
 
         // Create results container
