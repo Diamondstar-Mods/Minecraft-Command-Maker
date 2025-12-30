@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Configuration - Command Maker Wiki</title>
+    <title>Economy System - Command Maker Wiki</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="https://diamondstar-mods.github.io/Minecraft-Command-Maker/favicon.ico">
 </head>
 <body>
-    <!-- Navigation Bar -->
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-logo">
@@ -19,6 +18,7 @@
                 <a href="getting-started.html" class="nav-link">Getting Started</a>
                 <a href="commands.html" class="nav-link">Commands</a>
                 <a href="syntax-system.html" class="nav-link">Custom Syntax</a>
+                <a href="functions.html" class="nav-link">Functions</a>
                 <div class="dropdown">
                     <button class="dropdown-toggle">Systems ▼</button>
                     <div class="dropdown-menu">
@@ -51,11 +51,7 @@
         </div>
     </nav>
 
-    </nav>
-
-    <!-- Main Content -->
     <div class="main-wrapper">
-        <!-- Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-widget">
                 <h3 class="widget-title">📚 Documentation</h3>
@@ -71,6 +67,7 @@
                 <h3 class="widget-title">⚡ Features</h3>
                 <ul class="widget-list">
                     <li><a href="syntax-system.html">Custom Syntax System</a></li>
+                    <li><a href="functions.html">Functions System</a></li>
                     <li><a href="variables.html">Variables & Substitution</a></li>
                     <li><a href="gui-system.html">GUI System</a></li>
                     <li><a href="chat-messages.html">Chat Messages</a></li>
@@ -97,140 +94,68 @@
             </div>
         </aside>
 
-        <!-- Content Area -->
         <main class="content">
-            <h1 id="docs-path" data-subpath="configuration.html"></h1>
+            <h1 id="docs-path" data-subpath="economy-system.html">Economy System</h1>
             <iframe style="border: none; font-style: italic;" id="last-commit-iframe" src="" width="400" height="50"></iframe>
             <script>
                 document.getElementById('last-commit-iframe').src = 'last-commit.html?path=' + document.getElementById('docs-path').dataset.subpath;
             </script>
-            <h1>Configuration</h1>
-            <p>Learn how to configure Command Maker for your needs. All configuration is done through simple JSON files.</p>
-            <p>If you want a simpler way to set up commands <strong>in game</strong> then check the <a href=getting-started.html>Getting Started</a> page for more information on <strong>/addcommand</strong></p>
 
-            <section>
-                <h2>Configuration File Locations</h2>
-                <p>Command Maker stores all configuration in JSON files located at:</p>
-                <ul>
-                    <li><strong>Single Player:</strong> <code>.minecraft/config/CommandMaker/</code></li>
-                    <li><strong>Servers:</strong> <code>config/CommandMaker/</code></li>
-                    <li><strong>Launchers:</strong> <code>instance-name/minecraft/config/CommandMaker/</code></li>
-                </ul>
+            <p>Create a complete economy system with virtual currency, shops, and player balances using Command Maker's custom syntax and variables.</p>
 
-                <p>The folder is automatically created on first launch.</p>
-            </section>
+            <h2>Basic Setup</h2>
+            <p>First, set up your economy variables:</p>
+            <pre><code>/setcmdvariable currency_name "Coins"
+/setcmdvariable starting_balance 100</code></pre>
 
-            <section>
-                <h2>aliases.json</h2>
-                <p>This is the main configuration file where you define all your aliases and custom commands.</p>
+            <h2>Balance Commands</h2>
+            <p>Create commands to check and manage player balances:</p>
+            <pre><code>/addcommand add balance tellraw ${player} {"text":"Your balance: ${balance} ${currency_name}","color":"green"}
+/addcommand add pay tellraw ${player} {"text":"Paid ${amount} ${currency_name} to ${target}","color":"yellow"} && tellraw ${target} {"text":"Received ${amount} ${currency_name} from ${player}","color":"green"}</code></pre>
 
-                <h3>File Structure</h3>
-                <pre><code>{
-  "alias_name": "minecraft command",
-  "another_alias": "another minecraft command",
-  "greet": "say Hello, ${player}!"
+            <h2>Shop System</h2>
+            <p>Use custom syntax to create a shop system:</p>
+            <pre><code>// In syntax.json
+{
+  "buy": {
+    "pattern": "/buy <item> <amount>",
+    "description": "Buy items from the shop"
+  }
+}
+
+// In aliases.json
+{
+  "buy_diamond": "give ${player} diamond ${buy_amount} && tellraw ${player} {\"text\":\"Bought ${buy_amount} diamonds for ${price} ${currency_name}\",\"color\":\"green\"}"
 }</code></pre>
 
-                <h3>Key Points</h3>
-                <ul>
-                    <li>Each alias is a key-value pair</li>
-                    <li>Keys are the alias names (what you type in chat)</li>
-                    <li>Values are the actual Minecraft commands to execute</li>
-                    <li>Supports variables like <code>${player}</code>, <code>${x}</code>, <code>${y}</code>, <code>${z}</code></li>
-                    <li>Must be valid JSON (proper commas, quotes, etc.)</li>
-                </ul>
+            <h2>Earning Currency</h2>
+            <p>Create ways for players to earn currency:</p>
+            <pre><code>/addcommand add daily give ${player} emerald 1 && tellraw ${player} {"text":"Daily reward: 1 Emerald!","color":"gold"}
+/addcommand add work tellraw ${player} {"text":"You worked hard and earned 50 ${currency_name}!","color":"green"}</code></pre>
 
-                <h3>Example Configuration</h3>
-                <pre><code>{
-  "home": "tp ${player} 0 64 0",
-  "spawn": "tp ${player} 100 100 100",
-  "greet": "say Hello, ${player}!",
-  "admin": "give ${player} diamond 64"
-}</code></pre>
-            </section>
-
-            <section>
-                <h2>Reloading Configuration</h2>
-                <p>After editing your <code>aliases.json</code>, reload the configuration with:</p>
-                <pre><code>/addcommand reload</code></pre>
-
-                <p>You should see a message confirming the aliases were loaded.</p>
-            </section>
-
-            <section>
-                <h2>Managing Aliases In-Game</h2>
-                <p>You can manage aliases directly in-game using commands:</p>
-
-                <h3>Add a New Alias</h3>
-                <pre><code>/addcommand add &lt;alias&gt; &lt;command&gt;</code></pre>
-                <p><strong>Example:</strong> <code>/addcommand add test "say This is a test!"</code></p>
-
-                <h3>Delete an Alias</h3>
-                <pre><code>/addcommand del &lt;alias&gt;</code></pre>
-                <p><strong>Example:</strong> <code>/addcommand del test</code></p>
-
-                <h3>Delete via GUI</h3>
-                <pre><code>/deletealiases-gui</code></pre>
-                <p>Opens a graphical interface to manage and delete aliases.</p>
-
-                <h3>Reload All Aliases</h3>
-                <pre><code>/addcommand reload</code></pre>
-            </section>
-
-            <section>
-                <h2>Variable Substitution</h2>
-                <p>Command Maker supports several built-in variables:</p>
-                <ul>
-                    <li><code>${player}</code> - Current player name</li>
-                    <li><code>${x}</code> - Player's X coordinate</li>
-                    <li><code>${y}</code> - Player's Y coordinate</li>
-                    <li><code>${z}</code> - Player's Z coordinate</li>
-                </ul>
-
-                <p>Example: <code>"home": "tp ${player} ${x} 64 ${z}"</code></p>
-
-                <p>Learn more: <a href="variables.html">Variables & Substitution</a></p>
-            </section>
-
-            <section>
-                <h2>JSON Validation</h2>
-                <p>Your <code>aliases.json</code> must be valid JSON. Common mistakes:</p>
-                <ul>
-                    <li>❌ Missing commas between entries</li>
-                    <li>❌ Single quotes instead of double quotes</li>
-                    <li>❌ Trailing commas after the last entry</li>
-                    <li>❌ Unescaped special characters</li>
-                </ul>
-
-                <p>Use a <a href="https://jsonlint.com/" target="_blank" rel="noopener">JSON validator</a> to check your file.</p>
-            </section>
-
-            <section>
-                <h2>Troubleshooting Configuration</h2>
-                <p><strong>❌ Aliases not loading?</strong></p>
-                <ul>
-                    <li>Check that <code>aliases.json</code> is valid JSON</li>
-                    <li>Ensure the file is in the correct location</li>
-                    <li>Use <code>/addcommand reload</code> after making changes</li>
-                    <li>Check the console for error messages</li>
-                </ul>
-
-                <p>More help: <a href="troubleshooting.html">Troubleshooting Guide</a></p>
-            </section>
-
-            <section>
-                <h2>Next Steps</h2>
-                <ol>
-                    <li>Create your first alias in <code>aliases.json</code></li>
-                    <li>Use <code>/addcommand reload</code> to apply changes</li>
-                    <li>Learn about <a href="syntax-system.html">Custom Syntax</a> for advanced features</li>
-                    <li>Explore <a href="examples.html">Examples</a> for inspiration</li>
-                </ol>
+            <section class="popular-section">
+                <h2>Related Systems</h2>
+                <div class="articles-grid">
+                    <article class="article-card">
+                        <h3><a href="shop-system.html">Shop System</a></h3>
+                        <p>Learn how to create a comprehensive shop system with multiple items and prices.</p>
+                        <span class="article-meta">🛒 Related</span>
+                    </article>
+                    <article class="article-card">
+                        <h3><a href="kit-system.html">Kit System</a></h3>
+                        <p>Create kits that players can purchase with in-game currency.</p>
+                        <span class="article-meta">🎒 Related</span>
+                    </article>
+                    <article class="article-card">
+                        <h3><a href="syntax-system.html">Custom Syntax</a></h3>
+                        <p>Master the syntax system used in economy commands.</p>
+                        <span class="article-meta">📖 Reference</span>
+                    </article>
+                </div>
             </section>
         </main>
     </div>
 
-    <!-- Footer -->
     <footer class="footer">
         <div class="footer-content">
             <div class="footer-section">
@@ -261,7 +186,7 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2026 Command Maker Wiki. Built with ❤️ for Minecraft players.</p>
+            <p>&copy; 2025 Command Maker Wiki. Built with ❤️ for Minecraft players.</p>
         </div>
     </footer>
 
@@ -270,6 +195,9 @@
   window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
 </script>
 <script defer src="/_vercel/insights/script.js"></script>
+<script>
+  window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/speed-insights/script.js"></script>
 </body>
 </html>
-

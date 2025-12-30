@@ -37,6 +37,25 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // Dropdown menu functionality
+    const dropdowns = document.querySelectorAll('.dropdown');
+    dropdowns.forEach(dropdown => {
+        const toggle = dropdown.querySelector('.dropdown-toggle');
+        const menu = dropdown.querySelector('.dropdown-menu');
+
+        toggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            menu.classList.toggle('show');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!dropdown.contains(e.target)) {
+                menu.classList.remove('show');
+            }
+        });
+    });
+
     const searchBox = document.getElementById('searchBox');
 
     if (searchBox) {
@@ -65,7 +84,16 @@ document.addEventListener('DOMContentLoaded', function() {
             'Ban System': 'ban-system.html',
             'Warp System': 'warp-system.html',
             'Commands': 'commands.html',
-            'Examples': 'examples.html',
+            'Economy System': 'economy-system.html',
+            'Kit System': 'kit-system.html',
+            'Home System': 'home-system.html',
+            'Shop System': 'shop-system.html',
+            'Jail System': 'jail-system.html',
+            'Mute System': 'mute-system.html',
+            'Vote System': 'vote-system.html',
+            'Rank System': 'rank-system.html',
+            'Achievement System': 'achievement-system.html',
+            'Event System': 'event-system.html',
             'FAQ': 'faq.html',
             'Troubleshooting': 'troubleshooting.html',
             'Best Practices': 'best-practices.html',
