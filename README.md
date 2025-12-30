@@ -47,12 +47,20 @@ Visit the [**wiki**](https://commandmakerwiki.lucasgeitgey.com) for more informa
 This mod generates commands using Minecraft’s built-in JSON structure.  
 You can define custom behaviors without writing external functions.
 
+### Commands
+
+- `/cmd reload` - Reload all aliases from config
+- `/cmd add <alias> <command>` - Add a new alias
+- `/cmd del <alias>` - Remove an alias
+- `/cmd function <functionName>` - Execute a function from the Functions folder
+
 Example usage:
 ```mcfunction
 /cmd add hello say hello
+/cmd function test
 ```
 
-This command triggers a "hello" message sent in chat using only in-line JSON logic.  
+Functions are stored in `config/CommandMaker/Functions/<name>.mcfunction` and can contain multiple commands.
 
 Visit the [**wiki**](https://commandmakerwiki.lucasgeitgey.com/) for more information.
 

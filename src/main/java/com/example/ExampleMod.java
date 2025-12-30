@@ -188,6 +188,16 @@ public class ExampleMod implements ModInitializer {
 								})
 						)
 				)
+				.then(
+					net.minecraft.server.command.CommandManager.literal("function")
+						.then(
+							net.minecraft.server.command.CommandManager.argument("functionName", StringArgumentType.word())
+								.executes(ctx -> {
+									String functionName = StringArgumentType.getString(ctx, "functionName");
+									return executeFunction(functionName, ctx);
+								})
+						)
+				)
 		);
 	}
 
