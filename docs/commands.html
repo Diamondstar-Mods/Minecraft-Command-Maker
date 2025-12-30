@@ -225,6 +225,22 @@
                 </tr>
             </table>
 
+            <h2>Functions</h2>
+            <p><strong>Description:</strong> Execute multi-line command sequences stored in function files</p>
+            <p><strong>Location:</strong> <code>config/CommandMaker/Functions/&lt;name&gt;.mcfunction</code></p>
+            <p><strong>Usage:</strong></p>
+            <ul>
+                <li>Create a <code>.mcfunction</code> file in the Functions folder</li>
+                <li>Each line is executed as a separate command</li>
+                <li>Lines starting with <code>#</code> are comments and ignored</li>
+                <li>Use <code>/cmd function &lt;name&gt;</code> to execute</li>
+                <li>Variables like <code>${player}</code> work in functions</li>
+            </ul>
+            <p><strong>Example function file (<code>test.mcfunction</code>):</strong></p>
+            <pre><code># Test function
+say Hello from function!
+tellraw @s {"text":"Function executed!","color":"green"}</code></pre>
+
             <div class="info-box">
                 <h3>💡 Tip</h3>
                 <p>All aliases you create are also commands! Type <code>/alias_name [args]</code> to execute them.</p>
