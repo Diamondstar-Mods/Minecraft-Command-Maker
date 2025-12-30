@@ -92,7 +92,7 @@
 
             <h3>1️⃣ Simple Aliases (Easiest)</h3>
             <p>Quick shortcuts to existing commands:</p>
-            <pre><code>/addcommand add hello say Hello ${player}!</code></pre>
+            <pre><code>/cmd add hello say Hello ${player}!</code></pre>
 
             <h3>2️⃣ Custom Syntax (Intermediate)</h3>
             <p>Add parameters to your commands:</p>
@@ -114,7 +114,7 @@ Command: /tpa Steve</code></pre>
 
             <h3>Step 2: Create the Alias</h3>
             <p>In-game, run:</p>
-            <pre><code>/addcommand add hello say Hello ${player}! Welcome to our server!</code></pre>
+            <pre><code>/cmd add hello say Hello ${player}! Welcome to our server!</code></pre>
 
             <h3>Step 3: Test It</h3>
             <p>Run your new command:</p>
@@ -123,74 +123,74 @@ Command: /tpa Steve</code></pre>
 
             <h3>Step 4: Perfect It</h3>
             <p>Add effects or improve the message:</p>
-            <pre><code>/addcommand add hello say Hello ${player}! && playsound entity.player.levelup</code></pre>
+            <pre><code>/cmd add hello say Hello ${player}! && playsound entity.player.levelup</code></pre>
 
             <h2>Common Command Types</h2>
 
             <h3>Chat Commands</h3>
-            <pre><code>/addcommand add hello say Hello world!
-/addcommand add rules say Read the rules at /rules-site
-/addcommand add staff say Contact staff at support@example.com</code></pre>
+            <pre><code>/cmd add hello say Hello world!
+/cmd add rules say Read the rules at /rules-site
+/cmd add staff say Contact staff at support@example.com</code></pre>
 
             <h3>Teleport Commands</h3>
-            <pre><code>/addcommand add spawn tp ${player} 0 65 0
-/addcommand add home tp ${player} 100 65 100
-/addcommand add arena tp ${player} 500 100 500</code></pre>
+            <pre><code>/cmd add spawn tp ${player} 0 65 0
+/cmd add home tp ${player} 100 65 100
+/cmd add arena tp ${player} 500 100 500</code></pre>
 
             <h3>Item Commands</h3>
-            <pre><code>/addcommand add heal effect give @s instant_health 1
-/addcommand add feed effect give @s saturation 1
-/addcommand add night_vision effect give @s night_vision 1000</code></pre>
+            <pre><code>/cmd add heal effect give @s instant_health 1
+/cmd add feed effect give @s saturation 1
+/cmd add night_vision effect give @s night_vision 1000</code></pre>
 
             <h3>Permission-Based Commands</h3>
-            <pre><code>/addcommand add admin execute if entity @s[gamemode=creative] run say Admin mode
-/addcommand add staff execute if entity @s[gamemode=creative] run say Staff panel</code></pre>
+            <pre><code>/cmd add admin execute if entity @s[gamemode=creative] run say Admin mode
+/cmd add staff execute if entity @s[gamemode=creative] run say Staff panel</code></pre>
 
             <h3>Multiple Action Commands</h3>
-            <pre><code>/addcommand add party playsound music_disc.pigstep && say Party started!
-/addcommand add lights effect give @a glowing 120
-/addcommand add announce say [ANNOUNCEMENT] Server maintenance in 10 minutes</code></pre>
+            <pre><code>/cmd add party playsound music_disc.pigstep && say Party started!
+/cmd add lights effect give @a glowing 120
+/cmd add announce say [ANNOUNCEMENT] Server maintenance in 10 minutes</code></pre>
 
             <h2>Using Variables</h2>
 
             <h3>Player Name</h3>
-            <pre><code>/addcommand add greet say Hi ${player}!
-/addcommand add location say ${player} is at ${x} ${y} ${z}</code></pre>
+            <pre><code>/cmd add greet say Hi ${player}!
+/cmd add location say ${player} is at ${x} ${y} ${z}</code></pre>
 
             <h3>Custom Variables</h3>
             <pre><code">/setcmdvariable server_ip mc.example.com:25565
 /setcmdvariable discord https://discord.gg/example
 /setcmdvariable version 1.0.0
 
-/addcommand add ip say Connect to: ${server_ip}
-/addcommand add discord say Join: ${discord}
-/addcommand add version say Server version: ${version}</code></pre>
+/cmd add ip say Connect to: ${server_ip}
+/cmd add discord say Join: ${discord}
+/cmd add version say Server version: ${version}</code></pre>
 
             <h3>Coordinates</h3>
-            <pre><code">/addcommand add coords say You are at: ${x}, ${y}, ${z}
-/addcommand add home_set setblock ${x} ${y} ${z} diamond_block
-/addcommand add place_marker setblock ${x} ~ ${z} oak_sign</code></pre>
+            <pre><code">/cmd add coords say You are at: ${x}, ${y}, ${z}
+/cmd add home_set setblock ${x} ${y} ${z} diamond_block
+/cmd add place_marker setblock ${x} ~ ${z} oak_sign</code></pre>
 
             <h2>Creating Command Groups</h2>
 
             <p>Organize related commands:</p>
 
             <h3>Help System</h3>
-            <pre><code>/addcommand add help say Commands: /hello /rules /staff /version
-/addcommand add help_admin say Admin: /ban /kick /announce /shutdown</code></pre>
+            <pre><code>/cmd add help say Commands: /hello /rules /staff /version
+/cmd add help_admin say Admin: /ban /kick /announce /shutdown</code></pre>
 
             <h3>Hub Commands</h3>
-            <pre><code"/addcommand add spawn tp ${player} 0 65 0
-/addcommand add hub tp ${player} 500 100 -500
-/addcommand add main tp ${player} 1000 64 1000
-/addcommand add lobby tp ${player} -500 64 -500</code></pre>
+            <pre><code"/cmd add spawn tp ${player} 0 65 0
+/cmd add hub tp ${player} 500 100 -500
+/cmd add main tp ${player} 1000 64 1000
+/cmd add lobby tp ${player} -500 64 -500</code></pre>
 
             <h3>Game Commands</h3>
-            <pre><code>/addcommand add arena_join tp ${player} 1000 100 1000
-/addcommand add arena_leave tp ${player} 0 65 0
-/addcommand add arena_reset setblock 1000 100 1000 air
-/addcommand add arena_start say Arena starting!
-/addcommand add arena_end say Arena ended!</code></pre>
+            <pre><code>/cmd add arena_join tp ${player} 1000 100 1000
+/cmd add arena_leave tp ${player} 0 65 0
+/cmd add arena_reset setblock 1000 100 1000 air
+/cmd add arena_start say Arena starting!
+/cmd add arena_end say Arena ended!</code></pre>
 
             <h2>Advanced: Multi-Parameter Commands</h2>
 
@@ -217,34 +217,34 @@ Output: "Gave 10 diamonds to Steve"</code></pre>
 
             <h3>Use Feedback Messages</h3>
             <p><strong>Good:</strong></p>
-            <pre><code>/addcommand add teleport tp ${player} 1000 100 1000 && say Teleported to Arena!</code></pre>
+            <pre><code>/cmd add teleport tp ${player} 1000 100 1000 && say Teleported to Arena!</code></pre>
             <p><strong>Avoid:</strong></p>
-            <pre><code>/addcommand add teleport tp ${player} 1000 100 1000</code></pre>
+            <pre><code>/cmd add teleport tp ${player} 1000 100 1000</code></pre>
 
             <h3>Chain Commands with &&</h3>
-            <pre><code">/addcommand add party say Party started! && playsound music_disc.pigstep</code></pre>
+            <pre><code">/cmd add party say Party started! && playsound music_disc.pigstep</code></pre>
 
             <h3>Use Colors in Messages</h3>
-            <pre><code>/addcommand add success say {"text":"Success!","color":"green"}
-/addcommand add error say {"text":"Error!","color":"red"}</code></pre>
+            <pre><code>/cmd add success say {"text":"Success!","color":"green"}
+/cmd add error say {"text":"Error!","color":"red"}</code></pre>
 
             <h3>Add Sound Effects</h3>
-            <pre><code">/addcommand add levelup playsound entity.player.levelup
-/addcommand add click playsound ui.button.click
-/addcommand add success playsound entity.ender_pearl.sound</code></pre>
+            <pre><code">/cmd add levelup playsound entity.player.levelup
+/cmd add click playsound ui.button.click
+/cmd add success playsound entity.ender_pearl.sound</code></pre>
 
             <h3>Combine Effects</h3>
-            <pre><code">/addcommand add epic particle end_rod ~ ~ ~ 1 1 1 0.1 20 && playsound entity.enderman.teleport && say Epic!</code></pre>
+            <pre><code">/cmd add epic particle end_rod ~ ~ ~ 1 1 1 0.1 20 && playsound entity.enderman.teleport && say Epic!</code></pre>
 
             <h2>Testing Commands</h2>
 
             <h3>Test Template</h3>
             <p>For each command:</p>
             <ol>
-                <li>Create it: <code>/addcommand add test_cmd ...</code></li>
+                <li>Create it: <code>/cmd add test_cmd ...</code></li>
                 <li>Run it: <code>/test_cmd</code></li>
                 <li>Check output: Does it work?</li>
-                <li>Reload: <code>/addcommand reload</code></li>
+                <li>Reload: <code>/cmd reload</code></li>
                 <li>Test again: <code>/test_cmd</code></li>
                 <li>Check with other players (multiplayer)</li>
             </ol>
@@ -252,9 +252,9 @@ Output: "Gave 10 diamonds to Steve"</code></pre>
             <h3>Debugging</h3>
             <p>If command doesn't work:</p>
             <ul>
-                <li>Verify alias exists: <code>/addcommand list</code></li>
+                <li>Verify alias exists: <code>/cmd list</code></li>
                 <li>Check for typos</li>
-                <li>Reload config: <code>/addcommand reload</code></li>
+                <li>Reload config: <code>/cmd reload</code></li>
                 <li>Test underlying command directly</li>
                 <li>Check JSON syntax if using syntax.json</li>
             </ul>
@@ -262,22 +262,22 @@ Output: "Gave 10 diamonds to Steve"</code></pre>
             <h2>Real-World Examples</h2>
 
             <h3>Welcome Command</h3>
-            <pre><code">/addcommand add welcome say Welcome to ${server_name}, ${player}!
-/addcommand add welcome_advanced say Welcome ${player}! && say Type /help for commands && playsound entity.player.levelup</code></pre>
+            <pre><code">/cmd add welcome say Welcome to ${server_name}, ${player}!
+/cmd add welcome_advanced say Welcome ${player}! && say Type /help for commands && playsound entity.player.levelup</code></pre>
 
             <h3>Shop System</h3>
-            <pre><code">/addcommand add shop_sell execute at ${player} run particle glow_ink_sac ~ ~ ~ 0.5 0.5 0.5 0.1 20
-/addcommand add shop_open say Opening shop...</code></pre>
+            <pre><code">/cmd add shop_sell execute at ${player} run particle glow_ink_sac ~ ~ ~ 0.5 0.5 0.5 0.1 20
+/cmd add shop_open say Opening shop...</code></pre>
 
             <h3>Rank System</h3>
-            <pre><code">/addcommand add vip say ${player} is VIP level 1
-/addcommand add admin_panel execute if entity @s[gamemode=creative] run say Admin controls active
-/addcommand add become_vip execute if entity @s[name=Owner] run say ${player} is now VIP</code></pre>
+            <pre><code">/cmd add vip say ${player} is VIP level 1
+/cmd add admin_panel execute if entity @s[gamemode=creative] run say Admin controls active
+/cmd add become_vip execute if entity @s[name=Owner] run say ${player} is now VIP</code></pre>
 
             <h3>Minigame Setup</h3>
-            <pre><code">/addcommand add start_game say Game starting! && effect give @a speed 600 2
-/addcommand add end_game say Game over! && effect clear @a speed
-/addcommand add reset_game say Resetting arena... && setblock 0 0 0 air</code></pre>
+            <pre><code">/cmd add start_game say Game starting! && effect give @a speed 600 2
+/cmd add end_game say Game over! && effect clear @a speed
+/cmd add reset_game say Resetting arena... && setblock 0 0 0 air</code></pre>
 
             <h2>Best Practices</h2>
 

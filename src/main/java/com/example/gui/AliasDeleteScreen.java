@@ -130,7 +130,7 @@ public class AliasDeleteScreen extends Screen {
 
 	private void deleteAlias(String alias) {
 		if (this.client != null && this.client.player != null) {
-			this.client.player.networkHandler.sendChatMessage("/addcommand del " + alias);
+			this.client.player.networkHandler.sendChatMessage("/cmd del " + alias);
 		}
 
 		aliases.remove(alias);

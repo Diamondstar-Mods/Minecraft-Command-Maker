@@ -94,7 +94,7 @@ Result: tp steve @s
 ✅ **Works with Custom Variables** - `/setcmdvariable` still works  
 ✅ **No Code Required** - Pure JSON configuration  
 ✅ **Easy Discovery** - `/syntax` command shows all patterns  
-✅ **Instant Reload** - `/addcommand reload` applies changes  
+✅ **Instant Reload** - `/cmd reload` applies changes  
 
 ---
 
@@ -183,7 +183,7 @@ Ready to use!
 - [ ] View `/syntax` to see example patterns
 - [ ] Edit `syntax.json` with custom pattern
 - [ ] Create alias with `${syntax_name_parameter}`
-- [ ] Run `/addcommand reload`
+- [ ] Run `/cmd reload`
 - [ ] Test custom command in-game
 - [ ] Verify parameter substitution works
 
@@ -193,9 +193,9 @@ Ready to use!
 
 ```
 /syntax                    Lists all custom syntax patterns
-/addcommand reload         Reloads syntax.json and aliases.json
-/addcommand add <alias> <cmd>    Add new alias
-/addcommand del <alias>    Delete alias
+/cmd reload         Reloads syntax.json and aliases.json
+/cmd add <alias> <cmd>    Add new alias
+/cmd del <alias>    Delete alias
 /setcmdvariable <var> <val>     Set custom variable
 /deletealiases-gui         Opens GUI for deleting aliases
 ```

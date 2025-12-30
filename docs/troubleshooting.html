@@ -127,10 +127,10 @@
             <p><strong>Troubleshooting steps:</strong></p>
             <ol>
                 <li>Check spelling of command/alias</li>
-                <li>Run <code>/addcommand list</code> to verify alias exists</li>
+                <li>Run <code>/cmd list</code> to verify alias exists</li>
                 <li>Make sure you have permission to run the command</li>
                 <li>Check if the underlying command works directly</li>
-                <li>Run <code>/addcommand reload</code> to refresh</li>
+                <li>Run <code>/cmd reload</code> to refresh</li>
             </ol>
 
             <h3>❌ "Variable not substituting / Still shows ${player}"</h3>
@@ -142,11 +142,11 @@
             </ul>
             <p><strong>Fix:</strong></p>
             <pre><code>/setcmdvariable myvar "my value"
-/addcommand add test say ${myvar}</code></pre>
+/cmd add test say ${myvar}</code></pre>
 
             <h3>❌ "Alias worked once, then stopped"</h3>
             <p><strong>Solution:</strong> Reload the config</p>
-            <pre><code>/addcommand reload</code></pre>
+            <pre><code>/cmd reload</code></pre>
             <p>If still broken, check config files for errors.</p>
 
             <h3>❌ "Command returns weird symbols or errors"</h3>
@@ -162,7 +162,7 @@ say \'Use single quotes inside\'</code></pre>
             <p><strong>Check:</strong></p>
             <ul>
                 <li>JSON syntax is valid (use <a href="https://jsonlint.com">JSONLint</a>)</li>
-                <li>You ran <code>/addcommand reload</code> after editing syntax.json</li>
+                <li>You ran <code>/cmd reload</code> after editing syntax.json</li>
                 <li>Pattern format is correct: <code>/tpa &lt;player&gt;</code></li>
                 <li>Parameter names are in angle brackets</li>
             </ul>
@@ -227,7 +227,7 @@ RIGHT: { "key": "value" }</code></pre>
                 <li>Edit the JSON file</li>
                 <li>Save and close the editor</li>
                 <li>Restart Minecraft</li>
-                <li>Run <code>/addcommand reload</code></li>
+                <li>Run <code>/cmd reload</code></li>
             </ol>
 
             <h3>❌ "Where's the config folder?"</h3>
@@ -253,7 +253,7 @@ RIGHT: { "key": "value" }</code></pre>
             <h3>❌ "Too many aliases / Mod freezes on load"</h3>
             <p><strong>Solution:</strong> Remove unused aliases</p>
             <pre><code>/deletealias old_alias
-/addcommand reload</code></pre>
+/cmd reload</code></pre>
 
             <h2>Advanced Troubleshooting</h2>
 
@@ -268,13 +268,13 @@ RIGHT: { "key": "value" }</code></pre>
             </ol>
 
             <h3>Test Basic Function:</h3>
-            <pre><code>1. Run: /addcommand add test say Works!
+            <pre><code>1. Run: /cmd add test say Works!
 2. Run: /test
 3. Should see: "Works!" in chat
 4. If not → mod not loading properly</code></pre>
 
             <h3>Test Variables:</h3>
-            <pre><code>1. Run: /addcommand add playertest say ${player}
+            <pre><code>1. Run: /cmd add playertest say ${player}
 2. Run: /playertest
 3. Should see: your username in chat
 4. If not → variable system broken</code></pre>
@@ -282,7 +282,7 @@ RIGHT: { "key": "value" }</code></pre>
             <h3>Test Syntax:</h3>
             <pre><code>1. Create pattern /hello &lt;name&gt; in syntax.json
 2. Create alias: hello = say Hello ${hello_name}!
-3. Run: /addcommand reload
+3. Run: /cmd reload
 4. Run: /hello Steve
 5. Should see: Hello Steve!
 6. If not → syntax system broken</code></pre>

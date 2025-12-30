@@ -105,8 +105,8 @@
 
             <h2>Basic Item Shop</h2>
             <p>Create simple item purchases:</p>
-            <pre><code>/addcommand add buy_diamond give ${player} diamond 1 && tellraw ${player} {"text":"Bought 1 diamond!","color":"green"}
-/addcommand add buy_sword give ${player} diamond_sword 1 && tellraw ${player} {"text":"Bought diamond sword!","color":"green"}</code></pre>
+            <pre><code>/cmd add buy_diamond give ${player} diamond 1 && tellraw ${player} {"text":"Bought 1 diamond!","color":"green"}
+/cmd add buy_sword give ${player} diamond_sword 1 && tellraw ${player} {"text":"Bought diamond sword!","color":"green"}</code></pre>
 
             <h2>Custom Syntax Shop</h2>
             <pre><code>// In syntax.json
@@ -125,7 +125,7 @@
 
             <h2>Economy Integration</h2>
             <p>Integrate with an economy system:</p>
-            <pre><code>/addcommand add buy_diamond execute if score @s money matches 10.. run give @s diamond 1 && scoreboard players remove @s money 10 && tellraw @s {"text":"Bought diamond for 10 coins!","color":"green"} || tellraw @s {"text":"Not enough coins!","color":"red"}</code></pre>
+            <pre><code>/cmd add buy_diamond execute if score @s money matches 10.. run give @s diamond 1 && scoreboard players remove @s money 10 && tellraw @s {"text":"Bought diamond for 10 coins!","color":"green"} || tellraw @s {"text":"Not enough coins!","color":"red"}</code></pre>
 
             <h2>Shop GUI (Advanced)</h2>
             <p>Use functions for complex shop interfaces:</p>

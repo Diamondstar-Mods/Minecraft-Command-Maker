@@ -185,9 +185,9 @@ ${SpawnCoords}</code></pre>
 
             <h3>Restrict Dangerous Commands</h3>
             <pre><code>// Only give admin permissions to these
-/addcommand add ban ban-ip ${ban_player}
-/addcommand add stop stop
-/addcommand add pardon pardon ${player}</code></pre>
+/cmd add ban ban-ip ${ban_player}
+/cmd add stop stop
+/cmd add pardon pardon ${player}</code></pre>
 
             <h3>Use Operator Permission Checks</h3>
             <pre><code">{
@@ -212,8 +212,8 @@ AVOID:
 
             <h3>Help Text</h3>
             <p>Create a help command:</p>
-            <pre><code">/addcommand add help say Available commands: /spawn /home /arena /heal
-/addcommand add help_admin say Admin: /ban /kick /stop /announce</code></pre>
+            <pre><code">/cmd add help say Available commands: /spawn /home /arena /heal
+/cmd add help_admin say Admin: /ban /kick /stop /announce</code></pre>
 
             <h3>Error Handling</h3>
             <p>Use || for fallback commands:</p>
@@ -244,9 +244,9 @@ AVOID:
             <h3>Testing</h3>
             <p>Test each command before deployment:</p>
             <ol>
-                <li>Create simple test: <code>/addcommand add test say Works</code></li>
+                <li>Create simple test: <code>/cmd add test say Works</code></li>
                 <li>Run <code>/test</code> to verify</li>
-                <li>Run <code>/addcommand reload</code></li>
+                <li>Run <code>/cmd reload</code></li>
                 <li>Test all aliases after reload</li>
                 <li>Test with different users if possible</li>
             </ol>
@@ -328,7 +328,7 @@ config/CommandMaker/*.tmp</code></pre>
                     <tr>
                         <td>Forgetting to reload</td>
                         <td>Changes don't apply</td>
-                        <td>Run <code>/addcommand reload</code></td>
+                        <td>Run <code>/cmd reload</code></td>
                     </tr>
                     <tr>
                         <td>Too complex commands</td>

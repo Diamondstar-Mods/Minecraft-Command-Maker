@@ -105,13 +105,13 @@
 
             <h2>Basic Rank Assignment</h2>
             <p>Assign ranks using tags:</p>
-            <pre><code>/addcommand add setrank_vip tag ${rank_player} add vip && tellraw ${rank_player} {"text":"You are now VIP!","color":"gold"}
-/addcommand add setrank_mod tag ${rank_player} add moderator && tellraw ${rank_player} {"text":"You are now a Moderator!","color":"blue"}</code></pre>
+            <pre><code>/cmd add setrank_vip tag ${rank_player} add vip && tellraw ${rank_player} {"text":"You are now VIP!","color":"gold"}
+/cmd add setrank_mod tag ${rank_player} add moderator && tellraw ${rank_player} {"text":"You are now a Moderator!","color":"blue"}</code></pre>
 
             <h2>Rank-Based Permissions</h2>
             <p>Restrict commands by rank:</p>
-            <pre><code>/addcommand add vip_command execute if entity @s[tag=vip] run give @s diamond 1 || tellraw @s {"text":"VIP required!","color":"red"}
-/addcommand add mod_command execute if entity @s[tag=moderator] run kick ${kick_player} || tellraw @s {"text":"Moderator required!","color":"red"}</code></pre>
+            <pre><code>/cmd add vip_command execute if entity @s[tag=vip] run give @s diamond 1 || tellraw @s {"text":"VIP required!","color":"red"}
+/cmd add mod_command execute if entity @s[tag=moderator] run kick ${kick_player} || tellraw @s {"text":"Moderator required!","color":"red"}</code></pre>
 
             <h2>Custom Syntax for Ranks</h2>
             <pre><code>// In syntax.json
@@ -134,7 +134,7 @@
 
             <h2>Auto-Rank by Playtime</h2>
             <p>Promote players based on playtime:</p>
-            <pre><code>/addcommand add rank_check execute as @a[scores={playtime=72000..}] unless entity @s[tag=vip] run tag @s add vip && tellraw @s {"text":"Congratulations! You earned VIP rank!","color":"gold"}</code></pre>
+            <pre><code>/cmd add rank_check execute as @a[scores={playtime=72000..}] unless entity @s[tag=vip] run tag @s add vip && tellraw @s {"text":"Congratulations! You earned VIP rank!","color":"gold"}</code></pre>
 
             <section class="popular-section">
                 <h2>Related Systems</h2>

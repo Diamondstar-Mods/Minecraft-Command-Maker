@@ -110,8 +110,8 @@
 
             <h2>Balance Commands</h2>
             <p>Create commands to check and manage player balances:</p>
-            <pre><code>/addcommand add balance tellraw ${player} {"text":"Your balance: ${balance} ${currency_name}","color":"green"}
-/addcommand add pay tellraw ${player} {"text":"Paid ${amount} ${currency_name} to ${target}","color":"yellow"} && tellraw ${target} {"text":"Received ${amount} ${currency_name} from ${player}","color":"green"}</code></pre>
+            <pre><code>/cmd add balance tellraw ${player} {"text":"Your balance: ${balance} ${currency_name}","color":"green"}
+/cmd add pay tellraw ${player} {"text":"Paid ${amount} ${currency_name} to ${target}","color":"yellow"} && tellraw ${target} {"text":"Received ${amount} ${currency_name} from ${player}","color":"green"}</code></pre>
 
             <h2>Shop System</h2>
             <p>Use custom syntax to create a shop system:</p>
@@ -130,8 +130,8 @@
 
             <h2>Earning Currency</h2>
             <p>Create ways for players to earn currency:</p>
-            <pre><code>/addcommand add daily give ${player} emerald 1 && tellraw ${player} {"text":"Daily reward: 1 Emerald!","color":"gold"}
-/addcommand add work tellraw ${player} {"text":"You worked hard and earned 50 ${currency_name}!","color":"green"}</code></pre>
+            <pre><code>/cmd add daily give ${player} emerald 1 && tellraw ${player} {"text":"Daily reward: 1 Emerald!","color":"gold"}
+/cmd add work tellraw ${player} {"text":"You worked hard and earned 50 ${currency_name}!","color":"green"}</code></pre>
 
             <section class="popular-section">
                 <h2>Related Systems</h2>

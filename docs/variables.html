@@ -89,7 +89,7 @@
             <h2>What are Variables?</h2>
             <p>Variables are placeholders that get replaced with actual values when commands run.</p>
             <p><strong>Example:</strong></p>
-            <pre><code>/addcommand add hello say Hello ${player}!</code></pre>
+            <pre><code>/cmd add hello say Hello ${player}!</code></pre>
             <p>When you run <code>/hello</code>, <code>${player}</code> gets replaced with your username.</p>
 
             <h2>Built-in Variables</h2>
@@ -148,15 +148,15 @@
             <h2>Using Variables</h2>
 
             <h3>Player Variable</h3>
-            <pre><code>/addcommand add whoami say You are: ${player}
-/addcommand add greet say Hello, ${player}! Welcome back!</code></pre>
+            <pre><code>/cmd add whoami say You are: ${player}
+/cmd add greet say Hello, ${player}! Welcome back!</code></pre>
 
             <h3>Coordinate Variables</h3>
-            <pre><code>/addcommand add here say ${player} is at X:${x} Y:${y} Z:${z}
-/addcommand add coords say Coordinates: ${x}, ${y}, ${z}</code></pre>
+            <pre><code>/cmd add here say ${player} is at X:${x} Y:${y} Z:${z}
+/cmd add coords say Coordinates: ${x}, ${y}, ${z}</code></pre>
 
             <h3>Combined</h3>
-            <pre><code>/addcommand add location say ${player} is at (${x}, ${y}, ${z})</code></pre>
+            <pre><code>/cmd add location say ${player} is at (${x}, ${y}, ${z})</code></pre>
 
             <h2>Custom Variables</h2>
 
@@ -168,9 +168,9 @@
 /setcmdvariable spawn_coords "0 65 0"</code></pre>
 
             <h3>Using Custom Variables</h3>
-            <pre><code>/addcommand add discord say Join our Discord: ${admin_discord}
-/addcommand add about say Server: ${server_name}
-/addcommand add spawn tp ${player} ${spawn_coords}</code></pre>
+            <pre><code>/cmd add discord say Join our Discord: ${admin_discord}
+/cmd add about say Server: ${server_name}
+/cmd add spawn tp ${player} ${spawn_coords}</code></pre>
 
             <h2>Custom Syntax Variables</h2>
 
@@ -248,13 +248,13 @@
             <h2>Advanced: Combining Variables</h2>
 
             <h3>Multiple Variables in One Command</h3>
-            <pre><code>/addcommand add info say ${player} is at ${x} ${y} ${z} on ${server_name}</code></pre>
+            <pre><code>/cmd add info say ${player} is at ${x} ${y} ${z} on ${server_name}</code></pre>
 
             <h3>Variables with Text</h3>
-            <pre><code>/addcommand add status say Status: ${player} - OK (${server_name})</code></pre>
+            <pre><code>/cmd add status say Status: ${player} - OK (${server_name})</code></pre>
 
             <h3>Variables in Selectors</h3>
-            <pre><code">/addcommand add heal effect give @s instant_health 1 && say Healed ${player}</code></pre>
+            <pre><code">/cmd add heal effect give @s instant_health 1 && say Healed ${player}</code></pre>
 
             <h2>Variable Examples</h2>
 
@@ -262,22 +262,22 @@
             <pre><code>/setcmdvariable server_name "Adventure Server"
 /setcmdvariable rules_url "https://rules.example.com"
 
-/addcommand add welcome say Welcome to ${server_name}, ${player}!
-/addcommand add rules say Read our rules: ${rules_url}</code></pre>
+/cmd add welcome say Welcome to ${server_name}, ${player}!
+/cmd add rules say Read our rules: ${rules_url}</code></pre>
 
             <h3>Teleport System</h3>
             <pre><code>/setcmdvariable spawn_point "0 65 0"
 /setcmdvariable pvp_arena "1000 100 1000"
 
-/addcommand add spawn tp ${player} ${spawn_point}
-/addcommand add arena tp ${player} ${pvp_arena}</code></pre>
+/cmd add spawn tp ${player} ${spawn_point}
+/cmd add arena tp ${player} ${pvp_arena}</code></pre>
 
             <h3>Moderation System</h3>
             <pre><code">/setcmdvariable kick_reason "Breaking server rules"
 /setcmdvariable ban_reason "Permanent ban for serious violations"
 
-/addcommand add kick kick ${player} ${kick_reason}
-/addcommand add ban ban ${player} ${ban_reason}</code></pre>
+/cmd add kick kick ${player} ${kick_reason}
+/cmd add ban ban ${player} ${ban_reason}</code></pre>
 
             <h2>Viewing Custom Variables</h2>
 
@@ -309,17 +309,17 @@
                 <li>Check spelling (case-sensitive!)</li>
                 <li>Use correct syntax: <code>${variable}</code></li>
                 <li>Make sure variable exists if custom</li>
-                <li>Reload with <code>/addcommand reload</code></li>
+                <li>Reload with <code>/cmd reload</code></li>
             </ul>
 
             <h3>Getting literal ${} in chat?</h3>
-            <pre><code>WRONG: /addcommand add test say $player
-RIGHT: /addcommand add test say ${player}</code></pre>
+            <pre><code>WRONG: /cmd add test say $player
+RIGHT: /cmd add test say ${player}</code></pre>
 
             <h3>Custom variable returns nothing?</h3>
             <pre><code>1. Create it first: /setcmdvariable myvar "value"
-2. Use in command: /addcommand add test say ${myvar}
-3. Reload: /addcommand reload</code></pre>
+2. Use in command: /cmd add test say ${myvar}
+3. Reload: /cmd reload</code></pre>
         </main>
     </div>
 

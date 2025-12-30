@@ -100,10 +100,10 @@
 
             <h3>Method 1: Simple Aliases (Quick)</h3>
             <p>The fastest way to create warps:</p>
-            <pre><code>/addcommand add spawn tp ${player} 0 65 0
-/addcommand add hub tp ${player} 500 100 -500
-/addcommand add arena tp ${player} 1000 65 1000
-/addcommand add shop tp ${player} -500 65 250</code></pre>
+            <pre><code>/cmd add spawn tp ${player} 0 65 0
+/cmd add hub tp ${player} 500 100 -500
+/cmd add arena tp ${player} 1000 65 1000
+/cmd add shop tp ${player} -500 65 250</code></pre>
 
             <h3>Method 2: Using Custom Syntax (Flexible)</h3>
             <p>For a more elegant system, use custom syntax patterns:</p>
@@ -205,14 +205,14 @@
             <h2>List Warps Command</h2>
 
             <p>Create a command that lists available warps:</p>
-            <pre><code>/addcommand add warps say Available warps: spawn, hub, arena, shop</code></pre>
+            <pre><code>/cmd add warps say Available warps: spawn, hub, arena, shop</code></pre>
 
             <h2>Warp Descriptions</h2>
 
             <p>Give players information about warps:</p>
-            <pre><code>/addcommand add spawn say [SPAWN] Main spawn point for all players
-/addcommand add hub say [HUB] Central hub world with games and shops
-/addcommand add arena say [ARENA] PvP fighting arena for battles</code></pre>
+            <pre><code>/cmd add spawn say [SPAWN] Main spawn point for all players
+/cmd add hub say [HUB] Central hub world with games and shops
+/cmd add arena say [ARENA] PvP fighting arena for battles</code></pre>
 
             <h2>Multi-World Warping</h2>
 
@@ -231,7 +231,7 @@
 
             <div class="info-box">
                 <h3>💡 Pro Tip</h3>
-                <p>Use <code>/addcommand reload</code> to instantly apply changes without restarting!</p>
+                <p>Use <code>/cmd reload</code> to instantly apply changes without restarting!</p>
             </div>
 
             <h2>Warp System Ideas</h2>

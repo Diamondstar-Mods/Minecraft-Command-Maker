@@ -105,11 +105,11 @@
 
             <h2>Setting Homes</h2>
             <p>Create a simple home setting command:</p>
-            <pre><code>/addcommand add sethome execute store result score @s home_x run data get entity @s Pos[0] && execute store result score @s home_y run data get entity @s Pos[1] && execute store result score @s home_z run data get entity @s Pos[2] && tellraw @s {"text":"Home set!","color":"green"}</code></pre>
+            <pre><code>/cmd add sethome execute store result score @s home_x run data get entity @s Pos[0] && execute store result score @s home_y run data get entity @s Pos[1] && execute store result score @s home_z run data get entity @s Pos[2] && tellraw @s {"text":"Home set!","color":"green"}</code></pre>
 
             <h2>Teleporting Home</h2>
             <p>Teleport to your saved home:</p>
-            <pre><code>/addcommand add home execute if score @s home_x matches -2147483648..2147483647 run tp @s ~ ~ ~ && tellraw @s {"text":"Teleported home!","color":"green"} || tellraw @s {"text":"No home set! Use /sethome first.","color":"red"}</code></pre>
+            <pre><code>/cmd add home execute if score @s home_x matches -2147483648..2147483647 run tp @s ~ ~ ~ && tellraw @s {"text":"Teleported home!","color":"green"} || tellraw @s {"text":"No home set! Use /sethome first.","color":"red"}</code></pre>
 
             <h2>Multiple Homes</h2>
             <p>Use custom syntax for named homes:</p>
@@ -133,7 +133,7 @@
 
             <h2>Home Limits</h2>
             <p>Restrict number of homes per player:</p>
-            <pre><code>/addcommand add sethome execute if score @s home_count matches ..2 run scoreboard players add @s home_count 1 && [set home] || tellraw @s {"text":"Maximum 3 homes allowed!","color":"red"}</code></pre>
+            <pre><code>/cmd add sethome execute if score @s home_count matches ..2 run scoreboard players add @s home_count 1 && [set home] || tellraw @s {"text":"Maximum 3 homes allowed!","color":"red"}</code></pre>
 
             <section class="popular-section">
                 <h2>Related Systems</h2>

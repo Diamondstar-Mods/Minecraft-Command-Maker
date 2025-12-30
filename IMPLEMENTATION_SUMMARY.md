@@ -157,7 +157,7 @@ Documentation/
 ✅ **Flexible** - Unlimited custom parameters  
 ✅ **Backward Compatible** - Works with existing aliases and variables  
 ✅ **Auto-Create Examples** - Default patterns included  
-✅ **Easy Management** - Edit JSON, reload with `/addcommand reload`  
+✅ **Easy Management** - Edit JSON, reload with `/cmd reload`  
 ✅ **Discoverable** - `/syntax` command shows all patterns  
 ✅ **Production Ready** - Fully tested, error handling included  
 
@@ -204,7 +204,7 @@ Documentation/
 4. **Configure:** Edit `config/CommandMaker/syntax.json`
 5. **Create Aliases:** Use `${syntax_name_parameter}` in `aliases.json`
 6. **Test:** Use `/syntax` to verify patterns
-7. **Reload:** Run `/addcommand reload` to apply changes
+7. **Reload:** Run `/cmd reload` to apply changes
 
 ---
 

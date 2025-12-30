@@ -106,7 +106,7 @@
             </script>
             <h1>Configuration</h1>
             <p>Learn how to configure Command Maker for your needs. All configuration is done through simple JSON files.</p>
-            <p>If you want a simpler way to set up commands <strong>in game</strong> then check the <a href=getting-started.html>Getting Started</a> page for more information on <strong>/addcommand</strong></p>
+            <p>If you want a simpler way to set up commands <strong>in game</strong> then check the <a href=getting-started.html>Getting Started</a> page for more information on <strong>/cmd</strong></p>
 
             <section>
                 <h2>Configuration File Locations</h2>
@@ -152,7 +152,7 @@
             <section>
                 <h2>Reloading Configuration</h2>
                 <p>After editing your <code>aliases.json</code>, reload the configuration with:</p>
-                <pre><code>/addcommand reload</code></pre>
+                <pre><code>/cmd reload</code></pre>
 
                 <p>You should see a message confirming the aliases were loaded.</p>
             </section>
@@ -162,19 +162,19 @@
                 <p>You can manage aliases directly in-game using commands:</p>
 
                 <h3>Add a New Alias</h3>
-                <pre><code>/addcommand add &lt;alias&gt; &lt;command&gt;</code></pre>
-                <p><strong>Example:</strong> <code>/addcommand add test "say This is a test!"</code></p>
+                <pre><code>/cmd add &lt;alias&gt; &lt;command&gt;</code></pre>
+                <p><strong>Example:</strong> <code>/cmd add test "say This is a test!"</code></p>
 
                 <h3>Delete an Alias</h3>
-                <pre><code>/addcommand del &lt;alias&gt;</code></pre>
-                <p><strong>Example:</strong> <code>/addcommand del test</code></p>
+                <pre><code>/cmd del &lt;alias&gt;</code></pre>
+                <p><strong>Example:</strong> <code>/cmd del test</code></p>
 
                 <h3>Delete via GUI</h3>
                 <pre><code>/deletealiases-gui</code></pre>
                 <p>Opens a graphical interface to manage and delete aliases.</p>
 
                 <h3>Reload All Aliases</h3>
-                <pre><code>/addcommand reload</code></pre>
+                <pre><code>/cmd reload</code></pre>
             </section>
 
             <section>
@@ -211,7 +211,7 @@
                 <ul>
                     <li>Check that <code>aliases.json</code> is valid JSON</li>
                     <li>Ensure the file is in the correct location</li>
-                    <li>Use <code>/addcommand reload</code> after making changes</li>
+                    <li>Use <code>/cmd reload</code> after making changes</li>
                     <li>Check the console for error messages</li>
                 </ul>
 
@@ -222,7 +222,7 @@
                 <h2>Next Steps</h2>
                 <ol>
                     <li>Create your first alias in <code>aliases.json</code></li>
-                    <li>Use <code>/addcommand reload</code> to apply changes</li>
+                    <li>Use <code>/cmd reload</code> to apply changes</li>
                     <li>Learn about <a href="syntax-system.html">Custom Syntax</a> for advanced features</li>
                     <li>Explore <a href="examples.html">Examples</a> for inspiration</li>
                 </ol>

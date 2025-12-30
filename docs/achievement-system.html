@@ -105,11 +105,11 @@
 
             <h2>Simple Achievement</h2>
             <p>Award achievement for first join:</p>
-            <pre><code>/addcommand add first_join execute unless score @s achievements matches 1.. run scoreboard players add @s achievements 1 && tellraw @s {"text":"Achievement Unlocked: Welcome!","color":"gold"} && give @s emerald 5</code></pre>
+            <pre><code>/cmd add first_join execute unless score @s achievements matches 1.. run scoreboard players add @s achievements 1 && tellraw @s {"text":"Achievement Unlocked: Welcome!","color":"gold"} && give @s emerald 5</code></pre>
 
             <h2>Progress Tracking</h2>
             <p>Track mining achievements:</p>
-            <pre><code>/addcommand add mine_check execute store result score @s mined_diamond run clear @s diamond 0 && execute if score @s mined_diamond matches 100.. unless score @s ach_miner achievements matches 1 run scoreboard players add @s ach_miner achievements 1 && tellraw @s {"text":"Achievement: Diamond Miner!","color":"aqua"}</code></pre>
+            <pre><code>/cmd add mine_check execute store result score @s mined_diamond run clear @s diamond 0 && execute if score @s mined_diamond matches 100.. unless score @s ach_miner achievements matches 1 run scoreboard players add @s ach_miner achievements 1 && tellraw @s {"text":"Achievement: Diamond Miner!","color":"aqua"}</code></pre>
 
             <h2>Custom Syntax Achievements</h2>
             <pre><code>// In syntax.json
@@ -132,7 +132,7 @@
 
             <h2>Timed Achievements</h2>
             <p>Achievements that require speed:</p>
-            <pre><code>/addcommand add speedrun execute if score @s playtime matches ..1200 run scoreboard players add @s ach_speedrun achievements 1 && tellraw @s {"text":"Achievement: Speedrunner!","color":"red"} && give @s netherite_ingot 1</code></pre>
+            <pre><code>/cmd add speedrun execute if score @s playtime matches ..1200 run scoreboard players add @s ach_speedrun achievements 1 && tellraw @s {"text":"Achievement: Speedrunner!","color":"red"} && give @s netherite_ingot 1</code></pre>
 
             <section class="popular-section">
                 <h2>Related Systems</h2>

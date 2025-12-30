@@ -105,7 +105,7 @@
 
             <h2>Basic Muting</h2>
             <p>Mute a player for a set duration:</p>
-            <pre><code>/addcommand add mute tellraw ${mute_player} {"text":"You have been muted for 5 minutes!","color":"red"} && scoreboard players set ${mute_player} mute_time 6000</code></pre>
+            <pre><code>/cmd add mute tellraw ${mute_player} {"text":"You have been muted for 5 minutes!","color":"red"} && scoreboard players set ${mute_player} mute_time 6000</code></pre>
 
             <h2>Mute Prevention</h2>
             <p>Block muted players from sending messages:</p>
@@ -134,7 +134,7 @@ execute as @a[scores={mute_time=1..}] run tellraw @s {"text":"You are muted!","c
 
             <h2>Automatic Unmute</h2>
             <p>Countdown and automatic unmute:</p>
-            <pre><code>/addcommand add mute_tick execute as @a[scores={mute_time=1..}] run scoreboard players remove @s mute_time 1 && execute as @a[scores={mute_time=0}] run tellraw @s {"text":"Mute expired!","color":"green"} && scoreboard players reset @s mute_time</code></pre>
+            <pre><code>/cmd add mute_tick execute as @a[scores={mute_time=1..}] run scoreboard players remove @s mute_time 1 && execute as @a[scores={mute_time=0}] run tellraw @s {"text":"Mute expired!","color":"green"} && scoreboard players reset @s mute_time</code></pre>
 
             <section class="popular-section">
                 <h2>Related Systems</h2>

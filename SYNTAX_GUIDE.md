@@ -197,18 +197,18 @@ Lists all aliases (unchanged).
 
 ### Add New Alias
 ```
-/addcommand add <alias> <command>
-/addcommand add warp_spawn tp ${player} 0 64 0
+/cmd add <alias> <command>
+/cmd add warp_spawn tp ${player} 0 64 0
 ```
 
 ### Delete Alias
 ```
-/addcommand del <alias>
+/cmd del <alias>
 ```
 
 ### Reload Config
 ```
-/addcommand reload
+/cmd reload
 ```
 Reloads both aliases and syntax definitions from files.
 
@@ -226,7 +226,7 @@ Reloads both aliases and syntax definitions from files.
 1. Check variable format: `${syntax_name_parameter}` (all lowercase)
 2. Verify syntax exists: `config/CommandMaker/syntax.json`
 3. Check alias: `config/CommandMaker/aliases.json`
-4. Use `/addcommand reload` to refresh
+4. Use `/cmd reload` to refresh
 
 ### Multiple Parameters with Spaces
 ```json
@@ -265,7 +265,7 @@ Both are auto-created on first run with examples!
 
 4. **Reload Without Restart:**
    ```
-   /addcommand reload
+   /cmd reload
    ```
    This reloads both aliases and syntax definitions
 

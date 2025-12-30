@@ -24,7 +24,7 @@ Visit the [**wiki**](https://commandmakerwiki.lucasgeitgey.com) for more informa
 
 ## Features
 
-- ✅ Vanilla-compatible `/addcommand` command (JSON-only logic)
+- ✅ Vanilla-compatible `/cmd` command (JSON-only logic)
 - 🧪 Modular command generation for Fabric 26.1
 - 🔒 Admin-free setup—no elevated permissions required
 - 📁 Portable structure for locked-down environments
@@ -38,7 +38,7 @@ Visit the [**wiki**](https://commandmakerwiki.lucasgeitgey.com) for more informa
 2. Download the latest `.jar` file
 3. Drop it into your server’s `mods/` folder
 4. Make sure you’re running **Minecraft 26.1+** with **Fabric Loader**
-5. Restart the server and test with `/addcommand` or other generated commands
+5. Restart the server and test with `/cmd` or other generated commands
 
 ---
 
@@ -49,7 +49,7 @@ You can define custom behaviors without writing external functions.
 
 Example usage:
 ```mcfunction
-/addcommand add hello say hello
+/cmd add hello say hello
 ```
 
 This command triggers a "hello" message sent in chat using only in-line JSON logic.  

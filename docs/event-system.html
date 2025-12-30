@@ -105,12 +105,12 @@
 
             <h2>Scheduled Events</h2>
             <p>Start events at specific times:</p>
-            <pre><code>/addcommand add start_event tellraw @a {"text":"Treasure Hunt Event Started!","color":"gold"} && function:event_setup
-/addcommand add event_check execute if score #event_timer event_time matches 0 run function:event_end</code></pre>
+            <pre><code>/cmd add start_event tellraw @a {"text":"Treasure Hunt Event Started!","color":"gold"} && function:event_setup
+/cmd add event_check execute if score #event_timer event_time matches 0 run function:event_end</code></pre>
 
             <h2>Player-Triggered Events</h2>
             <p>Events that start when enough players join:</p>
-            <pre><code>/addcommand add join_event scoreboard players add #event_players event_count 1 && tellraw @s {"text":"Joined event!","color":"green"} && execute if score #event_players event_count matches 5.. run function:start_pvp_event</code></pre>
+            <pre><code>/cmd add join_event scoreboard players add #event_players event_count 1 && tellraw @s {"text":"Joined event!","color":"green"} && execute if score #event_players event_count matches 5.. run function:start_pvp_event</code></pre>
 
             <h2>Custom Syntax Events</h2>
             <pre><code>// In syntax.json
@@ -130,7 +130,7 @@
 
             <h2>Event Rewards</h2>
             <p>Automatic rewards for event participation:</p>
-            <pre><code>/addcommand add event_reward execute as @a[tag=event_player] run give @s diamond 1 && tellraw @s {"text":"Event reward!","color":"gold"} && tag @s remove event_player</code></pre>
+            <pre><code>/cmd add event_reward execute as @a[tag=event_player] run give @s diamond 1 && tellraw @s {"text":"Event reward!","color":"gold"} && tag @s remove event_player</code></pre>
 
             <section class="popular-section">
                 <h2>Related Systems</h2>

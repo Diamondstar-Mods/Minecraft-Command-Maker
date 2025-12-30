@@ -39,7 +39,7 @@ public class ExampleMod implements ModInitializer {
 		SyntaxManager.loadSyntaxDefinitions();
 		loadTelemetryConfig();
 		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
-			registerAddCommand(dispatcher);
+			registercmd(dispatcher);
 			registerAliases(dispatcher);
 			registerSetCmdVariable(dispatcher);
 			registerDeleteAliasMenu(dispatcher);
@@ -136,10 +136,10 @@ public class ExampleMod implements ModInitializer {
 		}).start();
 	}
 
-	// Register /addcommand (reload|add|del) ...
-	private void registerAddCommand(CommandDispatcher<ServerCommandSource> dispatcher) {
+	// Register /cmd (reload|add|del) ...
+	private void registercmd(CommandDispatcher<ServerCommandSource> dispatcher) {
 		dispatcher.register(
-			LiteralArgumentBuilder.<ServerCommandSource>literal("addcommand")
+			LiteralArgumentBuilder.<ServerCommandSource>literal("cmd")
 				.then(
 					net.minecraft.server.command.CommandManager.literal("reload")
 						.executes(ctx -> {
@@ -470,7 +470,7 @@ public class ExampleMod implements ModInitializer {
 						source.sendFeedback(() -> net.minecraft.text.Text.literal("  §f[" + idx + "] §6/" + alias + " §7-> §f" + cmd), false);
 						index[0]++;
 					}
-					source.sendFeedback(() -> net.minecraft.text.Text.literal("§7Use: §f/addcommand del <alias>§7 to delete"), false);
+					source.sendFeedback(() -> net.minecraft.text.Text.literal("§7Use: §f/cmd del <alias>§7 to delete"), false);
 					return 1;
 				})
 				.then(net.minecraft.server.command.CommandManager.argument("alias", StringArgumentType.word())
@@ -516,7 +516,7 @@ public class ExampleMod implements ModInitializer {
 		);
 	}
 
-	private int addCommand(ServerCommandSource source, String alias, String command, CommandDispatcher<ServerCommandSource> dispatcher) {
+	private int cmd(ServerCommandSource source, String alias, String command, CommandDispatcher<ServerCommandSource> dispatcher) {
 		if (aliases.containsKey(alias)) {
 			source.sendFeedback(() -> net.minecraft.text.Text.literal("§cAlias '§f" + alias + "§c' already exists. Use /deletealias " + alias + " first."), false);
 			return 0;
@@ -592,7 +592,7 @@ public class ExampleMod implements ModInitializer {
 							.executes(ctx -> {
 								String alias = StringArgumentType.getString(ctx, "alias");
 								String command = StringArgumentType.getString(ctx, "command");
-								return addCommand(ctx.getSource(), alias, command, dispatcher);
+								return cmd(ctx.getSource(), alias, command, dispatcher);
 							})
 						)
 					)

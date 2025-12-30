@@ -107,8 +107,8 @@
             <p><strong>Aliases</strong> are simple name shortcuts that execute a command. <strong>Custom Syntax</strong> allows you to create patterns with parameters, like <code>/tpa &lt;player&gt;</code>.</p>
 
             <h3>How do I create a new alias?</h3>
-            <p>Use the <code>/addcommand add &lt;alias&gt; &lt;command&gt;</code> command in-game. Example:</p>
-            <pre><code>/addcommand add hello say Hello ${player}!</code></pre>
+            <p>Use the <code>/cmd add &lt;alias&gt; &lt;command&gt;</code> command in-game. Example:</p>
+            <pre><code>/cmd add hello say Hello ${player}!</code></pre>
 
             <h3>Can I have spaces in alias names?</h3>
             <p>No, alias names must be single words without spaces. Use the pattern like <code>/hello world</code> if you need multi-word triggers.</p>
@@ -169,7 +169,7 @@
             </p>
 
             <h3>Can I edit config files directly?</h3>
-            <p>Yes, you can edit JSON files directly with any text editor. After editing, run <code>/addcommand reload</code> to apply changes.</p>
+            <p>Yes, you can edit JSON files directly with any text editor. After editing, run <code>/cmd reload</code> to apply changes.</p>
 
             <h3>What happens if my JSON is invalid?</h3>
             <p>The mod will log errors and fall back to the last known good configuration. Fix the JSON and reload.</p>
@@ -197,7 +197,7 @@
             <p>Make sure:</p>
             <ul>
                 <li>JSON syntax is correct (use a JSON validator)</li>
-                <li>You ran <code>/addcommand reload</code></li>
+                <li>You ran <code>/cmd reload</code></li>
                 <li>Pattern uses correct format <code>&lt;parameter&gt;</code></li>
                 <li>You used <code>${syntax_name_param}</code> in the alias command</li>
             </ul>
@@ -218,7 +218,7 @@
 
             <h3>Can I use command selectors like @a, @p?</h3>
             <p>Yes! Selectors work in command aliases. Example:</p>
-            <pre><code>/addcommand add broadcast say [${player}]: @a</code></pre>
+            <pre><code>/cmd add broadcast say [${player}]: @a</code></pre>
 
             <h3>Can I chain multiple commands?</h3>
             <p>Use the format: <code>command1 && command2 && command3</code></p>
@@ -226,7 +226,7 @@
 
             <h3>How do I use scoreboards with Command Maker?</h3>
             <p>Create aliases that execute scoreboard commands:</p>
-            <pre><code>/addcommand add score scoreboard players add ${player} kills 1</code></pre>
+            <pre><code>/cmd add score scoreboard players add ${player} kills 1</code></pre>
 
             <h3>Performance: Will lots of aliases slow down my server?</h3>
             <p>No. Aliases are cached after first load and have minimal performance impact.</p>

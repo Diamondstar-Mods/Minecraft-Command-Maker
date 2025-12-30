@@ -105,11 +105,11 @@
 
             <h2>Basic Jailing</h2>
             <p>Jail a player with a time limit:</p>
-            <pre><code>/addcommand add jail tp ${jail_player} 0 100 0 && tellraw ${jail_player} {"text":"You have been jailed!","color":"red"} && scoreboard players set ${jail_player} jail_time 1200</code></pre>
+            <pre><code>/cmd add jail tp ${jail_player} 0 100 0 && tellraw ${jail_player} {"text":"You have been jailed!","color":"red"} && scoreboard players set ${jail_player} jail_time 1200</code></pre>
 
             <h2>Jail Release</h2>
             <p>Automatic release after time expires:</p>
-            <pre><code>/addcommand add jail_check execute as @a[scores={jail_time=1..}] run scoreboard players remove @s jail_time 1 && execute as @a[scores={jail_time=0}] run tp @s 100 65 100 && tellraw @s {"text":"You have been released from jail!","color":"green"} && scoreboard players reset @s jail_time</code></pre>
+            <pre><code>/cmd add jail_check execute as @a[scores={jail_time=1..}] run scoreboard players remove @s jail_time 1 && execute as @a[scores={jail_time=0}] run tp @s 100 65 100 && tellraw @s {"text":"You have been released from jail!","color":"green"} && scoreboard players reset @s jail_time</code></pre>
 
             <h2>Custom Syntax for Jailing</h2>
             <pre><code>// In syntax.json
@@ -132,7 +132,7 @@
 
             <h2>Jail Area Protection</h2>
             <p>Prevent jailed players from escaping:</p>
-            <pre><code>/addcommand add jail_protect execute as @a[scores={jail_time=1..}] at @s if block ~ ~-1 ~ minecraft:bedrock run tp @s 0 101 0 && tellraw @s {"text":"Stay in jail!","color":"red"}</code></pre>
+            <pre><code>/cmd add jail_protect execute as @a[scores={jail_time=1..}] at @s if block ~ ~-1 ~ minecraft:bedrock run tp @s 0 101 0 && tellraw @s {"text":"Stay in jail!","color":"red"}</code></pre>
 
             <section class="popular-section">
                 <h2>Related Systems</h2>

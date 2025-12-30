@@ -39,7 +39,7 @@ This executes: `say steve wants to teleport to you!`
 ✅ **Flexible Parameters** - Create any number of parameters in any pattern  
 ✅ **Multi-Parameter** - `/ban <player> <reason>` → `${ban_player}`, `${ban_reason}`  
 ✅ **Works with Existing Variables** - Still use `${player}`, `${x}`, `${y}`, `${z}`  
-✅ **Easy Management** - Edit JSON files, run `/addcommand reload`  
+✅ **Easy Management** - Edit JSON files, run `/cmd reload`  
 
 ---
 
@@ -56,7 +56,7 @@ This executes: `say steve wants to teleport to you!`
 
 ```
 /syntax                    # List all syntax patterns
-/addcommand reload         # Reload syntax.json and aliases.json
+/cmd reload         # Reload syntax.json and aliases.json
 ```
 
 ---

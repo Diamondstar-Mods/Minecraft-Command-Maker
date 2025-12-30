@@ -113,15 +113,15 @@ give @s minecraft:bread 16
 tellraw @s {"text":"Starter kit redeemed!","color":"green"}</code></pre>
 
             <p>Then create an alias:</p>
-            <pre><code>/addcommand add starter function:starter</code></pre>
+            <pre><code>/cmd add starter function:starter</code></pre>
 
             <h2>Advanced Kits with Cooldowns</h2>
             <p>Use scoreboard objectives for cooldown tracking:</p>
-            <pre><code>/addcommand add kit_starter execute unless score @s kit_starter_cooldown matches 1.. run function:starter && scoreboard players set @s kit_starter_cooldown 24000</code></pre>
+            <pre><code>/cmd add kit_starter execute unless score @s kit_starter_cooldown matches 1.. run function:starter && scoreboard players set @s kit_starter_cooldown 24000</code></pre>
 
             <h2>Permission-Based Kits</h2>
             <p>Restrict kits to certain players:</p>
-            <pre><code>/addcommand add vip_kit execute if entity @s[tag=vip] run function:vip_kit || tellraw @s {"text":"You need VIP to use this kit!","color":"red"}</code></pre>
+            <pre><code>/cmd add vip_kit execute if entity @s[tag=vip] run function:vip_kit || tellraw @s {"text":"You need VIP to use this kit!","color":"red"}</code></pre>
 
             <h2>Custom Syntax for Kit Selection</h2>
             <pre><code>// In syntax.json

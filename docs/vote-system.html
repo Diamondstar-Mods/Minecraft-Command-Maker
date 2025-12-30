@@ -105,12 +105,12 @@
 
             <h2>Simple Yes/No Vote</h2>
             <p>Create a basic voting system:</p>
-            <pre><code>/addcommand add vote_yes scoreboard players add #vote_yes vote_count 1 && tellraw @s {"text":"Voted YES!","color":"green"}
-/addcommand add vote_no scoreboard players add #vote_no vote_count 1 && tellraw @s {"text":"Voted NO!","color":"red"}</code></pre>
+            <pre><code>/cmd add vote_yes scoreboard players add #vote_yes vote_count 1 && tellraw @s {"text":"Voted YES!","color":"green"}
+/cmd add vote_no scoreboard players add #vote_no vote_count 1 && tellraw @s {"text":"Voted NO!","color":"red"}</code></pre>
 
             <h2>Vote Results</h2>
             <p>Check and announce vote results:</p>
-            <pre><code>/addcommand add vote_results tellraw @a [{"text":"Vote Results: YES ","color":"green"},{"score":{"name":"#vote_yes","objective":"vote_count"},"color":"green"},{"text":" | NO ","color":"red"},{"score":{"name":"#vote_no","objective":"vote_count"},"color":"red"}]</code></pre>
+            <pre><code>/cmd add vote_results tellraw @a [{"text":"Vote Results: YES ","color":"green"},{"score":{"name":"#vote_yes","objective":"vote_count"},"color":"green"},{"text":" | NO ","color":"red"},{"score":{"name":"#vote_no","objective":"vote_count"},"color":"red"}]</code></pre>
 
             <h2>Custom Syntax Voting</h2>
             <pre><code>// In syntax.json
@@ -130,8 +130,8 @@
 
             <h2>Timed Votes</h2>
             <p>Automatic vote ending after time:</p>
-            <pre><code>/addcommand add start_vote scoreboard players set #vote_timer vote_time 1200 && tellraw @a {"text":"Voting started! 2 minutes remaining.","color":"gold"}
-/addcommand add vote_tick execute if score #vote_timer vote_time matches 1.. run scoreboard players remove #vote_timer vote_time 1 && execute if score #vote_timer vote_time matches 0 run function:end_vote</code></pre>
+            <pre><code>/cmd add start_vote scoreboard players set #vote_timer vote_time 1200 && tellraw @a {"text":"Voting started! 2 minutes remaining.","color":"gold"}
+/cmd add vote_tick execute if score #vote_timer vote_time matches 1.. run scoreboard players remove #vote_timer vote_time 1 && execute if score #vote_timer vote_time matches 0 run function:end_vote</code></pre>
 
             <section class="popular-section">
                 <h2>Related Systems</h2>

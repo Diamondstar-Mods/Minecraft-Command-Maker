@@ -100,7 +100,7 @@ This is a complete, ready-to-use TPA (Teleport Request) system using custom synt
 
 ## Testing Checklist
 
-- [ ] Reload config: `/addcommand reload`
+- [ ] Reload config: `/cmd reload`
 - [ ] View syntaxes: `/syntax` (should show tpa, tpaccept, tpadeny)
 - [ ] Test TPA request: `/tpa <player>`
 - [ ] Check message appears to target player
@@ -139,7 +139,7 @@ Now you can track who requested using `/setcmdvariable` and `${tpa_request}`!
 ## Common Issues
 
 **Issue:** Message doesn't appear  
-**Solution:** Check syntax.json has correct pattern, run `/addcommand reload`
+**Solution:** Check syntax.json has correct pattern, run `/cmd reload`
 
 **Issue:** Player teleports to wrong location  
 **Solution:** Verify `@s` is used to teleport to the target player
