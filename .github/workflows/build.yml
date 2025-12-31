@@ -9,7 +9,7 @@ on: [pull_request, push]
 
 jobs:
   build:
-    runs-on: windows-11
+    runs-on: windows-latest
     steps:
       - name: checkout repository
         uses: actions/checkout@v4
