@@ -51,6 +51,27 @@
         body.dark .modal-content button:hover {
             background-color: #777;
         }
+        .edition-selector {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .edition-selector label {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .edition-selector select {
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            background-color: #fff;
+            color: #333;
+        }
+        body.dark .edition-selector select {
+            background-color: #333;
+            color: #fff;
+            border-color: #555;
+        }
     </style>
 </head>
 <body class="download-page">
@@ -119,7 +140,15 @@
                 document.getElementById('last-commit-iframe').src = 'last-commit.html?path=' + document.getElementById('docs-path').dataset.subpath;
             </script>
             <h1>Modrinth Versions for Command Maker</h1>
-            <p>Automatically loaded from the Modrinth API. Direct Downloads Only.</p>
+            <p>Choose between Server Edition (requires server mod) or Client Edition (works on any server). Automatically loaded from the Modrinth API. Direct Downloads Only.</p>
+
+            <div class="edition-selector">
+                <label for="edition-select">Select Edition:</label>
+                <select id="edition-select">
+                    <option value="3cwbW4UB" selected>Server Edition</option>
+                    <option value="HuGRbHKz">Client Edition</option>
+                </select>
+            </div>
 
             <div id="versions">Loading…</div>
 
@@ -295,11 +324,11 @@
         return `${bytes.toFixed(bytes < 10 && i > 0 ? 1 : 0)} ${units[i]}`;
         }
 
-        async function loadVersions() {
+        async function loadVersions(projectId = "3cwbW4UB") {
             const container = document.getElementById("versions");
 
             try {
-                const response = await fetch("https://api.modrinth.com/v2/project/3cwbW4UB/version");
+                const response = await fetch(`https://api.modrinth.com/v2/project/${projectId}/version`);
                 versions = await response.json();
                 totalPages = Math.max(1, Math.ceil(versions.length / itemsPerPage));
                 currentPage = 1;
@@ -434,6 +463,13 @@
                 await displayPage(currentPage);
                 updatePagination();
             }
+        });
+
+        document.getElementById("edition-select").addEventListener('change', async (event) => {
+            const selectedProjectId = event.target.value;
+            // Clear the downloads cache when switching editions
+            Object.keys(versionDownloadsCache).forEach(key => delete versionDownloadsCache[key]);
+            await loadVersions(selectedProjectId);
         });
 
         loadVersions();

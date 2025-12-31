@@ -40,6 +40,17 @@ Visit the [**wiki**](https://commandmakerwiki.lucasgeitgey.com) for more informa
 4. Make sure you’re running **Minecraft 26.1+** with **Fabric Loader**
 5. Restart the server and test with `/cmd` or other generated commands
 
+### Client-Only Version
+
+For single-player or when you want to use Command Maker on any server (even without server-side mod), there's a **client-only version**:
+
+1. Download the `CMDMaker-Fabric-client.jar` file from releases
+2. Place it in your client's `mods/` folder (not the server's)
+3. The mod will work on any server, sending commands directly from your client
+4. All features work the same as the server version
+
+**Note:** The client version requires Fabric API on the client side.
+
 ---
 
 ## Usage
@@ -94,11 +105,16 @@ You can build this mod yourself using the included Gradle wrapper. Here's how:
      ```bat
      gradlew.bat build
      ```
-
-3. **Find the compiled `.jar`**
-   - After building, the mod will be located in:
+   - Or use the provided build script:
+     ```bat
+     build.bat
      ```
-     build/libs/
+
+3. **Find the compiled `.jar` files**
+   - After building, the mods will be located in:
+     ```
+     server/build/libs/CMDMaker-Fabric-server.jar  # Server version
+     client/build/libs/CMDMaker-Fabric-client.jar  # Client-only version
      ```
 
 ### 🛠️ Troubleshooting

@@ -1,0 +1,424 @@
+package com.example;
+
+import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
+import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.context.CommandContext;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.text.Text;
+
+import java.nio.file.*;
+import java.util.*;
+import com.google.gson.*;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+
+public class CMDMakerClient implements ClientModInitializer {
+	public static final String MOD_ID = "cmdmakerclient";
+	public static final org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(MOD_ID);
+
+	private static final Path CONFIG_PATH = Paths.get("config", "CommandMaker", "aliases.json");
+	private static final Path TELEMETRY_CONFIG_PATH = Paths.get("config", "CommandMaker", "telementry.yml");
+	private static final Path FUNCTIONS_PATH = Paths.get("config", "CommandMaker", "Functions");
+	private static final Map<String, String> aliases = new HashMap<>();
+	// Store per-player custom variables: player UUID -> (varName -> value)
+	private static final Map<UUID, Map<String, String>> playerVariables = new HashMap<>();
+
+	@Override
+	public void onInitializeClient() {
+		ensureConfigExists();
+		loadAliases();
+		SyntaxManager.loadSyntaxDefinitions();
+		loadTelemetryConfig();
+		ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
+			registercmd(dispatcher);
+			registerAliases(dispatcher);
+			registerSetCmdVariable(dispatcher);
+			registerDeleteAliasMenu(dispatcher);
+			registerSyntaxCommand(dispatcher);
+			registerCmdCommand(dispatcher);
+		});
+
+		LOGGER.info("CMDMaker Client mod initialized!");
+	}
+
+	// Ensure config folder and config files exist, create with defaults if not
+	private void ensureConfigExists() {
+		try {
+			Path folder = CONFIG_PATH.getParent();
+			if (!Files.exists(folder)) {
+				Files.createDirectories(folder);
+			}
+			if (!Files.exists(FUNCTIONS_PATH)) {
+				Files.createDirectories(FUNCTIONS_PATH);
+				// Create example function file
+				Path exampleFunction = FUNCTIONS_PATH.resolve("mobsoff.mcfunction");
+				if (!Files.exists(exampleFunction)) {
+					List<String> functionLines = Arrays.asList(
+						"# Example function: Disable monster spawns",
+						"spawn rates monster 0",
+						"say Monster spawns disabled!"
+					);
+					Files.write(exampleFunction, functionLines, StandardOpenOption.CREATE_NEW);
+				}
+			}
+			if (!Files.exists(CONFIG_PATH)) {
+				List<String> lines = new ArrayList<>();
+				lines.add("# CommandMaker Aliases Config");
+				lines.add("# Each entry is an alias and its command target.");
+				lines.add("# You can use variables like ${player}, ${x}, ${y}, ${z} in the command.");
+				lines.add("# For functions, use \"function:name\" to reference config/CommandMaker/Functions/name.mcfunction");
+				lines.add("# Example:");
+				lines.add("#   teleport=tp ${player} 0 100 0");
+				lines.add("#   greet=say Hello, ${player}!");
+				lines.add("#   mobsoff=function:mobsoff");
+				lines.add("{");
+				lines.add("}");
+				Files.write(CONFIG_PATH, lines, StandardOpenOption.CREATE_NEW);
+			}
+			if (!Files.exists(TELEMETRY_CONFIG_PATH)) {
+				List<String> lines = new ArrayList<>();
+				lines.add("# CommandMaker Telemetry Config");
+				lines.add("# Set to true to allow anonymous telemetry (helps improve the mod)");
+				lines.add("# Set to false to disable");
+				lines.add("allow-telementry=true");
+				Files.write(TELEMETRY_CONFIG_PATH, lines, StandardOpenOption.CREATE_NEW);
+			}
+		} catch (Exception e) {
+			LOGGER.error("Failed to create config folder or files", e);
+		}
+	}
+
+	// Load telemetry config and send request if enabled
+	private void loadTelemetryConfig() {
+		try {
+			if (Files.exists(TELEMETRY_CONFIG_PATH)) {
+				List<String> lines = Files.readAllLines(TELEMETRY_CONFIG_PATH);
+				for (String line : lines) {
+					if (line.contains("allow-telementry=true")) {
+						sendTelemetryRequest();
+						break;
+					}
+				}
+			}
+		} catch (Exception e) {
+			LOGGER.error("Failed to load telemetry config", e);
+		}
+	}
+
+	// Send anonymous telemetry request
+	private void sendTelemetryRequest() {
+		try {
+			HttpClient client = HttpClient.newHttpClient();
+			HttpRequest request = HttpRequest.newBuilder()
+				.uri(java.net.URI.create("https://nekkycommandmaker.vercel.app/api/telemetry"))
+				.POST(HttpRequest.BodyPublishers.ofString("{\"mod\":\"CMDMakerClient\",\"version\":\"" + getClass().getPackage().getImplementationVersion() + "\"}"))
+				.header("Content-Type", "application/json")
+				.build();
+
+			client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+				.thenAccept(response -> {
+					if (response.statusCode() == 200) {
+						LOGGER.info("Telemetry sent successfully");
+					} else {
+						LOGGER.warn("Failed to send telemetry: {}", response.statusCode());
+					}
+				});
+		} catch (Exception e) {
+			LOGGER.error("Failed to send telemetry request", e);
+		}
+	}
+
+	// Load aliases from config file
+	private void loadAliases() {
+		try {
+			if (Files.exists(CONFIG_PATH)) {
+				String content = new String(Files.readAllBytes(CONFIG_PATH));
+				JsonElement element = JsonParser.parseString(content);
+				if (element.isJsonObject()) {
+					JsonObject jsonObject = element.getAsJsonObject();
+					for (String key : jsonObject.keySet()) {
+						JsonElement valueElement = jsonObject.get(key);
+						if (valueElement.isJsonPrimitive()) {
+							aliases.put(key, valueElement.getAsString());
+						}
+					}
+				}
+			}
+		} catch (Exception e) {
+			LOGGER.error("Failed to load aliases", e);
+		}
+	}
+
+	// Save aliases to config file
+	private void saveAliases() {
+		try {
+			JsonObject jsonObject = new JsonObject();
+			for (Map.Entry<String, String> entry : aliases.entrySet()) {
+				jsonObject.addProperty(entry.getKey(), entry.getValue());
+			}
+			String json = new GsonBuilder().setPrettyPrinting().create().toJson(jsonObject);
+			Files.write(CONFIG_PATH, json.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+		} catch (Exception e) {
+			LOGGER.error("Failed to save aliases", e);
+		}
+	}
+
+	// Register the /cmd command and its subcommands
+	private void registercmd(CommandDispatcher<FabricClientCommandSource> dispatcher) {
+		dispatcher.register(
+			ClientCommandManager.literal("cmd")
+				.then(
+					ClientCommandManager.literal("reload")
+						.executes(ctx -> {
+							loadAliases();
+							// Remove all old aliases from dispatcher before re-registering
+							for (String alias : new HashSet<>(aliases.keySet())) {
+								dispatcher.getRoot().getChildren().removeIf(node -> node.getName().equals(alias));
+							}
+							registerAliases(dispatcher);
+							ctx.getSource().sendFeedback(Text.literal("Aliases reloaded."));
+							return 1;
+						})
+				)
+				.then(
+					ClientCommandManager.literal("add")
+						.then(
+							ClientCommandManager.argument("alias", StringArgumentType.word())
+								.then(
+									ClientCommandManager.argument("target", StringArgumentType.greedyString())
+										.executes(ctx -> {
+											String alias = StringArgumentType.getString(ctx, "alias");
+											String target = StringArgumentType.getString(ctx, "target");
+											aliases.put(alias, target);
+											saveAliases();
+											registerAlias(dispatcher, alias, target);
+											ctx.getSource().sendFeedback(Text.literal("Alias /" + alias + " -> " + target + " added."));
+											return 1;
+										})
+								)
+						)
+				)
+				.then(
+					ClientCommandManager.literal("del")
+						.then(
+							ClientCommandManager.argument("alias", StringArgumentType.word())
+								.executes(ctx -> {
+									String alias = StringArgumentType.getString(ctx, "alias");
+									if (aliases.remove(alias) != null) {
+										saveAliases();
+										dispatcher.getRoot().getChildren().removeIf(node -> node.getName().equals(alias));
+										ctx.getSource().sendFeedback(Text.literal("Alias /" + alias + " removed."));
+									} else {
+										ctx.getSource().sendFeedback(Text.literal("Alias /" + alias + " not found."));
+									}
+									return 1;
+								})
+						)
+				)
+				.then(
+					ClientCommandManager.literal("function")
+						.then(
+							ClientCommandManager.argument("functionName", StringArgumentType.word())
+								.executes(ctx -> {
+									String functionName = StringArgumentType.getString(ctx, "functionName");
+									return executeFunction(functionName, ctx);
+								})
+						)
+				)
+		);
+	}
+
+	// Register all aliases as commands
+	private void registerAliases(CommandDispatcher<FabricClientCommandSource> dispatcher) {
+		for (Map.Entry<String, String> entry : aliases.entrySet()) {
+			registerAlias(dispatcher, entry.getKey(), entry.getValue());
+		}
+	}
+
+	// Register a single alias
+	private void registerAlias(CommandDispatcher<FabricClientCommandSource> dispatcher, String alias, String target) {
+		dispatcher.register(
+			ClientCommandManager.literal(alias)
+				.executes(ctx -> executeAlias(target, ctx))
+		);
+	}
+
+	// Execute an alias command
+	private int executeAlias(String target, CommandContext<FabricClientCommandSource> ctx) {
+		try {
+			MinecraftClient client = MinecraftClient.getInstance();
+			if (client.player == null) return 0;
+
+			// Handle function calls
+			if (target.startsWith("function:")) {
+				String functionName = target.substring(9);
+				return executeFunction(functionName, ctx);
+			}
+
+			// Replace variables
+			String command = replaceVariables(target, ctx);
+
+			// Send the command to the server
+			client.player.networkHandler.sendChatMessage("/" + command);
+			return 1;
+		} catch (Exception e) {
+			LOGGER.error("Failed to execute alias: {}", target, e);
+			ctx.getSource().sendError(Text.literal("Failed to execute alias: " + e.getMessage()));
+			return 0;
+		}
+	}
+
+	// Execute a function from the Functions folder
+	private int executeFunction(String functionName, CommandContext<FabricClientCommandSource> ctx) {
+		try {
+			Path functionFile = FUNCTIONS_PATH.resolve(functionName + ".mcfunction");
+			if (!Files.exists(functionFile)) {
+				ctx.getSource().sendError(Text.literal("Function '" + functionName + "' not found."));
+				return 0;
+			}
+
+			List<String> lines = Files.readAllLines(functionFile);
+			MinecraftClient client = MinecraftClient.getInstance();
+			if (client.player == null) return 0;
+
+			for (String line : lines) {
+				line = line.trim();
+				if (line.isEmpty() || line.startsWith("#")) continue;
+
+				// Replace variables
+				line = replaceVariables(line, ctx);
+
+				// Send each command to the server
+				client.player.networkHandler.sendChatMessage("/" + line);
+			}
+			return 1;
+		} catch (Exception e) {
+			LOGGER.error("Failed to execute function: {}", functionName, e);
+			ctx.getSource().sendError(Text.literal("Failed to execute function: " + e.getMessage()));
+			return 0;
+		}
+	}
+
+	// Replace variables in command string
+	private String replaceVariables(String command, CommandContext<FabricClientCommandSource> ctx) {
+		MinecraftClient client = MinecraftClient.getInstance();
+		if (client.player == null) return command;
+
+		String result = command;
+		UUID playerUUID = client.player.getUuid();
+
+		// Replace player variables
+		result = result.replace("${player}", client.player.getName().getString());
+		result = result.replace("${x}", String.valueOf((int) client.player.getX()));
+		result = result.replace("${y}", String.valueOf((int) client.player.getY()));
+		result = result.replace("${z}", String.valueOf((int) client.player.getZ()));
+
+		// Replace custom player variables
+		Map<String, String> playerVars = playerVariables.get(playerUUID);
+		if (playerVars != null) {
+			for (Map.Entry<String, String> entry : playerVars.entrySet()) {
+				result = result.replace("${" + entry.getKey() + "}", entry.getValue());
+			}
+		}
+
+		return result;
+	}
+
+	// Register /setcmdvar command
+	private void registerSetCmdVariable(CommandDispatcher<FabricClientCommandSource> dispatcher) {
+		dispatcher.register(
+			ClientCommandManager.literal("setcmdvar")
+				.then(
+					ClientCommandManager.argument("name", StringArgumentType.word())
+						.then(
+							ClientCommandManager.argument("value", StringArgumentType.greedyString())
+								.executes(ctx -> {
+									MinecraftClient client = MinecraftClient.getInstance();
+									if (client.player == null) return 0;
+
+									String name = StringArgumentType.getString(ctx, "name");
+									String value = StringArgumentType.getString(ctx, "value");
+									UUID playerUUID = client.player.getUuid();
+
+									playerVariables.computeIfAbsent(playerUUID, k -> new HashMap<>()).put(name, value);
+									ctx.getSource().sendFeedback(Text.literal("Variable $" + name + " set to: " + value));
+									return 1;
+								})
+						)
+				)
+		);
+	}
+
+	// Register /delaliasmenu command
+	private void registerDeleteAliasMenu(CommandDispatcher<FabricClientCommandSource> dispatcher) {
+		dispatcher.register(
+			ClientCommandManager.literal("delaliasmenu")
+				.executes(ctx -> {
+					// This would open a GUI for deleting aliases, but for client-side we'll just list them
+					StringBuilder sb = new StringBuilder("Available aliases to delete:\n");
+					for (String alias : aliases.keySet()) {
+						sb.append("- ").append(alias).append(" -> ").append(aliases.get(alias)).append("\n");
+					}
+					ctx.getSource().sendFeedback(Text.literal(sb.toString()));
+					return 1;
+				})
+		);
+	}
+
+	// Register /syntax command
+	private void registerSyntaxCommand(CommandDispatcher<FabricClientCommandSource> dispatcher) {
+		dispatcher.register(
+			ClientCommandManager.literal("syntax")
+				.then(
+					ClientCommandManager.literal("list")
+						.executes(ctx -> {
+							StringBuilder sb = new StringBuilder("Available syntaxes:\n");
+							for (Map.Entry<String, CommandSyntax> entry : SyntaxManager.getAllSyntaxes().entrySet()) {
+								sb.append("- ").append(entry.getKey()).append(": ").append(entry.getValue().getPattern()).append("\n");
+							}
+							ctx.getSource().sendFeedback(Text.literal(sb.toString()));
+							return 1;
+						})
+				)
+				.then(
+					ClientCommandManager.literal("help")
+						.then(
+							ClientCommandManager.argument("syntaxName", StringArgumentType.word())
+								.executes(ctx -> {
+									String syntaxName = StringArgumentType.getString(ctx, "syntaxName");
+									CommandSyntax syntax = SyntaxManager.getSyntax(syntaxName);
+									if (syntax != null) {
+										ctx.getSource().sendFeedback(Text.literal(syntaxName + ": " + syntax.getPattern() + "\n" + syntax.getDescription()));
+									} else {
+										ctx.getSource().sendFeedback(Text.literal("Syntax '" + syntaxName + "' not found."));
+									}
+									return 1;
+								})
+						)
+				)
+		);
+	}
+
+	// Register /cmdcommand command (for compatibility)
+	private void registerCmdCommand(CommandDispatcher<FabricClientCommandSource> dispatcher) {
+		dispatcher.register(
+			ClientCommandManager.literal("cmdcommand")
+				.then(
+					ClientCommandManager.argument("command", StringArgumentType.greedyString())
+						.executes(ctx -> {
+							String command = StringArgumentType.getString(ctx, "command");
+							MinecraftClient client = MinecraftClient.getInstance();
+							if (client.player != null) {
+								client.player.networkHandler.sendChatMessage("/" + command);
+							}
+							return 1;
+						})
+				)
+		);
+	}
+}
