@@ -24,14 +24,20 @@ public class CMDMakerClient implements ClientModInitializer {
 	private static final Path CONFIG_PATH = Paths.get("config", "CommandMaker", "aliases.json");
 	private static final Path TELEMETRY_CONFIG_PATH = Paths.get("config", "CommandMaker", "telementry.yml");
 	private static final Path FUNCTIONS_PATH = Paths.get("config", "CommandMaker", "Functions");
+	private static final Path SETTINGS_PATH = Paths.get("config", "CommandMaker", "settings", "opSettings.yml");
 	private static final Map<String, String> aliases = new HashMap<>();
 	// Store per-player custom variables: player UUID -> (varName -> value)
 	private static final Map<UUID, Map<String, String>> playerVariables = new HashMap<>();
+	// Operator settings
+	private static boolean onlyOperatorsCanRunAliases = false;
+	private static final Set<String> commandsRunByNonAdminsAllowOverride = new HashSet<>();
+	private static final Set<String> commandsRunInConsoleMode = new HashSet<>();
 
 	@Override
 	public void onInitializeClient() {
 		ensureConfigExists();
 		loadAliases();
+		loadSettings();
 		SyntaxManager.loadSyntaxDefinitions();
 		loadTelemetryConfig();
 		ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
@@ -49,9 +55,11 @@ public class CMDMakerClient implements ClientModInitializer {
 	// Ensure config folder and config files exist, create with defaults if not
 	private void ensureConfigExists() {
 		try {
+			LOGGER.info("Ensuring config files exist...");
 			Path folder = CONFIG_PATH.getParent();
 			if (!Files.exists(folder)) {
 				Files.createDirectories(folder);
+				LOGGER.info("Created config directory: {}", folder);
 			}
 			if (!Files.exists(FUNCTIONS_PATH)) {
 				Files.createDirectories(FUNCTIONS_PATH);
@@ -79,6 +87,7 @@ public class CMDMakerClient implements ClientModInitializer {
 				lines.add("{");
 				lines.add("}");
 				Files.write(CONFIG_PATH, lines, StandardOpenOption.CREATE_NEW);
+				LOGGER.info("Created aliases config file: {}", CONFIG_PATH);
 			}
 			if (!Files.exists(TELEMETRY_CONFIG_PATH)) {
 				List<String> lines = new ArrayList<>();
@@ -87,6 +96,42 @@ public class CMDMakerClient implements ClientModInitializer {
 				lines.add("# Set to false to disable");
 				lines.add("allow-telementry=true");
 				Files.write(TELEMETRY_CONFIG_PATH, lines, StandardOpenOption.CREATE_NEW);
+				LOGGER.info("Created telemetry config file: {}", TELEMETRY_CONFIG_PATH);
+			}
+			if (!Files.exists(SETTINGS_PATH)) {
+				LOGGER.info("Settings file doesn't exist, creating: {}", SETTINGS_PATH);
+				Path settingsFolder = SETTINGS_PATH.getParent();
+				if (!Files.exists(settingsFolder)) {
+					Files.createDirectories(settingsFolder);
+					LOGGER.info("Created settings directory: {}", settingsFolder);
+				}
+				List<String> lines = new ArrayList<>();
+				lines.add("# CommandMaker Operator Settings");
+				lines.add("# This file controls operator permissions for alias execution");
+				lines.add("#");
+				lines.add("# Set to true to restrict alias execution to operators only (permission level 2+)");
+				lines.add("# Set to false to allow all players to run aliases (default)");
+				lines.add("onlyOperatorsCanRunAliases= false");
+				lines.add("");
+				lines.add("# Commands that non-admin players can run even when onlyOperatorsCanRunAliases=true");
+				lines.add("# These aliases will be allowed for regular players as exceptions");
+				lines.add("commandsRunByNonAdminsAllowOverride:");
+				lines.add("#\thelp      # Allow non-admins to use help commands");
+				lines.add("#\ttp        # Allow non-admins to use teleport commands");
+				lines.add("#\thome      # Allow non-admins to use home commands");
+				lines.add("#\tspawn     # Allow non-admins to use spawn commands");
+				lines.add("");
+				lines.add("# Commands that should run in console/server mode instead of player mode");
+				lines.add("# These aliases will execute as the server rather than the player who ran them");
+				lines.add("commandsRunInConsoleMode:");
+				lines.add("#\tban       # Ban commands should run as console");
+				lines.add("#\tkick      # Kick commands should run as console");
+				lines.add("#\top        # OP commands should run as console");
+				lines.add("#\tdeop      # DEOP commands should run as console");
+				Files.write(SETTINGS_PATH, lines, StandardOpenOption.CREATE_NEW);
+				LOGGER.info("Created settings file: {}", SETTINGS_PATH);
+			} else {
+				LOGGER.info("Settings file already exists: {}", SETTINGS_PATH);
 			}
 		} catch (Exception e) {
 			LOGGER.error("Failed to create config folder or files", e);
@@ -107,6 +152,57 @@ public class CMDMakerClient implements ClientModInitializer {
 			}
 		} catch (Exception e) {
 			LOGGER.error("Failed to load telemetry config", e);
+		}
+	}
+
+	// Load operator settings
+	private void loadSettings() {
+		try {
+			if (Files.exists(SETTINGS_PATH)) {
+				List<String> lines = Files.readAllLines(SETTINGS_PATH);
+				String currentSection = null;
+				
+				for (String line : lines) {
+					String trimmed = line.trim();
+					
+					// Skip empty lines and comments
+					if (trimmed.isEmpty() || trimmed.startsWith("#")) {
+						continue;
+					}
+					
+					// Check for main settings
+					if (trimmed.startsWith("onlyOperatorsCanRunAliases=")) {
+						String value = trimmed.substring("onlyOperatorsCanRunAliases=".length()).trim();
+						onlyOperatorsCanRunAliases = "true".equalsIgnoreCase(value);
+						continue;
+					}
+					
+					// Check for section headers
+					if (trimmed.equals("commandsRunByNonAdminsAllowOverride:")) {
+						currentSection = "allowOverride";
+						continue;
+					}
+					if (trimmed.equals("commandsRunInConsoleMode:")) {
+						currentSection = "consoleMode";
+						continue;
+					}
+					
+					// Process indented lines based on current section
+					if (line.startsWith("\t") && currentSection != null) {
+						String command = trimmed;
+						if ("allowOverride".equals(currentSection)) {
+							commandsRunByNonAdminsAllowOverride.add(command);
+						} else if ("consoleMode".equals(currentSection)) {
+							commandsRunInConsoleMode.add(command);
+						}
+					}
+				}
+				
+				LOGGER.info("Loaded operator settings: onlyOperatorsCanRunAliases={}, allowOverrideCommands={}, consoleModeCommands={}", 
+					onlyOperatorsCanRunAliases, commandsRunByNonAdminsAllowOverride.size(), commandsRunInConsoleMode.size());
+			}
+		} catch (Exception e) {
+			LOGGER.error("Failed to load operator settings", e);
 		}
 	}
 
@@ -192,6 +288,12 @@ public class CMDMakerClient implements ClientModInitializer {
 								.then(
 									ClientCommandManager.argument("target", StringArgumentType.greedyString())
 										.executes(ctx -> {
+											// Check if only operators can manage aliases
+											if (onlyOperatorsCanRunAliases) {
+												ctx.getSource().sendError(Text.literal("Only operators can add aliases. This setting is controlled server-side."));
+												return 0;
+											}
+											
 											String alias = StringArgumentType.getString(ctx, "alias");
 											String target = StringArgumentType.getString(ctx, "target");
 											aliases.put(alias, target);
@@ -208,6 +310,12 @@ public class CMDMakerClient implements ClientModInitializer {
 						.then(
 							ClientCommandManager.argument("alias", StringArgumentType.word())
 								.executes(ctx -> {
+									// Check if only operators can manage aliases
+									if (onlyOperatorsCanRunAliases) {
+										ctx.getSource().sendError(Text.literal("Only operators can delete aliases. This setting is controlled server-side."));
+										return 0;
+									}
+									
 									String alias = StringArgumentType.getString(ctx, "alias");
 									if (aliases.remove(alias) != null) {
 										saveAliases();
