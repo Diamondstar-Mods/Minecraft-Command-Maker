@@ -393,8 +393,13 @@ public class CMDMakerClient implements ClientModInitializer {
 			// Replace variables
 			String command = replaceVariables(target, ctx);
 
+			// Ensure the command starts with /
+			if (!command.startsWith("/")) {
+				command = "/" + command;
+			}
+
 			// Send the command to the server
-			client.player.networkHandler.sendChatMessage("/" + command);
+			client.player.networkHandler.sendChatMessage(command);
 			return 1;
 		} catch (Exception e) {
 			LOGGER.error("Failed to execute alias: {}", target, e);

@@ -40,6 +40,7 @@ public class ExampleMod implements ModInitializer {
 		loadTelemetryConfig();
 		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
 			registercmd(dispatcher);
+			registerAddCommand(dispatcher);
 			registerAliases(dispatcher);
 			registerSetCmdVariable(dispatcher);
 			registerDeleteAliasMenu(dispatcher);
@@ -219,6 +220,55 @@ public class ExampleMod implements ModInitializer {
 							}
 							return 1;
 						})
+				)
+		);
+	}
+
+	// Register /addcommand command
+	private void registerAddCommand(CommandDispatcher<ServerCommandSource> dispatcher) {
+		dispatcher.register(
+			net.minecraft.server.command.CommandManager.literal("addcommand")
+				.then(net.minecraft.server.command.CommandManager.literal("add")
+					.then(net.minecraft.server.command.CommandManager.argument("alias", StringArgumentType.word())
+						.then(net.minecraft.server.command.CommandManager.argument("command", StringArgumentType.greedyString())
+							.executes(ctx -> {
+								String alias = StringArgumentType.getString(ctx, "alias");
+								String command = StringArgumentType.getString(ctx, "command");
+								aliases.put(alias, command);
+								saveAliases();
+								registerAlias(dispatcher, alias, command);
+								ctx.getSource().sendFeedback(() -> net.minecraft.text.Text.literal("Alias /" + alias + " -> " + command + " added."), false);
+								return 1;
+							})
+						)
+					)
+				)
+				.then(net.minecraft.server.command.CommandManager.literal("del")
+					.then(net.minecraft.server.command.CommandManager.argument("alias", StringArgumentType.word())
+						.executes(ctx -> {
+							String alias = StringArgumentType.getString(ctx, "alias");
+							if (aliases.remove(alias) != null) {
+								saveAliases();
+								dispatcher.getRoot().getChildren().removeIf(node -> node.getName().equals(alias));
+								ctx.getSource().sendFeedback(() -> net.minecraft.text.Text.literal("Alias /" + alias + " removed."), false);
+							} else {
+								ctx.getSource().sendFeedback(() -> net.minecraft.text.Text.literal("Alias /" + alias + " not found."), false);
+							}
+							return 1;
+						})
+					)
+				)
+				.then(net.minecraft.server.command.CommandManager.literal("reload")
+					.executes(ctx -> {
+						loadAliases();
+						// Remove all old aliases from dispatcher before re-registering
+						for (String alias : new HashSet<>(aliases.keySet())) {
+							dispatcher.getRoot().getChildren().removeIf(node -> node.getName().equals(alias));
+						}
+						registerAliases(dispatcher);
+						ctx.getSource().sendFeedback(() -> net.minecraft.text.Text.literal("Aliases reloaded."), false);
+						return 1;
+					})
 				)
 		);
 	}

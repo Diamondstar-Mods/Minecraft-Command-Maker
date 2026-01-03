@@ -1,10 +1,4 @@
-# CommandMaker Aliases Config
-# Each entry is an alias and its command target.
-# You can use variables like ${player}, ${x}, ${y}, ${z} in the command.
-# For functions, use "function:name" to reference config/CommandMaker/Functions/name.mcfunction
-# Example:
-#   teleport=tp ${player} 0 100 0
-#   greet=say Hello, ${player}!
-#   mobsoff=function:mobsoff
 {
+  "sayhello": "say poopie",
+  "hello": "poop"
 }

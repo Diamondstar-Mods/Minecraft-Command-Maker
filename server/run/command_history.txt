@@ -12,3 +12,14 @@
 /cmd list
 /cmd add testcmd say Hello World
 /cmd list
+/cmd wiki
+/cmd donate
+/cmd list
+/cmd gui
+/deletealiases-gui
+/addcommand add 'deletealiases-gui
+/addcommand add deletealiases-gui
+/cmd add deletealiases-gui cmd gui
+/deletealias-gui
+/deletealiases-gui
+/deletealias

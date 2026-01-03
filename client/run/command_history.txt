@@ -2,3 +2,12 @@
 /reg hihi hihi
 /addcommand add hello poop
 /hello
+/addcommand
+/addcommandt
+/addcommand
+/cmd add hello poop
+/poop
+/hello
+/poop
+/cmd add sayhello say poopie
+/sayhello

@@ -6,4 +6,4 @@
 #   teleport=tp ${player} 0 100 0
 #   greet=say Hello, ${player}!
 #   mobsoff=function:mobsoff
-{"mobsoff":"function:mobsoff","testcmd":"say Hello World"}
+{"mobsoff":"function:mobsoff","deletealiases-gui":"cmd gui","testcmd":"say Hello World"}
