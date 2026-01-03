@@ -13,3 +13,9 @@
 /sayhello
 /cmd list
 /sayhello
+/cmd add poop summon sheep
+/poop
+/cmd add poop summon sheep
+/poop
+/poopt
+/poop

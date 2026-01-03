@@ -12,6 +12,9 @@ import net.minecraft.text.Text;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.Vec2f;
+import net.minecraft.util.math.Vec3d;
+import com.mojang.brigadier.ParseResults;
 
 import java.nio.file.*;
 import java.util.*;
@@ -403,17 +406,12 @@ public class CMDMakerClient implements ClientModInitializer {
 			}
 
 			// Execute the command on the server
-			MinecraftServer server = client.getServer();
-			if (server != null) {
-				ServerPlayerEntity player = (ServerPlayerEntity) server.getPlayerManager().getPlayer(client.player.getUuid());
-				if (player != null) {
-					ServerCommandSource source = new ServerCommandSource(player, player.getPos(), player.getRotation(), server.getWorld(player.getWorld().getRegistryKey()), 4, player.getName().getString(), player.getDisplayName(), server, player);
-					server.getCommandManager().execute(source, command);
+			String finalCommand = command;
+			client.execute(() -> {
+				if (client.player != null) {
+					client.player.networkHandler.sendChatMessage(finalCommand);
 				}
-			} else {
-				// Fallback if no server
-				client.player.networkHandler.sendChatMessage(command);
-			}
+			});
 			return 1;
 		} catch (Exception e) {
 			LOGGER.error("Failed to execute alias: {}", target, e);
