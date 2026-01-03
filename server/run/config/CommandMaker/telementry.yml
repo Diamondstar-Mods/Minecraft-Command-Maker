@@ -1,0 +1,4 @@
+# CommandMaker Telemetry Config
+# Set to true to allow anonymous telemetry (helps improve the mod)
+# Set to false to disable
+allow-telementry=true
