@@ -9,6 +9,9 @@ import com.mojang.brigadier.context.CommandContext;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.server.MinecraftServer;
 
 import java.nio.file.*;
 import java.util.*;
@@ -42,6 +45,7 @@ public class CMDMakerClient implements ClientModInitializer {
 		loadTelemetryConfig();
 		ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
 			registercmd(dispatcher);
+			registerAddCommand(dispatcher);
 			registerAliases(dispatcher);
 			registerSetCmdVariable(dispatcher);
 			registerDeleteAliasMenu(dispatcher);
@@ -398,8 +402,18 @@ public class CMDMakerClient implements ClientModInitializer {
 				command = "/" + command;
 			}
 
-			// Send the command to the server
-			client.player.networkHandler.sendChatMessage(command);
+			// Execute the command on the server
+			MinecraftServer server = client.getServer();
+			if (server != null) {
+				ServerPlayerEntity player = (ServerPlayerEntity) server.getPlayerManager().getPlayer(client.player.getUuid());
+				if (player != null) {
+					ServerCommandSource source = new ServerCommandSource(player, player.getPos(), player.getRotation(), server.getWorld(player.getWorld().getRegistryKey()), 4, player.getName().getString(), player.getDisplayName(), server, player);
+					server.getCommandManager().execute(source, command);
+				}
+			} else {
+				// Fallback if no server
+				client.player.networkHandler.sendChatMessage(command);
+			}
 			return 1;
 		} catch (Exception e) {
 			LOGGER.error("Failed to execute alias: {}", target, e);
@@ -553,6 +567,55 @@ public class CMDMakerClient implements ClientModInitializer {
 							}
 							return 1;
 						})
+				)
+		);
+	}
+
+	// Register /addcommand command
+	private void registerAddCommand(CommandDispatcher<FabricClientCommandSource> dispatcher) {
+		dispatcher.register(
+			ClientCommandManager.literal("addcommand")
+				.then(ClientCommandManager.literal("add")
+					.then(ClientCommandManager.argument("alias", StringArgumentType.word())
+						.then(ClientCommandManager.argument("command", StringArgumentType.greedyString())
+							.executes(ctx -> {
+								String alias = StringArgumentType.getString(ctx, "alias");
+								String command = StringArgumentType.getString(ctx, "command");
+								aliases.put(alias, command);
+								saveAliases();
+								registerAlias(dispatcher, alias, command);
+								ctx.getSource().sendFeedback(Text.literal("Alias /" + alias + " -> " + command + " added."));
+								return 1;
+							})
+						)
+					)
+				)
+				.then(ClientCommandManager.literal("del")
+					.then(ClientCommandManager.argument("alias", StringArgumentType.word())
+						.executes(ctx -> {
+							String alias = StringArgumentType.getString(ctx, "alias");
+							if (aliases.remove(alias) != null) {
+								saveAliases();
+								dispatcher.getRoot().getChildren().removeIf(node -> node.getName().equals(alias));
+								ctx.getSource().sendFeedback(Text.literal("Alias /" + alias + " removed."));
+							} else {
+								ctx.getSource().sendFeedback(Text.literal("Alias /" + alias + " not found."));
+							}
+							return 1;
+						})
+					)
+				)
+				.then(ClientCommandManager.literal("reload")
+					.executes(ctx -> {
+						loadAliases();
+						// Remove all old aliases from dispatcher before re-registering
+						for (String alias : new HashSet<>(aliases.keySet())) {
+							dispatcher.getRoot().getChildren().removeIf(node -> node.getName().equals(alias));
+						}
+						registerAliases(dispatcher);
+						ctx.getSource().sendFeedback(Text.literal("Aliases reloaded."));
+						return 1;
+					})
 				)
 		);
 	}

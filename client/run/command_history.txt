@@ -11,3 +11,5 @@
 /poop
 /cmd add sayhello say poopie
 /sayhello
+/cmd list
+/sayhello
