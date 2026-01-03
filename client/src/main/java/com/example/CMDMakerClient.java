@@ -338,6 +338,28 @@ public class CMDMakerClient implements ClientModInitializer {
 								})
 						)
 				)
+				.then(
+					ClientCommandManager.literal("list")
+						.executes(ctx -> {
+							FabricClientCommandSource source = ctx.getSource();
+							source.sendFeedback(Text.literal("Aliases:"));
+							for (Map.Entry<String, String> entry : aliases.entrySet()) {
+								source.sendFeedback(Text.literal("  /" + entry.getKey() + " -> " + entry.getValue()));
+							}
+							source.sendFeedback(Text.literal("Functions:"));
+							try {
+								Files.list(FUNCTIONS_PATH)
+									.filter(path -> path.toString().endsWith(".mcfunction"))
+									.forEach(path -> {
+										String name = path.getFileName().toString().replace(".mcfunction", "");
+										source.sendFeedback(Text.literal("  " + name));
+									});
+							} catch (Exception e) {
+								source.sendFeedback(Text.literal("Error listing functions: " + e.getMessage()));
+							}
+							return 1;
+						})
+				)
 		);
 	}
 

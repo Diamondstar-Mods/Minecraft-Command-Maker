@@ -1,2 +1,14 @@
 /cmd gui
 /cmd donate
+/cmd function
+/cmd list
+/deletealias
+/deletealias-gui
+/deletealias
+/function:mobsoff
+/cmd function function:mobsoff
+/cmd function mobsoff
+/mobsoff
+/cmd list
+/cmd add testcmd say Hello World
+/cmd list

@@ -1,0 +1,4 @@
+/cmd list
+/reg hihi hihi
+/addcommand add hello poop
+/hello

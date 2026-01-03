@@ -310,6 +310,28 @@ public class ExampleMod implements ModInitializer {
 								})
 						)
 				)
+				.then(
+					net.minecraft.server.command.CommandManager.literal("list")
+						.executes(ctx -> {
+							ServerCommandSource source = ctx.getSource();
+							source.sendFeedback(() -> Text.literal("Aliases:"), false);
+							for (Map.Entry<String, String> entry : aliases.entrySet()) {
+								source.sendFeedback(() -> Text.literal("  /" + entry.getKey() + " -> " + entry.getValue()), false);
+							}
+							source.sendFeedback(() -> Text.literal("Functions:"), false);
+							try {
+								Files.list(FUNCTIONS_PATH)
+									.filter(path -> path.toString().endsWith(".mcfunction"))
+									.forEach(path -> {
+										String name = path.getFileName().toString().replace(".mcfunction", "");
+										source.sendFeedback(() -> Text.literal("  " + name), false);
+									});
+							} catch (Exception e) {
+								source.sendFeedback(() -> Text.literal("Error listing functions: " + e.getMessage()), false);
+							}
+							return 1;
+						})
+				)
 		);
 	}
 
