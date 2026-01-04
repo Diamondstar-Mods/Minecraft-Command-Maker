@@ -1,25 +1,50 @@
-/cmd gui
-/cmd donate
-/cmd function
-/cmd list
-/deletealias
-/deletealias-gui
-/deletealias
-/function:mobsoff
-/cmd function function:mobsoff
-/cmd function mobsoff
-/mobsoff
-/cmd list
-/cmd add testcmd say Hello World
-/cmd list
-/cmd wiki
-/cmd donate
-/cmd list
-/cmd gui
-/deletealiases-gui
-/addcommand add 'deletealiases-gui
-/addcommand add deletealiases-gui
-/cmd add deletealiases-gui cmd gui
-/deletealias-gui
-/deletealiases-gui
-/deletealias
+/scoreboard objectives add party dummy
+/danceparty
+/cmd reload
+/danceparty
+/cmd reload
+/danceparty
+/cmd reload
+/danceparty
+/cmd reload
+/danceparty
+/tntrain
+/cmd reload
+/tntrain
+/cr
+/craycray
+/cmd reload
+/craycray
+/craycrayt
+/advancement grant @s everything
+/advancement revoke @s everything
+/advancement grant @s everything
+/advancement revoke @s everything
+/advancement grant @s everything
+/advancement revoke @s everything
+/craycray
+/playsound minecraft:ui.toast.challenge_complete
+/playsound minecraft:ui.toast.challenge_completet
+/playsound minecraft:ui.toast.challenge_complete
+/playsound minecraft:ui.toast.challenge_completet
+/playsound minecraft:ui.toast.challenge_complete
+/cmd reload
+/sound
+/cmd reload
+/tntrain
+/cmd reload
+/extratntrain
+/cmd reload
+/fireworkshow
+/give @s minecraft:firework_rocket[]
+/extratntrain
+/nuke
+/addcommand add nuke extratntrain
+/nuke
+/nuket
+/nuke
+/cmd reload
+/nuke
+/fireworkshow
+/gamemode survival
+/fireworkshow

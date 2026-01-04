@@ -243,7 +243,7 @@
         async function loadVersions() {
             const container = document.getElementById("versions");
             try {
-                const response = await fetch('https://api.github.com/repos/Diamondstar-Mods/Minecraft-Command-Maker/contents/docs/cdn');
+                const response = await fetch('https://api.github.com/repos/Diamondstar-Mods/Minecraft-Command-Maker/contents/docs/cdn/versions/');
                 const data = await response.json();
                 versions = data.filter(item => item.type === 'dir').map(item => ({ name: item.name, path: item.path }));
                 versions.sort((a, b) => b.name.localeCompare(a.name, undefined, { numeric: true, sensitivity: 'base' })); // Sort descending
@@ -279,7 +279,7 @@
                         </select>
                     </div>
                     <div class="download-group">
-                        <a id="download-link-${v.name}" class="download-btn" href="cdn/${v.name}/client.jar" download>Download Client Edition</a>
+                        <a id="download-link-${v.name}" class="download-btn" href="cdn/versions/${v.name}/client.jar" download>Download Client Edition</a>
                     </div>
                 `;
 
@@ -289,7 +289,7 @@
                 document.getElementById(`edition-${v.name}`).addEventListener('change', (event) => {
                     const selectedEdition = event.target.value;
                     const link = document.getElementById(`download-link-${v.name}`);
-                    link.href = `cdn/${v.name}/${selectedEdition}.jar`;
+                    link.href = `cdn/versions/${v.name}/${selectedEdition}.jar`;
                     link.textContent = `Download ${selectedEdition.charAt(0).toUpperCase() + selectedEdition.slice(1)} Edition`;
                 });
             }
