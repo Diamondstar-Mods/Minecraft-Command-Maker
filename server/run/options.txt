@@ -30,7 +30,7 @@ screenEffectScale:1.0
 soundDevice:""
 autoJump:false
 rotateWithMinecart:false
-operatorItemsTab:false
+operatorItemsTab:true
 autoSuggestions:true
 chatColors:true
 chatLinks:true
@@ -51,7 +51,7 @@ sprintWindow:7
 darkMojangStudiosBackground:false
 hideLightningFlashes:false
 hideSplashTexts:false
-mouseSensitivity:0.5
+mouseSensitivity:0.40492957746478875
 damageTiltStrength:1.0
 highContrast:false
 highContrastBlockOutline:false
