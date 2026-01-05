@@ -1,0 +1,57 @@
+[15:59:57] [main/INFO] (FabricLoader/GameProvider) Loading Minecraft 1.21.9 with Fabric Loader 0.17.0
+[15:59:58] [ForkJoinPool-1-worker-1/WARN] (FabricLoader/Metadata) Mod nekkycommandmaker uses the version latest which isn't compatible with Loader's extended semantic version format (Could not parse version number component 'latest'!), SemVer is recommended for reliably evaluating dependencies and prioritizing newer version
+[15:59:58] [main/INFO] (FabricLoader) Loading 51 mods:
+	- fabric-api 0.134.0+1.21.9
+	- fabric-api-base 1.0.0+14b92d897d
+	- fabric-api-lookup-api-v1 1.6.106+d17682157d
+	- fabric-biome-api-v1 16.1.0+c2417d4f7d
+	- fabric-block-api-v1 1.1.5+d17682157d
+	- fabric-block-view-api-v2 1.0.34+e4fd1b927d
+	- fabric-client-gametest-api-v1 4.2.13+14b92d897d
+	- fabric-command-api-v2 2.3.7+328a75ba7d
+	- fabric-content-registries-v0 10.2.3+b6a242647d
+	- fabric-convention-tags-v1 2.1.47+7f945d5b7d
+	- fabric-convention-tags-v2 2.15.12+3154c1c87d
+	- fabric-crash-report-info-v1 0.3.18+33df5e6e7d
+	- fabric-data-attachment-api-v1 1.8.28+9bce411b7d
+	- fabric-data-generation-api-v1 23.2.22+d8b85ef17d
+	- fabric-dimensions-v1 4.0.22+38b9cc197d
+	- fabric-entity-events-v1 2.1.12+14b92d897d
+	- fabric-events-interaction-v0 4.0.35+5ba217127d
+	- fabric-game-rule-api-v1 1.1.1+e47eaae57d
+	- fabric-gametest-api-v1 3.1.18+33df5e6e7d
+	- fabric-item-api-v1 11.5.8+9bce411b7d
+	- fabric-item-group-api-v1 4.2.24+86b3ae577d
+	- fabric-key-binding-api-v1 1.1.1+b3ba9c487d
+	- fabric-lifecycle-events-v1 2.6.9+33df5e6e7d
+	- fabric-loot-api-v2 3.0.64+3f89f5a57d
+	- fabric-loot-api-v3 2.0.11+d17682157d
+	- fabric-message-api-v1 6.1.7+3154c1c87d
+	- fabric-model-loading-api-v1 6.0.0+3ffd6ef07d
+	- fabric-networking-api-v1 5.0.13+d269470c7d
+	- fabric-object-builder-api-v1 21.1.24+9bce411b7d
+	- fabric-particles-v1 4.2.2+a0ee59a47d
+	- fabric-recipe-api-v1 8.1.26+d17682157d
+	- fabric-registry-sync-v0 6.1.41+679c8c5c7d
+	- fabric-renderer-api-v1 7.1.1+328a75ba7d
+	- fabric-renderer-indigo 4.0.19+328a75ba7d
+	- fabric-rendering-fluids-v1 3.1.38+86b3ae577d
+	- fabric-rendering-v1 16.0.1+328a75ba7d
+	- fabric-resource-conditions-api-v1 5.0.28+33df5e6e7d
+	- fabric-resource-loader-v0 3.2.2+3388a3b27d
+	- fabric-resource-loader-v1 1.0.2+225bca407d
+	- fabric-screen-api-v1 3.1.0+9c82a7987d
+	- fabric-screen-handler-api-v1 1.3.150+d17682157d
+	- fabric-serialization-api-v1 1.0.0+d857c9767d
+	- fabric-sound-api-v1 1.0.45+328a75ba7d
+	- fabric-tag-api-v1 1.2.10+2fa446b27d
+	- fabric-transfer-api-v1 6.0.15+79ec2c127d
+	- fabric-transitive-access-wideners-v1 6.5.3+41eb43437d
+	- fabricloader 0.17.0
+	- java 21
+	- minecraft 1.21.9
+	- mixinextras 0.5.0
+	- nekkycommandmaker latest
+[15:59:58] [main/INFO] (FabricLoader/Mixin) SpongePowered MIXIN Subsystem Version=0.8.7 Source=file:/C:/Users/adam/.gradle/caches/modules-2/files-2.1/net.fabricmc/sponge-mixin/0.16.3+mixin.0.8.7/3e535042688d1265447e52ad86950b7d9678a5fa/sponge-mixin-0.16.3+mixin.0.8.7.jar Service=Knot/Fabric Env=CLIENT
+[15:59:58] [main/INFO] (FabricLoader/Mixin) Loaded Fabric development mappings for mixin remapper!
+[15:59:58] [main/INFO] (FabricLoader/Mixin) Compatibility level set to JAVA_21

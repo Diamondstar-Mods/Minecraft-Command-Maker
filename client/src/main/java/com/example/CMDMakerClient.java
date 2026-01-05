@@ -367,6 +367,32 @@ public class CMDMakerClient implements ClientModInitializer {
 							return 1;
 						})
 				)
+				.then(ClientCommandManager.literal("downloadfunction")
+					.then(ClientCommandManager.argument("function", StringArgumentType.word())
+						.executes(ctx -> {
+							String function = StringArgumentType.getString(ctx, "function");
+							new Thread(() -> {
+								try {
+									HttpClient client = HttpClient.newHttpClient();
+									HttpRequest request = HttpRequest.newBuilder()
+										.uri(java.net.URI.create("https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/functions/" + function + ".mcfunction"))
+										.build();
+									HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+									if (response.statusCode() == 200) {
+										Path filePath = FUNCTIONS_PATH.resolve(function + ".mcfunction");
+										Files.write(filePath, response.body().getBytes(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+										ctx.getSource().sendFeedback(Text.literal("Downloaded function '" + function + "' successfully."));
+									} else {
+										ctx.getSource().sendFeedback(Text.literal("Failed to download function '" + function + "': HTTP " + response.statusCode()));
+									}
+								} catch (Exception e) {
+									ctx.getSource().sendFeedback(Text.literal("Failed to download function '" + function + "': " + e.getMessage()));
+								}
+							}).start();
+							return 1;
+						})
+					)
+				)
 		);
 	}
 
