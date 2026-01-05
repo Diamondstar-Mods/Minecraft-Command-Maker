@@ -743,7 +743,7 @@ public class ExampleMod implements ModInitializer {
 								try {
 									HttpClient client = HttpClient.newHttpClient();
 									HttpRequest request = HttpRequest.newBuilder()
-										.uri(java.net.URI.create("https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/functions/" + function + ".mcfunction"))
+										.uri(java.net.URI.create("https://commandmakerwiki.lucasgeitgey.com/cdn/functions/" + function + ".mcfunction"))
 										.build();
 									HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 									if (response.statusCode() == 200) {

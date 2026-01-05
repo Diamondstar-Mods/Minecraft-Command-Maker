@@ -1,6 +1,3 @@
-/danceparty
-/cmd reload
-/danceparty
 /cmd reload
 /danceparty
 /cmd reload
@@ -48,3 +45,6 @@
 /gamemode creative
 /cmd downloadfunction example
 /cmd downloadfunction example.mcfunction
+/cmd downloadfunction example
+/example
+/cmd downloadfunction copilot
