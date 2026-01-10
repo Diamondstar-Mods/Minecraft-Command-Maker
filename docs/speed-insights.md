@@ -12,23 +12,23 @@ To view instructions on using the Vercel Speed Insights in your project for your
   <CodeBlock>
   <Code tab="pnpm">
   `bash
-  pnpm i vercel
-  `
+pnpm i vercel
+`
   </Code>
   <Code tab="yarn">
   `bash
-  yarn i vercel
-  `
+yarn i vercel
+`
   </Code>
   <Code tab="npm">
   `bash
-  npm i vercel
-  `
+npm i vercel
+`
   </Code>
   <Code tab="bun">
   `bash
-  bun i vercel
-  `
+bun i vercel
+`
   </Code>
   </CodeBlock>
 
@@ -70,14 +70,14 @@ To view instructions on using the Vercel Speed Insights in your project for your
   > **💡 Note:** When using the HTML implementation, there is no need to install the
   > `@vercel/speed-insights` package.
 
-- > For [ >   'nextjs',
-  >   'nextjs-app',
-  >   'remix',
-  >   'create-react-app',
-  >   'nuxt',
-  >   'vue',
-  >   'astro',
-  >   ]:
+- > For [ > 'nextjs',
+  > > 'nextjs-app',
+  > > 'remix',
+  > > 'create-react-app',
+  > > 'nuxt',
+  > > 'vue',
+  > > 'astro',
+  > > ]:
 
   ### Add the `SpeedInsights` component to your app
 

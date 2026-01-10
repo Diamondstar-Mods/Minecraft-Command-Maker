@@ -28,9 +28,9 @@ This is a complete, ready-to-use TPA (Teleport Request) system using custom synt
 ```json
 {
   "tpa": "tellraw ${tpa_player} {\"text\":\"${player} wants to teleport to you! Type /tpaccept ${player} to accept or /tpadeny ${player} to deny.\",\"color\":\"yellow\"}",
-  
+
   "tpaccept": "execute as ${tpaccept_player} at @s run tp ${player} @s",
-  
+
   "tpadeny": "tellraw ${tpadeny_player} {\"text\":\"Teleport request from ${player} denied.\",\"color\":\"red\"}"
 }
 ```
@@ -38,21 +38,27 @@ This is a complete, ready-to-use TPA (Teleport Request) system using custom synt
 ## Usage in-Game
 
 ### Player A requests TP to Player B:
+
 ```
 /tpa B
 ```
+
 → B gets message: "A wants to teleport to you! Type /tpaccept A to accept or /tpadeny A to deny."
 
 ### Player B accepts:
+
 ```
 /tpaccept A
 ```
+
 → A gets teleported to B's location
 
 ### Or Player B denies:
+
 ```
 /tpadeny A
 ```
+
 → A gets message: "Teleport request from A denied."
 
 ---
@@ -69,6 +75,7 @@ This is a complete, ready-to-use TPA (Teleport Request) system using custom synt
 ## Customization Ideas
 
 ### Add Permission Checks
+
 ```json
 {
   "tpa": "execute if predicate your_tpa_allowed run tellraw ${tpa_player} {\"text\":\"${player} wants to teleport to you!\",\"color\":\"yellow\"}"
@@ -76,6 +83,7 @@ This is a complete, ready-to-use TPA (Teleport Request) system using custom synt
 ```
 
 ### Add Confirmation Messages
+
 ```json
 {
   "tpa": "tellraw ${player} {\"text\":\"Request sent to ${tpa_player}!\",\"color\":\"green\"} && tellraw ${tpa_player} {\"text\":\"${player} wants to teleport to you!\",\"color\":\"yellow\"}"
@@ -83,6 +91,7 @@ This is a complete, ready-to-use TPA (Teleport Request) system using custom synt
 ```
 
 ### Add Delay
+
 ```json
 {
   "tpaccept": "schedule function my_namespace:accept_tp 5t"
@@ -90,6 +99,7 @@ This is a complete, ready-to-use TPA (Teleport Request) system using custom synt
 ```
 
 ### Combine with Built-in Variables
+
 ```json
 {
   "tpa": "say ${player} at ${x} ${y} ${z} wants to teleport to ${tpa_player}!"

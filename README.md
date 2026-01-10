@@ -1,4 +1,5 @@
 # **RELEASES WILL NO LONGER BE RELEASED ON GITHUB. TO SEE LATEST RELEASES, VISIT THIS PAGE: https://modrinth.com/mod/command-maker/versions**
+
 or this page:
 https://commandmakerwiki.lucasgeitgey.com/download.html
 
@@ -66,6 +67,7 @@ You can define custom behaviors without writing external functions.
 - `/cmd function <functionName>` - Execute a function from the Functions folder
 
 Example usage:
+
 ```mcfunction
 /cmd add hello say hello
 /cmd function test
@@ -91,6 +93,7 @@ You can build this mod yourself using the included Gradle wrapper. Here's how:
 ### 🔧 Steps
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/Diamondstar-Mods/Minecraft-Command-Maker.git
    cd Minecraft-Command-Maker

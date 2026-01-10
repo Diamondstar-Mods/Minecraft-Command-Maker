@@ -1,1 +1,11 @@
-{"stats":{"minecraft:custom":{"minecraft:time_since_rest":79,"minecraft:total_world_time":79,"minecraft:play_time":79,"minecraft:time_since_death":79}},"DataVersion":4554}
+{
+  "stats": {
+    "minecraft:custom": {
+      "minecraft:time_since_rest": 79,
+      "minecraft:total_world_time": 79,
+      "minecraft:play_time": 79,
+      "minecraft:time_since_death": 79
+    }
+  },
+  "DataVersion": 4554
+}

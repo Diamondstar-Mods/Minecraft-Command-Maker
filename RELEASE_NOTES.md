@@ -1,6 +1,7 @@
 # 🎉 Custom Command Syntax System - COMPLETE!
 
 ## What You Asked For
+
 > "The ability to create our own syntax. We should be able to create our own custom variables and syntax that then get plugged into the command. One example I can think of is a TPA system... it would make this mod go from a 10 to a 100!"
 
 ## ✅ What Was Delivered
@@ -12,11 +13,13 @@ A **complete, production-ready custom command syntax system** that lets users de
 ## Quick Overview
 
 ### Before (Limited)
+
 ```
 Aliases only: /mycommand -> tp @s 0 100 0
 ```
 
 ### After (Powerful!)
+
 ```
 Define: /tpa <player>
 Alias:  /tpa_request -> tp ${tpa_player} @s
@@ -29,6 +32,7 @@ Result: tp steve @s
 ## What's New
 
 ### 2 New Java Classes
+
 1. **`CommandSyntax.java`** (2,684 bytes)
    - Parses pattern definitions
    - Extracts parameters from user input
@@ -40,18 +44,21 @@ Result: tp steve @s
    - Auto-creates example config
 
 ### Updated Existing Class
+
 3. **`ExampleMod.java`** (Enhanced)
    - Integrated syntax loading
    - Added `/syntax` command
    - Smart alias execution with syntax matching
 
 ### New Documentation
+
 - `SYNTAX_GUIDE.md` - Complete 200+ line guide
 - `SYNTAX_QUICK_START.md` - Quick reference
 - `EXAMPLES_TPA.md` - Copy-paste ready TPA system
 - `IMPLEMENTATION_SUMMARY.md` - Technical details
 
 ### New Config Files (Auto-Created)
+
 - `config/CommandMaker/syntax.json` - Define patterns with examples
 - Updates to `aliases.json` - Use `${syntax_name_parameter}` variables
 
@@ -60,7 +67,9 @@ Result: tp steve @s
 ## How to Use (Super Simple)
 
 ### 1. Define a Pattern
+
 **File:** `config/CommandMaker/syntax.json`
+
 ```json
 {
   "tpa": {
@@ -71,7 +80,9 @@ Result: tp steve @s
 ```
 
 ### 2. Create an Alias Using the Pattern
+
 **File:** `config/CommandMaker/aliases.json`
+
 ```json
 {
   "tpa_request": "say ${tpa_player} wants to TP to you!"
@@ -79,6 +90,7 @@ Result: tp steve @s
 ```
 
 ### 3. Use It In-Game
+
 ```
 /tpa_request steve
 → say steve wants to TP to you!
@@ -94,37 +106,42 @@ Result: tp steve @s
 ✅ **Works with Custom Variables** - `/setcmdvariable` still works  
 ✅ **No Code Required** - Pure JSON configuration  
 ✅ **Easy Discovery** - `/syntax` command shows all patterns  
-✅ **Instant Reload** - `/cmd reload` applies changes  
+✅ **Instant Reload** - `/cmd reload` applies changes
 
 ---
 
 ## Example Use Cases Now Possible
 
 ### TPA System (Included!)
+
 ```json
 "tpa": "/tpa <player>"
 "alias": "say ${tpa_player} wants to TP!"
 ```
 
 ### Ban System
+
 ```json
 "ban": "/ban <player> <reason>"
 "alias": "ban ${ban_player} ${ban_reason}"
 ```
 
 ### Give Items
+
 ```json
 "give": "/give <item> <amount>"
 "alias": "give @s ${give_item} ${give_amount}"
 ```
 
 ### Send Messages
+
 ```json
 "msg": "/msg <player> <message>"
 "alias": "tellraw ${msg_player} {\"text\":\"${msg_message}\"}"
 ```
 
 ### Spawn Commands
+
 ```json
 "spawn": "/spawn <name>"
 "alias": "tp ${player} ${spawn_x} ${spawn_y} ${spawn_z}"
@@ -135,6 +152,7 @@ Result: tp steve @s
 ## File Summary
 
 ### Code Added
+
 ```
 CommandSyntax.java       New - Pattern definition & parameter extraction
 SyntaxManager.java       New - Syntax management & JSON loading
@@ -142,6 +160,7 @@ ExampleMod.java          Updated - Integrated syntax system
 ```
 
 ### Documentation Added
+
 ```
 SYNTAX_GUIDE.md              Comprehensive guide (250+ lines)
 SYNTAX_QUICK_START.md        Quick reference
@@ -150,6 +169,7 @@ IMPLEMENTATION_SUMMARY.md    Technical details
 ```
 
 ### Config Files
+
 ```
 config/CommandMaker/syntax.json      Created with examples (auto-generated)
 config/CommandMaker/aliases.json     Updated with syntax variable examples
@@ -206,7 +226,7 @@ Ready to use!
 
 ⚡ **Minimal** - Syntax matching only occurs on commands with arguments  
 ⚡ **Efficient** - Pre-compiled regex patterns  
-⚡ **No Impact** - Commands without syntax match instantly  
+⚡ **No Impact** - Commands without syntax match instantly
 
 ---
 
@@ -214,7 +234,7 @@ Ready to use!
 
 ✅ **100% Compatible** - All existing aliases work exactly as before  
 ✅ **No Breaking Changes** - Old configs work without modification  
-✅ **Optional Feature** - Use syntax only if you want to  
+✅ **Optional Feature** - Use syntax only if you want to
 
 ---
 

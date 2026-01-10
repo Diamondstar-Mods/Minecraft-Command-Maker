@@ -1,1 +1,27 @@
-{"stats":{"minecraft:dropped":{"minecraft:sandstone":62},"minecraft:picked_up":{"minecraft:string":4,"minecraft:brown_wool":4,"minecraft:sandstone":50,"minecraft:mutton":10},"minecraft:used":{"minecraft:sandstone":5},"minecraft:custom":{"minecraft:sprint_one_cm":19795,"minecraft:time_since_rest":5243,"minecraft:walk_one_cm":5215,"minecraft:total_world_time":16126,"minecraft:leave_game":5,"minecraft:fly_one_cm":52614,"minecraft:sneak_time":55,"minecraft:play_time":9571,"minecraft:deaths":5,"minecraft:jump":97,"minecraft:time_since_death":5210,"minecraft:drop":62}},"DataVersion":4554}
+{
+  "stats": {
+    "minecraft:dropped": { "minecraft:sandstone": 62 },
+    "minecraft:picked_up": {
+      "minecraft:string": 4,
+      "minecraft:brown_wool": 4,
+      "minecraft:sandstone": 50,
+      "minecraft:mutton": 10
+    },
+    "minecraft:used": { "minecraft:sandstone": 5 },
+    "minecraft:custom": {
+      "minecraft:sprint_one_cm": 19795,
+      "minecraft:time_since_rest": 5243,
+      "minecraft:walk_one_cm": 5215,
+      "minecraft:total_world_time": 16126,
+      "minecraft:leave_game": 5,
+      "minecraft:fly_one_cm": 52614,
+      "minecraft:sneak_time": 55,
+      "minecraft:play_time": 9571,
+      "minecraft:deaths": 5,
+      "minecraft:jump": 97,
+      "minecraft:time_since_death": 5210,
+      "minecraft:drop": 62
+    }
+  },
+  "DataVersion": 4554
+}

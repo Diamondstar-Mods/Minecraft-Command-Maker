@@ -7,7 +7,9 @@ Create your own **custom command patterns** with parameters that automatically s
 ## Quick Example: TPA System
 
 ### 1. Define the Syntax Pattern
+
 In `config/CommandMaker/syntax.json`:
+
 ```json
 {
   "tpa": {
@@ -18,7 +20,9 @@ In `config/CommandMaker/syntax.json`:
 ```
 
 ### 2. Create an Alias Using the Parameter
+
 In `config/CommandMaker/aliases.json`:
+
 ```json
 {
   "tpa_request": "say ${tpa_player} wants to teleport to you!"
@@ -26,9 +30,11 @@ In `config/CommandMaker/aliases.json`:
 ```
 
 ### 3. Use It In-Game
+
 ```
 /tpa_request steve
 ```
+
 This executes: `say steve wants to teleport to you!`
 
 ---
@@ -39,7 +45,7 @@ This executes: `say steve wants to teleport to you!`
 ✅ **Flexible Parameters** - Create any number of parameters in any pattern  
 ✅ **Multi-Parameter** - `/ban <player> <reason>` → `${ban_player}`, `${ban_reason}`  
 ✅ **Works with Existing Variables** - Still use `${player}`, `${x}`, `${y}`, `${z}`  
-✅ **Easy Management** - Edit JSON files, run `/cmd reload`  
+✅ **Easy Management** - Edit JSON files, run `/cmd reload`
 
 ---
 

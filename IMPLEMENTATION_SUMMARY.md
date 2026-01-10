@@ -9,35 +9,44 @@ A **complete, production-ready custom command syntax system** that allows users 
 ## Core Components
 
 ### 1. `CommandSyntax.java`
+
 Represents a single syntax definition with:
+
 - **Pattern parsing** - Extracts `<parameter>` placeholders from patterns like `/tpa <player>`
 - **Regex matching** - Converts patterns to regex for matching user input
 - **Parameter extraction** - Pulls parameter values from user commands
 - **Variable substitution** - Replaces `${syntax_name_parameter}` with actual values
 
 **Key Methods:**
+
 - `extractParameters(String input)` - Parse user input against the pattern
 - `substituteParameters(String command, Map params)` - Replace variables in alias target
 
 ### 2. `SyntaxManager.java`
+
 Manages all custom syntax definitions:
+
 - **Load from JSON** - `config/CommandMaker/syntax.json` with examples
 - **Pattern matching** - Try to match user input against all defined syntaxes
 - **Auto-create config** - Generates example file with TPA, give, msg patterns on first run
 
 **Key Features:**
+
 - `loadSyntaxDefinitions()` - Load from file
 - `matchInput(String input)` - Find matching syntax pattern
 - `getAllSyntaxes()` - Get all registered patterns
 
 ### 3. Integration with `ExampleMod.java`
+
 Updated main mod class:
+
 - **Load syntaxes on startup** - `SyntaxManager.loadSyntaxDefinitions()` in `onInitialize()`
 - **Register `/syntax` command** - Lists all available patterns
 - **Smart alias execution** - Check if input matches custom syntax before normal execution
 - **Parameter substitution** - Apply syntax variables before variable substitution
 
 **Modified Methods:**
+
 - `onInitialize()` - Added syntax loading and `/syntax` command registration
 - `registerAlias()` - Added syntax matching logic with parameter extraction
 - `registerSyntaxCommand()` - NEW - Display all available syntax patterns
@@ -47,6 +56,7 @@ Updated main mod class:
 ## How It Works (Technical)
 
 ### Execution Flow
+
 ```
 User enters: /tpa_request steve
     ↓
@@ -69,12 +79,14 @@ Execute final command
 ```
 
 ### Pattern Matching Rules
+
 - Patterns use `<parameter_name>` format (any valid identifier)
 - Last parameter is **greedy** - captures everything to end
 - Case-sensitive matching
 - Parameters extracted in order defined in pattern
 
 ### Variable Format
+
 - **Built-in:** `${player}`, `${x}`, `${y}`, `${z}`
 - **Custom variables:** `${custom_var}` (via `/setcmdvariable`)
 - **Syntax parameters:** `${syntax_name_parameter_name}`
@@ -86,6 +98,7 @@ Execute final command
 ### Configuration Files Created on First Run
 
 #### `config/CommandMaker/syntax.json`
+
 ```json
 {
   "tpa": {
@@ -104,6 +117,7 @@ Execute final command
 ```
 
 #### `config/CommandMaker/aliases.json`
+
 ```json
 {
   "tpa_request": "execute as ${tpa_player} run say ${player} wants to TP!",
@@ -113,6 +127,7 @@ Execute final command
 ```
 
 ### In-Game Usage
+
 ```
 /tpa_request steve
     → execute as steve run say [YourName] wants to TP!
@@ -159,23 +174,26 @@ Documentation/
 ✅ **Auto-Create Examples** - Default patterns included  
 ✅ **Easy Management** - Edit JSON, reload with `/cmd reload`  
 ✅ **Discoverable** - `/syntax` command shows all patterns  
-✅ **Production Ready** - Fully tested, error handling included  
+✅ **Production Ready** - Fully tested, error handling included
 
 ---
 
 ## Technical Specifications
 
 ### Regex Pattern Generation
+
 - Input pattern: `/tpa <player>`
 - Generated regex: `^/tpa (.+)$`
 - Matches: `/tpa steve`, `/tpa alex`, etc.
 
 ### Parameter Extraction
+
 - Pattern: `/msg <player> <message>`
 - Input: `/msg alex hello world`
 - Extracts: `{player: "alex", message: "hello world"}`
 
 ### Variable Substitution Priority
+
 1. Syntax parameters: `${syntax_name_parameter}`
 2. Built-in variables: `${player}`, `${x}`, `${y}`, `${z}`
 3. Custom variables: `${custom_var}`
@@ -189,6 +207,7 @@ Documentation/
 **Compiled Mod:** `CMDMaker-2.1.1alpha.jar` (31,347 bytes)
 
 **Includes:**
+
 - All source files compiled
 - Config auto-generation logic
 - Pattern matching and regex engines
@@ -211,6 +230,7 @@ Documentation/
 ## Examples for Different Use Cases
 
 ### 1. Ban System
+
 ```json
 // syntax.json
 "ban": { "pattern": "/ban <player> <reason>" }
@@ -220,6 +240,7 @@ Documentation/
 ```
 
 ### 2. Warp System
+
 ```json
 // syntax.json
 "warp": { "pattern": "/warp <location>" }
@@ -230,6 +251,7 @@ Documentation/
 ```
 
 ### 3. Mod System
+
 ```json
 // syntax.json
 "mod": { "pattern": "/mod <player> <action>" }

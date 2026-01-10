@@ -1,58 +1,78 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<style>
-    body { margin: 0; padding: 0; font-family: Arial, sans-serif; background: transparent; }
-    .commit-date { font-style: italic; color: #8c8c8c; }
-</style>
-<link rel="icon" href="https://diamondstar-mods.github.io/Minecraft-Command-Maker/favicon.ico">
-</head>
-<body>
-<!-- Last Commit Date for File -->
-<p style="font-style: italic;">Last Edited: <span id="commit-date">Loading...</span></p>
-<script>
-// ====== CONFIGURATION ======
-const owner = "diamondstar-mods"; // GitHub username/org
-const repo = "minecraft-command-maker"; // Repository name
-const branch = "26.1"; // Branch name
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background: transparent;
+      }
+      .commit-date {
+        font-style: italic;
+        color: #8c8c8c;
+      }
+    </style>
+    <link
+      rel="icon"
+      href="https://diamondstar-mods.github.io/Minecraft-Command-Maker/favicon.ico"
+    />
+  </head>
+  <body>
+    <!-- Last Commit Date for File -->
+    <p style="font-style: italic">
+      Last Edited: <span id="commit-date">Loading...</span>
+    </p>
+    <script>
+      // ====== CONFIGURATION ======
+      const owner = "diamondstar-mods"; // GitHub username/org
+      const repo = "minecraft-command-maker"; // Repository name
+      const branch = "26.1"; // Branch name
 
-// Get path from URL parameter
-const urlParams = new URLSearchParams(window.location.search);
-const path = urlParams.get('path');
-let filePath = "docs/";
-if (path) {
-    filePath = "docs/" + path;
-}
+      // Get path from URL parameter
+      const urlParams = new URLSearchParams(window.location.search);
+      const path = urlParams.get("path");
+      let filePath = "docs/";
+      if (path) {
+        filePath = "docs/" + path;
+      }
 
-// GitHub API endpoint for commits affecting a specific file
-const apiUrl = `https://api.github.com/repos/${owner}/${repo}/commits?path=${encodeURIComponent(filePath)}&sha=${branch}&per_page=1`;
+      // GitHub API endpoint for commits affecting a specific file
+      const apiUrl = `https://api.github.com/repos/${owner}/${repo}/commits?path=${encodeURIComponent(filePath)}&sha=${branch}&per_page=1`;
 
-fetch(apiUrl)
-    .then(response => {
-        if (!response.ok) {
+      fetch(apiUrl)
+        .then((response) => {
+          if (!response.ok) {
             throw new Error(`GitHub API error: ${response.status}`);
-        }
-        return response.json();
-    })
-    .then(data => {
-        if (data.length === 0) {
-            document.getElementById("commit-date").textContent = "No commits found for this file.";
+          }
+          return response.json();
+        })
+        .then((data) => {
+          if (data.length === 0) {
+            document.getElementById("commit-date").textContent =
+              "No commits found for this file.";
             return;
-        }
-        // Extract commit date
-        const commitDate = new Date(data[0].commit.committer.date);
-        document.getElementById("commit-date").textContent = commitDate.toLocaleString();
-    })
-    .catch(error => {
-        console.error(error);
-        document.getElementById("commit-date").textContent = "Error fetching commit date.";
-    });
-</script>
+          }
+          // Extract commit date
+          const commitDate = new Date(data[0].commit.committer.date);
+          document.getElementById("commit-date").textContent =
+            commitDate.toLocaleString();
+        })
+        .catch((error) => {
+          console.error(error);
+          document.getElementById("commit-date").textContent =
+            "Error fetching commit date.";
+        });
+    </script>
 
-<script>
-  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
-</script>
-<script defer src="/_vercel/insights/script.js"></script>
-</body>
+    <script>
+      window.va =
+        window.va ||
+        function () {
+          (window.vaq = window.vaq || []).push(arguments);
+        };
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script>
+  </body>
 </html>

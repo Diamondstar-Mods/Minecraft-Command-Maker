@@ -1,4 +1,4 @@
-(function() {
+(function () {
   function h(a) {
     return '[giscus] An error occurred. Error message: "'.concat(a, '".');
   }
@@ -6,7 +6,9 @@
   function l(a, f) {
     void 0 === f && (f = !1);
     f = f ? "meta[property='og:".concat(a, "'],") : "";
-    return (a = document.querySelector(f + "meta[name='".concat(a, "']"))) ? a.content : "";
+    return (a = document.querySelector(f + "meta[name='".concat(a, "']")))
+      ? a.content
+      : "";
   }
 
   function p() {
@@ -16,7 +18,7 @@
   }
 
   var m = document.currentScript,
-    k = (new URL(m.src)).origin,
+    k = new URL(m.src).origin,
     b = new URL(location.href),
     d = b.searchParams.get("giscus") || "",
     n = localStorage.getItem("giscus-session");
@@ -33,7 +35,12 @@
       d = JSON.parse(n);
     } catch (a) {
       localStorage.removeItem("giscus-session");
-      console.warn("".concat(h(null === a || void 0 === a ? void 0 : a.message), " Session has been cleared."));
+      console.warn(
+        "".concat(
+          h(null === a || void 0 === a ? void 0 : a.message),
+          " Session has been cleared.",
+        ),
+      );
     }
   }
 
@@ -70,7 +77,10 @@
       c.number = b.term;
       break;
     default:
-      c.term = 2 > location.pathname.length ? "index" : location.pathname.substring(1).replace(/\.\w+$/, "");
+      c.term =
+        2 > location.pathname.length
+          ? "index"
+          : location.pathname.substring(1).replace(/\.\w+$/, "");
   }
 
   var r = (d = document.querySelector(".giscus")) && d.id;
@@ -87,14 +97,14 @@
     scrolling: "no",
     allow: "clipboard-write",
     src: g,
-    loading: b
-  }).forEach(function(a) {
+    loading: b,
+  }).forEach(function (a) {
     var f = a[0];
     return (a = a[1]) && e.setAttribute(f, a);
   });
 
   e.style.opacity = "0";
-  e.addEventListener("load", function() {
+  e.addEventListener("load", function () {
     e.style.removeProperty("opacity");
     e.classList.remove("giscus-frame--loading");
   });
@@ -106,7 +116,7 @@
   document.head.prepend(b);
 
   if (d) {
-    for (; d.firstChild;) d.firstChild.remove();
+    for (; d.firstChild; ) d.firstChild.remove();
     d.appendChild(e);
   } else {
     d = document.createElement("div");
@@ -115,15 +125,18 @@
     m.insertAdjacentElement("afterend", d);
   }
 
-  window.addEventListener("message", function(a) {
+  window.addEventListener("message", function (a) {
     a.origin === k &&
       ((a = a.data),
       "object" === typeof a &&
         a.giscus &&
-        (a.giscus.resizeHeight && (e.style.height = "".concat(a.giscus.resizeHeight, "px")),
+        (a.giscus.resizeHeight &&
+          (e.style.height = "".concat(a.giscus.resizeHeight, "px")),
         a.giscus.signOut
           ? (localStorage.removeItem("giscus-session"),
-            console.log("[giscus] User has logged out. Session has been cleared."),
+            console.log(
+              "[giscus] User has logged out. Session has been cleared.",
+            ),
             p())
           : a.giscus.error &&
             ((a = a.giscus.error),
@@ -136,23 +149,27 @@
                   p())
                 : n ||
                   console.error(
-                    "".concat(h(a), " No session is stored initially. ").concat(
-                      "Please consider reporting this error at https://github.com/giscus/giscus/issues/new."
-                    )
+                    ""
+                      .concat(h(a), " No session is stored initially. ")
+                      .concat(
+                        "Please consider reporting this error at https://github.com/giscus/giscus/issues/new.",
+                      ),
                   )
               : a.includes("Discussion not found")
-              ? console.warn(
-                  "[giscus] ".concat(
-                    a,
-                    ". A new discussion will be created if a comment/reaction is submitted."
+                ? console.warn(
+                    "[giscus] ".concat(
+                      a,
+                      ". A new discussion will be created if a comment/reaction is submitted.",
+                    ),
                   )
-                )
-              : a.includes("API rate limit exceeded")
-              ? console.warn(h(a))
-              : console.error(
-                  "".concat(h(a), " ").concat(
-                    "Please consider reporting this error at https://github.com/giscus/giscus/issues/new."
-                  )
-                ))));
+                : a.includes("API rate limit exceeded")
+                  ? console.warn(h(a))
+                  : console.error(
+                      ""
+                        .concat(h(a), " ")
+                        .concat(
+                          "Please consider reporting this error at https://github.com/giscus/giscus/issues/new.",
+                        ),
+                    ))));
   });
 })();

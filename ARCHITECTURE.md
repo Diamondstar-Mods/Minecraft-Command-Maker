@@ -86,6 +86,7 @@
 ## Data Flow
 
 ### Configuration Loading Phase
+
 ```
 Minecraft Start
     ↓
@@ -103,6 +104,7 @@ Log: "Loaded custom syntax: tpa -> /tpa <player>"
 ```
 
 ### Command Execution Phase
+
 ```
 User Input: /tpa_request steve
     ↓
@@ -186,7 +188,7 @@ Pattern: "/msg <player> <message>"
 3. Extract parameters:
    parameters[0] = "player"
    parameters[1] = "message"
-   
+
    result = {
      "player": "alex",
      "message": "hello world"
@@ -201,7 +203,7 @@ Pattern: "/msg <player> <message>"
 ## Variable Substitution Layers
 
 ```
-Original Alias Target: 
+Original Alias Target:
   "say ${msg_player} said: ${msg_message} from ${player} at ${x} ${y} ${z}"
 
 Layer 1 - Syntax Parameters (from custom syntax):
@@ -229,16 +231,18 @@ Execute via CommandDispatcher
 ## JSON Configuration Structure
 
 ### syntax.json Schema
+
 ```json
 {
   "syntax_name": {
-    "pattern": "/command <param1> <param2>",  // Required
-    "description": "What this does"            // Optional
+    "pattern": "/command <param1> <param2>", // Required
+    "description": "What this does" // Optional
   }
 }
 ```
 
 ### aliases.json Usage
+
 ```json
 {
   "alias_name": "target_command_with_${syntax_name_param_name}"
@@ -248,6 +252,7 @@ Execute via CommandDispatcher
 ## Extension Points
 
 ### For Future Enhancements:
+
 1. **Conditional Execution**
    - If parameter matches pattern, execute different command
 
@@ -268,13 +273,13 @@ Execute via CommandDispatcher
 
 ## Performance Characteristics
 
-| Operation | Complexity | Notes |
-|-----------|-----------|-------|
-| Load syntaxes | O(n) | n = number of syntax definitions |
-| Match input | O(n) | n = number of syntax definitions |
-| Regex compile | O(m) | m = pattern length |
-| Extract params | O(k) | k = number of parameters |
-| Substitute vars | O(j) | j = number of variables |
+| Operation       | Complexity | Notes                            |
+| --------------- | ---------- | -------------------------------- |
+| Load syntaxes   | O(n)       | n = number of syntax definitions |
+| Match input     | O(n)       | n = number of syntax definitions |
+| Regex compile   | O(m)       | m = pattern length               |
+| Extract params  | O(k)       | k = number of parameters         |
+| Substitute vars | O(j)       | j = number of variables          |
 
 **Total per command:** O(n) + O(k) + O(j) ≈ **O(n)** (very fast!)
 
@@ -297,13 +302,13 @@ Negligible impact on memory
 ```
 File Not Found
   → Create default syntax.json with examples
-  
+
 Invalid JSON
   → Log error, continue without that syntax
-  
+
 No Match Found
   → Use default alias behavior
-  
+
 Parameter Missing
   → Replace with empty string, log warning
 ```
@@ -311,6 +316,7 @@ Parameter Missing
 ---
 
 This architecture ensures:
+
 - ✅ Clean separation of concerns
 - ✅ Efficient pattern matching
 - ✅ Flexible variable substitution
