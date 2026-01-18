@@ -1,0 +1,53 @@
+name: Upload to Modrinth
+
+on:
+  push:
+    branches: [ 26.1 ]
+
+jobs:
+  upload:
+    if: endsWith(github.event.head_commit.message, '-modrinth')
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Extract commit info
+        id: commit
+        shell: bash
+        run: |
+          SUBJECT="${{ github.event.head_commit.message }}"
+          TITLE="${SUBJECT%-modrinth}"
+          BODY="${{ github.event.head_commit.body }}"
+
+          echo "title=$TITLE" >> $GITHUB_OUTPUT
+          echo "changelog=$BODY" >> $GITHUB_OUTPUT
+
+      - name: Run build script
+        shell: cmd
+        run: |
+          build.bat
+
+      - name: Find newest jar
+        id: findjar
+        shell: bash
+        run: |
+          FILE=$(ls -t CompiledFiles/CMDMaker-Fabric-server-*.jar | head -n 1)
+          echo "file=$FILE" >> $GITHUB_OUTPUT
+
+      - name: Upload to Modrinth
+        shell: bash
+        run: |
+          curl -X POST "https://api.modrinth.com/v2/version" \
+            -H "Authorization: ${{ secrets.MODRINTH_TOKEN }}" \
+            -H "Content-Type: multipart/form-data" \
+            -F "data={
+              \"name\": \"${{ steps.commit.outputs.title }}\",
+              \"version_number\": \"${{ steps.commit.outputs.title }}\",
+              \"changelog\": \"${{ steps.commit.outputs.changelog }}\",
+              \"project_id\": \"command-maker\",
+              \"game_versions\": [\"1.21\"],
+              \"loaders\": [\"fabric\"]
+            }" \
+            -F "file=@${{ steps.findjar.outputs.file }}"
