@@ -1,7 +1,7 @@
 *.lock
 *.log
 # gradle
-
+*ips.txt
 .gradle/
 build/
 out/
