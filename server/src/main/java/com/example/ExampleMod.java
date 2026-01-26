@@ -38,6 +38,7 @@ public class ExampleMod implements ModInitializer {
 		loadAliases();
 		SyntaxManager.loadSyntaxDefinitions();
 		loadTelemetryConfig();
+		TelemetryManager.sendTelemetry("server");
 		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
 			registercmd(dispatcher);
 			registerAddCommand(dispatcher);

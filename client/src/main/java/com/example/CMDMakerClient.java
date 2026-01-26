@@ -46,6 +46,7 @@ public class CMDMakerClient implements ClientModInitializer {
 		loadSettings();
 		SyntaxManager.loadSyntaxDefinitions();
 		loadTelemetryConfig();
+		TelemetryManager.sendTelemetry("client");
 		ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
 			registercmd(dispatcher);
 			registerAddCommand(dispatcher);
