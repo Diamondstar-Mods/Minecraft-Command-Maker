@@ -1,0 +1,22 @@
+# CommandMaker Operator Settings
+# This file controls operator permissions for alias execution
+#
+# Set to true to restrict alias execution to operators only (permission level 2+)
+# Set to false to allow all players to run aliases (default)
+onlyOperatorsCanRunAliases= false
+
+# Commands that non-admin players can run even when onlyOperatorsCanRunAliases=true
+# These aliases will be allowed for regular players as exceptions
+commandsRunByNonAdminsAllowOverride:
+#	help      # Allow non-admins to use help commands
+#	tp        # Allow non-admins to use teleport commands
+#	home      # Allow non-admins to use home commands
+#	spawn     # Allow non-admins to use spawn commands
+
+# Commands that should run in console/server mode instead of player mode
+# These aliases will execute as the server rather than the player who ran them
+commandsRunInConsoleMode:
+#	ban       # Ban commands should run as console
+#	kick      # Kick commands should run as console
+#	op        # OP commands should run as console
+#	deop      # DEOP commands should run as console

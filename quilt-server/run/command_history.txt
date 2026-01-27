@@ -1,0 +1,50 @@
+/danceparty
+/tntrain
+/cmd reload
+/tntrain
+/cr
+/craycray
+/cmd reload
+/craycray
+/craycrayt
+/advancement grant @s everything
+/advancement revoke @s everything
+/advancement grant @s everything
+/advancement revoke @s everything
+/advancement grant @s everything
+/advancement revoke @s everything
+/craycray
+/playsound minecraft:ui.toast.challenge_complete
+/playsound minecraft:ui.toast.challenge_completet
+/playsound minecraft:ui.toast.challenge_complete
+/playsound minecraft:ui.toast.challenge_completet
+/playsound minecraft:ui.toast.challenge_complete
+/cmd reload
+/sound
+/cmd reload
+/tntrain
+/cmd reload
+/extratntrain
+/cmd reload
+/fireworkshow
+/give @s minecraft:firework_rocket[]
+/extratntrain
+/nuke
+/addcommand add nuke extratntrain
+/nuke
+/nuket
+/nuke
+/cmd reload
+/nuke
+/fireworkshow
+/gamemode survival
+/fireworkshow
+/gamemode creative
+/cmd downloadfunction example
+/cmd downloadfunction example.mcfunction
+/cmd downloadfunction example
+/example
+/cmd downloadfunction copilot
+/cmd downloadfunction example
+/cmd downloadfunction copilot
+/copilot

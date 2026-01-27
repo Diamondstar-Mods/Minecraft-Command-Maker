@@ -1,0 +1,21 @@
+/cmd list
+/reg hihi hihi
+/addcommand add hello poop
+/hello
+/addcommand
+/addcommandt
+/addcommand
+/cmd add hello poop
+/poop
+/hello
+/poop
+/cmd add sayhello say poopie
+/sayhello
+/cmd list
+/sayhello
+/cmd add poop summon sheep
+/poop
+/cmd add poop summon sheep
+/poop
+/poopt
+/poop

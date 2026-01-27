@@ -1,0 +1,14 @@
+{
+  "tpa": {
+    "pattern": "/tpa \u003cplayer\u003e",
+    "description": "Teleport request to a player"
+  },
+  "give": {
+    "pattern": "/give \u003citem\u003e \u003camount\u003e",
+    "description": "Give an item to sender"
+  },
+  "msg": {
+    "pattern": "/msg \u003cplayer\u003e \u003cmessage\u003e",
+    "description": "Send a message to a player"
+  }
+}

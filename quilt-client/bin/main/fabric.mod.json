@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "nekkycommandmakerclient",
+  "version": "${version}",
+  "name": "Nek's Command Maker Client",
+  "description": "NEKKY COMMAND MAKER - Client Only Version",
+  "authors": ["NekSheep9180 aka lucgei231"],
+  "contact": {
+    "homepage": "https://github.com/Diamondstar-Mods/Minecraft-Command-Maker",
+    "sources": "https://github.com/Diamondstar-Mods/Minecraft-Command-Maker",
+    "issues": "https://github.com/Diamondstar-Mods/Minecraft-Command-Maker/issues"
+  },
+  "license": "CC0-BY-SA-4.0",
+  "icon": "assets/modid/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": ["com.example.CMDMakerClient"]
+  },
+  "mixins": ["modid.mixins.json"],
+  "depends": {
+    "fabricloader": ">=0.15.0",
+    "minecraft": ">=1.20",
+    "java": ">=21",
+    "fabric-api": "*"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}

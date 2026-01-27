@@ -1,0 +1,18 @@
+{
+  "stats": {
+    "minecraft:picked_up": { "minecraft:sandstone": 27 },
+    "minecraft:custom": {
+      "minecraft:sprint_one_cm": 353,
+      "minecraft:time_since_rest": 1404,
+      "minecraft:fall_one_cm": 975,
+      "minecraft:walk_one_cm": 955,
+      "minecraft:total_world_time": 17124,
+      "minecraft:fly_one_cm": 16062,
+      "minecraft:damage_taken": 20,
+      "minecraft:play_time": 1404,
+      "minecraft:jump": 11,
+      "minecraft:time_since_death": 1404
+    }
+  },
+  "DataVersion": 4554
+}
