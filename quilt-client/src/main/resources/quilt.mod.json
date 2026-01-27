@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "quilt_loader": {
+    "group": "com.example",
+    "name": "Command Maker",
+    "version": "${version}",
+    "metadata": {
+      "name": "Nek's Command Maker! - Quilt",
+      "description": "NEKKY COMMAND MAKER - Quilt Client Edition",
+      "authors": ["NekSheep9180 aka lucgei231"],
+      "contact": {
+        "homepage": "https://github.com/Diamondstar-Mods/Minecraft-Command-Maker",
+        "sources": "https://github.com/Diamondstar-Mods/Minecraft-Command-Maker",
+        "issues": "https://github.com/Diamondstar-Mods/Minecraft-Command-Maker/issues"
+      },
+      "license": "CC0-1.0",
+      "icon": "assets/modid/icon.png"
+    },
+    "mixin": ["modid.mixins.json"],
+    "plugins": ["com.example.ExampleModClient"],
+    "entrypoints": {
+      "init": ["com.example.ExampleModClient"]
+    },
+    "depends": [
+      {
+        "id": "quilt_loader",
+        "versions": ">=0.25.0"
+      },
+      {
+        "id": "quilted_fabric_api",
+        "versions": "*"
+      },
+      {
+        "id": "quilt_standard_libraries",
+        "versions": "*"
+      },
+      {
+        "id": "minecraft",
+        "versions": ">=1.21.0"
+      },
+      {
+        "id": "java",
+        "versions": ">=21"
+      }
+    ]
+  }
+}

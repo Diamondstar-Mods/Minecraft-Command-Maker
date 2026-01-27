@@ -13,6 +13,7 @@ allprojects {
     repositories {
         mavenCentral()
         maven { url 'https://maven.fabricmc.net/' }
+        maven { url 'https://maven.quiltmc.org/repository/release' }
     }
 
     dependencies {
@@ -20,12 +21,26 @@ allprojects {
         minecraft "com.mojang:minecraft:${project.minecraft_version}"
         mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 
-        // Fabric Loader and API
+        // Fabric Loader and API (for Fabric modules)
         modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
         modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
         // Optional: JSON parsing
         implementation "com.google.code.gson:gson:2.10.1"
+    }
+
+    // Quilt-specific dependencies for quilt modules
+    if (project.name.contains('quilt')) {
+        dependencies {
+            // Quilt Loader
+            modImplementation "org.quiltmc:quilt-loader:${project.quilt_loader_version}+${project.quilt_minecraft_version}"
+
+            // Quilted Fabric API (for Minecraft 1.21.9)
+            modImplementation "org.quiltmc.quilted-fabric-api:quilted-fabric-api:${project.quilted_fabric_api_version}+${project.quilt_minecraft_version}"
+
+            // Quilt Standard Libraries (for Minecraft 1.21.9)
+            modImplementation "org.quiltmc:qsl:${project.quilt_standard_libraries_version}+${project.quilt_minecraft_version}"
+        }
     }
 
     tasks.withType(JavaCompile).configureEach {
