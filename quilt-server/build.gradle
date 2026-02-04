@@ -48,6 +48,7 @@ dependencies {
     modImplementation "org.ow2.asm:asm-commons:9.6"
     modImplementation "org.ow2.asm:asm-util:9.6"
     modImplementation "net.fabricmc:sponge-mixin:0.12.5+mixin.0.8.5"
+    modImplementation "org.quiltmc:json5:1.0.0"
 
     // Use Fabric API (Quilt can load Fabric mods)
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"

@@ -1,0 +1,33 @@
+---- Crashed! ----
+Date/Time: 2026/02/04 19:16:50.6682 [+0000]
+Quilt Loader Version: 0.30.0-beta.0
+
+-- Crash --
+
+java.lang.NoClassDefFoundError: org/quiltmc/json5/JsonReader
+	at org.quiltmc.loader.impl.game.LoaderLibrary.<clinit>(LoaderLibrary.java:52)
+	at org.quiltmc.loader.impl.game.LibClassifier.<init>(LibClassifier.java:105)
+	at org.quiltmc.loader.impl.game.minecraft.MinecraftGameProvider.locateGame(MinecraftGameProvider.java:219)
+	at org.quiltmc.loader.impl.launch.knot.Knot.createGameProvider(Knot.java:190)
+	at org.quiltmc.loader.impl.launch.knot.Knot.init(Knot.java:133)
+	at org.quiltmc.loader.impl.launch.knot.Knot.launch(Knot.java:79)
+	at net.fabricmc.loader.launch.knot.KnotClient.main(KnotClient.java:31)
+	at net.fabricmc.devlaunchinjector.Main.main(Main.java:86)
+Caused by: java.lang.ClassNotFoundException: org.quiltmc.json5.JsonReader
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:641)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:188)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:526)
+	... 8 more
+
+
+-- Mods --
+
+| Index | Mod          | ID           | Version       | Type      | File Hash (SHA-1) | File(s) |
+|------:|--------------|--------------|---------------|-----------|-------------------|---------|
+|       | Quilt Loader | quilt_loader | 0.30.0-beta.0 | !missing! |                   |         |
+|------:|--------------|--------------|---------------|-----------|-------------------|---------|
+Mod Table Version: 2
+Plugin Types: {}
+
+
+---- end of report ----
