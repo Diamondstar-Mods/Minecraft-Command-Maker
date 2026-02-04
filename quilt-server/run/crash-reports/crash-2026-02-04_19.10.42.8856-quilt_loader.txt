@@ -1,0 +1,41 @@
+---- Crashed! ----
+Date/Time: 2026/02/04 19:10:42.8896 [+0000]
+Quilt Loader Version: 0.30.0-beta.0
+
+-- Crash --
+
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at org.quiltmc.loader.impl.launch.knot.Knot.findEmbedddedGameProvider(Knot.java:261)
+	at org.quiltmc.loader.impl.launch.knot.Knot.createGameProvider(Knot.java:186)
+	at org.quiltmc.loader.impl.launch.knot.Knot.init(Knot.java:133)
+	at org.quiltmc.loader.impl.launch.knot.Knot.launch(Knot.java:79)
+	at net.fabricmc.loader.launch.knot.KnotClient.main(KnotClient.java:31)
+	at net.fabricmc.devlaunchinjector.Main.main(Main.java:86)
+Caused by: java.lang.reflect.InvocationTargetException
+	at java.base/jdk.internal.reflect.DirectConstructorHandleAccessor.newInstance(DirectConstructorHandleAccessor.java:74)
+	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:502)
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:486)
+	at org.quiltmc.loader.impl.launch.knot.Knot.findEmbedddedGameProvider(Knot.java:254)
+	... 5 more
+Caused by: java.lang.NoClassDefFoundError: org/objectweb/asm/tree/ClassNode
+	at org.quiltmc.loader.impl.game.minecraft.MinecraftGameProvider.<init>(MinecraftGameProvider.java:99)
+	at java.base/jdk.internal.reflect.DirectConstructorHandleAccessor.newInstance(DirectConstructorHandleAccessor.java:62)
+	... 8 more
+Caused by: java.lang.ClassNotFoundException: org.objectweb.asm.tree.ClassNode
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:641)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:188)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:526)
+	... 10 more
+
+
+-- Mods --
+
+| Index | Mod          | ID           | Version       | Type      | File Hash (SHA-1) | File(s) |
+|------:|--------------|--------------|---------------|-----------|-------------------|---------|
+|       | Quilt Loader | quilt_loader | 0.30.0-beta.0 | !missing! |                   |         |
+|------:|--------------|--------------|---------------|-----------|-------------------|---------|
+Mod Table Version: 2
+Plugin Types: {}
+
+
+---- end of report ----
