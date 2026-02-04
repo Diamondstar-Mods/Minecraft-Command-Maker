@@ -4,7 +4,7 @@ plugins {
 }
 
 version = project.mod_version
-description = "Compatible with Fabric. Supports Minecraft 1.20 to 1.21.11. Client-only version."
+description = "Compatible with Fabric. Supports Minecraft 1.21.9. Client-only version."
 group = 'io.github.diamondstar_mods' // <-- update this to match your GitHub org/user
 
 base {

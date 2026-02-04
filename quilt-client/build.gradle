@@ -39,7 +39,7 @@ dependencies {
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 
     // Quilt Loader
-    modImplementation "org.quiltmc:quilt-loader:0.27.0+1.21.9"
+    modImplementation "org.quiltmc:quilt-loader:0.30.0-beta.0"
 
     // Use Fabric API (Quilt can load Fabric mods)
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
