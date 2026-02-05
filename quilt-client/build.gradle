@@ -38,20 +38,11 @@ dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 
-    // Quilt Loader
-    modImplementation "org.quiltmc:quilt-loader:${project.quilt_loader_version}"
-
-    // ASM library required by Quilt
-    modImplementation "org.ow2.asm:asm:9.6"
-    modImplementation "org.ow2.asm:asm-tree:9.6"
-    modImplementation "org.ow2.asm:asm-analysis:9.6"
-    modImplementation "org.ow2.asm:asm-commons:9.6"
-    modImplementation "org.ow2.asm:asm-util:9.6"
-    modImplementation "net.fabricmc:sponge-mixin:0.12.5+mixin.0.8.5"
-    modImplementation "org.quiltmc:json5:1.0.0"
-
     // Use Fabric API (Quilt can load Fabric mods)
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+    // Provide Fabric loader API at compile time only (Quilt provides loader at runtime)
+    compileOnly "net.fabricmc:fabric-loader:${project.loader_version}"
 
     // Optional: JSON parsing
     implementation "com.google.code.gson:gson:2.10.1"
@@ -65,6 +56,10 @@ processResources {
     inputs.property "version", project.version
     filesMatching("fabric.mod.json") {
         expand "version": inputs.properties["version"]
+    }
+    filesMatching("quilt.mod.json") {
+        expand "version": inputs.properties["version"],
+               "quilt_loader_version": project.quilt_loader_version
     }
 }
 
