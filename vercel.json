@@ -1,0 +1,14 @@
+{
+  "buildCommand": "",
+  "outputDirectory": "docs",
+  "rewrites": [
+    {
+      "source": "/:path*",
+      "destination": "/docs/:path*"
+    },
+    {
+      "source": "/",
+      "destination": "/docs/index.html"
+    }
+  ]
+}
