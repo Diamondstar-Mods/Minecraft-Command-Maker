@@ -27,14 +27,7 @@ export async function getServerSideProps({ params, res }) {
   const requested = slugArr.join('/');
   const cwd = process.cwd();
 
-  // When Vercel uses the `docs` folder as project root, HTML files are in cwd (not in subdirs).
-  // Fallback to looking in public/ or docs/ if needed.
-  const baseDirs = [
-    cwd,                                    // Primary: current dir (where /docs HTML files are)
-    path.join(cwd, 'public'),               // Fallback: public/
-    path.join(cwd, 'static')                // Fallback: static/
-  ];
-
+  // Only look for HTML files in /docs (the current working directory when Vercel uses /docs as root)
   const candidates = [];
   if (!requested) {
     candidates.push('index.html');
@@ -47,24 +40,21 @@ export async function getServerSideProps({ params, res }) {
     }
   }
 
-  for (const baseDir of baseDirs) {
-    for (const cand of candidates) {
-      const filePath = path.join(baseDir, cand);
-      try {
-        if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
-          const ext = path.extname(filePath).toLowerCase();
-          const mime = MIME[ext] || 'application/octet-stream';
-          const data = fs.readFileSync(filePath);
-          res.setHeader('Content-Type', mime);
-          res.setHeader('Cache-Control', 'public, max-age=60');
-          res.statusCode = 200;
-          res.end(data);
-          return { props: {} };
-        }
-      } catch (err) {
-        // Ignore errors for this candidate and try next
-        continue;
+  for (const cand of candidates) {
+    const filePath = path.join(cwd, cand);
+    try {
+      if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
+        const ext = path.extname(filePath).toLowerCase();
+        const mime = MIME[ext] || 'application/octet-stream';
+        const data = fs.readFileSync(filePath);
+        res.setHeader('Content-Type', mime);
+        res.setHeader('Cache-Control', 'public, max-age=60');
+        res.statusCode = 200;
+        res.end(data);
+        return { props: {} };
       }
+    } catch (err) {
+      continue;
     }
   }
 
