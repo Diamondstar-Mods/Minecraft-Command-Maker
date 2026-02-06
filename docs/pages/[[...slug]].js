@@ -25,12 +25,14 @@ export default function Page() {
 export async function getServerSideProps({ params, res }) {
   const slugArr = params?.slug || [];
   const requested = slugArr.join('/');
+  const cwd = process.cwd();
 
-  // When Vercel uses the `docs` folder as project root, files will be here.
+  // When Vercel uses the `docs` folder as project root, HTML files are in cwd (not in subdirs).
+  // Fallback to looking in public/ or docs/ if needed.
   const baseDirs = [
-    path.join(process.cwd(), 'public'),
-    path.join(process.cwd(), '.'),
-    path.join(process.cwd(), 'docs')
+    cwd,                                    // Primary: current dir (where /docs HTML files are)
+    path.join(cwd, 'public'),               // Fallback: public/
+    path.join(cwd, 'static')                // Fallback: static/
   ];
 
   const candidates = [];
@@ -48,15 +50,20 @@ export async function getServerSideProps({ params, res }) {
   for (const baseDir of baseDirs) {
     for (const cand of candidates) {
       const filePath = path.join(baseDir, cand);
-      if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
-        const ext = path.extname(filePath).toLowerCase();
-        const mime = MIME[ext] || 'application/octet-stream';
-        const data = fs.readFileSync(filePath);
-        res.setHeader('Content-Type', mime);
-        res.setHeader('Cache-Control', 'public, max-age=60');
-        res.statusCode = 200;
-        res.end(data);
-        return { props: {} };
+      try {
+        if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
+          const ext = path.extname(filePath).toLowerCase();
+          const mime = MIME[ext] || 'application/octet-stream';
+          const data = fs.readFileSync(filePath);
+          res.setHeader('Content-Type', mime);
+          res.setHeader('Cache-Control', 'public, max-age=60');
+          res.statusCode = 200;
+          res.end(data);
+          return { props: {} };
+        }
+      } catch (err) {
+        // Ignore errors for this candidate and try next
+        continue;
       }
     }
   }
