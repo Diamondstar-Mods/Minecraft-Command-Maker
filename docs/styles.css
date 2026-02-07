@@ -846,16 +846,47 @@ tr:hover {
 }
 
 @media (max-width: 480px) {
+    .nav-container {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .nav-logo {
+        width: 100%;
+        text-align: center;
+    }
+
+    /* Hide entire nav menu and donate button on phone */
+    .nav-menu {
+        display: none;
+    }
+
+    .nav-donate {
+        display: none;
+    }
+
+    /* Show theme switcher and search */
+    #theme-select {
+        display: block !important;
+        width: 100%;
+        padding: 8px;
+        margin: 5px 0;
+    }
+
+    .nav-search {
+        width: 100%;
+    }
+
+    .search-input {
+        width: 100%;
+    }
+
     .edit-button {
         top: 8px;
         right: 8px;
         padding: 6px 8px;
         font-size: 13px;
-    }
-
-    /* Hide Commands at 480px and below */
-    .nav-menu a[href="commands.html"] {
-        display: none;
     }
 }
 
