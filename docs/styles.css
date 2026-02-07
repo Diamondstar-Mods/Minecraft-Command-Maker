@@ -838,7 +838,7 @@ tr:hover {
     text-decoration: none;
 }
 
-@media (max-width: 1400px) {
+@media (max-width: 600px) {
     .nav-container {
         flex-direction: column;
         align-items: stretch;
