@@ -688,7 +688,8 @@ a:hover {
         grid-column: 1;
     }
 
-    .nav-menu {
+    /* Hide Custom Syntax at 1024px and below */
+    .nav-menu a[href="syntax-system.html"] {
         display: none;
     }
 
@@ -723,6 +724,11 @@ a:hover {
 
     .search-input {
         width: 100%;
+    }
+
+    /* Hide Systems dropdown at 768px and below */
+    .nav-menu .dropdown {
+        display: none;
     }
 
     .features-grid {
@@ -845,6 +851,11 @@ tr:hover {
         right: 8px;
         padding: 6px 8px;
         font-size: 13px;
+    }
+
+    /* Hide Commands at 480px and below */
+    .nav-menu a[href="commands.html"] {
+        display: none;
     }
 }
 
