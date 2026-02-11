@@ -8,7 +8,7 @@ description = "Compatible with Quilt. Supports Minecraft 1.21.9. Client-only ver
 group = 'io.github.diamondstar_mods'
 
 base {
-    archivesName = project.archives_base_name + "-quilt-client"
+    archivesName = project.archives_base_name + "-client"
 }
 
 repositories {
@@ -75,6 +75,6 @@ java {
 
 jar {
     from("LICENSE") {
-        rename { "CMDMakerFabric" }
+        rename { "CMDMakerQuilt" }
     }
 }

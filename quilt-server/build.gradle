@@ -8,7 +8,7 @@ description = "Compatible with Quilt. Supports Minecraft 26.1. Server-only versi
 group = 'io.github.diamondstar_mods'
 
 base {
-    archivesName = project.archives_base_name + "-quilt-server"
+    archivesName = project.archives_base_name + "-server"
 }
 
 repositories {
@@ -75,6 +75,6 @@ java {
 
 jar {
     from("LICENSE") {
-        rename { "CMDMakerFabric" }
+        rename { "CMDMakerQuilt" }
     }
 }
