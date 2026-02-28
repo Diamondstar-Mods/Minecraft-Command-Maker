@@ -628,7 +628,15 @@ public class CMDMakerClient implements ClientModInitializer {
 							dispatcher.getRoot().getChildren().removeIf(node -> node.getName().equals(alias));
 						}
 						registerAliases(dispatcher);
-						ctx.getSource().sendFeedback(Text.literal("Aliases reloaded."));
+						// Ensure functions directory exists
+						try {
+							if (!Files.exists(FUNCTIONS_PATH)) {
+								Files.createDirectories(FUNCTIONS_PATH);
+							}
+						} catch (Exception e) {
+							LOGGER.error("Failed to verify functions directory", e);
+						}
+						ctx.getSource().sendFeedback(Text.literal("Aliases and functions reloaded."));
 						return 1;
 					})
 				)

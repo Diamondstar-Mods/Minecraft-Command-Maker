@@ -590,7 +590,15 @@ public class ExampleMod implements ModInitializer {
 		for (Map.Entry<String, String> entry : aliases.entrySet()) {
 			registerAlias(dispatcher, entry.getKey(), entry.getValue());
 		}
-		source.sendFeedback(() -> net.minecraft.text.Text.literal("§6Reloaded aliases and syntax definitions."), false);
+		// Ensure functions directory exists
+		try {
+			if (!Files.exists(FUNCTIONS_PATH)) {
+				Files.createDirectories(FUNCTIONS_PATH);
+			}
+		} catch (Exception e) {
+			LOGGER.error("Failed to verify functions directory", e);
+		}
+		source.sendFeedback(() -> net.minecraft.text.Text.literal("§6Reloaded aliases, functions, and syntax definitions."), false);
 		return 1;
 	}
 
