@@ -2155,3 +2155,7 @@ com.mojang.brigadier.exceptions.CommandSyntaxException: Unable to apply this eff
 [15:54:31] [Server thread/DEBUG] (FabricLoader/Mixin) Mixing TradeOffersTypeAwareBuyForOneEmeraldFactoryMixin from fabric-object-builder-v1.mixins.json into net.minecraft.village.TradeOffers$TypeAwareBuyForOneEmeraldFactory
 [15:54:31] [Server thread/INFO] (net.minecraft.server.MinecraftServer) Saving chunks for level 'ServerLevel[CMDMAKER TESTING (auto reset)]'/minecraft:the_end
 [15:54:31] [Server thread/INFO] (net.minecraft.server.MinecraftServer) Saving chunks for level 'ServerLevel[CMDMAKER TESTING (auto reset)]'/minecraft:the_nether
+[15:55:18] [Server thread/INFO] (net.minecraft.server.integrated.IntegratedServer) Saving and pausing game...
+[15:55:18] [Server thread/INFO] (net.minecraft.server.MinecraftServer) Saving chunks for level 'ServerLevel[CMDMAKER TESTING (auto reset)]'/minecraft:overworld
+[15:55:18] [Server thread/INFO] (net.minecraft.server.MinecraftServer) Saving chunks for level 'ServerLevel[CMDMAKER TESTING (auto reset)]'/minecraft:the_end
+[15:55:18] [Server thread/INFO] (net.minecraft.server.MinecraftServer) Saving chunks for level 'ServerLevel[CMDMAKER TESTING (auto reset)]'/minecraft:the_nether

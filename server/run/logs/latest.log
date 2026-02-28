@@ -195,3 +195,7 @@ com.mojang.brigadier.exceptions.CommandSyntaxException: Unable to apply this eff
 [15:54:31] [Server thread/INFO] (Minecraft) Saving chunks for level 'ServerLevel[CMDMAKER TESTING (auto reset)]'/minecraft:overworld
 [15:54:31] [Server thread/INFO] (Minecraft) Saving chunks for level 'ServerLevel[CMDMAKER TESTING (auto reset)]'/minecraft:the_end
 [15:54:31] [Server thread/INFO] (Minecraft) Saving chunks for level 'ServerLevel[CMDMAKER TESTING (auto reset)]'/minecraft:the_nether
+[15:55:18] [Server thread/INFO] (Minecraft) Saving and pausing game...
+[15:55:18] [Server thread/INFO] (Minecraft) Saving chunks for level 'ServerLevel[CMDMAKER TESTING (auto reset)]'/minecraft:overworld
+[15:55:18] [Server thread/INFO] (Minecraft) Saving chunks for level 'ServerLevel[CMDMAKER TESTING (auto reset)]'/minecraft:the_end
+[15:55:18] [Server thread/INFO] (Minecraft) Saving chunks for level 'ServerLevel[CMDMAKER TESTING (auto reset)]'/minecraft:the_nether
