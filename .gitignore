@@ -43,3 +43,4 @@ replay_*.log
 #nekky
 
 docs/node_modules/
+server/run/
