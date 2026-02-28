@@ -1,0 +1,1 @@
+(Archived) TELEMETRY_VISUAL_GUIDE.md

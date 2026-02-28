@@ -1,0 +1,16 @@
+Moved files:
+- telemetry_server.py
+- telemetry_requirements.txt
+- test_telemetry_server.py
+- TELEMETRY_README.md
+- TELEMETRY.md
+- TELEMETRY_SETUP.md
+- TELEMETRY_IMPLEMENTATION.md
+- TELEMETRY_VISUAL_GUIDE.md
+- TELEMETRY_COMPLETE.md
+- client_ips.txt
+- server_ips.txt
+- client/src/.../TelemetryManager.java (copied)
+- server/src/.../TelemetryManager.java (copied)
+- quilt-client/src/.../TelemetryManager.java (copied)
+- quilt-server/src/.../TelemetryManager.java (copied)

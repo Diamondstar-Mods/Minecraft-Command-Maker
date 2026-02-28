@@ -1,21 +1,3 @@
-package com.example;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.net.URI;
-import java.net.InetAddress;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.URL;
-
-public class TelemetryManager {
-    private static final Logger LOGGER = LoggerFactory.getLogger("cmdmaker-telemetry");
-    private static final String TELEMETRY_SERVER = "http://92.239.83.83:5000/telemetry";
-    private static final HttpClient httpClient = HttpClient.newHttpClient();
-
     /**
      * Sends telemetry data to the remote server
      * @param edition "server" or "client"

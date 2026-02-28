@@ -28,7 +28,6 @@ public class CMDMakerClient implements ClientModInitializer {
 	public static final org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(MOD_ID);
 
 	private static final Path CONFIG_PATH = Paths.get("config", "CommandMaker", "aliases.json");
-	private static final Path TELEMETRY_CONFIG_PATH = Paths.get("config", "CommandMaker", "telementry.yml");
 	private static final Path FUNCTIONS_PATH = Paths.get("config", "CommandMaker", "Functions");
 	private static final Path SETTINGS_PATH = Paths.get("config", "CommandMaker", "settings", "opSettings.yml");
 	private static final Map<String, String> aliases = new HashMap<>();
@@ -45,8 +44,6 @@ public class CMDMakerClient implements ClientModInitializer {
 		loadAliases();
 		loadSettings();
 		SyntaxManager.loadSyntaxDefinitions();
-		loadTelemetryConfig();
-		TelemetryManager.sendTelemetry("client");
 		ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
 			registercmd(dispatcher);
 			registerAddCommand(dispatcher);
@@ -97,15 +94,7 @@ public class CMDMakerClient implements ClientModInitializer {
 				Files.write(CONFIG_PATH, lines, StandardOpenOption.CREATE_NEW);
 				LOGGER.info("Created aliases config file: {}", CONFIG_PATH);
 			}
-			if (!Files.exists(TELEMETRY_CONFIG_PATH)) {
-				List<String> lines = new ArrayList<>();
-				lines.add("# CommandMaker Telemetry Config");
-				lines.add("# Set to true to allow anonymous telemetry (helps improve the mod)");
-				lines.add("# Set to false to disable");
-				lines.add("allow-telementry=true");
-				Files.write(TELEMETRY_CONFIG_PATH, lines, StandardOpenOption.CREATE_NEW);
-				LOGGER.info("Created telemetry config file: {}", TELEMETRY_CONFIG_PATH);
-			}
+
 			if (!Files.exists(SETTINGS_PATH)) {
 				LOGGER.info("Settings file doesn't exist, creating: {}", SETTINGS_PATH);
 				Path settingsFolder = SETTINGS_PATH.getParent();
@@ -143,23 +132,6 @@ public class CMDMakerClient implements ClientModInitializer {
 			}
 		} catch (Exception e) {
 			LOGGER.error("Failed to create config folder or files", e);
-		}
-	}
-
-	// Load telemetry config and send request if enabled
-	private void loadTelemetryConfig() {
-		try {
-			if (Files.exists(TELEMETRY_CONFIG_PATH)) {
-				List<String> lines = Files.readAllLines(TELEMETRY_CONFIG_PATH);
-				for (String line : lines) {
-					if (line.contains("allow-telementry=true")) {
-						sendTelemetryRequest();
-						break;
-					}
-				}
-			}
-		} catch (Exception e) {
-			LOGGER.error("Failed to load telemetry config", e);
 		}
 	}
 
@@ -211,29 +183,6 @@ public class CMDMakerClient implements ClientModInitializer {
 			}
 		} catch (Exception e) {
 			LOGGER.error("Failed to load operator settings", e);
-		}
-	}
-
-	// Send anonymous telemetry request
-	private void sendTelemetryRequest() {
-		try {
-			HttpClient client = HttpClient.newHttpClient();
-			HttpRequest request = HttpRequest.newBuilder()
-				.uri(java.net.URI.create("https://nekkycommandmaker.vercel.app/api/telemetry"))
-				.POST(HttpRequest.BodyPublishers.ofString("{\"mod\":\"CMDMakerClient\",\"version\":\"" + getClass().getPackage().getImplementationVersion() + "\"}"))
-				.header("Content-Type", "application/json")
-				.build();
-
-			client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
-				.thenAccept(response -> {
-					if (response.statusCode() == 200) {
-						LOGGER.info("Telemetry sent successfully");
-					} else {
-						LOGGER.warn("Failed to send telemetry: {}", response.statusCode());
-					}
-				});
-		} catch (Exception e) {
-			LOGGER.error("Failed to send telemetry request", e);
 		}
 	}
 
