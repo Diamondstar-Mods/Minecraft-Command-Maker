@@ -1,16 +1,3 @@
-/craycray
-/cmd reload
-/craycray
-/craycrayt
-/advancement grant @s everything
-/advancement revoke @s everything
-/advancement grant @s everything
-/advancement revoke @s everything
-/advancement grant @s everything
-/advancement revoke @s everything
-/craycray
-/playsound minecraft:ui.toast.challenge_complete
-/playsound minecraft:ui.toast.challenge_completet
 /playsound minecraft:ui.toast.challenge_complete
 /playsound minecraft:ui.toast.challenge_completet
 /playsound minecraft:ui.toast.challenge_complete
@@ -47,4 +34,17 @@
 /cmd downloadfunction better_dance_party
 /better_dance_party
 /danceparty
+/better_dance_party
+/cmd downloadfunction better_dance_party
+/better_dance_party
+/stopsound @A
+/stopsound @a
+/better_dance_party
+/cmd gui
+/deletealiases-gui
+/deletealiases
+/deletealias
+/cmd list
+/function craycray
+/stopsound @a
 /better_dance_party
