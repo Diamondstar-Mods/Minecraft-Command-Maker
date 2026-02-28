@@ -2099,3 +2099,85 @@ java.lang.IllegalAccessException: class io.netty.util.internal.PlatformDependent
 [16:21:12] [Render thread/INFO] (net.minecraft.client.gl.DynamicUniformStorage) Resizing Dynamic Transforms UBO, capacity limit of 64 reached during a single frame. New capacity will be 128.
 [16:21:12] [Server thread/DEBUG] (FabricLoader/Mixin) Mixing NbtWriteViewMixin from fabric-serialization-api-v1.mixins.json into net.minecraft.storage.NbtWriteView
 [16:21:13] [Render thread/INFO] (net.minecraft.client.gl.DynamicUniformStorage) Resizing Dynamic Transforms UBO, capacity limit of 128 reached during a single frame. New capacity will be 256.
+[16:21:14] [Render thread/INFO] (net.minecraft.client.gl.DynamicUniformStorage) Resizing Dynamic Transforms UBO, capacity limit of 256 reached during a single frame. New capacity will be 512.
+[16:21:27] [Render thread/DEBUG] (net.fabricmc.fabric.impl.command.client.ClientCommandInternals) Syntax exception for client-sided command 'cmd downloadfunction meteor_shower'
+com.mojang.brigadier.exceptions.CommandSyntaxException: Unknown or incomplete command. See below for error at position 0: <--[HERE]
+[16:21:27] [Render thread/INFO] (net.minecraft.client.gui.hud.ChatHud) [System] [CHAT] Downloaded function 'meteor_shower' successfully.
+[16:21:33] [Render thread/DEBUG] (net.fabricmc.fabric.impl.command.client.ClientCommandInternals) Syntax exception for client-sided command 'meteor_shower'
+com.mojang.brigadier.exceptions.CommandSyntaxException: Unknown or incomplete command. See below for error at position 0: <--[HERE]
+[16:21:33] [Render thread/INFO] (net.minecraft.client.gui.hud.ChatHud) [System] [CHAT] Unknown or incomplete command. See below for error
+[16:21:33] [Render thread/INFO] (net.minecraft.client.gui.hud.ChatHud) [System] [CHAT] meteor_shower<--[HERE]
+[16:21:40] [Server thread/INFO] (net.minecraft.server.integrated.IntegratedServer) Saving and pausing game...
+[16:21:40] [Server thread/INFO] (net.minecraft.server.MinecraftServer) Saving chunks for level 'ServerLevel[CMDMAKER TESTING (auto reset)]'/minecraft:overworld
+[16:21:40] [Server thread/DEBUG] (FabricLoader/Mixin) Mixing TradeOffersTypeAwareBuyForOneEmeraldFactoryMixin from fabric-object-builder-v1.mixins.json into net.minecraft.village.TradeOffers$TypeAwareBuyForOneEmeraldFactory
+[16:21:40] [Server thread/INFO] (net.minecraft.server.MinecraftServer) Saving chunks for level 'ServerLevel[CMDMAKER TESTING (auto reset)]'/minecraft:the_nether
+[16:21:40] [Server thread/INFO] (net.minecraft.server.MinecraftServer) Saving chunks for level 'ServerLevel[CMDMAKER TESTING (auto reset)]'/minecraft:the_end
+[16:21:40] [Server thread/INFO] (net.minecraft.server.network.ServerPlayNetworkHandler) Player320 lost connection: Disconnected
+[16:21:40] [Server thread/INFO] (net.minecraft.server.MinecraftServer) Player320 left the game
+[16:21:40] [Server thread/INFO] (net.minecraft.server.network.ServerCommonNetworkHandler) Stopping singleplayer server as player logged out
+[16:21:40] [Server thread/INFO] (net.minecraft.server.MinecraftServer) Stopping server
+[16:21:40] [Server thread/INFO] (net.minecraft.server.MinecraftServer) Saving players
+[16:21:40] [Server thread/INFO] (net.minecraft.server.MinecraftServer) Saving worlds
+[16:21:40] [Server thread/INFO] (net.minecraft.server.MinecraftServer) Saving chunks for level 'ServerLevel[CMDMAKER TESTING (auto reset)]'/minecraft:overworld
+[16:21:41] [Server thread/INFO] (net.minecraft.server.MinecraftServer) Saving chunks for level 'ServerLevel[CMDMAKER TESTING (auto reset)]'/minecraft:the_nether
+[16:21:41] [Server thread/INFO] (net.minecraft.server.MinecraftServer) Saving chunks for level 'ServerLevel[CMDMAKER TESTING (auto reset)]'/minecraft:the_end
+[16:21:41] [Server thread/INFO] (net.minecraft.server.MinecraftServer) ThreadedAnvilChunkStorage (CMDMAKER TESTING (auto reset)): All chunks are saved
+[16:21:41] [Server thread/INFO] (net.minecraft.server.MinecraftServer) ThreadedAnvilChunkStorage (DIM-1): All chunks are saved
+[16:21:41] [Server thread/INFO] (net.minecraft.server.MinecraftServer) ThreadedAnvilChunkStorage (DIM1): All chunks are saved
+[16:21:41] [Server thread/INFO] (net.minecraft.server.MinecraftServer) ThreadedAnvilChunkStorage: All dimensions are saved
+[16:21:42] [Render thread/DEBUG] (net.fabricmc.fabric.impl.resource.loader.ModResourcePackUtil) [Fabric] Starting internal pack sorting with: [fabric, fabric-convention-tags-v2, fabric-gametest-api-v1]
+[16:21:42] [Render thread/DEBUG] (net.fabricmc.fabric.impl.resource.loader.ModResourcePackUtil) [Fabric] Removed all internal packs, result: [fabric]
+[16:21:42] [Render thread/DEBUG] (net.fabricmc.fabric.impl.resource.loader.ModResourcePackUtil) [Fabric] cur @ fabric, auto-enabled fabric-convention-tags-v2, currently enabled: [fabric, fabric-convention-tags-v2]
+[16:21:42] [Render thread/DEBUG] (net.fabricmc.fabric.impl.resource.loader.ModResourcePackUtil) [Fabric] cur @ fabric, auto-enabled fabric-gametest-api-v1, currently enabled: [fabric, fabric-convention-tags-v2, fabric-gametest-api-v1]
+[16:21:42] [Render thread/DEBUG] (net.fabricmc.fabric.impl.resource.loader.ModResourcePackUtil) [Fabric] Final sorting result: [fabric, fabric-convention-tags-v2, fabric-gametest-api-v1]
+[16:21:42] [Render thread/DEBUG] (net.fabricmc.fabric.impl.resource.loader.ModResourcePackUtil) [Fabric] Starting internal pack sorting with: [vanilla, fabric, fabric-convention-tags-v2, fabric-gametest-api-v1]
+[16:21:42] [Render thread/DEBUG] (net.fabricmc.fabric.impl.resource.loader.ModResourcePackUtil) [Fabric] Removed all internal packs, result: [vanilla, fabric]
+[16:21:42] [Render thread/DEBUG] (net.fabricmc.fabric.impl.resource.loader.ModResourcePackUtil) [Fabric] cur @ fabric, auto-enabled fabric-convention-tags-v2, currently enabled: [vanilla, fabric, fabric-convention-tags-v2]
+[16:21:42] [Render thread/DEBUG] (net.fabricmc.fabric.impl.resource.loader.ModResourcePackUtil) [Fabric] cur @ fabric, auto-enabled fabric-gametest-api-v1, currently enabled: [vanilla, fabric, fabric-convention-tags-v2, fabric-gametest-api-v1]
+[16:21:42] [Render thread/DEBUG] (net.fabricmc.fabric.impl.resource.loader.ModResourcePackUtil) [Fabric] Final sorting result: [vanilla, fabric, fabric-convention-tags-v2, fabric-gametest-api-v1]
+[16:21:43] [Render thread/INFO] (net.minecraft.recipe.ServerRecipeManager) Loaded 1461 recipes
+[16:21:43] [Render thread/INFO] (net.minecraft.advancement.AdvancementManager) Loaded 1574 advancements
+[16:21:43] [Render thread/INFO] (net.fabricmc.fabric.impl.biome.modification.BiomeModificationImpl) Applied 0 biome modifications to 0 of 65 new biomes in 330.7 μs
+[16:21:43] [Server thread/INFO] (net.minecraft.server.integrated.IntegratedServer) Starting integrated minecraft server version 1.21.9
+[16:21:43] [Server thread/INFO] (net.minecraft.server.MinecraftServer) Generating keypair
+[16:21:43] [Server thread/INFO] (net.minecraft.world.chunk.LoggingChunkLoadProgress) Loading 0 persistent chunks...
+[16:21:43] [Server thread/INFO] (net.minecraft.world.chunk.LoggingChunkLoadProgress) Preparing spawn area: 16%
+[16:21:43] [Netty Local Client IO #1/DEBUG] (ClientPlayNetworkAddon for Player320) Handling inbound packet from channel with name "minecraft:register"
+[16:21:43] [Netty Server IO #3/DEBUG] (ServerConfigurationNetworkAddon for Player320) Handling inbound packet from channel with name "minecraft:register"
+[16:21:43] [Netty Local Client IO #1/DEBUG] (ClientPlayNetworkAddon for Player320) Handling inbound packet from channel with name "minecraft:brand"
+[16:21:43] [Netty Local Client IO #1/DEBUG] (ClientPlayNetworkAddon for Player320) Handling inbound packet from channel with name "fabric:custom_ingredient_sync"
+[16:21:43] [Netty Server IO #3/DEBUG] (ServerConfigurationNetworkAddon for Player320) Handling inbound packet from channel with name "fabric:custom_ingredient_sync"
+[16:21:43] [Netty Local Client IO #1/DEBUG] (ClientPlayNetworkAddon for Player320) Handling inbound packet from channel with name "fabric:accepted_attachments_v1"
+[16:21:43] [Netty Server IO #3/DEBUG] (ServerConfigurationNetworkAddon for Player320) Handling inbound packet from channel with name "fabric:accepted_attachments_v1"
+[16:21:43] [Netty Local Client IO #1/DEBUG] (ClientPlayNetworkAddon for Player320) Handling inbound packet from channel with name "c:version"
+[16:21:43] [Netty Local Client IO #1/DEBUG] (ClientPlayNetworkAddon for Player320) Negotiated common packet version 1
+[16:21:43] [Netty Server IO #3/DEBUG] (ServerConfigurationNetworkAddon for Player320) Handling inbound packet from channel with name "c:version"
+[16:21:43] [Netty Server IO #3/DEBUG] (ServerConfigurationNetworkAddon for Player320) Negotiated common packet version 1
+[16:21:43] [Netty Local Client IO #1/DEBUG] (ClientPlayNetworkAddon for Player320) Handling inbound packet from channel with name "c:register"
+[16:21:43] [Netty Local Client IO #1/DEBUG] (fabric-networking-api-v1) Received accepted channels from the server
+[16:21:43] [Netty Server IO #3/DEBUG] (ServerConfigurationNetworkAddon for Player320) Handling inbound packet from channel with name "c:register"
+[16:21:43] [Netty Server IO #3/DEBUG] (fabric-networking-api-v1) Received accepted channels from the client for play phase
+[16:21:43] [Render thread/DEBUG] (ClientPlayNetworkAddon for Player320) Handling inbound packet from channel with name "minecraft:brand"
+[16:21:43] [Render thread/DEBUG] (net.fabricmc.fabric.impl.resource.loader.ModResourcePackUtil) [Fabric] Starting internal pack sorting with: []
+[16:21:43] [Render thread/DEBUG] (net.fabricmc.fabric.impl.resource.loader.ModResourcePackUtil) [Fabric] Removed all internal packs, result: []
+[16:21:43] [Render thread/DEBUG] (net.fabricmc.fabric.impl.resource.loader.ModResourcePackUtil) [Fabric] Final sorting result: []
+[16:21:43] [Render thread/DEBUG] (net.fabricmc.fabric.impl.resource.loader.ModResourcePackUtil) [Fabric] Starting internal pack sorting with: [vanilla, fabric-convention-tags-v2, fabric-gametest-api-v1]
+[16:21:43] [Render thread/DEBUG] (net.fabricmc.fabric.impl.resource.loader.ModResourcePackUtil) [Fabric] Removed all internal packs, result: [vanilla, fabric-convention-tags-v2, fabric-gametest-api-v1]
+[16:21:43] [Render thread/DEBUG] (net.fabricmc.fabric.impl.resource.loader.ModResourcePackUtil) [Fabric] Final sorting result: [vanilla, fabric-convention-tags-v2, fabric-gametest-api-v1]
+[16:21:43] [Server thread/DEBUG] (SynchronizeRegistriesTaskMixin) Synchronizing registries with common known packs: [fabric:fabric-convention-tags-v2:2.15.12+3154c1c87d, minecraft:core:1.21.9, fabric:fabric-gametest-api-v1:3.1.18+33df5e6e7d]
+[16:21:43] [Server thread/INFO] (net.minecraft.world.chunk.LoggingChunkLoadProgress) Loading 49 chunks for player spawn...
+[16:21:43] [Server thread/INFO] (net.minecraft.world.chunk.LoggingChunkLoadProgress) Time elapsed: 412 ms
+[16:21:43] [Server thread/INFO] (net.minecraft.server.PlayerManager) Player320[local:E:d0055840] logged in with entity id 260 at (-8.012572603403509, 0.0, 46.24230549981274)
+[16:21:43] [Netty Server IO #3/DEBUG] (ServerPlayNetworkAddon for literal{Player320}[style={clickEvent=SuggestCommand[command=/tell Player320 ],hoverEvent=ShowEntity[entity=net.minecraft.text.HoverEvent$EntityContent@91012d78],insertion=Player320}]) Handling inbound packet from channel with name "minecraft:register"
+[16:21:43] [Server thread/INFO] (net.minecraft.server.MinecraftServer) Player320 joined the game
+[16:21:43] [Server thread/INFO] (net.minecraft.server.integrated.IntegratedServer) Changing view distance to 12, from 10
+[16:21:43] [Server thread/INFO] (net.minecraft.server.integrated.IntegratedServer) Changing simulation distance to 12, from 0
+[16:21:43] [Render thread/INFO] (net.minecraft.advancement.AdvancementManager) Loaded 5 advancements
+[16:21:49] [Render thread/DEBUG] (net.fabricmc.fabric.impl.command.client.ClientCommandInternals) Syntax exception for client-sided command 'meteor_shower'
+com.mojang.brigadier.exceptions.CommandSyntaxException: Unknown or incomplete command. See below for error at position 0: <--[HERE]
+[16:21:49] [Render thread/INFO] (net.minecraft.client.gui.hud.ChatHud) [System] [CHAT] Unknown or incomplete command. See below for error
+[16:21:49] [Render thread/INFO] (net.minecraft.client.gui.hud.ChatHud) [System] [CHAT] meteor_shower<--[HERE]
+[16:22:02] [Server thread/INFO] (net.minecraft.server.integrated.IntegratedServer) Saving and pausing game...
+[16:22:02] [Server thread/INFO] (net.minecraft.server.MinecraftServer) Saving chunks for level 'ServerLevel[CMDMAKER TESTING (auto reset)]'/minecraft:overworld
+[16:22:02] [Server thread/INFO] (net.minecraft.server.MinecraftServer) Saving chunks for level 'ServerLevel[CMDMAKER TESTING (auto reset)]'/minecraft:the_nether
+[16:22:02] [Server thread/INFO] (net.minecraft.server.MinecraftServer) Saving chunks for level 'ServerLevel[CMDMAKER TESTING (auto reset)]'/minecraft:the_end

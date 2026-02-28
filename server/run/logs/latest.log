@@ -142,3 +142,44 @@ net.minecraft.client.realms.exception.RealmsServiceException: Realms authenticat
 [16:21:12] [Render thread/INFO] (Minecraft) Resizing Dynamic Transforms UBO, capacity limit of 32 reached during a single frame. New capacity will be 64.
 [16:21:12] [Render thread/INFO] (Minecraft) Resizing Dynamic Transforms UBO, capacity limit of 64 reached during a single frame. New capacity will be 128.
 [16:21:13] [Render thread/INFO] (Minecraft) Resizing Dynamic Transforms UBO, capacity limit of 128 reached during a single frame. New capacity will be 256.
+[16:21:14] [Render thread/INFO] (Minecraft) Resizing Dynamic Transforms UBO, capacity limit of 256 reached during a single frame. New capacity will be 512.
+[16:21:27] [Render thread/INFO] (Minecraft) [System] [CHAT] Downloaded function 'meteor_shower' successfully.
+[16:21:33] [Render thread/INFO] (Minecraft) [System] [CHAT] Unknown or incomplete command. See below for error
+[16:21:33] [Render thread/INFO] (Minecraft) [System] [CHAT] meteor_shower<--[HERE]
+[16:21:40] [Server thread/INFO] (Minecraft) Saving and pausing game...
+[16:21:40] [Server thread/INFO] (Minecraft) Saving chunks for level 'ServerLevel[CMDMAKER TESTING (auto reset)]'/minecraft:overworld
+[16:21:40] [Server thread/INFO] (Minecraft) Saving chunks for level 'ServerLevel[CMDMAKER TESTING (auto reset)]'/minecraft:the_nether
+[16:21:40] [Server thread/INFO] (Minecraft) Saving chunks for level 'ServerLevel[CMDMAKER TESTING (auto reset)]'/minecraft:the_end
+[16:21:40] [Server thread/INFO] (Minecraft) Player320 lost connection: Disconnected
+[16:21:40] [Server thread/INFO] (Minecraft) Player320 left the game
+[16:21:40] [Server thread/INFO] (Minecraft) Stopping singleplayer server as player logged out
+[16:21:40] [Server thread/INFO] (Minecraft) Stopping server
+[16:21:40] [Server thread/INFO] (Minecraft) Saving players
+[16:21:40] [Server thread/INFO] (Minecraft) Saving worlds
+[16:21:40] [Server thread/INFO] (Minecraft) Saving chunks for level 'ServerLevel[CMDMAKER TESTING (auto reset)]'/minecraft:overworld
+[16:21:41] [Server thread/INFO] (Minecraft) Saving chunks for level 'ServerLevel[CMDMAKER TESTING (auto reset)]'/minecraft:the_nether
+[16:21:41] [Server thread/INFO] (Minecraft) Saving chunks for level 'ServerLevel[CMDMAKER TESTING (auto reset)]'/minecraft:the_end
+[16:21:41] [Server thread/INFO] (Minecraft) ThreadedAnvilChunkStorage (CMDMAKER TESTING (auto reset)): All chunks are saved
+[16:21:41] [Server thread/INFO] (Minecraft) ThreadedAnvilChunkStorage (DIM-1): All chunks are saved
+[16:21:41] [Server thread/INFO] (Minecraft) ThreadedAnvilChunkStorage (DIM1): All chunks are saved
+[16:21:41] [Server thread/INFO] (Minecraft) ThreadedAnvilChunkStorage: All dimensions are saved
+[16:21:43] [Render thread/INFO] (Minecraft) Loaded 1461 recipes
+[16:21:43] [Render thread/INFO] (Minecraft) Loaded 1574 advancements
+[16:21:43] [Render thread/INFO] (BiomeModificationImpl) Applied 0 biome modifications to 0 of 65 new biomes in 330.7 μs
+[16:21:43] [Server thread/INFO] (Minecraft) Starting integrated minecraft server version 1.21.9
+[16:21:43] [Server thread/INFO] (Minecraft) Generating keypair
+[16:21:43] [Server thread/INFO] (Minecraft) Loading 0 persistent chunks...
+[16:21:43] [Server thread/INFO] (Minecraft) Preparing spawn area: 16%
+[16:21:43] [Server thread/INFO] (Minecraft) Loading 49 chunks for player spawn...
+[16:21:43] [Server thread/INFO] (Minecraft) Time elapsed: 412 ms
+[16:21:43] [Server thread/INFO] (Minecraft) Player320[local:E:d0055840] logged in with entity id 260 at (-8.012572603403509, 0.0, 46.24230549981274)
+[16:21:43] [Server thread/INFO] (Minecraft) Player320 joined the game
+[16:21:43] [Server thread/INFO] (Minecraft) Changing view distance to 12, from 10
+[16:21:43] [Server thread/INFO] (Minecraft) Changing simulation distance to 12, from 0
+[16:21:43] [Render thread/INFO] (Minecraft) Loaded 5 advancements
+[16:21:49] [Render thread/INFO] (Minecraft) [System] [CHAT] Unknown or incomplete command. See below for error
+[16:21:49] [Render thread/INFO] (Minecraft) [System] [CHAT] meteor_shower<--[HERE]
+[16:22:02] [Server thread/INFO] (Minecraft) Saving and pausing game...
+[16:22:02] [Server thread/INFO] (Minecraft) Saving chunks for level 'ServerLevel[CMDMAKER TESTING (auto reset)]'/minecraft:overworld
+[16:22:02] [Server thread/INFO] (Minecraft) Saving chunks for level 'ServerLevel[CMDMAKER TESTING (auto reset)]'/minecraft:the_nether
+[16:22:02] [Server thread/INFO] (Minecraft) Saving chunks for level 'ServerLevel[CMDMAKER TESTING (auto reset)]'/minecraft:the_end
