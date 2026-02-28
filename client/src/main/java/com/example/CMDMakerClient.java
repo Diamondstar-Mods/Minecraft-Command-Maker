@@ -444,15 +444,21 @@ public class CMDMakerClient implements ClientModInitializer {
 			MinecraftClient client = MinecraftClient.getInstance();
 			if (client.player == null) return 0;
 
-			for (String line : lines) {
-				line = line.trim();
+			for (int idx = 0; idx < lines.size(); idx++) {
+				String rawLine = lines.get(idx);
+				String line = rawLine.trim();
 				if (line.isEmpty() || line.startsWith("#")) continue;
+				try {
+					// Replace variables
+					line = replaceVariables(line, ctx);
 
-				// Replace variables
-				line = replaceVariables(line, ctx);
-
-				// Send each command to the server
-				client.player.networkHandler.sendChatMessage("/" + line);
+					// Send each command to the server
+					client.player.networkHandler.sendChatMessage("/" + line);
+				} catch (Exception ex) {
+					LOGGER.error("Failed to execute function {} at line {}: {}", functionName, idx + 1, line, ex);
+					ctx.getSource().sendError(Text.literal("Error in function '" + functionName + "' line " + (idx + 1) + ": " + ex.getMessage()));
+					return 0;
+				}
 			}
 			return 1;
 		} catch (Exception e) {

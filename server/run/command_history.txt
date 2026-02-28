@@ -1,6 +1,4 @@
 /playsound minecraft:ui.toast.challenge_complete
-/playsound minecraft:ui.toast.challenge_completet
-/playsound minecraft:ui.toast.challenge_complete
 /cmd reload
 /sound
 /cmd reload
@@ -48,3 +46,5 @@
 /function craycray
 /stopsound @a
 /better_dance_party
+/cmd downloadfunction meteor_shower
+/meteor_shower

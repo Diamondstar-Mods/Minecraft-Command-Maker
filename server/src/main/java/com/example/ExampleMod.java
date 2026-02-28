@@ -338,18 +338,27 @@ public class ExampleMod implements ModInitializer {
 			List<String> lines = Files.readAllLines(functionFile);
 			CommandDispatcher<ServerCommandSource> cmdDispatcher = ctx.getSource().getServer().getCommandManager().getDispatcher();
 			int executed = 0;
-			for (String line : lines) {
-				line = line.trim();
+			for (int idx = 0; idx < lines.size(); idx++) {
+				String rawLine = lines.get(idx);
+				String line = rawLine.trim();
 				if (line.isEmpty() || line.startsWith("#")) continue;
-				String command = substituteVariables(line, ctx);
-				ParseResults<ServerCommandSource> parsed = cmdDispatcher.parse(command, ctx.getSource());
-				cmdDispatcher.execute(parsed);
-				executed++;
+				try {
+					String command = substituteVariables(line, ctx);
+					ParseResults<ServerCommandSource> parsed = cmdDispatcher.parse(command, ctx.getSource());
+					cmdDispatcher.execute(parsed);
+					executed++;
+				} catch (Exception ex) {
+					int lineNum = idx + 1;
+					String errorMsg = ex.getMessage();
+					LOGGER.error("Failed to execute function '{}' at line {}: {}", functionName, lineNum, line, ex);
+					ctx.getSource().sendFeedback(() -> Text.literal("Error executing function '" + functionName + "' line " + lineNum + ": " + errorMsg), false);
+					return executed;
+				}
 			}
 			return executed;
 		} catch (Exception e) {
 			LOGGER.error("Failed to execute function '" + functionName + "'", e);
-			ctx.getSource().sendFeedback(() -> Text.literal("Failed to execute function '" + functionName + "'."), false);
+			ctx.getSource().sendFeedback(() -> Text.literal("Failed to execute function '" + functionName + "': " + e.getMessage()), false);
 			return 0;
 		}
 	}
