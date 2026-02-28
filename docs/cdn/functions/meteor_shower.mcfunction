@@ -11,6 +11,7 @@ time set midnight
 weather thunder
 
 # --- Give players fire resistance so they don't die ---
+effect clear @a
 effect give @a minecraft:fire_resistance 60 0 true
 
 # --- Wave 1: Magma meteors falling from the sky ---
