@@ -1,0 +1,2 @@
+cd ..
+./gradlew :client:runClient
