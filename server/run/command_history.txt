@@ -1,8 +1,3 @@
-/danceparty
-/tntrain
-/cmd reload
-/tntrain
-/cr
 /craycray
 /cmd reload
 /craycray
@@ -48,3 +43,8 @@
 /cmd downloadfunction example
 /cmd downloadfunction copilot
 /copilot
+/cmd downloadfunction dance_party
+/cmd downloadfunction better_dance_party
+/better_dance_party
+/danceparty
+/better_dance_party

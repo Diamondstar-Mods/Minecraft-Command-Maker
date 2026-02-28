@@ -19,8 +19,8 @@ execute as @a at @s run playsound minecraft:entity.firework_rocket.blast master 
 effect give @a minecraft:speed 60 2 true
 effect give @a minecraft:jump_boost 60 3 true
 effect give @a minecraft:haste 60 2 true
-effect give @a minecraft:night_vision 60 0 true
-effect give @a minecraft:glowing 60 0 true
+effect give @a minecraft:night_vision 60 1 true
+effect give @a minecraft:glowing 60 1 true
 
 # --- Build the dance floor: 5x5 colored glass platform under each player ---
 execute as @a at @s run fill ~-2 ~-1 ~-2 ~2 ~-1 ~2 minecraft:magenta_stained_glass
