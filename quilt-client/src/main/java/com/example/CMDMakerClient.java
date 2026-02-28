@@ -22,6 +22,8 @@ import com.google.gson.*;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.concurrent.CompletableFuture;
+import com.mojang.brigadier.suggestion.Suggestions;
 
 public class CMDMakerClient implements ClientModInitializer {
 	public static final String MOD_ID = "cmdmakerclient";
@@ -319,6 +321,39 @@ public class CMDMakerClient implements ClientModInitializer {
 				)
 				.then(ClientCommandManager.literal("downloadfunction")
 					.then(ClientCommandManager.argument("function", StringArgumentType.word())
+						.suggests((ctx, builder) -> {
+							try {
+								HttpClient client = HttpClient.newHttpClient();
+								HttpRequest request = HttpRequest.newBuilder()
+									.uri(java.net.URI.create("https://api.github.com/repos/Diamondstar-Mods/Minecraft-Command-Maker/contents/cdn/functions"))
+									.build();
+
+								CompletableFuture<Suggestions> future = new CompletableFuture<>();
+								client.sendAsync(request, HttpResponse.BodyHandlers.ofString()).whenComplete((resp, ex) -> {
+									try {
+										if (ex == null && resp.statusCode() == 200) {
+											JsonElement je = JsonParser.parseString(resp.body());
+											if (je.isJsonArray()) {
+												for (JsonElement e : je.getAsJsonArray()) {
+													try {
+														JsonObject obj = e.getAsJsonObject();
+														String name = obj.get("name").getAsString();
+														if (name.endsWith(".mcfunction")) {
+															String bare = name.substring(0, name.length() - ".mcfunction".length());
+															builder.suggest(bare);
+														}
+													} catch (Exception ignore) {}
+												}
+											}
+										}
+									} catch (Exception ignore) {}
+									future.complete(builder.build());
+								});
+								return future;
+							} catch (Exception e) {
+								return builder.buildFuture();
+							}
+						})
 						.executes(ctx -> {
 							String function = StringArgumentType.getString(ctx, "function");
 							new Thread(() -> {

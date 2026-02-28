@@ -20,6 +20,7 @@ import com.google.gson.*;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.concurrent.CompletableFuture;
 
 public class ExampleMod implements ModInitializer {
 	public static final String MOD_ID = "cmdmaker";
@@ -686,31 +687,64 @@ public class ExampleMod implements ModInitializer {
 					})
 				)
 				.then(net.minecraft.server.command.CommandManager.literal("downloadfunction")
-					.then(net.minecraft.server.command.CommandManager.argument("function", StringArgumentType.word())
-						.executes(ctx -> {
-							String function = StringArgumentType.getString(ctx, "function");
-							new Thread(() -> {
+						.then(net.minecraft.server.command.CommandManager.argument("function", StringArgumentType.word())
+							.suggests((ctx, builder) -> {
 								try {
 									HttpClient client = HttpClient.newHttpClient();
 									HttpRequest request = HttpRequest.newBuilder()
-										.uri(java.net.URI.create("https://commandmakerwiki.lucasgeitgey.com/cdn/functions/" + function + ".mcfunction"))
+										.uri(java.net.URI.create("https://api.github.com/repos/Diamondstar-Mods/Minecraft-Command-Maker/contents/cdn/functions"))
 										.build();
-									HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-									if (response.statusCode() == 200) {
-										Path filePath = FUNCTIONS_PATH.resolve(function + ".mcfunction");
-										Files.write(filePath, response.body().getBytes(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
-										ctx.getSource().sendFeedback(() -> Text.literal("Downloaded function '" + function + "' successfully."), false);
-									} else {
-										ctx.getSource().sendFeedback(() -> Text.literal("Failed to download function '" + function + "': HTTP " + response.statusCode()), false);
-									}
+
+									CompletableFuture<com.mojang.brigadier.suggestion.Suggestions> future = new CompletableFuture<>();
+									client.sendAsync(request, HttpResponse.BodyHandlers.ofString()).whenComplete((resp, ex) -> {
+										try {
+											if (ex == null && resp.statusCode() == 200) {
+												JsonElement je = JsonParser.parseString(resp.body());
+												if (je.isJsonArray()) {
+													for (JsonElement e : je.getAsJsonArray()) {
+														try {
+															JsonObject obj = e.getAsJsonObject();
+															String name = obj.get("name").getAsString();
+															if (name.endsWith(".mcfunction")) {
+																String bare = name.substring(0, name.length() - ".mcfunction".length());
+																builder.suggest(bare);
+															}
+														} catch (Exception ignore) {}
+													}
+												}
+											}
+										} catch (Exception ignore) {}
+										future.complete(builder.build());
+									});
+									return future;
 								} catch (Exception e) {
-									ctx.getSource().sendFeedback(() -> Text.literal("Failed to download function '" + function + "': " + e.getMessage()), false);
+									return builder.buildFuture();
 								}
-							}).start();
-							return 1;
-						})
+							})
+							.executes(ctx -> {
+								String function = StringArgumentType.getString(ctx, "function");
+								new Thread(() -> {
+									try {
+										HttpClient client = HttpClient.newHttpClient();
+										HttpRequest request = HttpRequest.newBuilder()
+											.uri(java.net.URI.create("https://commandmakerwiki.lucasgeitgey.com/cdn/functions/" + function + ".mcfunction"))
+											.build();
+										HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+										if (response.statusCode() == 200) {
+											Path filePath = FUNCTIONS_PATH.resolve(function + ".mcfunction");
+											Files.write(filePath, response.body().getBytes(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+											ctx.getSource().sendFeedback(() -> Text.literal("Downloaded function '" + function + "' successfully."), false);
+										} else {
+											ctx.getSource().sendFeedback(() -> Text.literal("Failed to download function '" + function + "': HTTP " + response.statusCode()), false);
+										}
+									} catch (Exception e) {
+										ctx.getSource().sendFeedback(() -> Text.literal("Failed to download function '" + function + "': " + e.getMessage()), false);
+									}
+								}).start();
+								return 1;
+							})
+						)
 					)
-				)
 		);
 	}
 }
