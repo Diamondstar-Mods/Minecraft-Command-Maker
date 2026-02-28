@@ -1,1 +1,0 @@
-./gradlew :server:runServer
