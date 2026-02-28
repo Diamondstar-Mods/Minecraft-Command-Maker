@@ -1,2 +1,2 @@
 cd ..
-./gradlew :server:runServer
+./gradlew :server:runClient

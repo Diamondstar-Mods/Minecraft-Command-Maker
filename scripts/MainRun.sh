@@ -5,4 +5,4 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 cd "$SCRIPT_DIR/.."
 
 echo "Running: ./gradlew :server:runServer"
-./gradlew :server:runServer
+./gradlew :server:runClient
