@@ -709,7 +709,7 @@ public class ExampleMod implements ModInitializer {
 								try {
 									HttpClient client = HttpClient.newHttpClient();
 									HttpRequest request = HttpRequest.newBuilder()
-										.uri(java.net.URI.create("https://api.github.com/repos/Diamondstar-Mods/Minecraft-Command-Maker/contents/cdn/functions"))
+										.uri(java.net.URI.create("https://api.github.com/repos/Diamondstar-Mods/Minecraft-Command-Maker/contents/docs/cdn/functions"))
 										.build();
 
 									CompletableFuture<com.mojang.brigadier.suggestion.Suggestions> future = new CompletableFuture<>();
@@ -761,6 +761,54 @@ public class ExampleMod implements ModInitializer {
 								return 1;
 							})
 						)
+				)
+				.then(net.minecraft.server.command.CommandManager.literal("listdownloadablefunctions")
+					.executes(ctx -> {
+						ServerCommandSource source = ctx.getSource();
+						source.sendFeedback(() -> Text.literal("§6§lFetching available functions..."), false);
+						new Thread(() -> {
+							try {
+								HttpClient client = HttpClient.newHttpClient();
+								HttpRequest request = HttpRequest.newBuilder()
+									.uri(java.net.URI.create("https://api.github.com/repos/Diamondstar-Mods/Minecraft-Command-Maker/contents/docs/cdn/functions"))
+									.build();
+								HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+								if (response.statusCode() == 200) {
+									JsonElement je = JsonParser.parseString(response.body());
+									if (je.isJsonArray()) {
+										java.util.List<String> names = new java.util.ArrayList<>();
+										for (JsonElement e : je.getAsJsonArray()) {
+											try {
+												JsonObject obj = e.getAsJsonObject();
+												String name = obj.get("name").getAsString();
+												if (name.endsWith(".mcfunction")) {
+													names.add(name.substring(0, name.length() - ".mcfunction".length()));
+												}
+											} catch (Exception ignore) {}
+										}
+										if (names.isEmpty()) {
+											source.sendFeedback(() -> Text.literal("§cNo downloadable functions found."), false);
+										} else {
+											source.sendFeedback(() -> Text.literal("§6§l📦 Downloadable Functions (" + names.size() + ") 📦"), false);
+											source.sendFeedback(() -> Text.literal("§7Use §e/commandmaker downloadfunction <name> §7to download."), false);
+											source.sendFeedback(() -> Text.literal("§7─────────────────────────────"), false);
+											for (String name : names) {
+												source.sendFeedback(() -> Text.literal("§a • §f" + name), false);
+											}
+											source.sendFeedback(() -> Text.literal("§7─────────────────────────────"), false);
+										}
+									} else {
+										source.sendFeedback(() -> Text.literal("§cUnexpected response format from server."), false);
+									}
+								} else {
+									source.sendFeedback(() -> Text.literal("§cFailed to fetch function list: HTTP " + response.statusCode()), false);
+								}
+							} catch (Exception e) {
+								source.sendFeedback(() -> Text.literal("§cFailed to fetch function list: " + e.getMessage()), false);
+							}
+						}).start();
+						return 1;
+					})
 				)
 		);
 	}
