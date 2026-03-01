@@ -60,8 +60,8 @@
           // Format in UK style (day/month/year) including time
           document.getElementById("commit-date").textContent =
             commitDate.toLocaleString("en-GB");
-          // Show author and message as well
-          const author = commitInfo.committer.name || commitInfo.author?.name || "Unknown";
+          // Show author and message as well (prefer GitHub login)
+          const author = data[0].author?.login || commitInfo.committer.name || commitInfo.author?.name || "Unknown";
           const msgEl = document.createElement("p");
           msgEl.textContent = `Author: ${author}`;
           document.body.appendChild(msgEl);
