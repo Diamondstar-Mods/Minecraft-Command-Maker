@@ -66,7 +66,7 @@
           msgEl.textContent = `Author: ${author}`;
           document.body.appendChild(msgEl);
           const messageEl = document.createElement("p");
-          messageEl.textContent = `Message: ${commitInfo.message}`;
+          messageEl.textContent = `  ${commitInfo.message}`;
           document.body.appendChild(messageEl);
         })
         .catch((error) => {
