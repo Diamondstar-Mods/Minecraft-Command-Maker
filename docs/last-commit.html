@@ -55,9 +55,19 @@
             return;
           }
           // Extract commit date
-          const commitDate = new Date(data[0].commit.committer.date);
+          const commitInfo = data[0].commit;
+          const commitDate = new Date(commitInfo.committer.date);
+          // Format in UK style (day/month/year) including time
           document.getElementById("commit-date").textContent =
-            commitDate.toLocaleString();
+            commitDate.toLocaleString("en-GB");
+          // Show author and message as well
+          const author = commitInfo.committer.name || commitInfo.author?.name || "Unknown";
+          const msgEl = document.createElement("p");
+          msgEl.textContent = `Author: ${author}`;
+          document.body.appendChild(msgEl);
+          const messageEl = document.createElement("p");
+          messageEl.textContent = `Message: ${commitInfo.message}`;
+          document.body.appendChild(messageEl);
         })
         .catch((error) => {
           console.error(error);
