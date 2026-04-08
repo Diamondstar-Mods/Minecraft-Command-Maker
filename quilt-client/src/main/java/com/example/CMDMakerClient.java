@@ -24,6 +24,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.concurrent.CompletableFuture;
 import com.mojang.brigadier.suggestion.Suggestions;
+import com.example.gui.AliasDeleteScreen;
 
 public class CMDMakerClient implements ClientModInitializer {
 	public static final String MOD_ID = "cmdmakerclient";
@@ -52,6 +53,7 @@ public class CMDMakerClient implements ClientModInitializer {
 			registerAliases(dispatcher);
 			registerSetCmdVariable(dispatcher);
 			registerDeleteAliasMenu(dispatcher);
+			registerDeleteAliasCommand(dispatcher);
 			registerSyntaxCommand(dispatcher);
 			registerCmdCommand(dispatcher);
 		});
@@ -523,14 +525,48 @@ public class CMDMakerClient implements ClientModInitializer {
 		dispatcher.register(
 			ClientCommandManager.literal("delaliasmenu")
 				.executes(ctx -> {
-					// This would open a GUI for deleting aliases, but for client-side we'll just list them
-					StringBuilder sb = new StringBuilder("Available aliases to delete:\n");
-					for (String alias : aliases.keySet()) {
-						sb.append("- ").append(alias).append(" -> ").append(aliases.get(alias)).append("\n");
-					}
-					ctx.getSource().sendFeedback(Text.literal(sb.toString()));
+					MinecraftClient.getInstance().setScreen(new AliasDeleteScreen(aliases, null));
 					return 1;
 				})
+		);
+	}
+
+	// Register /deletealias command
+	private void registerDeleteAliasCommand(CommandDispatcher<FabricClientCommandSource> dispatcher) {
+		dispatcher.register(
+			ClientCommandManager.literal("deletealias")
+				.executes(ctx -> {
+					if (aliases.isEmpty()) {
+						ctx.getSource().sendFeedback(Text.literal("§cNo aliases to delete."));
+						return 0;
+					}
+					// Send a message listing all aliases with delete instructions
+					ctx.getSource().sendFeedback(Text.literal("§6Delete Aliases Menu:"));
+					final int[] index = {1};
+					for (String alias : aliases.keySet()) {
+						String cmd = aliases.get(alias);
+						int idx = index[0];
+						ctx.getSource().sendFeedback(Text.literal("  §f[" + idx + "] §6/" + alias + " §7-> §f" + cmd));
+						index[0]++;
+					}
+					ctx.getSource().sendFeedback(Text.literal("§7Use: §f/deletealias <alias>§7 to delete"));
+					return 1;
+				})
+				.then(ClientCommandManager.argument("alias", StringArgumentType.word())
+					.executes(ctx -> {
+						String alias = StringArgumentType.getString(ctx, "alias");
+						if (aliases.containsKey(alias)) {
+							aliases.remove(alias);
+							saveAliases();
+							dispatcher.getRoot().getChildren().removeIf(node -> node.getName().equals(alias));
+							ctx.getSource().sendFeedback(Text.literal("§6[" + alias + "] was deleted"));
+							return 1;
+						} else {
+							ctx.getSource().sendFeedback(Text.literal("§cAlias '§f" + alias + "§c' not found."));
+							return 0;
+						}
+					})
+				)
 		);
 	}
 
