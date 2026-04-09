@@ -20,8 +20,8 @@
   "mixins": ["modid.mixins.json"],
   "depends": {
     "fabricloader": "*",
-    "minecraft": ">=1.17",
-    "java": ">=17",
+    "minecraft": ">=1.14",
+    "java": ">=8",
     "fabric-api": "*"
   },
   "suggests": {

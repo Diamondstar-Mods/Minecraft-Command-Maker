@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "nekkycommandmaker-legacy-server",
+  "version": "${version}",
+  "name": "Nek's Command Maker Legacy Server",
+  "description": "Legacy Fabric server support for Minecraft 1.8-1.13.2.",
+  "authors": ["NekSheep9180 aka lucgei231"],
+  "contact": {
+    "homepage": "https://github.com/Diamondstar-Mods/",
+    "sources": "https://github.com/Diamondstar-Mods/Minecraft-Command-Maker",
+    "issues": "https://github.com/Diamondstar-Mods/Minecraft-Command-Maker/issues"
+  },
+  "license": "CC-BY-SA-4.0",
+  "environment": "server",
+  "entrypoints": {
+    "main": ["com.example.ExampleMod"]
+  },
+  "depends": {
+    "fabricloader": ">=0.7.12",
+    "minecraft": ">=1.8 <=1.13.2",
+    "java": ">=8"
+  }
+}
