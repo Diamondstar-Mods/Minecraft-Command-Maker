@@ -1,0 +1,63 @@
+buildscript {
+    repositories {
+        maven { url 'https://repo.legacyfabric.net/maven/' }
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'net.fabricmc:fabric-loom:1.15-SNAPSHOT'
+    }
+}
+
+apply plugin: 'fabric-loom'
+apply plugin: 'maven-publish'
+
+version = project.mod_version
+description = "Legacy Fabric client mod for Minecraft 1.8-1.13.2."
+group = 'io.github.diamondstar_mods'
+
+base {
+    archivesName = project.archives_base_name + "-client-legacy"
+}
+
+repositories {
+    mavenCentral()
+    maven { url 'https://repo.legacyfabric.net/maven/' }
+}
+
+loom {
+    mods {
+        "modid" {
+            sourceSet sourceSets.main
+        }
+    }
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:1.13.2"
+    mappings "net.legacyfabric:yarn:1.13.2+build.458:v2"
+    modImplementation "net.fabricmc:fabric-loader:0.18.4"
+    implementation "com.google.code.gson:gson:2.10.1"
+}
+
+processResources {
+    inputs.property "version", project.version
+    filesMatching("fabric.mod.json") {
+        expand "version": inputs.properties["version"]
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    it.options.release = 8
+}
+
+java {
+    withSourcesJar()
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+jar {
+    from("LICENSE") {
+        rename { "CMDMakerFabricLegacyClient" }
+    }
+}
