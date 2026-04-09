@@ -4,7 +4,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'net.fabricmc:fabric-loom:1.10-SNAPSHOT'
+        classpath 'net.fabricmc:fabric-loom:1.15-SNAPSHOT'
     }
 }
 
@@ -34,9 +34,8 @@ loom {
 
 dependencies {
     minecraft "com.mojang:minecraft:1.13.2"
-    mappings "net.fabricmc:yarn:1.13.2+build.14:v2"
-    modImplementation "net.fabricmc:fabric-loader:0.7.12+build.7"
-    modImplementation "net.fabricmc.fabric-api:fabric-api:0.4.5+build.292"
+    mappings "net.legacyfabric:yarn:1.13.2+build.458:v2"
+    modImplementation "net.fabricmc:fabric-loader:0.18.4"
     implementation "com.google.code.gson:gson:2.10.1"
 }
 
