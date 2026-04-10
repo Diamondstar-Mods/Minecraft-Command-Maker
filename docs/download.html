@@ -72,6 +72,152 @@
             color: #fff;
             border-color: #555;
         }
+        .download-finder-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+            cursor: pointer;
+            border: none;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+        .download-finder-btn:hover {
+            background: #0056b3;
+        }
+        body.dark .download-finder-btn {
+            background: #555;
+        }
+        body.dark .download-finder-btn:hover {
+            background: #777;
+        }
+        .download-finder-modal {
+            position: fixed;
+            z-index: 1001;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        .download-finder-content {
+            background-color: #fefefe;
+            padding: 30px;
+            border-radius: 8px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+        body.dark .download-finder-content {
+            background-color: #333;
+            color: #fff;
+        }
+        .download-finder-close {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 28px;
+            font-weight: bold;
+            color: #f44336;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+        }
+        .download-finder-close:hover {
+            color: #da190b;
+        }
+        .download-finder-section {
+            margin-bottom: 20px;
+        }
+        .download-finder-section label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        .download-finder-section select,
+        .download-finder-section input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        body.dark .download-finder-section select,
+        body.dark .download-finder-section input {
+            background-color: #555;
+            color: #fff;
+            border-color: #777;
+        }
+        .download-finder-results {
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 10px;
+            background: #f9f9f9;
+        }
+        body.dark .download-finder-results {
+            background-color: #444;
+            border-color: #555;
+        }
+        .version-result {
+            padding: 12px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: white;
+        }
+        body.dark .version-result {
+            background-color: #555;
+            border-color: #666;
+        }
+        .version-result h3 {
+            margin: 0 0 8px 0;
+            font-size: 16px;
+        }
+        .version-result .meta {
+            font-size: 12px;
+            color: #666;
+            margin: 4px 0;
+        }
+        body.dark .version-result .meta {
+            color: #aaa;
+        }
+        .version-result .type-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        .type-badge.release {
+            background: #28a745;
+            color: white;
+        }
+        .type-badge.beta {
+            background: #ffc107;
+            color: black;
+        }
+        .type-badge.alpha {
+            background: #dc3545;
+            color: white;
+        }
+        .version-result .download-btn {
+            display: inline-block;
+            margin-top: 8px;
+        }
     </style>
 </head>
 <body class="download-page">
@@ -142,6 +288,8 @@
             <h1>Modrinth Versions for Command Maker</h1>
             <p>Choose between Server Edition (requires server mod) or Client Edition (works on any server). Automatically loaded from the Modrinth API. Direct Downloads Only.</p>
 
+            <button class="download-finder-btn" id="downloadFinderBtn">🔍 Download Finder</button>
+
             <div class="edition-selector">
                 <label for="edition-select">Select Edition:</label>
                 <select id="edition-select">
@@ -168,6 +316,42 @@
             <p style="color: black;">Error loading versions. Would you like to try finding the versions on Modrinth?</p>
             <button id="yes-btn">Yes</button>
             <button id="no-btn">No</button>
+        </div>
+    </div>
+
+    <div class="download-finder-modal" id="downloadFinderModal">
+        <div class="download-finder-content">
+            <button class="download-finder-close" id="closeFinderBtn">&times;</button>
+            <h2 style="margin-top: 0;">Download Finder</h2>
+            
+            <div class="download-finder-section">
+                <label for="finderMinecraftVersion">Minecraft Version:</label>
+                <input type="text" id="finderMinecraftVersion" placeholder="e.g., 1.20, 1.21"> 
+            </div>
+
+            <div class="download-finder-section">
+                <label for="finderLoader">Loader:</label>
+                <select id="finderLoader">
+                    <option value="">Any Loader</option>
+                    <option value="fabric">Fabric</option>
+                    <option value="quilt">Quilt</option>
+                </select>
+            </div>
+
+            <div class="download-finder-section">
+                <label for="finderEdition">Edition:</label>
+                <select id="finderEdition">
+                    <option value="3cwbW4UB">Server Edition</option>
+                    <option value="HuGRbHKz">Client Edition</option>
+                </select>
+            </div>
+
+            <button class="download-finder-btn" id="searchFinderBtn" style="width: 100%; margin-bottom: 15px;">Search</button>
+
+            <div class="download-finder-results" id="finderResults" style="display: none;">
+                <h3>Results:</h3>
+                <div id="finderResultsList"></div>
+            </div>
         </div>
     </div>
 
@@ -483,6 +667,98 @@
 
         document.getElementById('no-btn').addEventListener('click', () => {
             document.getElementById('error-modal').style.display = 'none';
+        });
+
+        // Download Finder functionality
+        const downloadFinderModal = document.getElementById('downloadFinderModal');
+        const downloadFinderBtn = document.getElementById('downloadFinderBtn');
+        const closeFinderBtn = document.getElementById('closeFinderBtn');
+        const searchFinderBtn = document.getElementById('searchFinderBtn');
+
+        downloadFinderBtn.addEventListener('click', () => {
+            downloadFinderModal.style.display = 'flex';
+        });
+
+        closeFinderBtn.addEventListener('click', () => {
+            downloadFinderModal.style.display = 'none';
+        });
+
+        window.addEventListener('click', (event) => {
+            if (event.target === downloadFinderModal) {
+                downloadFinderModal.style.display = 'none';
+            }
+        });
+
+        searchFinderBtn.addEventListener('click', async () => {
+            const mcVersion = document.getElementById('finderMinecraftVersion').value.trim();
+            const loader = document.getElementById('finderLoader').value;
+            const edition = document.getElementById('finderEdition').value;
+            const resultsList = document.getElementById('finderResultsList');
+            const resultsContainer = document.getElementById('finderResults');
+
+            if (!mcVersion) {
+                resultsList.innerHTML = '<p style="color: red;">Please enter a Minecraft version.</p>';
+                resultsContainer.style.display = 'block';
+                return;
+            }
+
+            try {
+                resultsList.innerHTML = 'Searching...';
+                resultsContainer.style.display = 'block';
+
+                const response = await fetch(`https://api.modrinth.com/v2/project/${edition}/version`);
+                const allVersions = await response.json();
+
+                // Filter by MC version and loader
+                const filtered = allVersions.filter(v => {
+                    const matchesVersion = Array.isArray(v.game_versions) && v.game_versions.includes(mcVersion);
+                    const matchesLoader = !loader || (Array.isArray(v.loaders) && v.loaders.includes(loader));
+                    return matchesVersion && matchesLoader;
+                });
+
+                if (filtered.length === 0) {
+                    resultsList.innerHTML = '<p style="color: red;">No versions found matching your criteria.</p>';
+                    return;
+                }
+
+                // Group by release type
+                const releases = filtered.filter(v => v.version_type === 'release').slice(0, 1);
+                const betas = filtered.filter(v => v.version_type === 'beta').slice(0, 1);
+                const alphas = filtered.filter(v => v.version_type === 'alpha').slice(0, 1);
+
+                resultsList.innerHTML = '';
+
+                const displayVersions = (versionList, type) => {
+                    return versionList.map(v => {
+                        const primaryFile = (Array.isArray(v.files) && (v.files.find(f => f.primary) || v.files[0])) || null;
+                        const typeColor = type === 'release' ? 'release' : (type === 'beta' ? 'beta' : 'alpha');
+                        return `
+                            <div class="version-result">
+                                <h3>${v.name} <span class="type-badge ${typeColor}">${type.toUpperCase()}</span></h3>
+                                <div class="meta"><strong>Version Number:</strong> ${v.version_number}</div>
+                                <div class="meta"><strong>Loaders:</strong> ${Array.isArray(v.loaders) ? v.loaders.join(", ") : "Unknown"}</div>
+                                <div class="meta"><strong>Published:</strong> ${formatDate(v.date_published)}</div>
+                                ${primaryFile ? `<a class="download-btn" href="${primaryFile.url}" download>Download (${primaryFile.filename})</a>` : ''}
+                            </div>
+                        `;
+                    }).join('');
+                };
+
+                if (releases.length > 0) {
+                    resultsList.innerHTML += '<h4 style="margin-top: 0;">Latest Release</h4>' + displayVersions(releases, 'release');
+                }
+                if (betas.length > 0) {
+                    resultsList.innerHTML += '<h4>Latest Beta</h4>' + displayVersions(betas, 'beta');
+                }
+                if (alphas.length > 0) {
+                    resultsList.innerHTML += '<h4>Latest Alpha</h4>' + displayVersions(alphas, 'alpha');
+                }
+
+            } catch (err) {
+                console.error('Error searching versions:', err);
+                resultsList.innerHTML = '<p style="color: red;">Error searching versions. Please try again.</p>';
+                resultsContainer.style.display = 'block';
+            }
         });
     </script>
 
