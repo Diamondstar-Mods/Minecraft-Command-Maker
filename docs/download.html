@@ -561,8 +561,8 @@
                 const publishedHtml = v.date_published ? `<time datetime="${v.date_published}" title="${v.date_published}">${formatDate(v.date_published)}</time>` : "Unknown";
 
                 div.innerHTML = `
-                    <h2>${v.name}</h2>
-                    <div class="meta"><strong>Version Number:</strong> ${v.version_number}</div>
+                    <h2>${v.version_number}</h2>
+                    <div class="meta"><strong>Name:</strong> ${v.name}</div>
                     <div class="meta"><strong>Release Type:</strong> ${v.version_type}</div>
                     <div class="meta"><strong>Supported Loaders:</strong> ${Array.isArray(v.loaders) ? v.loaders.join(", ") : ""}</div>
                     <div class="meta collapsible"><strong>Supported Minecraft Versions:</strong> (${Array.isArray(v.game_versions) ? v.game_versions.length : 0} versions)</div>
@@ -825,8 +825,8 @@
                         const typeColor = type === 'release' ? 'release' : (type === 'beta' ? 'beta' : 'alpha');
                         return `
                             <div class="version-result">
-                                <h3>${v.name} <span class="type-badge ${typeColor}">${type.toUpperCase()}</span></h3>
-                                <div class="meta"><strong>Version Number:</strong> ${v.version_number}</div>
+                                <h3>${v.version_number} <span class="type-badge ${typeColor}">${type.toUpperCase()}</span></h3>
+                                <div class="meta"><strong>Name:</strong> ${v.name}</div>
                                 <div class="meta"><strong>Loaders:</strong> ${Array.isArray(v.loaders) ? v.loaders.join(", ") : "Unknown"}</div>
                                 <div class="meta"><strong>Published:</strong> ${formatDate(v.date_published)}</div>
                                 ${primaryFile ? `<a class="download-btn" href="${primaryFile.url}" download>Download (${primaryFile.filename})</a>` : ''}
