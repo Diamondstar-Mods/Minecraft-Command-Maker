@@ -288,7 +288,9 @@
             <h1>Modrinth Versions for Command Maker</h1>
             <p>Choose between Server Edition (requires server mod) or Client Edition (works on any server). Automatically loaded from the Modrinth API. Direct Downloads Only.</p>
 
-            <button class="download-finder-btn" id="downloadFinderBtn">🔍 Download Finder</button>
+            <div style="text-align: center; margin-bottom: 20px;">
+                <button class="download-finder-btn" id="downloadFinderBtn">🔍 Download Finder</button>
+            </div>
 
             <div class="edition-selector">
                 <label for="edition-select">Select Edition:</label>
@@ -841,7 +843,10 @@
                 resultsList.innerHTML = '<p style="color: red;">Error searching versions. Please try again.</p>';
                 resultsContainer.style.display = 'block';
             }
-        });
+        }
+
+        // Load initial versions
+        loadVersions();
     </script>
 
     <div class="footer">
