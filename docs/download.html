@@ -326,7 +326,14 @@
             
             <div class="download-finder-section">
                 <label for="finderMinecraftVersion">Minecraft Version:</label>
-                <input type="text" id="finderMinecraftVersion" placeholder="e.g., 1.20, 1.21"> 
+                <select id="finderMinecraftVersion">
+                    <option value="">Select a version...</option>
+                </select>
+            </div>
+
+            <div class="download-finder-section" style="display: flex; align-items: center;">
+                <input type="checkbox" id="finderShowSnapshots" style="width: auto; margin-right: 10px;">
+                <label for="finderShowSnapshots" style="margin-bottom: 0;">Show Snapshots</label>
             </div>
 
             <div class="download-finder-section">
@@ -335,6 +342,8 @@
                     <option value="">Any Loader</option>
                     <option value="fabric">Fabric</option>
                     <option value="quilt">Quilt</option>
+                    <option value="legacy-fabric">Legacy Fabric</option>
+                    <option value="forge">Forge</option>
                 </select>
             </div>
 
@@ -345,8 +354,6 @@
                     <option value="HuGRbHKz">Client Edition</option>
                 </select>
             </div>
-
-            <button class="download-finder-btn" id="searchFinderBtn" style="width: 100%; margin-bottom: 15px;">Search</button>
 
             <div class="download-finder-results" id="finderResults" style="display: none;">
                 <h3>Results:</h3>
@@ -673,10 +680,18 @@
         const downloadFinderModal = document.getElementById('downloadFinderModal');
         const downloadFinderBtn = document.getElementById('downloadFinderBtn');
         const closeFinderBtn = document.getElementById('closeFinderBtn');
-        const searchFinderBtn = document.getElementById('searchFinderBtn');
+        const versionDropdown = document.getElementById('finderMinecraftVersion');
+        const showSnapshotsCheckbox = document.getElementById('finderShowSnapshots');
+        const loaderSelect = document.getElementById('finderLoader');
+        const editionSelect = document.getElementById('finderEdition');
+        let availableVersions = [];
 
-        downloadFinderBtn.addEventListener('click', () => {
+        downloadFinderBtn.addEventListener('click', async () => {
             downloadFinderModal.style.display = 'flex';
+            // Fetch available versions when modal opens if not already loaded
+            if (availableVersions.length === 0) {
+                await loadAvailableVersions();
+            }
         });
 
         closeFinderBtn.addEventListener('click', () => {
@@ -689,7 +704,74 @@
             }
         });
 
-        searchFinderBtn.addEventListener('click', async () => {
+        async function loadAvailableVersions() {
+            try {
+                const edition = editionSelect.value;
+                const response = await fetch(`https://api.modrinth.com/v2/project/${edition}/version`);
+                const allVersions = await response.json();
+                
+                // Extract unique game versions from all versions
+                const versionSet = new Set();
+                allVersions.forEach(v => {
+                    if (Array.isArray(v.game_versions)) {
+                        v.game_versions.forEach(gv => versionSet.add(gv));
+                    }
+                });
+                
+                availableVersions = Array.from(versionSet).sort((a, b) => {
+                    // Sort versions numerically in descending order
+                    const aParts = a.split('.').map(Number);
+                    const bParts = b.split('.').map(Number);
+                    for (let i = 0; i < Math.max(aParts.length, bParts.length); i++) {
+                        const aPart = aParts[i] || 0;
+                        const bPart = bParts[i] || 0;
+                        if (aPart !== bPart) return bPart - aPart;
+                    }
+                    return 0;
+                });
+                
+                populateVersionDropdown();
+            } catch (err) {
+                console.error('Error loading available versions:', err);
+            }
+        }
+
+        function populateVersionDropdown() {
+            const showSnapshots = showSnapshotsCheckbox.checked;
+            versionDropdown.innerHTML = '<option value="">Select a version...</option>';
+            
+            availableVersions.forEach(v => {
+                // Check if version is a snapshot (contains 'w' or '-pre')
+                const isSnapshot = v.includes('w') || v.includes('-pre');
+                if (!isSnapshot || showSnapshots) {
+                    const option = document.createElement('option');
+                    option.value = v;
+                    option.textContent = isSnapshot ? `${v} (Snapshot)` : v;
+                    versionDropdown.appendChild(option);
+                }
+            });
+        }
+
+        showSnapshotsCheckbox.addEventListener('change', () => {
+            populateVersionDropdown();
+            if (versionDropdown.value) performSearch();
+        });
+
+        versionDropdown.addEventListener('change', () => {
+            if (versionDropdown.value) performSearch();
+        });
+
+        loaderSelect.addEventListener('change', () => {
+            if (versionDropdown.value) performSearch();
+        });
+
+        editionSelect.addEventListener('change', async () => {
+            availableVersions = [];
+            await loadAvailableVersions();
+            if (versionDropdown.value) performSearch();
+        });
+
+        async function performSearch() {
             const mcVersion = document.getElementById('finderMinecraftVersion').value.trim();
             const loader = document.getElementById('finderLoader').value;
             const edition = document.getElementById('finderEdition').value;
