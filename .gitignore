@@ -44,3 +44,5 @@ replay_*.log
 
 docs/node_modules/
 server/run/
+.vercel
+.env*.local
