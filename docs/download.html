@@ -743,8 +743,8 @@
             versionDropdown.innerHTML = '<option value="">Select a version...</option>';
             
             availableVersions.forEach(v => {
-                // Check if version is a snapshot (contains 'w' or '-pre')
-                const isSnapshot = v.includes('w') || v.includes('-pre');
+                // Check if version is a snapshot (contains 'w', '-pre', 'rc', or 'snapshot')
+                const isSnapshot = v.includes('w') || v.includes('-pre') || v.includes('rc') || v.toLowerCase().includes('snapshot');
                 if (!isSnapshot || showSnapshots) {
                     const option = document.createElement('option');
                     option.value = v;
@@ -756,7 +756,10 @@
 
         showSnapshotsCheckbox.addEventListener('change', () => {
             populateVersionDropdown();
-            if (versionDropdown.value) performSearch();
+            if (versionDropdown.options.length > 1) {
+                versionDropdown.selectedIndex = 1;
+                performSearch();
+            }
         });
 
         versionDropdown.addEventListener('change', () => {
@@ -770,7 +773,11 @@
         editionSelect.addEventListener('change', async () => {
             availableVersions = [];
             await loadAvailableVersions();
-            if (versionDropdown.value) performSearch();
+            // Auto-select the first available version and search
+            if (versionDropdown.options.length > 1) {
+                versionDropdown.selectedIndex = 1;
+                performSearch();
+            }
         });
 
         async function performSearch() {
