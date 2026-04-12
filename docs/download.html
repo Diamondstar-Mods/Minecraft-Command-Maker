@@ -93,6 +93,13 @@
         body.dark .download-finder-btn:hover {
             background: #777;
         }
+        .download-btn img.modrinth-icon,
+        .additional-download-btn img.modrinth-icon {
+            width: 16px;
+            height: 16px;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
         .download-finder-modal {
             position: fixed;
             z-index: 1001;
@@ -286,7 +293,7 @@
                 document.getElementById('last-commit-iframe').src = 'last-commit.html?path=' + document.getElementById('docs-path').dataset.subpath;
             </script>
             <h1>Modrinth Versions for Command Maker</h1>
-            <p>Choose between Server Edition (requires server mod) or Client Edition (works on any server). Automatically loaded from the Modrinth API. Direct Downloads Only.</p>
+            <p>Choose between Server Edition (requires server mod) or Client Edition (works on any server). Automatically loaded from the Modrinth API.</p>
 
             <div style="text-align: center; margin-bottom: 20px;">
                 <button class="download-finder-btn" id="downloadFinderBtn">🔍 Download Finder</button>
@@ -421,6 +428,7 @@
         let versions = [];
         let currentPage = 1;
         let totalPages = 1;
+        let currentProjectId = "3cwbW4UB";
         const itemsPerPage = 5;
 
         // Cache to avoid refetching details for versions already seen
@@ -521,6 +529,7 @@
         }
 
         async function loadVersions(projectId = "3cwbW4UB") {
+            currentProjectId = projectId;
             const container = document.getElementById("versions");
 
             try {
@@ -572,15 +581,15 @@
                     <div class="meta"><strong>Published:</strong> ${publishedHtml}</div>
                     <div class="meta"><strong>Downloads:</strong> <span id="${downloadsPlaceholderId}">Loading…</span></div>
                     <div class="download-group">
-    <a class="download-btn" href="${primaryFile?.url || '#'}" download>
-        Download (${primaryFile?.filename || 'file'} • ${formatFileSize(primaryFile?.size)})
+    <a class="download-btn" href="https://modrinth.com/mod/${v.project_id || currentProjectId}/version/${v.id}/" target="_blank" rel="noopener noreferrer">
+        <img class="modrinth-icon" src="https://modrinth.com/favicon.ico" alt="Modrinth">Download (${primaryFile?.filename || 'file'} • ${formatFileSize(primaryFile?.size)})
     </a>
 
     ${Array.isArray(v.files) ? v.files
         .filter(f => !f.primary)
         .map(f => `
-            <a class="additional-download-btn" href="${f.url}" download>
-                Download ${f.filename} • ${formatFileSize(f.size)}
+            <a class="additional-download-btn" href="https://modrinth.com/mod/${v.project_id || currentProjectId}/version/${v.id}/" target="_blank" rel="noopener noreferrer">
+                <img class="modrinth-icon" src="https://modrinth.com/favicon.ico" alt="Modrinth">Download ${f.filename} • ${formatFileSize(f.size)}
             </a>
         `).join('') : ''}
 </div>
@@ -823,13 +832,14 @@
                     return versionList.map(v => {
                         const primaryFile = (Array.isArray(v.files) && (v.files.find(f => f.primary) || v.files[0])) || null;
                         const typeColor = type === 'release' ? 'release' : (type === 'beta' ? 'beta' : 'alpha');
+                        const versionPageUrl = `https://modrinth.com/mod/${edition}/version/${v.id}/`;
                         return `
                             <div class="version-result">
                                 <h3>${v.version_number} <span class="type-badge ${typeColor}">${type.toUpperCase()}</span></h3>
                                 <div class="meta"><strong>Name:</strong> ${v.name}</div>
                                 <div class="meta"><strong>Loaders:</strong> ${Array.isArray(v.loaders) ? v.loaders.join(", ") : "Unknown"}</div>
                                 <div class="meta"><strong>Published:</strong> ${formatDate(v.date_published)}</div>
-                                ${primaryFile ? `<a class="download-btn" href="${primaryFile.url}" download>Download (${primaryFile.filename})</a>` : ''}
+                                ${primaryFile ? `<a class="download-btn" href="${versionPageUrl}" target="_blank" rel="noopener noreferrer"><img class="modrinth-icon" src="https://modrinth.com/favicon.ico" alt="Modrinth">Download (${primaryFile.filename})</a>` : ''}
                             </div>
                         `;
                     }).join('');
