@@ -6,7 +6,7 @@ Thank you for your interest in contributing to the Minecraft Command Maker proje
 
 ### Prerequisites
 
-- Java 21 or higher
+- Java 17, 21, or 25
 - Gradle (included via `gradlew`)
 - Git
 - A GitHub account
@@ -16,7 +16,7 @@ Thank you for your interest in contributing to the Minecraft Command Maker proje
 1. **Fork the repository** on GitHub
 2. **Clone your fork** locally:
    ```bash
-   git clone https://github.com/your-username/Minecraft-Command-Maker.git
+   git clone https://github.com/Diamondstar-Mods/Minecraft-Command-Maker.git
    cd Minecraft-Command-Maker
    ```
 3. **Add upstream remote** to stay in sync:
@@ -66,6 +66,9 @@ Before submitting a pull request, ensure:
    ```
 
 3. **Manual testing** in-game for mod features
+   ```bash
+   ./gradlew :server:runClient
+   ./gradlew :client:runClient
 
 ## Submitting Changes
 
@@ -136,7 +139,7 @@ Found a bug or have a feature request?
 
 ## Review Process
 
-- Maintainers will review your PR
+- Maintainers will review your PR (very quickly, they are bored)
 - Changes may be requested
 - Be open to constructive feedback
 - Reviews aim to maintain code quality and project consistency
@@ -159,7 +162,8 @@ By contributing, you agree that your contributions will be licensed under the sa
 
 - Open an issue for questions
 - Check existing documentation in `/docs`
-- Ask in the project forum or chat
+- Visit wiki at `commandmakerwiki.lucasgeitgey.com` or `minecraft-command-maker.vercel.app`
+- Ask in the project (forum)[https://commandmakerwiki.lucasgeitgey.com/forum.html] or chat
 
 ## Recognition
 
