@@ -163,7 +163,7 @@ By contributing, you agree that your contributions will be licensed under the sa
 - Open an issue for questions
 - Check existing documentation in `/docs`
 - Visit wiki at `commandmakerwiki.lucasgeitgey.com` or `minecraft-command-maker.vercel.app`
-- Ask in the project (forum)[https://commandmakerwiki.lucasgeitgey.com/forum.html] or chat
+- Ask in the project [forum](https://commandmakerwiki.lucasgeitgey.com/forum.html) or chat
 
 ## Recognition
 
