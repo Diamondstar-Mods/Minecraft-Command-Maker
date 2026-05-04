@@ -344,7 +344,7 @@ window.addEventListener("load", function () {
   try {
     // Determine the filename (fallback to index.html)
     const filename = window.location.pathname.split("/").pop() || "index.html";
-    const branch = "26.1.1-fabric-quilt";
+    const branch = "26.x-fabric-quilt";
     const editUrl = `https://github.com/Diamondstar-Mods/Minecraft-Command-Maker/edit/${branch}/docs/${filename}`;
 
     const link = document.createElement("a");
