@@ -44,7 +44,7 @@
       fetch(apiUrl)
         .then((response) => {
           if (!response.ok) {
-            throw new Error(`GitHub API error: ${response.status}`);
+            throw new Error(`GitHub API Error: ${response.status}`);
           }
           return response.json();
         })
@@ -71,8 +71,19 @@
         })
         .catch((error) => {
           console.error(error);
-          document.getElementById("commit-date").textContent =
-            "Error fetching commit date.";
+          let errorMessage = "";
+          
+          if (error.message.startsWith("GitHub API Error:")) {
+            errorMessage = `${error.message} You may want to create an <a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker/issues">issue</a>.`;
+          } else {
+            errorMessage = `Unidentified error. <a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker/issues">Report</a>`;
+          }
+          
+          const errorEl = document.createElement("p");
+          errorEl.innerHTML = errorMessage;
+          errorEl.style.color = "#d32f2f";
+          document.getElementById("commit-date").textContent = "";
+          document.getElementById("commit-date").parentElement.appendChild(errorEl);
         });
     </script>
 
