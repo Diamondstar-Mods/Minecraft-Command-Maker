@@ -1,9 +1,5 @@
-# **RELEASES WILL NO LONGER BE RELEASED ON GITHUB. TO SEE LATEST RELEASES, VISIT THIS PAGE: https://modrinth.com/mod/command-maker/versions**
 
-or this page:
-https://commandmakerwiki.lucasgeitgey.com/download.html
-
-# 🧩 Minecraft Command Maker – Fabric 26.1
+# 🧩 Nek's Command Maker – Fabric 1.17 - 26.x
 
 A lightweight, portable command generator mod for Minecraft Fabric servers.  
 Built entirely in Java—no external functions, no dependencies (besides Fabric API), and no admin rights required.
