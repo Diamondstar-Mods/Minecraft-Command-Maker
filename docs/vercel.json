@@ -1,5 +1,4 @@
 {
-  "rootDirectory": "docs",
   "installCommand": "npm install",
   "buildCommand": "npm run build"
 }

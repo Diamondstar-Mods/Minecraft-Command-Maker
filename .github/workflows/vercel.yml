@@ -1,0 +1,42 @@
+name: Deploy to Vercel
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Vercel CLI
+        run: npm install -g vercel
+
+      - name: Determine deployment type
+        id: mode
+        run: |
+          COMMIT_MSG="${{ github.event.head_commit.message }}"
+          echo "Commit message: $COMMIT_MSG"
+
+          if [[ "$COMMIT_MSG" == *"prod" ]]; then
+            echo "mode=prod" >> $GITHUB_OUTPUT
+          else
+            echo "mode=preview" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Deploy to Vercel
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: |
+          if [ "${{ steps.mode.outputs.mode }}" = "prod" ]; then
+            echo "Deploying to PRODUCTION"
+            vercel deploy --prod --yes
+          else
+            echo "Deploying to PREVIEW"
+            vercel deploy --yes
+          fi
