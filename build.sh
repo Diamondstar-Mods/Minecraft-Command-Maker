@@ -20,7 +20,7 @@ cp client/build/libs/* CompiledFiles/ 2>/dev/null || true
 ./gradlew :quilt-client:build
 cp quilt-client/build/libs/* CompiledFiles/ 2>/dev/null || true
 
-echo "Copying resources..."
+echo "Copying resources..." 
 mkdir -p docs/cdn/files
 cp CompiledFiles/* docs/cdn/files/ 2>/dev/null || true
 
