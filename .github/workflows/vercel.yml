@@ -33,7 +33,7 @@ jobs:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
         run: |
-          if [ "${{ steps.mode.outputs.mode }}" = "prod" ]; then
+          if [ "${{ steps.mode.outputs.mode }}" = "prod¹" ]; then
             echo "Deploying to PRODUCTION"
             vercel deploy --prod --yes
           else
