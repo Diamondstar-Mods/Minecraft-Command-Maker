@@ -336,7 +336,6 @@ public class ExampleMod implements ModInitializer {
 							command = substituteVariables(command, ctx);
 						}
 						
-						ServerCommandSource source = ctx.getSource();
 						CommandDispatcher<ServerCommandSource> cmdDispatcher = source.getServer().getCommandManager().getDispatcher();
 						ParseResults<ServerCommandSource> parsed = cmdDispatcher.parse(command, source);
 						return cmdDispatcher.execute(parsed);
