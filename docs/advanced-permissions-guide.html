@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Permissions & LuckPerms Setup Guide - Command Maker</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .permission-table {
+            margin: 20px 0;
+            border-collapse: collapse;
+            width: 100%;
+        }
+        .permission-table th,
+        .permission-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        .permission-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        .permission-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .code-block {
+            background-color: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 12px;
+            margin: 10px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+        }
+        .command {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+        .warning {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 12px;
+            margin: 15px 0;
+        }
+        .success {
+            background-color: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 12px;
+            margin: 15px 0;
+        }
+        .info {
+            background-color: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            padding: 12px;
+            margin: 15px 0;
+        }
+        .toc {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .toc h3 {
+            margin-top: 0;
+        }
+        .toc ul {
+            list-style-position: inside;
+            padding-left: 0;
+        }
+        .toc a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .toc a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔐 Advanced Permissions & LuckPerms Setup Guide</h1>
+        <p><strong>Last Updated:</strong> 2026-05-21 | <strong>CMDMaker Version:</strong> 2.4.0+</p>
+
+        <div class="toc">
+            <h3>📑 Table of Contents</h3>
+            <ul>
+                <li><a href="#overview">Overview</a></li>
+                <li><a href="#installation">Installation</a></li>
+                <li><a href="#configuration">Configuration</a></li>
+                <li><a href="#permission-system">Permission System</a></li>
+                <li><a href="#luckperms-integration">LuckPerms Integration</a></li>
+                <li><a href="#commands">Commands</a></li>
+                <li><a href="#examples">Examples</a></li>
+                <li><a href="#troubleshooting">Troubleshooting</a></li>
+            </ul>
+        </div>
+
+        <hr>
+
+        <h2 id="overview">📋 Overview</h2>
+        <p>CMDMaker now features an advanced permission system that gives server administrators fine-grained control over who can use aliases and commands. The system supports:</p>
+
+        <ul>
+            <li><strong>Per-Alias Permissions</strong>: Control which players can use specific aliases</li>
+            <li><strong>Per-Command Permissions</strong>: Allow/deny <span class="command">/cmd</span> and <span class="command">/addcommand</span> access separately</li>
+            <li><strong>Operator Bypass</strong>: Operators (permission level 2+) always have full access</li>
+            <li><strong>LuckPerms Integration</strong>: Full integration with the popular LuckPerms permission plugin</li>
+            <li><strong>Configuration-Based Fallback</strong>: If LuckPerms isn't installed, use built-in JSON configuration</li>
+            <li><strong>Per-Player Permissions</strong>: Grant specific permissions directly to player UUIDs</li>
+        </ul>
+
+        <h3>Permission Hierarchy</h3>
+        <ol>
+            <li><strong>Operators (Level 2+)</strong>: Always have full access - no checks needed</li>
+            <li><strong>LuckPerms Users</strong>: If LuckPerms is installed, permissions are checked via LuckPerms</li>
+            <li><strong>Config-Based Users</strong>: Fallback to <span class="command">permissions.json</span> configuration</li>
+            <li><strong>Default</strong>: No access unless explicitly granted</li>
+        </ol>
+
+        <hr>
+
+        <h2 id="installation">⚙️ Installation</h2>
+
+        <h3>Step 1: Install the Mod</h3>
+        <p>Install CMDMaker mod to your Minecraft server:</p>
+        <div class="code-block">
+Fabric: Copy JAR to mods/ folder<br>
+Quilt: Copy JAR to mods/ folder
+        </div>
+
+        <h3>Step 2: (Optional) Install LuckPerms</h3>
+        <p>For advanced permission management with groups and inheritance, install LuckPerms:</p>
+        <ol>
+            <li>Download LuckPerms from <a href="https://luckperms.net/download" target="_blank">LuckPerms Downloads</a></li>
+            <li>Place the JAR in your <span class="command">mods/</span> folder</li>
+            <li>Restart the server</li>
+            <li>CMDMaker will automatically detect and integrate with LuckPerms</li>
+        </ol>
+
+        <div class="info">
+            <strong>ℹ️ Note:</strong> LuckPerms is optional. CMDMaker works perfectly without it using built-in configuration.
+        </div>
+
+        <h3>Step 3: Server Startup</h3>
+        <p>When the server starts:</p>
+        <ul>
+            <li>CMDMaker will automatically create <span class="command">config/CommandMaker/permissions.json</span></li>
+            <li>Default configuration allows all players to use all commands (no restrictions)</li>
+            <li>LuckPerms integration will be enabled if the plugin is detected</li>
+        </ul>
+
+        <hr>
+
+        <h2 id="configuration">🔧 Configuration</h2>
+
+        <h3>Configuration Locations</h3>
+        <table class="permission-table">
+            <tr>
+                <th>Version</th>
+                <th>Location</th>
+            </tr>
+            <tr>
+                <td>Fabric Server/Client</td>
+                <td><span class="command">config/CommandMaker/permissions.json</span></td>
+            </tr>
+            <tr>
+                <td>Quilt Server/Client</td>
+                <td><span class="command">config/CommandMaker/permissions.json</span></td>
+            </tr>
+        </table>
+
+        <h3>Default Configuration Structure</h3>
+        <p>The first time the server runs, CMDMaker creates a default <span class="command">permissions.json</span> file with this structure:</p>
+        <div class="code-block">
+{
+  "version": "1.0",
+  "description": "CMDMaker Advanced Permissions Configuration",
+  "useLuckPerms": true,
+  "enablePerAliasPermissions": true,
+  "aliases": {
+    "home": {
+      "permission": "cmdmaker.alias.home",
+      "description": "Allow players to use the home alias",
+      "enabled": true
+    }
+  },
+  "globalPermissions": {
+    "cmdmaker.cmd": "Allow use of /cmd command",
+    "cmdmaker.addcommand": "Allow use of /addcommand",
+    "cmdmaker.manage.alias": "Allow managing aliases",
+    "cmdmaker.*": "Allow all cmdmaker features"
+  },
+  "players": {
+    "permissions": {}
+  },
+  "luckperms": {
+    "syncInterval": 300,
+    "enabled": true,
+    "groupPrefix": "cmdmaker"
+  }
+}
+        </div>
+
+        <h3>Key Settings</h3>
+        <table class="permission-table">
+            <tr>
+                <th>Setting</th>
+                <th>Type</th>
+                <th>Default</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>version</td>
+                <td>String</td>
+                <td>"1.0"</td>
+                <td>Config version for future compatibility</td>
+            </tr>
+            <tr>
+                <td>useLuckPerms</td>
+                <td>Boolean</td>
+                <td>true</td>
+                <td>Enable LuckPerms integration if available</td>
+            </tr>
+            <tr>
+                <td>enablePerAliasPermissions</td>
+                <td>Boolean</td>
+                <td>true</td>
+                <td>Enable per-alias permission checks</td>
+            </tr>
+        </table>
+
+        <hr>
+
+        <h2 id="permission-system">🛡️ Permission System</h2>
+
+        <h3>Permission Nodes</h3>
+        <p>CMDMaker uses hierarchical permission nodes following Minecraft conventions:</p>
+
+        <h4>Global Permissions</h4>
+        <table class="permission-table">
+            <tr>
+                <th>Permission</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><span class="command">cmdmaker.*</span></td>
+                <td>Admin wildcard, grants all permissions</td>
+            </tr>
+            <tr>
+                <td><span class="command">cmdmaker.cmd</span></td>
+                <td>Allow use of <span class="command">/cmd</span> command</td>
+            </tr>
+            <tr>
+                <td><span class="command">cmdmaker.addcommand</span></td>
+                <td>Allow use of <span class="command">/addcommand</span> command</td>
+            </tr>
+            <tr>
+                <td><span class="command">cmdmaker.manage.alias</span></td>
+                <td>Allow adding/deleting/reloading aliases</td>
+            </tr>
+            <tr>
+                <td><span class="command">cmdmaker.manage.permissions</span></td>
+                <td>Allow managing permissions (admin command)</td>
+            </tr>
+        </table>
+
+        <h4>Per-Alias Permissions</h4>
+        <ul>
+            <li><span class="command">cmdmaker.alias.{aliasname}</span> - Allow use of specific alias</li>
+        </ul>
+
+        <p><strong>Examples:</strong></p>
+        <ul>
+            <li><span class="command">cmdmaker.alias.home</span> - Use the /home alias</li>
+            <li><span class="command">cmdmaker.alias.tp</span> - Use the /tp alias</li>
+            <li><span class="command">cmdmaker.alias.ban</span> - Use the /ban alias</li>
+        </ul>
+
+        <h3>How Permissions Are Checked</h3>
+        <ol>
+            <li><strong>Console Commands</strong>: Always pass - console has full access</li>
+            <li><strong>Operator Players</strong>: Pass if permission level ≥ 2 (default OP level)</li>
+            <li><strong>LuckPerms Enabled</strong>: Check LuckPerms permission if installed</li>
+            <li><strong>Configuration Fallback</strong>: Check <span class="command">permissions.json</span></li>
+            <li><strong>Default Deny</strong>: If no permission found, access is denied</li>
+        </ol>
+
+        <hr>
+
+        <h2 id="luckperms-integration">🎯 LuckPerms Integration</h2>
+
+        <h3>Why LuckPerms?</h3>
+        <p>LuckPerms is the most powerful permission plugin for Minecraft. It provides:</p>
+        <ul>
+            <li><strong>Group Management</strong>: Create permission groups for easy bulk assignment</li>
+            <li><strong>Inheritance</strong>: Extend permissions from parent groups</li>
+            <li><strong>Tracks</strong>: Create hierarchical advancement tracks</li>
+            <li><strong>Prefix/Suffix System</strong>: Custom tags for players</li>
+            <li><strong>Web Editor</strong>: Beautiful online configuration interface</li>
+            <li><strong>Per-World Permissions</strong>: Different permissions on different worlds</li>
+        </ul>
+
+        <h3>Setting Up LuckPerms</h3>
+
+        <h4>1. Install LuckPerms</h4>
+        <div class="code-block">
+# Download from https://luckperms.net/download<br>
+# Place in mods/ folder<br>
+# Restart server
+        </div>
+
+        <h4>2. Create Permission Groups</h4>
+        <div class="code-block">
+/lp creategroup member<br>
+/lp creategroup moderator<br>
+/lp creategroup admin
+        </div>
+
+        <h4>3. Add CMDMaker Permissions</h4>
+
+        <p><strong>For Regular Members</strong> (limited alias access):</p>
+        <div class="code-block">
+/lp group member permission set cmdmaker.alias.home<br>
+/lp group member permission set cmdmaker.alias.spawn<br>
+/lp group member permission set cmdmaker.alias.tp
+        </div>
+
+        <p><strong>For Moderators</strong> (command access):</p>
+        <div class="code-block">
+/lp group moderator permission set cmdmaker.cmd<br>
+/lp group moderator permission set cmdmaker.addcommand<br>
+/lp group moderator permission set cmdmaker.manage.alias
+        </div>
+
+        <p><strong>For Admins</strong> (full access):</p>
+        <div class="code-block">
+/lp group admin permission set cmdmaker.*
+        </div>
+
+        <h4>4. Set Up Track Hierarchy</h4>
+        <div class="code-block">
+/lp createtrack promotion member moderator admin<br>
+/lp user {player} track set promotion member   # Assign to track at member level<br>
+/lp user {player} track set promotion admin    # Promote to admin
+        </div>
+
+        <h4>5. Assign Players to Groups</h4>
+        <div class="code-block">
+/lp user {player} parent set member<br>
+/lp user {player} parent set moderator<br>
+/lp user {player} parent set admin
+        </div>
+
+        <hr>
+
+        <h2 id="commands">⌨️ Commands</h2>
+
+        <h3 class="command">/cmd - Manage Aliases (Server-Side)</h3>
+        <p><strong>Requires:</strong> <span class="command">cmdmaker.cmd</span> permission</p>
+
+        <div class="code-block">
+/cmd list                           # List all aliases<br>
+/cmd reload                         # Reload aliases (requires cmdmaker.manage.alias)<br>
+/cmd add &lt;alias&gt; &lt;target&gt;      # Add an alias (requires cmdmaker.manage.alias)<br>
+/cmd del &lt;alias&gt;                 # Delete an alias (requires cmdmaker.manage.alias)<br>
+/cmd function &lt;function&gt;         # Execute a function
+        </div>
+
+        <h3 class="command">/addcommand - Alternative Alias Management</h3>
+        <p><strong>Requires:</strong> <span class="command">cmdmaker.addcommand</span> permission</p>
+
+        <div class="code-block">
+/addcommand add &lt;alias&gt; &lt;command&gt;  # Add an alias<br>
+/addcommand del &lt;alias&gt;            # Delete an alias<br>
+/addcommand reload                 # Reload aliases
+        </div>
+
+        <h3 class="command">/cmmakerperm - Permission Management (Admin Only)</h3>
+        <p><strong>Requires:</strong> OP level 4</p>
+
+        <div class="code-block">
+/cmmakerperm grant &lt;player&gt; &lt;permission&gt;    # Grant permission<br>
+/cmmakerperm revoke &lt;player&gt; &lt;permission&gt;   # Revoke permission<br>
+/cmmakerperm check &lt;player&gt; &lt;permission&gt;    # Check if player has permission<br>
+/cmmakerperm reload                         # Reload permission configuration
+        </div>
+
+        <hr>
+
+        <h2 id="examples">💡 Examples</h2>
+
+        <h3>Example 1: Basic Permission Setup (No LuckPerms)</h3>
+        <p>Edit <span class="command">config/CommandMaker/permissions.json</span>:</p>
+        <div class="code-block">
+{
+  "players": {
+    "permissions": {
+      "a1b2c3d4-e5f6-7890-abcd-ef1234567890": [
+        "cmdmaker.cmd",
+        "cmdmaker.alias.home",
+        "cmdmaker.alias.spawn"
+      ]
+    }
+  }
+}
+        </div>
+
+        <h3>Example 2: LuckPerms Setup with Groups</h3>
+        <div class="code-block">
+# Create groups<br>
+/lp creategroup member<br>
+/lp creategroup moderator<br>
+<br>
+# Add permissions<br>
+/lp group member permission set cmdmaker.alias.home<br>
+/lp group moderator permission set cmdmaker.*<br>
+<br>
+# Assign player<br>
+/lp user Steve parent set member<br>
+/lp user Alex parent set moderator
+        </div>
+
+        <hr>
+
+        <h2 id="troubleshooting">🔍 Troubleshooting</h2>
+
+        <h3>Issue: Players can't execute aliases</h3>
+        <p><strong>Solution Steps:</strong></p>
+        <ol>
+            <li>Check if player is operator: <span class="command">/op {player}</span></li>
+            <li>Check LuckPerms status: <span class="command">/lp info</span></li>
+            <li>Check permissions configuration: View <span class="command">permissions.json</span></li>
+            <li>Test with console: Execute the alias from console</li>
+        </ol>
+
+        <h3>Issue: LuckPerms not integrating</h3>
+        <p><strong>Solution Steps:</strong></p>
+        <ol>
+            <li>Verify LuckPerms is installed in <span class="command">mods/</span> folder</li>
+            <li>Check server log for integration message</li>
+            <li>Verify LuckPerms is working: <span class="command">/lp info</span></li>
+            <li>Check CMDMaker permissions: <span class="command">/lp search cmdmaker</span></li>
+        </ol>
+
+        <div class="success">
+            <strong>✅ Success!</strong> If you see "LuckPerms detected - enabling LuckPerms integration" in the server log, everything is set up correctly.
+        </div>
+
+        <hr>
+
+        <h2>📚 Resources</h2>
+        <ul>
+            <li><a href="https://commandmakerwiki.lucasgeitgey.com" target="_blank">CMDMaker Wiki</a></li>
+            <li><a href="https://luckperms.net/wiki" target="_blank">LuckPerms Documentation</a></li>
+            <li><a href="https://discord.gg/luckperms" target="_blank">LuckPerms Discord</a></li>
+        </ul>
+
+        <hr>
+
+        <p style="text-align: center; color: #888; font-size: 12px;">
+            <strong>CMDMaker v2.4.0+</strong> | Last Updated: 2026-05-21
+        </p>
+    </div>
+
+    <script>
+        // Add click-to-copy functionality to code blocks
+        document.querySelectorAll('.code-block').forEach(block => {
+            block.style.cursor = 'pointer';
+            block.addEventListener('click', function() {
+                const text = this.innerText;
+                navigator.clipboard.writeText(text).then(() => {
+                    const originalText = this.textContent;
+                    this.textContent = 'Copied!';
+                    setTimeout(() => {
+                        this.textContent = originalText;
+                    }, 2000);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

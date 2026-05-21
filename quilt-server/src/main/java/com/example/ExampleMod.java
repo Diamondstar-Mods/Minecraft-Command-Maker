@@ -37,6 +37,7 @@ public class ExampleMod implements ModInitializer {
 		ensureConfigExists();
 		loadAliases();
 		SyntaxManager.loadSyntaxDefinitions();
+		PermissionManager.initialize();
 		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
 			registercmd(dispatcher);
 			registerAddCommand(dispatcher);
@@ -45,6 +46,7 @@ public class ExampleMod implements ModInitializer {
 			registerDeleteAliasMenu(dispatcher);
 			registerSyntaxCommand(dispatcher);
 			registerCmdCommand(dispatcher);
+			registerPermissionCommand(dispatcher);
 		});
 		
 		LOGGER.info("Alias mod initialized!");
@@ -92,9 +94,14 @@ public class ExampleMod implements ModInitializer {
 	private void registercmd(CommandDispatcher<ServerCommandSource> dispatcher) {
 		dispatcher.register(
 			LiteralArgumentBuilder.<ServerCommandSource>literal("cmd")
+				.requires(source -> PermissionManager.canUseCmdCommand(source))
 				.then(
 					net.minecraft.server.command.CommandManager.literal("reload")
 						.executes(ctx -> {
+							if (!PermissionManager.canManageAliases(ctx.getSource())) {
+								ctx.getSource().sendFeedback(() -> net.minecraft.text.Text.literal("You don't have permission to reload aliases."), false);
+								return 0;
+							}
 							loadAliases();
 							// Remove all old aliases from dispatcher before re-registering
 							for (String alias : new HashSet<>(aliases.keySet())) {
@@ -112,6 +119,10 @@ public class ExampleMod implements ModInitializer {
 								.then(
 									net.minecraft.server.command.CommandManager.argument("target", StringArgumentType.greedyString())
 										.executes(ctx -> {
+											if (!PermissionManager.canManageAliases(ctx.getSource())) {
+												ctx.getSource().sendFeedback(() -> net.minecraft.text.Text.literal("You don't have permission to add aliases."), false);
+												return 0;
+											}
 											String alias = StringArgumentType.getString(ctx, "alias");
 											String target = StringArgumentType.getString(ctx, "target");
 											aliases.put(alias, target);
@@ -128,6 +139,10 @@ public class ExampleMod implements ModInitializer {
 						.then(
 							net.minecraft.server.command.CommandManager.argument("alias", StringArgumentType.word())
 								.executes(ctx -> {
+									if (!PermissionManager.canManageAliases(ctx.getSource())) {
+										ctx.getSource().sendFeedback(() -> net.minecraft.text.Text.literal("You don't have permission to delete aliases."), false);
+										return 0;
+									}
 									String alias = StringArgumentType.getString(ctx, "alias");
 									if (aliases.remove(alias) != null) {
 										saveAliases();
@@ -179,10 +194,15 @@ public class ExampleMod implements ModInitializer {
 	private void registerAddCommand(CommandDispatcher<ServerCommandSource> dispatcher) {
 		dispatcher.register(
 			net.minecraft.server.command.CommandManager.literal("addcommand")
+				.requires(source -> PermissionManager.canUseAddCommand(source))
 				.then(net.minecraft.server.command.CommandManager.literal("add")
 					.then(net.minecraft.server.command.CommandManager.argument("alias", StringArgumentType.word())
 						.then(net.minecraft.server.command.CommandManager.argument("command", StringArgumentType.greedyString())
 							.executes(ctx -> {
+								if (!PermissionManager.canManageAliases(ctx.getSource())) {
+									ctx.getSource().sendFeedback(() -> net.minecraft.text.Text.literal("You don't have permission to add aliases."), false);
+									return 0;
+								}
 								String alias = StringArgumentType.getString(ctx, "alias");
 								String command = StringArgumentType.getString(ctx, "command");
 								aliases.put(alias, command);
@@ -197,6 +217,10 @@ public class ExampleMod implements ModInitializer {
 				.then(net.minecraft.server.command.CommandManager.literal("del")
 					.then(net.minecraft.server.command.CommandManager.argument("alias", StringArgumentType.word())
 						.executes(ctx -> {
+							if (!PermissionManager.canManageAliases(ctx.getSource())) {
+								ctx.getSource().sendFeedback(() -> net.minecraft.text.Text.literal("You don't have permission to delete aliases."), false);
+								return 0;
+							}
 							String alias = StringArgumentType.getString(ctx, "alias");
 							if (aliases.remove(alias) != null) {
 								saveAliases();
@@ -264,6 +288,13 @@ public class ExampleMod implements ModInitializer {
 			net.minecraft.server.command.CommandManager.literal(alias)
 				.executes(ctx -> {
 					ServerCommandSource source = ctx.getSource();
+					
+					// Check if player has permission to use this alias
+					if (!PermissionManager.canUseAlias(source, alias)) {
+						source.sendFeedback(() -> net.minecraft.text.Text.literal("You don't have permission to use this alias."), false);
+						return 0;
+					}
+					
 					if (target.startsWith("function:")) {
 						String functionName = target.substring("function:".length());
 						return executeFunction(functionName, ctx);
@@ -276,6 +307,14 @@ public class ExampleMod implements ModInitializer {
 				})
 				.then(net.minecraft.server.command.CommandManager.argument("args", StringArgumentType.greedyString())
 					.executes(ctx -> {
+						ServerCommandSource source = ctx.getSource();
+						
+						// Check if player has permission to use this alias
+						if (!PermissionManager.canUseAlias(source, alias)) {
+							source.sendFeedback(() -> net.minecraft.text.Text.literal("You don't have permission to use this alias."), false);
+							return 0;
+						}
+						
 						if (target.startsWith("function:")) {
 							String functionName = target.substring("function:".length());
 							return executeFunction(functionName, ctx);
@@ -762,6 +801,65 @@ public class ExampleMod implements ModInitializer {
 							})
 						)
 					)
+		);
+	}
+
+	// Register /cmmakerperm command for managing permissions
+	private void registerPermissionCommand(CommandDispatcher<ServerCommandSource> dispatcher) {
+		dispatcher.register(
+			net.minecraft.server.command.CommandManager.literal("cmmakerperm")
+				.requires(source -> source.hasPermissionLevel(4)) // Ops only
+				.then(
+					net.minecraft.server.command.CommandManager.literal("grant")
+						.then(
+							net.minecraft.server.command.CommandManager.argument("player", StringArgumentType.word())
+								.then(
+									net.minecraft.server.command.CommandManager.argument("permission", StringArgumentType.greedyString())
+										.executes(ctx -> {
+											String playerName = StringArgumentType.getString(ctx, "player");
+											String permission = StringArgumentType.getString(ctx, "permission");
+											ctx.getSource().getServer().getPlayerManager().getPlayer(playerName);
+											// This is a simplified version - in production you'd resolve the player UUID properly
+											ctx.getSource().sendFeedback(() -> Text.literal("§cNote: For full permission management, use LuckPerms or edit permissions.json directly"), false);
+											return 1;
+										})
+								)
+						)
+				)
+				.then(
+					net.minecraft.server.command.CommandManager.literal("revoke")
+						.then(
+							net.minecraft.server.command.CommandManager.argument("player", StringArgumentType.word())
+								.then(
+									net.minecraft.server.command.CommandManager.argument("permission", StringArgumentType.greedyString())
+										.executes(ctx -> {
+											ctx.getSource().sendFeedback(() -> Text.literal("§cNote: For full permission management, use LuckPerms or edit permissions.json directly"), false);
+											return 1;
+										})
+								)
+						)
+				)
+				.then(
+					net.minecraft.server.command.CommandManager.literal("check")
+						.then(
+							net.minecraft.server.command.CommandManager.argument("player", StringArgumentType.word())
+								.then(
+									net.minecraft.server.command.CommandManager.argument("permission", StringArgumentType.greedyString())
+										.executes(ctx -> {
+											ctx.getSource().sendFeedback(() -> Text.literal("§cNote: For full permission checking, use LuckPerms"), false);
+											return 1;
+										})
+								)
+						)
+				)
+				.then(
+					net.minecraft.server.command.CommandManager.literal("reload")
+						.executes(ctx -> {
+							PermissionManager.initialize();
+							ctx.getSource().sendFeedback(() -> Text.literal("§aPermission config reloaded!"), false);
+							return 1;
+						})
+				)
 		);
 	}
 }

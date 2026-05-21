@@ -46,6 +46,9 @@ dependencies {
 
     // Optional: JSON parsing
     implementation "com.google.code.gson:gson:2.10.1"
+    
+    // LuckPerms API - optional, mod will work without it
+    compileOnly "net.luckperms:api:5.4"
 }
 
 processResources {
