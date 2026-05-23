@@ -16,7 +16,8 @@ pluginManagement {
 rootProject.name = 'Minecraft-Command-Maker'
 include 'server'
 include 'client'
-include 'quilt-server'
-include 'quilt-client'
-include 'server-legacy'
-include 'client-legacy'
+// Disabled older/quilt variants while focusing on main Fabric server/client builds
+// include 'quilt-server'
+// include 'quilt-client'
+// include 'server-legacy'
+// include 'client-legacy'
