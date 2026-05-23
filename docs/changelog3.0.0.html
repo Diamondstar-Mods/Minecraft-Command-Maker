@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Changelog v3.0.0 - Command Maker Wiki</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      rel="icon"
+      href="https://diamondstar-mods.github.io/Minecraft-Command-Maker/favicon.ico"
+    />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="nav-container">
+        <div class="nav-logo">
+          <a href="index.html"
+            ><img
+              class="logo-icon"
+              src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/favicon.ico"
+              alt="Command Maker Icon"
+            />
+            Command Maker Wiki</a
+          >
+        </div>
+        <div class="nav-menu">
+          <a href="index.html" class="nav-link">Home</a>
+          <a href="getting-started.html" class="nav-link">Getting Started</a>
+          <a href="commands.html" class="nav-link">Commands</a>
+          <a href="syntax-system.html" class="nav-link">Custom Syntax</a>
+          <a href="functions.html" class="nav-link">Functions</a>
+          <div class="dropdown">
+            <button class="dropdown-toggle">Systems ▼</button>
+            <div class="dropdown-menu">
+              <a href="economy-system.html">Economy System</a>
+              <a href="kit-system.html">Kit System</a>
+              <a href="home-system.html">Home System</a>
+              <a href="shop-system.html">Shop System</a>
+              <a href="jail-system.html">Jail System</a>
+              <a href="mute-system.html">Mute System</a>
+              <a href="vote-system.html">Vote System</a>
+              <a href="rank-system.html">Rank System</a>
+              <a href="achievement-system.html">Achievement System</a>
+              <a href="event-system.html">Event System</a>
+            </div>
+          </div>
+          <a href="faq.html" class="nav-link">FAQ</a>
+          <a href="forum.html" class="nav-link">Forum</a>
+          <a href="download.html" class="nav-link">Downloads</a>
+        </div>
+        <div class="nav-donate">
+          <a
+            href="https://commandmakerwiki.lucasgeitgey.com/donate.html"
+            class="nav-link"
+            target="_blank"
+            >❤️ Donate</a
+          >
+        </div>
+        <select id="theme-select" style="display: none">
+          <option value="light">Light (default)</option>
+          <option value="dark">Dark (beta)</option>
+        </select>
+        <div class="nav-search">
+          <input
+            type="text"
+            id="searchBox"
+            placeholder="Search documentation..."
+            class="search-input"
+          />
+        </div>
+      </div>
+    </nav>
+
+    <div class="main-wrapper">
+      <aside class="sidebar">
+        <div class="sidebar-widget">
+          <h3 class="widget-title">📚 Documentation</h3>
+          <ul class="widget-list">
+            <li><a href="getting-started.html">Getting Started</a></li>
+            <li><a href="installation.html">Installation</a></li>
+            <li><a href="configuration.html">Configuration</a></li>
+            <li><a href="aliases.html">Creating Aliases</a></li>
+          </ul>
+        </div>
+
+        <div class="sidebar-widget">
+          <h3 class="widget-title">⚡ Features</h3>
+          <ul class="widget-list">
+            <li><a href="syntax-system.html">Custom Syntax System</a></li>
+            <li><a href="functions.html">Functions System</a></li>
+            <li><a href="variables.html">Variables & Substitution</a></li>
+            <li><a href="gui-system.html">GUI System</a></li>
+            <li><a href="chat-messages.html">Chat Messages</a></li>
+          </ul>
+        </div>
+
+        <div class="sidebar-widget">
+          <h3 class="widget-title">🎮 Examples</h3>
+          <ul class="widget-list">
+            <li><a href="tpa-system.html">TPA System</a></li>
+            <li><a href="ban-system.html">Ban System</a></li>
+            <li><a href="warp-system.html">Warp System</a></li>
+            <li><a href="custom-commands.html">Custom Commands</a></li>
+          </ul>
+        </div>
+
+        <div class="sidebar-widget">
+          <h3 class="widget-title">❓ Help</h3>
+          <ul class="widget-list">
+            <li><a href="troubleshooting.html">Troubleshooting</a></li>
+            <li><a href="faq.html">Frequently Asked Questions</a></li>
+            <li><a href="best-practices.html">Best Practices</a></li>
+          </ul>
+        </div>
+      </aside>
+
+      <main class="content">
+        <h1 id="docs-path" data-subpath="changelog3.0.0.html"></h1>
+        <iframe
+          style="border: none; font-style: italic"
+          id="last-commit-iframe"
+          src=""
+          width="400"
+          height="100"
+        ></iframe>
+        <script>
+          document.getElementById("last-commit-iframe").src =
+            "last-commit.html?path=" +
+            document.getElementById("docs-path").dataset.subpath;
+        </script>
+
+        <section class="hero">
+          <div class="hero-content">
+            <h1 class="hero-title">Command Maker v3.0.0 Changelog</h1>
+            <p class="hero-subtitle">Release notes for the edition adding LuckPerms support and advanced permission control.</p>
+          </div>
+        </section>
+
+        <section class="content-block">
+          <h2>Release Summary</h2>
+          <p>Version <strong>3.0.0</strong> is now released. This update adds advanced permission management, optional LuckPerms integration, and fine-grained alias control for server administrators.</p>
+        </section>
+
+        <section class="content-block">
+          <h2>New Features</h2>
+          <ul>
+            <li><strong>LuckPerms integration:</strong> Optional support for LuckPerms groups and permission nodes so servers can manage CMDMaker access with existing permission systems.</li>
+            <li><strong>Advanced permission nodes:</strong> New nodes such as <code>cmdmaker.cmd</code>, <code>cmdmaker.addcommand</code>, <code>cmdmaker.manage.alias</code>, and <code>cmdmaker.alias.&lt;name&gt;</code>.</li>
+            <li><strong>Per-alias permissions:</strong> Grant or deny access to specific aliases independently, for tighter server control.</li>
+            <li><strong>Admin management command:</strong> Added the new <code>/cmmakerperm</code> command for permission checks, reloads, grants, and revokes.</li>
+            <li><strong>Config fallback:</strong> Built-in <code>permissions.json</code> support works even if LuckPerms is not installed.</li>
+          </ul>
+        </section>
+
+        <section class="content-block">
+          <h2>Improvements</h2>
+          <ul>
+            <li>Shared permission management code has been added to the server module for clean integration and easier future updates.</li>
+            <li>Documentation expanded with a dedicated advanced permissions guide and quick reference material.</li>
+            <li>Build process stabilized for the main Fabric server and client modules.</li>
+          </ul>
+        </section>
+
+        <section class="content-block">
+          <h2>Bug Fixes</h2>
+          <ul>
+            <li>Fixed alias command registration issues in server builds.</li>
+            <li>Resolved permission check conflicts for player and console sources.</li>
+            <li>Improved build reliability by cleaning stale artifact output during remap tasks.</li>
+          </ul>
+        </section>
+
+        <section class="content-block">
+          <h2>How to Use</h2>
+          <p>For full setup and permission instructions, see the <a href="advanced-permissions-guide.html">Advanced Permissions Guide</a>. If you need the mod download, use the <a href="download.html">Downloads page</a>.</p>
+        </section>
+
+        <section class="content-block">
+          <h2>Notes</h2>
+          <p>This changelog page is intentionally unlinked from other pages, so it can be used as a hidden or direct-access release note for v3.0.0.</p>
+        </section>
+      </main>
+    </div>
+
+    <footer class="footer">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4>Documentation</h4>
+          <ul>
+            <li><a href="getting-started.html">Getting Started</a></li>
+            <li><a href="commands.html">Commands</a></li>
+            <li><a href="syntax-system.html">Custom Syntax</a></li>
+            <li><a href="examples.html">Examples</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Resources</h4>
+          <ul>
+            <li><a href="troubleshooting.html">Troubleshooting</a></li>
+            <li><a href="faq.html">FAQ</a></li>
+            <li><a href="best-practices.html">Best Practices</a></li>
+            <li>
+              <a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">GitHub</a>
+            </li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Community</h4>
+          <ul>
+            <li><a href="https://modrinth.com/mod/command-maker">Modrinth</a></li>
+            <li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">Report Issues</a></li>
+            <li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">Contribute</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 Command Maker Wiki. Built with ❤️ for Minecraft players.</p>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+      window.va =
+        window.va ||
+        function () {
+          (window.vaq = window.vaq || []).push(arguments);
+        };
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script>
+    <script>
+      window.si =
+        window.si ||
+        function () {
+          (window.siq = window.siq || []).push(arguments);
+        };
+    </script>
+    <script defer src="/_vercel/speed-insights/script.js"></script>
+  </body>
+</html>
