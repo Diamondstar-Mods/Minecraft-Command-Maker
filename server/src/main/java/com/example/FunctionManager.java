@@ -17,7 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class FunctionManager {
     private static final Logger LOGGER = LoggerFactory.getLogger("cmdmaker");
-    private static final String MANIFEST_URL = "https://commandmakerwiki.lucasgeitgey.com/cdn/functions/functions.json";
+    private static final String MANIFEST_URL = "https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/functions/functions.json";
     private static Map<String, String> cachedManifest = null;
     private static long cacheTimestamp = 0;
     private static final long CACHE_TTL = 300000; // 5 minutes
@@ -62,7 +62,7 @@ public class FunctionManager {
             try {
                 HttpClient client = HttpClient.newHttpClient();
                 HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("https://commandmakerwiki.lucasgeitgey.com/cdn/functions/" + functionName + ".mcfunction"))
+                    .uri(URI.create("https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/functions/" + functionName + ".mcfunction"))
                     .build();
                 HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
                 if (response.statusCode() == 200) {

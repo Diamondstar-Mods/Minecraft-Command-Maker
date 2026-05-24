@@ -1,22 +1,3 @@
-/cmd list
-/cmd add helloooooo say {$hello}
-/helloooooo
-/cmd setvar hello poop
-/helloooooo
-/setcmdvariable hello poop
-/helloooooo
-/cmd reload
-/helloooooo
-/help cmd
-/help cmd wiki
-/cmd downloadfunction mob_army
-/mob_army
-/cmd reload
-/mob_army
-/cmd downloadfunction craycray
-/craycray
-/better_dance_party
-/summon minecraft:falling_block
 /summon minecraft:falling_block ~ ~ ~
 /execute at @e run execute at @e run execute at @e run summon minecraft:falling_block ~ 20 ~
 /execute at @e run summon minecraft:falling_block
@@ -47,4 +28,23 @@
 /boss_arena
 /gamemode survival
 /cmd downloadfunction bubble_party
+/cmd listdownloadablefunctions
+/gamemode creative
+/cmd listdownloadablefunctions
+/cmd downloadfunction bubble_party
+/cmd reload
+/bubble_party
+/tp 999 ~ 999
+/cmd listdownloadablefunctions
+/cmd downloadfunction underground_base
+/cmd reload
+/underground_base
+/effect clear @s
+/cmd downloadfunction parkour_course
+/cmd reload
+/parkour_course
+/gamemode survival
+/effect give Player593 minecraft:regeneration infinite 255 true
+/effect clear
+/gamemode creative
 /cmd listdownloadablefunctions
