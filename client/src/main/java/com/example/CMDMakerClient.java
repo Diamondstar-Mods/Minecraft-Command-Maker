@@ -325,7 +325,7 @@ public class CMDMakerClient implements ClientModInitializer {
 							try {
 								HttpClient client = HttpClient.newHttpClient();
 								HttpRequest request = HttpRequest.newBuilder()
-									.uri(java.net.URI.create("https://api.github.com/repos/Diamondstar-Mods/Minecraft-Command-Maker/contents/cdn/functions"))
+									.uri(java.net.URI.create("https://api.github.com/repos/Diamondstar-Mods/Minecraft-Command-Maker/contents/docs/cdn/functions"))
 									.build();
 
 								CompletableFuture<Suggestions> future = new CompletableFuture<>();
