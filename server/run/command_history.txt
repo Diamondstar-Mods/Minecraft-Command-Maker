@@ -1,9 +1,3 @@
-/cmd list
-/function craycray
-/stopsound @a
-/better_dance_party
-/cmd downloadfunction meteor_shower
-/meteor_shower
 /meteor_showert
 /meteor_shower
 /meteor_showert
@@ -48,3 +42,9 @@
 /cmmakerperm check player63 \
 /cmmakerperm check player63
 /lp
+/cmmakerperm reload
+/cmd listdownloadablefunctions
+/cmd list
+/better_dance_party
+/cmd downloadfunction better_dance_party
+/better_dance_party

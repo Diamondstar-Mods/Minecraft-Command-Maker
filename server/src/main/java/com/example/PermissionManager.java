@@ -50,9 +50,9 @@ public class PermissionManager {
             ensurePermissionsConfigExists();
             loadPermissionsConfig();
             initializeLuckPerms();
-            ExampleMod.LOGGER.info("Permission Manager initialized successfully");
+            LOGGER.info("Permission Manager initialized successfully");
         } catch (Exception e) {
-            ExampleMod.LOGGER.error("Failed to initialize Permission Manager", e);
+            LOGGER.error("Failed to initialize Permission Manager", e);
         }
     }
     
@@ -87,7 +87,7 @@ public class PermissionManager {
             return checkConfigPermission(player.getUuid(), permissionNode);
             
         } catch (Exception e) {
-            ExampleMod.LOGGER.warn("Error checking permission: {}", permissionNode, e);
+            LOGGER.warn("Error checking permission: {}", permissionNode, e);
             return false;
         }
     }
@@ -117,7 +117,7 @@ public class PermissionManager {
             return hasPermission(source, aliasPermission);
             
         } catch (Exception e) {
-            ExampleMod.LOGGER.warn("Error checking alias permission: {}", aliasName, e);
+            LOGGER.warn("Error checking alias permission: {}", aliasName, e);
             return false;
         }
     }
@@ -190,7 +190,7 @@ public class PermissionManager {
             
             return false;
         } catch (Exception e) {
-            ExampleMod.LOGGER.warn("Error checking config permission", e);
+            LOGGER.warn("Error checking config permission", e);
             return false;
         }
     }
@@ -203,13 +203,13 @@ public class PermissionManager {
             // Try to get LuckPerms API - this is a placeholder
             // In a real implementation, you'd use a proper service loader
             Class<?> luckPermsClass = Class.forName("net.luckperms.api.LuckPerms");
-            ExampleMod.LOGGER.info("LuckPerms detected - enabling LuckPerms integration");
+            LOGGER.info("LuckPerms detected - enabling LuckPerms integration");
             useLuckPerms = true;
         } catch (ClassNotFoundException e) {
-            ExampleMod.LOGGER.info("LuckPerms not found - using built-in permissions only");
+            LOGGER.info("LuckPerms not found - using built-in permissions only");
             useLuckPerms = false;
         } catch (Exception e) {
-            ExampleMod.LOGGER.warn("Failed to initialize LuckPerms", e);
+            LOGGER.warn("Failed to initialize LuckPerms", e);
             useLuckPerms = false;
         }
     }
@@ -232,7 +232,7 @@ public class PermissionManager {
             
             return false;
         } catch (Exception e) {
-            ExampleMod.LOGGER.warn("Error checking LuckPerms permission", e);
+            LOGGER.warn("Error checking LuckPerms permission", e);
             return false;
         }
     }
@@ -251,10 +251,10 @@ public class PermissionManager {
                 JsonObject defaultConfig = createDefaultPermissionsConfig();
                 String jsonStr = new GsonBuilder().setPrettyPrinting().create().toJson(defaultConfig);
                 Files.write(PERMS_CONFIG, jsonStr.getBytes(), StandardOpenOption.CREATE_NEW);
-                ExampleMod.LOGGER.info("Created default permissions config at: {}", PERMS_CONFIG);
+                LOGGER.info("Created default permissions config at: {}", PERMS_CONFIG);
             }
         } catch (Exception e) {
-            ExampleMod.LOGGER.error("Failed to ensure permissions config exists", e);
+            LOGGER.error("Failed to ensure permissions config exists", e);
         }
     }
     
@@ -269,9 +269,9 @@ public class PermissionManager {
             
             String json = new String(Files.readAllBytes(PERMS_CONFIG));
             permConfig = JsonParser.parseString(json).getAsJsonObject();
-            ExampleMod.LOGGER.info("Loaded permissions config from: {}", PERMS_CONFIG);
+            LOGGER.info("Loaded permissions config from: {}", PERMS_CONFIG);
         } catch (Exception e) {
-            ExampleMod.LOGGER.error("Failed to load permissions config", e);
+            LOGGER.error("Failed to load permissions config", e);
             permConfig = createDefaultPermissionsConfig();
         }
     }
@@ -356,9 +356,9 @@ public class PermissionManager {
             savePermissionsConfig();
             permissionCache.clear();
             
-            ExampleMod.LOGGER.info("Granted permission {} to player {}", permissionNode, playerUuid);
+            LOGGER.info("Granted permission {} to player {}", permissionNode, playerUuid);
         } catch (Exception e) {
-            ExampleMod.LOGGER.error("Failed to grant permission", e);
+            LOGGER.error("Failed to grant permission", e);
         }
     }
     
@@ -394,9 +394,9 @@ public class PermissionManager {
             savePermissionsConfig();
             permissionCache.clear();
             
-            ExampleMod.LOGGER.info("Revoked permission {} from player {}", permissionNode, playerUuid);
+            LOGGER.info("Revoked permission {} from player {}", permissionNode, playerUuid);
         } catch (Exception e) {
-            ExampleMod.LOGGER.error("Failed to revoke permission", e);
+            LOGGER.error("Failed to revoke permission", e);
         }
     }
     
@@ -407,9 +407,9 @@ public class PermissionManager {
         try {
             String jsonStr = new GsonBuilder().setPrettyPrinting().create().toJson(permConfig);
             Files.write(PERMS_CONFIG, jsonStr.getBytes(), StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING);
-            ExampleMod.LOGGER.info("Saved permissions config");
+            LOGGER.info("Saved permissions config");
         } catch (Exception e) {
-            ExampleMod.LOGGER.error("Failed to save permissions config", e);
+            LOGGER.error("Failed to save permissions config", e);
         }
     }
     
@@ -443,7 +443,7 @@ public class PermissionManager {
             return PermissionLevel.NONE;
             
         } catch (Exception e) {
-            ExampleMod.LOGGER.warn("Error getting permission level", e);
+            LOGGER.warn("Error getting permission level", e);
             return PermissionLevel.NONE;
         }
     }
