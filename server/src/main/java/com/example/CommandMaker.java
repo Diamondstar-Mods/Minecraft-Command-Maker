@@ -183,8 +183,15 @@ public class CommandMaker implements ModInitializer {
                 .then(CommandManager.literal("downloadfunction")
                     .then(CommandManager.argument("function", StringArgumentType.word())
                         .suggests((ctx, builder) -> CompletableFuture.supplyAsync(() -> {
-                            for (String name : FunctionManager.fetchDownloadableFunctionNames()) {
-                                builder.suggest(name);
+                            Map<String, String> manifest = FunctionManager.fetchFunctionManifest();
+                            for (Map.Entry<String, String> entry : manifest.entrySet()) {
+                                String name = entry.getKey();
+                                String desc = entry.getValue();
+                                if (desc != null && !desc.isEmpty()) {
+                                    builder.suggest(name, Text.literal("§7" + desc));
+                                } else {
+                                    builder.suggest(name);
+                                }
                             }
                             return builder.build();
                         }))

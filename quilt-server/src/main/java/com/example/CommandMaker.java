@@ -744,38 +744,54 @@ public class CommandMaker implements ModInitializer {
 				.then(net.minecraft.server.command.CommandManager.literal("downloadfunction")
 						.then(net.minecraft.server.command.CommandManager.argument("function", StringArgumentType.word())
 							.suggests((ctx, builder) -> {
-								try {
-									HttpClient client = HttpClient.newHttpClient();
-									HttpRequest request = HttpRequest.newBuilder()
-										.uri(java.net.URI.create("https://api.github.com/repos/Diamondstar-Mods/Minecraft-Command-Maker/contents/cdn/functions"))
-										.build();
-
 									CompletableFuture<com.mojang.brigadier.suggestion.Suggestions> future = new CompletableFuture<>();
-									client.sendAsync(request, HttpResponse.BodyHandlers.ofString()).whenComplete((resp, ex) -> {
-										try {
-											if (ex == null && resp.statusCode() == 200) {
+									HttpClient client = HttpClient.newHttpClient();
+									HttpRequest manifestRequest = HttpRequest.newBuilder()
+										.uri(java.net.URI.create("https://commandmakerwiki.lucasgeitgey.com/cdn/functions/functions.json"))
+										.build();
+									client.sendAsync(manifestRequest, HttpResponse.BodyHandlers.ofString()).whenComplete((resp, ex) -> {
+										final java.util.Map<String, String> descriptions = new java.util.HashMap<>();
+										if (ex == null && resp.statusCode() == 200) {
+											try {
 												JsonElement je = JsonParser.parseString(resp.body());
-												if (je.isJsonArray()) {
-													for (JsonElement e : je.getAsJsonArray()) {
-														try {
-															JsonObject obj = e.getAsJsonObject();
-															String name = obj.get("name").getAsString();
-															if (name.endsWith(".mcfunction")) {
-																String bare = name.substring(0, name.length() - ".mcfunction".length());
-																builder.suggest(bare);
-															}
-														} catch (Exception ignore) {}
+												if (je.isJsonObject()) {
+													for (java.util.Map.Entry<String, JsonElement> entry : je.getAsJsonObject().entrySet()) {
+														descriptions.put(entry.getKey(), entry.getValue().getAsString());
 													}
 												}
-											}
-										} catch (Exception ignore) {}
-										future.complete(builder.build());
+											} catch (Exception ignore) {}
+										}
+										HttpRequest ghRequest = HttpRequest.newBuilder()
+											.uri(java.net.URI.create("https://api.github.com/repos/Diamondstar-Mods/Minecraft-Command-Maker/contents/docs/cdn/functions"))
+											.build();
+										client.sendAsync(ghRequest, HttpResponse.BodyHandlers.ofString()).whenComplete((ghResp, ghEx) -> {
+											try {
+												if (ghEx == null && ghResp.statusCode() == 200) {
+													JsonElement je = JsonParser.parseString(ghResp.body());
+													if (je.isJsonArray()) {
+														for (JsonElement e : je.getAsJsonArray()) {
+															try {
+																JsonObject obj = e.getAsJsonObject();
+																String name = obj.get("name").getAsString();
+																if (name.endsWith(".mcfunction")) {
+																	String bare = name.substring(0, name.length() - ".mcfunction".length());
+																	String desc = descriptions.get(bare);
+																	if (desc != null && !desc.isEmpty()) {
+																		builder.suggest(bare, Text.literal("§7" + desc));
+																	} else {
+																		builder.suggest(bare);
+																	}
+																}
+															} catch (Exception ignore) {}
+														}
+													}
+												}
+											} catch (Exception ignore) {}
+											future.complete(builder.build());
+										});
 									});
 									return future;
-								} catch (Exception e) {
-									return builder.buildFuture();
-								}
-							})
+								})
 							.executes(ctx -> {
 								String function = StringArgumentType.getString(ctx, "function");
 								new Thread(() -> {

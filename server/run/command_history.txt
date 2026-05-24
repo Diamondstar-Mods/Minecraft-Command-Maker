@@ -1,5 +1,3 @@
-/cmd donate
-/cmd function treehouse
 /cmd list
 /cmd add helloooooo say {$hello}
 /helloooooo
@@ -48,3 +46,5 @@
 /cmd reload
 /boss_arena
 /gamemode survival
+/cmd downloadfunction bubble_party
+/cmd listdownloadablefunctions

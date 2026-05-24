@@ -13,9 +13,14 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.file.*;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class FunctionManager {
     private static final Logger LOGGER = LoggerFactory.getLogger("cmdmaker");
+    private static final String MANIFEST_URL = "https://commandmakerwiki.lucasgeitgey.com/cdn/functions/functions.json";
+    private static Map<String, String> cachedManifest = null;
+    private static long cacheTimestamp = 0;
+    private static final long CACHE_TTL = 300000; // 5 minutes
 
     public static int executeFunction(String functionName, CommandContext<ServerCommandSource> ctx) {
         try {
@@ -73,6 +78,44 @@ public class FunctionManager {
         }).start();
     }
 
+    public static Map<String, String> fetchFunctionManifest() {
+        long now = System.currentTimeMillis();
+        if (cachedManifest != null && (now - cacheTimestamp) < CACHE_TTL) {
+            return cachedManifest;
+        }
+        Map<String, String> manifest = new LinkedHashMap<>();
+        try {
+            HttpClient client = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(MANIFEST_URL))
+                .build();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() == 200) {
+                JsonElement je = JsonParser.parseString(response.body());
+                if (je.isJsonObject()) {
+                    JsonObject obj = je.getAsJsonObject();
+                    for (Map.Entry<String, JsonElement> entry : obj.entrySet()) {
+                        try {
+                            manifest.put(entry.getKey(), entry.getValue().getAsString());
+                        } catch (Exception ignore) {}
+                    }
+                }
+            }
+        } catch (Exception e) {
+            LOGGER.warn("Failed to fetch function manifest, falling back to file list", e);
+        }
+        if (manifest.isEmpty()) {
+            // Fallback: fetch from GitHub API without descriptions
+            List<String> names = fetchDownloadableFunctionNames();
+            for (String name : names) {
+                manifest.put(name, "");
+            }
+        }
+        cachedManifest = manifest;
+        cacheTimestamp = now;
+        return manifest;
+    }
+
     public static List<String> fetchDownloadableFunctionNames() {
         List<String> names = new ArrayList<>();
         try {
@@ -105,15 +148,21 @@ public class FunctionManager {
         source.sendFeedback(() -> Text.literal("§6§lFetching available functions..."), false);
         new Thread(() -> {
             try {
-                List<String> names = fetchDownloadableFunctionNames();
-                if (names.isEmpty()) {
+                Map<String, String> manifest = fetchFunctionManifest();
+                if (manifest.isEmpty()) {
                     source.sendFeedback(() -> Text.literal("§cNo downloadable functions found."), false);
                 } else {
-                    source.sendFeedback(() -> Text.literal("§6§l📦 Downloadable Functions (" + names.size() + ") 📦"), false);
-                    source.sendFeedback(() -> Text.literal("§7Use §e/commandmaker downloadfunction <name> §7to download."), false);
+                    source.sendFeedback(() -> Text.literal("§6§l📦 Downloadable Functions (" + manifest.size() + ") 📦"), false);
+                    source.sendFeedback(() -> Text.literal("§7Use §e/cmd downloadfunction <name> §7to download."), false);
                     source.sendFeedback(() -> Text.literal("§7─────────────────────────────"), false);
-                    for (String name : names) {
-                        source.sendFeedback(() -> Text.literal("§a • §f" + name), false);
+                    for (Map.Entry<String, String> entry : manifest.entrySet()) {
+                        String name = entry.getKey();
+                        String desc = entry.getValue();
+                        if (desc != null && !desc.isEmpty()) {
+                            source.sendFeedback(() -> Text.literal("§a • §f" + name + " §7- " + desc), false);
+                        } else {
+                            source.sendFeedback(() -> Text.literal("§a • §f" + name), false);
+                        }
                     }
                     source.sendFeedback(() -> Text.literal("§7─────────────────────────────"), false);
                 }
