@@ -1,7 +1,4 @@
 /cmd listdownloadablefunctions
-/light_show
-/hide_and_seek
-/cmd listdownloadablefunctions
 /sound
 /sound record.otherside
 /extratntrain
@@ -48,3 +45,6 @@
 /cmdgui
 /craycray
 /cmdgui
+/cm
+/cmdgui
+/cmd gui

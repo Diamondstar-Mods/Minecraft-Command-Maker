@@ -7,7 +7,7 @@ import net.minecraft.util.Identifier;
 
 public class ModScreens {
     public static final ScreenHandlerType<FunctionChestHandler> FUNCTION_CHEST =
-        new ScreenHandlerType<>(FunctionChestHandler::new);
+        new ScreenHandlerType<FunctionChestHandler>(FunctionChestHandler::new, net.minecraft.resource.featuretoggle.FeatureSet.empty());
 
     public static void register() {
         Registry.register(Registries.SCREEN_HANDLER,
