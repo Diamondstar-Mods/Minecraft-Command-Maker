@@ -287,3 +287,20 @@ net.minecraft.client.realms.exception.RealmsServiceException: Realms authenticat
 [19:09:13] [Render thread/INFO] (Minecraft) [System] [CHAT] Played sound minecraft:block.wood.place to Player521
 [19:09:13] [Render thread/INFO] (Minecraft) [System] [CHAT] Displaying particle minecraft:composter
 [19:09:13] [Render thread/INFO] (Minecraft) [System] [CHAT] [Build] Treehouse complete! Climb the ladder on the east side.
+[19:11:56] [Render thread/INFO] (Minecraft) Audio device was lost!
+[19:11:57] [Render thread/ERROR] (Minecraft) Create context (2619868119344): Invalid device.
+[19:11:57] [Render thread/ERROR] (Minecraft) Error starting SoundSystem. Turning off sounds & music
+java.lang.IllegalStateException: Unable to create OpenAL context
+	at knot/net.minecraft.client.sound.SoundEngine.init(SoundEngine.java:172) ~[minecraft-merged-42d054c137-1.21.9-net.fabricmc.yarn.1_21_9.1.21.9+build.1-v2.jar:?]
+	at knot/net.minecraft.client.sound.SoundSystem.start(SoundSystem.java:118) [minecraft-merged-42d054c137-1.21.9-net.fabricmc.yarn.1_21_9.1.21.9+build.1-v2.jar:?]
+	at knot/net.minecraft.client.sound.SoundSystem.reloadSounds(SoundSystem.java:108) [minecraft-merged-42d054c137-1.21.9-net.fabricmc.yarn.1_21_9.1.21.9+build.1-v2.jar:?]
+	at knot/net.minecraft.client.sound.SoundSystem.tick(SoundSystem.java:238) [minecraft-merged-42d054c137-1.21.9-net.fabricmc.yarn.1_21_9.1.21.9+build.1-v2.jar:?]
+	at knot/net.minecraft.client.sound.SoundManager.tick(SoundManager.java:277) [minecraft-merged-42d054c137-1.21.9-net.fabricmc.yarn.1_21_9.1.21.9+build.1-v2.jar:?]
+	at knot/net.minecraft.client.MinecraftClient.tick(MinecraftClient.java:1911) [minecraft-merged-42d054c137-1.21.9-net.fabricmc.yarn.1_21_9.1.21.9+build.1-v2.jar:?]
+	at knot/net.minecraft.client.MinecraftClient.render(MinecraftClient.java:1345) [minecraft-merged-42d054c137-1.21.9-net.fabricmc.yarn.1_21_9.1.21.9+build.1-v2.jar:?]
+	at knot/net.minecraft.client.MinecraftClient.run(MinecraftClient.java:969) [minecraft-merged-42d054c137-1.21.9-net.fabricmc.yarn.1_21_9.1.21.9+build.1-v2.jar:?]
+	at knot/net.minecraft.client.main.Main.main(Main.java:250) [minecraft-merged-42d054c137-1.21.9-net.fabricmc.yarn.1_21_9.1.21.9+build.1-v2.jar:?]
+	at net.fabricmc.loader.impl.game.minecraft.MinecraftGameProvider.launch(MinecraftGameProvider.java:514) [fabric-loader-0.18.4.jar:?]
+	at net.fabricmc.loader.impl.launch.knot.Knot.launch(Knot.java:72) [fabric-loader-0.18.4.jar:?]
+	at net.fabricmc.loader.impl.launch.knot.KnotClient.main(KnotClient.java:23) [fabric-loader-0.18.4.jar:?]
+	at net.fabricmc.devlaunchinjector.Main.main(Main.java:86) [dev-launch-injector-0.2.1+build.8.jar:?]
