@@ -25,6 +25,7 @@ import java.net.http.HttpResponse;
 import java.util.concurrent.CompletableFuture;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.example.gui.AliasDeleteScreen;
+import com.example.gui.FunctionManagerScreen;
 
 public class CMDMakerClient implements ClientModInitializer {
 	public static final String MOD_ID = "cmdmakerclient";
@@ -380,6 +381,18 @@ public class CMDMakerClient implements ClientModInitializer {
 						})
 					)
 				)
+				.then(ClientCommandManager.literal("gui")
+					.executes(ctx -> {
+						MinecraftClient.getInstance().setScreen(new FunctionManagerScreen(null));
+						return 1;
+					})
+				)
+				.then(ClientCommandManager.literal("functions")
+					.executes(ctx -> {
+						MinecraftClient.getInstance().setScreen(new FunctionManagerScreen(null));
+						return 1;
+					})
+				)
 		);
 	}
 
@@ -677,5 +690,8 @@ public class CMDMakerClient implements ClientModInitializer {
 					})
 				)
 		);
+	}
+
+	// Register /cmd functions command to open the Function Manager GUI
 	}
 }

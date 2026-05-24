@@ -14,6 +14,12 @@ import java.nio.file.*;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
+import com.example.gui.ModScreens;
+import com.example.gui.FunctionChestHandler;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
+import net.minecraft.inventory.SimpleInventory;
+
 public class CommandMaker implements ModInitializer {
     public static final String MOD_ID = "cmdmaker";
     public static final org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(MOD_ID);
@@ -24,6 +30,7 @@ public class CommandMaker implements ModInitializer {
         AliasManager.loadAliases();
         SyntaxManager.loadSyntaxDefinitions();
         PermissionManager.initialize();
+        ModScreens.register();
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
             registerCmdCommand(dispatcher);
             registerAddCommand(dispatcher);
@@ -119,9 +126,87 @@ public class CommandMaker implements ModInitializer {
                 // gui
                 .then(CommandManager.literal("gui")
                     .executes(ctx -> {
-                        ctx.getSource().sendFeedback(() -> Text.literal("§6Use §f/deletealiases-gui §6to open the GUI"), false);
+                        PlayerEntity player = ctx.getSource().getPlayer();
+                        if (player != null) {
+                            player.openHandledScreen(new SimpleNamedScreenHandlerFactory(
+                                (syncId, inv, p) -> new FunctionChestHandler(syncId, inv, ModScreens.FUNCTION_CHEST),
+                                Text.literal("Command Maker - Functions")
+                            ));
+                        } else {
+                            ctx.getSource().sendFeedback(() -> Text.literal("§cThis command can only be used by a player"), false);
+                        }
                         return 1;
                     })
+                )
+                // functions - open function manager GUI
+                .then(CommandManager.literal("functions")
+                    .executes(ctx -> {
+                        PlayerEntity player = ctx.getSource().getPlayer();
+                        if (player != null) {
+                            player.openHandledScreen(new SimpleNamedScreenHandlerFactory(
+                                (syncId, inv, p) -> new FunctionChestHandler(syncId, inv, ModScreens.FUNCTION_CHEST),
+                                Text.literal("Command Maker - Functions")
+                            ));
+                        } else {
+                            ctx.getSource().sendFeedback(() -> Text.literal("§cThis command can only be used by a player"), false);
+                        }
+                        return 1;
+                    })
+                )
+                // function subcommands
+                .then(CommandManager.literal("function")
+                    .then(CommandManager.literal("create")
+                        .then(CommandManager.argument("name", StringArgumentType.word())
+                            .executes(ctx -> {
+                                String name = StringArgumentType.getString(ctx, "name");
+                                if (name.contains("..") || name.contains("/") || name.contains("\\")) {
+                                    ctx.getSource().sendFeedback(() -> Text.literal("§c✖ Invalid function name — don't use §f.. / \\ §cin names"), false);
+                                    return 0;
+                                }
+                                try {
+                                    Path file = AliasManager.getFunctionsPath().resolve(name + ".mcfunction");
+                                    if (Files.exists(file)) {
+                                        ctx.getSource().sendFeedback(() -> Text.literal("§c✖ Function §f" + name + "§c already exists"), false);
+                                        return 0;
+                                    }
+                                    Files.createDirectories(file.getParent());
+                                    String content = "# " + name + "\n# Created with Command Maker\n\n# Add your Minecraft commands below\n# Lines starting with # are comments\n";
+                                    Files.writeString(file, content);
+                                    ctx.getSource().sendFeedback(() -> Text.literal("§a✔ Created §f" + name + " §7| Edit: config/CommandMaker/Functions/" + name + ".mcfunction"), false);
+                                    return 1;
+                                } catch (Exception e) {
+                                    ctx.getSource().sendFeedback(() -> Text.literal("§c✖ Error: §7" + e.getMessage()), false);
+                                    return 0;
+                                }
+                            })
+                        )
+                    )
+                    .then(CommandManager.literal("delete")
+                        .then(CommandManager.argument("name", StringArgumentType.word())
+                            .suggests((ctx, builder) -> {
+                                for (String name : FunctionManager.listLocalFunctions()) {
+                                    builder.suggest(name);
+                                }
+                                return builder.buildFuture();
+                            })
+                            .executes(ctx -> {
+                                String name = StringArgumentType.getString(ctx, "name");
+                                try {
+                                    Path file = AliasManager.getFunctionsPath().resolve(name + ".mcfunction");
+                                    if (Files.deleteIfExists(file)) {
+                                        ctx.getSource().sendFeedback(() -> Text.literal("§c🗑 Deleted §f" + name), false);
+                                        return 1;
+                                    } else {
+                                        ctx.getSource().sendFeedback(() -> Text.literal("§c✖ Function §f" + name + "§c not found"), false);
+                                        return 0;
+                                    }
+                                } catch (Exception e) {
+                                    ctx.getSource().sendFeedback(() -> Text.literal("§c✖ Error: §7" + e.getMessage()), false);
+                                    return 0;
+                                }
+                            })
+                        )
+                    )
                 )
                 // syntax
                 .then(CommandManager.literal("syntax")

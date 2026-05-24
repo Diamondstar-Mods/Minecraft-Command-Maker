@@ -1,50 +1,50 @@
-/summon minecraft:falling_block ~ ~ ~
-/execute at @e run execute at @e run execute at @e run summon minecraft:falling_block ~ 20 ~
-/execute at @e run summon minecraft:falling_block
-/execute at @e run summon minecraft:falling_block ~ ~20 ~
-/cmmakerperm check
-/cmmakerperm check player808
-/me
-/me d
-/cmmakerperm check player63 \
-/cmmakerperm check player63
-/lp
-/cmmakerperm reload
 /cmd listdownloadablefunctions
+/light_show
+/hide_and_seek
+/cmd listdownloadablefunctions
+/sound
+/sound record.otherside
+/extratntrain
+/example
+/execute at @e run extratntrain
+/cmd
+/cmd gui
+/cmd functions
+/cmd function
+/cmd functions
+/cmd function create
+/cmd donate
+/cmd listdownloadablefunctions
+/zombie_siege
+/gamemode survival
+/cmd gui
+/cmd functions
+/gamemode creative
+/time set day
+/cmd functions
+/cmd downloadfunction
+/cmd downloadfunction gui
+/cmd wiki
+/cmd reload
+/cmd gui
+/cmd functions
+/cmd gui
+/cmd functions
 /cmd list
-/better_dance_party
-/cmd downloadfunction better_dance_party
-/better_dance_party
 /cmd downloadfunction base_protection
-/base_protection
-/cmd reload
-/base_protection
-/cmd downloadfunction copilot
-/copilot
-/cmd downloadfunction craycray
+/cmd add dd ddd
+/cmdgui
+/cmdfunctions
+/cmdgui
+/cmd add dd say hello
+/dd
+/kill @e
+/cmd gui
+/cmdgui
+/cmd functions
+/cmdfunctions
+/cmdgui
+/cmdtest
+/cmdgui
 /craycray
-/cmd downloadfunction boss_arena
-/cmd reload
-/boss_arena
-/gamemode survival
-/cmd downloadfunction bubble_party
-/cmd listdownloadablefunctions
-/gamemode creative
-/cmd listdownloadablefunctions
-/cmd downloadfunction bubble_party
-/cmd reload
-/bubble_party
-/tp 999 ~ 999
-/cmd listdownloadablefunctions
-/cmd downloadfunction underground_base
-/cmd reload
-/underground_base
-/effect clear @s
-/cmd downloadfunction parkour_course
-/cmd reload
-/parkour_course
-/gamemode survival
-/effect give Player593 minecraft:regeneration infinite 255 true
-/effect clear
-/gamemode creative
-/cmd listdownloadablefunctions
+/cmdgui

@@ -19,3 +19,4 @@
 /poop
 /poopt
 /poop
+/cmd gui

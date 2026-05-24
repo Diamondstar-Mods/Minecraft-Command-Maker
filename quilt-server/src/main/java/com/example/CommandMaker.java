@@ -696,13 +696,75 @@ public class CommandMaker implements ModInitializer {
 				.then(net.minecraft.server.command.CommandManager.literal("reload")
 					.executes(ctx -> reloadCommands(ctx.getSource(), dispatcher))
 				)
-				.then(net.minecraft.server.command.CommandManager.literal("gui")
-					.executes(ctx -> {
-						ServerCommandSource source = ctx.getSource();
-						source.sendFeedback(() -> net.minecraft.text.Text.literal("§6Use §f/deletealiases-gui §6to open the GUI"), false);
-						return 1;
-					})
-				)
+					.then(net.minecraft.server.command.CommandManager.literal("gui")
+						.executes(ctx -> {
+							ServerCommandSource source = ctx.getSource();
+							source.sendFeedback(() -> net.minecraft.text.Text.literal("§6Use §f/cmd functions §6to open the Function Manager GUI"), false);
+							return 1;
+						})
+					)
+					.then(net.minecraft.server.command.CommandManager.literal("functions")
+						.executes(ctx -> {
+							ctx.getSource().sendFeedback(() -> net.minecraft.text.Text.literal("§6Use §f/cmd functions §6in chat to open the GUI"), false);
+							return 1;
+						})
+					)
+					.then(net.minecraft.server.command.CommandManager.literal("function")
+						.then(net.minecraft.server.command.CommandManager.literal("create")
+							.then(net.minecraft.server.command.CommandManager.argument("name", StringArgumentType.word())
+								.executes(ctx -> {
+									String name = StringArgumentType.getString(ctx, "name");
+									if (name.contains("..") || name.contains("/") || name.contains("\\")) {
+										ctx.getSource().sendFeedback(() -> net.minecraft.text.Text.literal("§cInvalid function name."), false);
+										return 0;
+									}
+									try {
+										java.nio.file.Path file = java.nio.file.Paths.get("config", "CommandMaker", "Functions", name + ".mcfunction");
+										if (java.nio.file.Files.exists(file)) {
+											ctx.getSource().sendFeedback(() -> net.minecraft.text.Text.literal("§cFunction already exists: §f" + name), false);
+											return 0;
+										}
+										java.nio.file.Files.createDirectories(file.getParent());
+										String fnContent = "# " + name + "\n# Created with Command Maker\n\n# Add your Minecraft commands below\n# Lines starting with # are comments\n";
+										java.nio.file.Files.writeString(file, fnContent);
+										ctx.getSource().sendFeedback(() -> net.minecraft.text.Text.literal("§aCreated function: §f" + name), false);
+										ctx.getSource().sendFeedback(() -> net.minecraft.text.Text.literal("§7Edit at: §fconfig/CommandMaker/Functions/" + name + ".mcfunction"), false);
+										return 1;
+									} catch (Exception e) {
+										ctx.getSource().sendFeedback(() -> net.minecraft.text.Text.literal("§cError creating function: " + e.getMessage()), false);
+										return 0;
+									}
+								})
+							)
+						)
+						.then(net.minecraft.server.command.CommandManager.literal("delete")
+							.then(net.minecraft.server.command.CommandManager.argument("name", StringArgumentType.word())
+								.suggests((ctx, builder) -> {
+									for (String fn : FunctionManager.listLocalFunctions()) {
+										builder.suggest(fn);
+									}
+									return builder.buildFuture();
+								})
+								.executes(ctx -> {
+									String name = StringArgumentType.getString(ctx, "name");
+									try {
+										java.nio.file.Path file = java.nio.file.Paths.get("config", "CommandMaker", "Functions", name + ".mcfunction");
+										if (java.nio.file.Files.deleteIfExists(file)) {
+											ctx.getSource().sendFeedback(() -> net.minecraft.text.Text.literal("§cDeleted function: §f" + name), false);
+											return 1;
+										} else {
+											ctx.getSource().sendFeedback(() -> net.minecraft.text.Text.literal("§cFunction not found: §f" + name), false);
+											return 0;
+										}
+									} catch (Exception e) {
+										ctx.getSource().sendFeedback(() -> net.minecraft.text.Text.literal("§cError deleting function: " + e.getMessage()), false);
+										return 0;
+									}
+								})
+							)
+						)
+					)
+
 				.then(net.minecraft.server.command.CommandManager.literal("syntax")
 					.executes(ctx -> listSyntax(ctx.getSource()))
 				)
