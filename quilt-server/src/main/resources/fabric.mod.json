@@ -14,8 +14,8 @@
   "icon": "assets/modid/icon.png",
   "environment": "*",
   "entrypoints": {
-    "main": ["com.example.ExampleMod"],
-    "client": ["com.example.ExampleModClient"]
+    "main": ["com.example.CommandMaker"],
+    "client": ["com.example.CommandMakerClient"]
   },
   "mixins": ["modid.mixins.json"],
   "depends": {

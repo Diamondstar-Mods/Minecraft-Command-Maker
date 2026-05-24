@@ -36,7 +36,7 @@ Manages all custom syntax definitions:
 - `matchInput(String input)` - Find matching syntax pattern
 - `getAllSyntaxes()` - Get all registered patterns
 
-### 3. Integration with `ExampleMod.java`
+### 3. Integration with `CommandMaker.java`
 
 Updated main mod class:
 
@@ -150,8 +150,8 @@ Execute final command
 src/main/java/com/example/
 ├── CommandSyntax.java          (NEW - Pattern definition class)
 ├── SyntaxManager.java          (NEW - Syntax management)
-├── ExampleMod.java             (UPDATED - Syntax integration)
-├── ExampleModClient.java       (Unchanged)
+├── CommandMaker.java             (UPDATED - Syntax integration)
+├── CommandMakerClient.java       (Unchanged)
 └── mixin/
     └── ExampleMixin.java       (Unchanged)
 

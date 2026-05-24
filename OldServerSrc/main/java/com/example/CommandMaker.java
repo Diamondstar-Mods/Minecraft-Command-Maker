@@ -21,7 +21,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-public class ExampleMod implements ModInitializer {
+public class CommandMaker implements ModInitializer {
 	public static final String MOD_ID = "cmdmaker";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 

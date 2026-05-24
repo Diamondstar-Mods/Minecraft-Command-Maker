@@ -13,7 +13,7 @@
   "license": "CC-BY-SA-4.0",
   "environment": "server",
   "entrypoints": {
-    "main": ["com.example.ExampleMod"]
+    "main": ["com.example.CommandMaker"]
   },
   "depends": {
     "fabricloader": ">=0.7.12",

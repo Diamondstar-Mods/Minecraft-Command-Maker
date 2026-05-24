@@ -45,7 +45,7 @@ Result: tp steve @s
 
 ### Updated Existing Class
 
-3. **`ExampleMod.java`** (Enhanced)
+3. **`CommandMaker.java`** (Enhanced)
    - Integrated syntax loading
    - Added `/syntax` command
    - Smart alias execution with syntax matching
@@ -156,7 +156,7 @@ Result: tp steve @s
 ```
 CommandSyntax.java       New - Pattern definition & parameter extraction
 SyntaxManager.java       New - Syntax management & JSON loading
-ExampleMod.java          Updated - Integrated syntax system
+CommandMaker.java          Updated - Integrated syntax system
 ```
 
 ### Documentation Added

@@ -1,6 +1,6 @@
 package com.example;
 
-public class ExampleMod {
+public class CommandMaker {
 	public void onInitialize() {
 		// This entrypoint is suitable for setting up mod initialization logic.
 	}

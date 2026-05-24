@@ -2,7 +2,7 @@ package com.example;
 
 import net.fabricmc.api.ClientModInitializer;
 
-public class ExampleMod implements ClientModInitializer {
+public class CommandMaker implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         // This code runs as soon as Minecraft is in a mod-load-ready state.

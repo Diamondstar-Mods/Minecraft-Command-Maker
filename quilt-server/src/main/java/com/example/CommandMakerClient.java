@@ -7,7 +7,7 @@ import net.minecraft.client.MinecraftClient;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ExampleModClient implements ClientModInitializer {
+public class CommandMakerClient implements ClientModInitializer {
 	private static Map<String, String> aliases = new HashMap<>();
 
 	public static void setAliases(Map<String, String> aliasMap) {

@@ -172,8 +172,8 @@ compileOnly "net.luckperms:api:5.4"
 ## Files Modified
 
 ### Source Code
-- `server/src/main/java/com/example/ExampleMod.java` ✅
-- `quilt-server/src/main/java/com/example/ExampleMod.java` ✅
+- `server/src/main/java/com/example/CommandMaker.java` ✅
+- `quilt-server/src/main/java/com/example/CommandMaker.java` ✅
 - `server/src/main/java/com/example/PermissionManager.java` ✅ (NEW)
 - `quilt-server/src/main/java/com/example/PermissionManager.java` ✅ (NEW)
 

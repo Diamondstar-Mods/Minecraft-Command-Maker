@@ -9,7 +9,7 @@
 └──────────────────────────────────┬──────────────────────────────────┘
                                    │
                     ┌──────────────▼──────────────┐
-                    │   ExampleMod.registerAlias  │
+                    │   CommandMaker.registerAlias  │
                     │   with arguments handler    │
                     └──────────────┬──────────────┘
                                    │
@@ -90,7 +90,7 @@
 ```
 Minecraft Start
     ↓
-ExampleMod.onInitialize()
+CommandMaker.onInitialize()
     ↓
 SyntaxManager.loadSyntaxDefinitions()
     ↓
@@ -108,7 +108,7 @@ Log: "Loaded custom syntax: tpa -> /tpa <player>"
 ```
 User Input: /tpa_request steve
     ↓
-ExampleMod.registerAlias() argument handler
+CommandMaker.registerAlias() argument handler
     ↓
 Full input: "tpa_request steve"
     ↓
@@ -129,7 +129,7 @@ syntax.substituteParameters(
     ↓
 Result: "say steve wants..."
     ↓
-ExampleMod.substituteVariables() for built-in vars
+CommandMaker.substituteVariables() for built-in vars
     ↓
 Execute command via CommandDispatcher
 ```
@@ -143,9 +143,9 @@ Project Root
 │   │   └── Pattern parsing & parameter extraction
 │   ├── SyntaxManager.java (NEW)
 │   │   └── Syntax registry & matching
-│   ├── ExampleMod.java (UPDATED)
+│   ├── CommandMaker.java (UPDATED)
 │   │   └── Main mod class + syntax integration
-│   ├── ExampleModClient.java
+│   ├── CommandMakerClient.java
 │   │   └── Client-side handling (unchanged)
 │   └── mixin/
 │       └── ExampleMixin.java (unchanged)
@@ -210,7 +210,7 @@ Layer 1 - Syntax Parameters (from custom syntax):
   result = syntax.substituteParameters(target, {player: "alex", message: "hi"})
   → "say alex said: hi from ${player} at ${x} ${y} ${z}"
 
-Layer 2 - Built-in Variables (from ExampleMod):
+Layer 2 - Built-in Variables (from CommandMaker):
   result = substituteVariables(result, ctx)
   - ${player} → YourName
   - ${x} → 123
