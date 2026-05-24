@@ -1,15 +1,3 @@
-/meteor_showert
-/meteor_shower
-/meteor_showert
-/meteor_showertt
-/meteor_shower
-/cmd downloadfunction starter_kit
-/cmd listdownloadablefunctions
-/cmd downloadfunction
-/cmd listdownloadablefunctions
-/cmd gui
-/deletealiases-gui
-/deletealias
 /cmd donate
 /cmd function treehouse
 /cmd list
@@ -48,3 +36,15 @@
 /better_dance_party
 /cmd downloadfunction better_dance_party
 /better_dance_party
+/cmd downloadfunction base_protection
+/base_protection
+/cmd reload
+/base_protection
+/cmd downloadfunction copilot
+/copilot
+/cmd downloadfunction craycray
+/craycray
+/cmd downloadfunction boss_arena
+/cmd reload
+/boss_arena
+/gamemode survival

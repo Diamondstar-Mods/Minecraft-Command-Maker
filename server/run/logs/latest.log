@@ -1,5 +1,5 @@
-[17:08:25] [main/INFO] (FabricLoader/GameProvider) Loading Minecraft 1.21.9 with Fabric Loader 0.18.4
-[17:08:25] [main/INFO] (FabricLoader) Loading 52 mods:
+[17:21:57] [main/INFO] (FabricLoader/GameProvider) Loading Minecraft 1.21.9 with Fabric Loader 0.18.4
+[17:21:57] [main/INFO] (FabricLoader) Loading 52 mods:
 	- fabric-api 0.134.1+1.21.9
 	- fabric-api-base 1.0.0+14b92d897d
 	- fabric-api-lookup-api-v1 1.6.106+d17682157d
@@ -52,23 +52,22 @@
 	- minecraft 1.21.9
 	- mixinextras 0.5.0
 	- nekkycommandmaker 3.0.0
-[17:08:29] [main/INFO] (FabricLoader/Mixin) SpongePowered MIXIN Subsystem Version=0.8.7 Source=file:/C:/Users/adam/.gradle/caches/modules-2/files-2.1/net.fabricmc/sponge-mixin/0.17.0+mixin.0.8.7/cf31463202f72d03b0ef1e1e38e8ee71b7faaab6/sponge-mixin-0.17.0+mixin.0.8.7.jar Service=Knot/Fabric Env=CLIENT
-[17:08:29] [main/INFO] (FabricLoader/Mixin) Loaded Fabric development mappings for mixin remapper!
-[17:08:29] [main/INFO] (FabricLoader/Mixin) Compatibility level set to JAVA_21
-[17:08:31] [main/INFO] (FabricLoader/MixinExtras|Service) Initializing MixinExtras via com.llamalad7.mixinextras.service.MixinExtrasServiceImpl(version=0.5.0).
-[17:08:33] [Datafixer Bootstrap/INFO] (Minecraft) 278 Datafixer optimizations took 760 milliseconds
-[17:08:40] [Render thread/INFO] (Minecraft) Environment: Environment[sessionHost=https://sessionserver.mojang.com, servicesHost=https://api.minecraftservices.com, profilesHost=https://api.mojang.com, name=PROD]
-[17:08:40] [Render thread/INFO] (Minecraft) Setting user: Player609
-[17:08:41] [Render thread/INFO] (cmdmaker) Loaded 21 aliases from JSON config
-[17:08:41] [Render thread/INFO] (cmdmaker) Loaded custom syntax: tpa -> /tpa <player>
-[17:08:41] [Render thread/INFO] (cmdmaker) Loaded custom syntax: give -> /give <item> <amount>
-[17:08:41] [Render thread/INFO] (cmdmaker) Loaded custom syntax: msg -> /msg <player> <message>
-[17:08:41] [Render thread/INFO] (cmdmaker-perms) Loaded permissions config from: config\CommandMaker\permissions.json
-[17:08:41] [Render thread/INFO] (cmdmaker-perms) LuckPerms not found - using built-in permissions only
-[17:08:41] [Render thread/INFO] (cmdmaker-perms) Permission Manager initialized successfully
-[17:08:41] [Render thread/INFO] (cmdmaker) Alias mod initialized!
-[17:08:41] [Render thread/INFO] (Indigo) [Indigo] Registering Indigo renderer!
-[17:08:41] [Download-2/ERROR] (Minecraft) Failed to fetch user properties
+[17:22:01] [main/INFO] (FabricLoader/Mixin) SpongePowered MIXIN Subsystem Version=0.8.7 Source=file:/C:/Users/adam/.gradle/caches/modules-2/files-2.1/net.fabricmc/sponge-mixin/0.17.0+mixin.0.8.7/cf31463202f72d03b0ef1e1e38e8ee71b7faaab6/sponge-mixin-0.17.0+mixin.0.8.7.jar Service=Knot/Fabric Env=CLIENT
+[17:22:01] [main/INFO] (FabricLoader/Mixin) Loaded Fabric development mappings for mixin remapper!
+[17:22:02] [main/INFO] (FabricLoader/Mixin) Compatibility level set to JAVA_21
+[17:22:03] [main/INFO] (FabricLoader/MixinExtras|Service) Initializing MixinExtras via com.llamalad7.mixinextras.service.MixinExtrasServiceImpl(version=0.5.0).
+[17:22:05] [Datafixer Bootstrap/INFO] (Minecraft) 278 Datafixer optimizations took 686 milliseconds
+[17:22:12] [Render thread/INFO] (Minecraft) Environment: Environment[sessionHost=https://sessionserver.mojang.com, servicesHost=https://api.minecraftservices.com, profilesHost=https://api.mojang.com, name=PROD]
+[17:22:12] [Render thread/INFO] (Minecraft) Setting user: Player810
+[17:22:13] [Render thread/INFO] (cmdmaker) Loaded 21 aliases from JSON config
+[17:22:13] [Render thread/INFO] (cmdmaker) Loaded custom syntax: tpa -> /tpa <player>
+[17:22:13] [Render thread/INFO] (cmdmaker) Loaded custom syntax: give -> /give <item> <amount>
+[17:22:13] [Render thread/INFO] (cmdmaker) Loaded custom syntax: msg -> /msg <player> <message>
+[17:22:13] [Render thread/INFO] (cmdmaker-perms) Loaded permissions config from: config\CommandMaker\permissions.json
+[17:22:13] [Render thread/INFO] (cmdmaker-perms) LuckPerms not found - using built-in permissions only
+[17:22:13] [Render thread/INFO] (cmdmaker-perms) Permission Manager initialized successfully
+[17:22:13] [Render thread/INFO] (cmdmaker) Alias mod initialized!
+[17:22:13] [Download-2/ERROR] (Minecraft) Failed to fetch user properties
 com.mojang.authlib.exceptions.InvalidCredentialsException: Status: 401
 	at knot/com.mojang.authlib.exceptions.MinecraftClientHttpException.toAuthenticationException(MinecraftClientHttpException.java:59) ~[authlib-7.0.61.jar:?]
 	at knot/com.mojang.authlib.yggdrasil.YggdrasilUserApiService.fetchProperties(YggdrasilUserApiService.java:150) ~[authlib-7.0.61.jar:?]
@@ -82,10 +81,11 @@ Caused by: com.mojang.authlib.exceptions.MinecraftClientHttpException: Status: 4
 	at knot/com.mojang.authlib.minecraft.client.MinecraftClient.get(MinecraftClient.java:56) ~[authlib-7.0.61.jar:?]
 	at knot/com.mojang.authlib.yggdrasil.YggdrasilUserApiService.fetchProperties(YggdrasilUserApiService.java:121) ~[authlib-7.0.61.jar:?]
 	... 5 more
-[17:08:41] [Render thread/INFO] (Minecraft) Backend library: LWJGL version 3.3.3-snapshot
-[17:08:42] [Render thread/INFO] (Minecraft) Using optional rendering extensions: GL_ARB_buffer_storage, GL_KHR_debug, GL_ARB_vertex_attrib_binding, GL_ARB_direct_state_access
-[17:08:43] [Download-2/INFO] (Minecraft) Could not authorize you against Realms server: java.lang.RuntimeException: Failed to parse into SignedJWT: FabricMC
-[17:08:43] [Download-2/ERROR] (Minecraft) Failed to fetch Realms feature flags
+[17:22:13] [Render thread/INFO] (Indigo) [Indigo] Registering Indigo renderer!
+[17:22:14] [Render thread/INFO] (Minecraft) Backend library: LWJGL version 3.3.3-snapshot
+[17:22:15] [Render thread/INFO] (Minecraft) Using optional rendering extensions: GL_ARB_buffer_storage, GL_KHR_debug, GL_ARB_vertex_attrib_binding, GL_ARB_direct_state_access
+[17:22:16] [Download-2/INFO] (Minecraft) Could not authorize you against Realms server: java.lang.RuntimeException: Failed to parse into SignedJWT: FabricMC
+[17:22:16] [Download-2/ERROR] (Minecraft) Failed to fetch Realms feature flags
 net.minecraft.client.realms.exception.RealmsServiceException: Realms authentication error with message 'java.lang.RuntimeException: Failed to parse into SignedJWT: FabricMC'
 	at knot/net.minecraft.client.realms.RealmsClient.execute(RealmsClient.java:536) ~[minecraft-merged-42d054c137-1.21.9-net.fabricmc.yarn.1_21_9.1.21.9+build.1-v2.jar:?]
 	at knot/net.minecraft.client.realms.RealmsClient.fetchFeatureFlags(RealmsClient.java:189) ~[minecraft-merged-42d054c137-1.21.9-net.fabricmc.yarn.1_21_9.1.21.9+build.1-v2.jar:?]
@@ -93,27 +93,27 @@ net.minecraft.client.realms.exception.RealmsServiceException: Realms authenticat
 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144) ~[?:?]
 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642) ~[?:?]
 	at java.base/java.lang.Thread.run(Thread.java:1583) [?:?]
-[17:08:43] [Render thread/INFO] (Minecraft) Reloading ResourceManager: vanilla, fabric, fabric-api, fabric-api-base, fabric-api-lookup-api-v1, fabric-biome-api-v1, fabric-block-api-v1, fabric-block-view-api-v2, fabric-client-gametest-api-v1, fabric-command-api-v2, fabric-content-registries-v0, fabric-convention-tags-v1, fabric-convention-tags-v2, fabric-crash-report-info-v1, fabric-data-attachment-api-v1, fabric-data-generation-api-v1, fabric-dimensions-v1, fabric-entity-events-v1, fabric-events-interaction-v0, fabric-game-rule-api-v1, fabric-gametest-api-v1, fabric-item-api-v1, fabric-item-group-api-v1, fabric-key-binding-api-v1, fabric-lifecycle-events-v1, fabric-loot-api-v2, fabric-loot-api-v3, fabric-message-api-v1, fabric-model-loading-api-v1, fabric-networking-api-v1, fabric-object-builder-api-v1, fabric-particles-v1, fabric-recipe-api-v1, fabric-registry-sync-v0, fabric-renderer-api-v1, fabric-renderer-indigo, fabric-rendering-fluids-v1, fabric-rendering-v1, fabric-resource-conditions-api-v1, fabric-resource-loader-v0, fabric-resource-loader-v1, fabric-screen-api-v1, fabric-screen-handler-api-v1, fabric-serialization-api-v1, fabric-sound-api-v1, fabric-tag-api-v1, fabric-transfer-api-v1, fabric-transitive-access-wideners-v1, fabricloader, nekkycommandmaker
-[17:08:44] [Worker-Main-4/INFO] (Minecraft) Found unifont_all_no_pua-16.0.03.hex, loading
-[17:08:44] [Worker-Main-7/INFO] (Minecraft) Found unifont_pua-16.0.03.hex, loading
-[17:08:44] [Worker-Main-5/INFO] (Minecraft) Found unifont_jp_patch-16.0.03.hex, loading
-[17:08:45] [Render thread/INFO] (Minecraft) OpenAL initialized on device OpenAL Soft on N07 (3- NVIDIA High Definition Audio)
-[17:08:45] [Render thread/INFO] (Minecraft) Sound engine started
-[17:08:45] [Render thread/INFO] (Minecraft) Created: 512x256x0 minecraft:textures/atlas/particles.png-atlas
-[17:08:45] [Render thread/INFO] (Minecraft) Created: 128x64x0 minecraft:textures/atlas/decorated_pot.png-atlas
-[17:08:45] [Render thread/INFO] (Minecraft) Created: 2048x1024x0 minecraft:textures/atlas/armor_trims.png-atlas
-[17:08:45] [Render thread/INFO] (Minecraft) Created: 512x256x0 minecraft:textures/atlas/paintings.png-atlas
-[17:08:45] [Render thread/INFO] (Minecraft) Created: 512x512x0 minecraft:textures/atlas/shield_patterns.png-atlas
-[17:08:45] [Render thread/INFO] (Minecraft) Created: 1024x512x4 minecraft:textures/atlas/blocks.png-atlas
-[17:08:45] [Render thread/INFO] (Minecraft) Created: 512x256x0 minecraft:textures/atlas/chest.png-atlas
-[17:08:45] [Render thread/INFO] (Minecraft) Created: 512x512x0 minecraft:textures/atlas/banner_patterns.png-atlas
-[17:08:45] [Render thread/INFO] (Minecraft) Created: 512x256x0 minecraft:textures/atlas/beds.png-atlas
-[17:08:45] [Render thread/INFO] (Minecraft) Created: 1024x512x0 minecraft:textures/atlas/gui.png-atlas
-[17:08:45] [Render thread/INFO] (Minecraft) Created: 64x64x0 minecraft:textures/atlas/map_decorations.png-atlas
-[17:08:45] [Render thread/INFO] (Minecraft) Created: 256x256x0 minecraft:textures/atlas/signs.png-atlas
-[17:08:45] [Render thread/INFO] (Minecraft) Created: 512x256x0 minecraft:textures/atlas/shulker_boxes.png-atlas
-[17:08:45] [IO-Worker-1/INFO] (Minecraft) Could not authorize you against Realms server: java.lang.RuntimeException: Failed to parse into SignedJWT: FabricMC
-[17:08:45] [IO-Worker-1/ERROR] (Minecraft) Couldn't connect to realms
+[17:22:16] [Render thread/INFO] (Minecraft) Reloading ResourceManager: vanilla, fabric, fabric-api, fabric-api-base, fabric-api-lookup-api-v1, fabric-biome-api-v1, fabric-block-api-v1, fabric-block-view-api-v2, fabric-client-gametest-api-v1, fabric-command-api-v2, fabric-content-registries-v0, fabric-convention-tags-v1, fabric-convention-tags-v2, fabric-crash-report-info-v1, fabric-data-attachment-api-v1, fabric-data-generation-api-v1, fabric-dimensions-v1, fabric-entity-events-v1, fabric-events-interaction-v0, fabric-game-rule-api-v1, fabric-gametest-api-v1, fabric-item-api-v1, fabric-item-group-api-v1, fabric-key-binding-api-v1, fabric-lifecycle-events-v1, fabric-loot-api-v2, fabric-loot-api-v3, fabric-message-api-v1, fabric-model-loading-api-v1, fabric-networking-api-v1, fabric-object-builder-api-v1, fabric-particles-v1, fabric-recipe-api-v1, fabric-registry-sync-v0, fabric-renderer-api-v1, fabric-renderer-indigo, fabric-rendering-fluids-v1, fabric-rendering-v1, fabric-resource-conditions-api-v1, fabric-resource-loader-v0, fabric-resource-loader-v1, fabric-screen-api-v1, fabric-screen-handler-api-v1, fabric-serialization-api-v1, fabric-sound-api-v1, fabric-tag-api-v1, fabric-transfer-api-v1, fabric-transitive-access-wideners-v1, fabricloader, nekkycommandmaker
+[17:22:16] [Worker-Main-6/INFO] (Minecraft) Found unifont_all_no_pua-16.0.03.hex, loading
+[17:22:16] [Worker-Main-2/INFO] (Minecraft) Found unifont_pua-16.0.03.hex, loading
+[17:22:17] [Worker-Main-1/INFO] (Minecraft) Found unifont_jp_patch-16.0.03.hex, loading
+[17:22:18] [Render thread/INFO] (Minecraft) OpenAL initialized on device OpenAL Soft on Speaker (Logi Z207)
+[17:22:18] [Render thread/INFO] (Minecraft) Sound engine started
+[17:22:18] [Render thread/INFO] (Minecraft) Created: 512x256x0 minecraft:textures/atlas/particles.png-atlas
+[17:22:18] [Render thread/INFO] (Minecraft) Created: 128x64x0 minecraft:textures/atlas/decorated_pot.png-atlas
+[17:22:18] [Render thread/INFO] (Minecraft) Created: 2048x1024x0 minecraft:textures/atlas/armor_trims.png-atlas
+[17:22:18] [Render thread/INFO] (Minecraft) Created: 512x256x0 minecraft:textures/atlas/paintings.png-atlas
+[17:22:18] [Render thread/INFO] (Minecraft) Created: 512x512x0 minecraft:textures/atlas/shield_patterns.png-atlas
+[17:22:18] [Render thread/INFO] (Minecraft) Created: 1024x512x4 minecraft:textures/atlas/blocks.png-atlas
+[17:22:18] [Render thread/INFO] (Minecraft) Created: 512x256x0 minecraft:textures/atlas/chest.png-atlas
+[17:22:18] [Render thread/INFO] (Minecraft) Created: 512x512x0 minecraft:textures/atlas/banner_patterns.png-atlas
+[17:22:18] [Render thread/INFO] (Minecraft) Created: 512x256x0 minecraft:textures/atlas/beds.png-atlas
+[17:22:18] [Render thread/INFO] (Minecraft) Created: 1024x512x0 minecraft:textures/atlas/gui.png-atlas
+[17:22:18] [Render thread/INFO] (Minecraft) Created: 64x64x0 minecraft:textures/atlas/map_decorations.png-atlas
+[17:22:18] [Render thread/INFO] (Minecraft) Created: 256x256x0 minecraft:textures/atlas/signs.png-atlas
+[17:22:18] [Render thread/INFO] (Minecraft) Created: 512x256x0 minecraft:textures/atlas/shulker_boxes.png-atlas
+[17:22:18] [IO-Worker-1/INFO] (Minecraft) Could not authorize you against Realms server: java.lang.RuntimeException: Failed to parse into SignedJWT: FabricMC
+[17:22:18] [IO-Worker-1/ERROR] (Minecraft) Couldn't connect to realms
 net.minecraft.client.realms.exception.RealmsServiceException: Realms authentication error with message 'java.lang.RuntimeException: Failed to parse into SignedJWT: FabricMC'
 	at knot/net.minecraft.client.realms.RealmsClient.execute(RealmsClient.java:536) ~[minecraft-merged-42d054c137-1.21.9-net.fabricmc.yarn.1_21_9.1.21.9+build.1-v2.jar:?]
 	at knot/net.minecraft.client.realms.RealmsClient.clientCompatible(RealmsClient.java:316) ~[minecraft-merged-42d054c137-1.21.9-net.fabricmc.yarn.1_21_9.1.21.9+build.1-v2.jar:?]
@@ -122,194 +122,403 @@ net.minecraft.client.realms.exception.RealmsServiceException: Realms authenticat
 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144) ~[?:?]
 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642) ~[?:?]
 	at java.base/java.lang.Thread.run(Thread.java:1583) [?:?]
-[17:09:44] [Render thread/INFO] (Minecraft) Loaded 1461 recipes
-[17:09:44] [Render thread/INFO] (Minecraft) Loaded 1574 advancements
-[17:09:44] [Render thread/INFO] (BiomeModificationImpl) Applied 0 biome modifications to 0 of 65 new biomes in 1.078 ms
-[17:09:44] [Server thread/INFO] (Minecraft) Starting integrated minecraft server version 1.21.9
-[17:09:44] [Server thread/INFO] (Minecraft) Generating keypair
-[17:09:45] [Server thread/INFO] (Minecraft) Loading 0 persistent chunks...
-[17:09:45] [Server thread/INFO] (Minecraft) Preparing spawn area: 16%
-[17:09:45] [Server thread/INFO] (Minecraft) Loading 49 chunks for player spawn...
-[17:09:45] [Server thread/INFO] (Minecraft) Preparing spawn area: 16%
-[17:09:46] [Server thread/INFO] (Minecraft) Preparing spawn area: 100%
-[17:09:46] [Server thread/INFO] (Minecraft) Time elapsed: 1012 ms
-[17:09:46] [Server thread/INFO] (Minecraft) Player609[local:E:fb10ca3e] logged in with entity id 53 at (107.62055637215347, -52.67851209242546, 44.93816018325109)
-[17:09:46] [Server thread/INFO] (Minecraft) Player609 joined the game
-[17:09:47] [Render thread/INFO] (Minecraft) Resizing Dynamic Transforms UBO, capacity limit of 2 reached during a single frame. New capacity will be 4.
-[17:09:47] [Server thread/INFO] (Minecraft) Changing view distance to 12, from 10
-[17:09:47] [Server thread/INFO] (Minecraft) Changing simulation distance to 12, from 0
-[17:09:47] [Render thread/INFO] (Minecraft) Resizing Dynamic Transforms UBO, capacity limit of 4 reached during a single frame. New capacity will be 8.
-[17:09:47] [Render thread/INFO] (Minecraft) Loaded 2 advancements
-[17:09:48] [Render thread/INFO] (Minecraft) Resizing Dynamic Transforms UBO, capacity limit of 8 reached during a single frame. New capacity will be 16.
-[17:09:48] [Render thread/INFO] (Minecraft) Resizing Dynamic Transforms UBO, capacity limit of 16 reached during a single frame. New capacity will be 32.
-[17:09:48] [Render thread/INFO] (Minecraft) Resizing Dynamic Transforms UBO, capacity limit of 32 reached during a single frame. New capacity will be 64.
-[17:09:49] [Render thread/INFO] (Minecraft) Resizing Dynamic Transforms UBO, capacity limit of 64 reached during a single frame. New capacity will be 128.
-[17:09:49] [Render thread/INFO] (Minecraft) Resizing Dynamic Transforms UBO, capacity limit of 128 reached during a single frame. New capacity will be 256.
-[17:09:59] [Server thread/INFO] (Minecraft) Saving and pausing game...
-[17:09:59] [Server thread/INFO] (Minecraft) Saving chunks for level 'ServerLevel[CommandMaker Test World]'/minecraft:overworld
-[17:09:59] [Server thread/INFO] (Minecraft) Saving chunks for level 'ServerLevel[CommandMaker Test World]'/minecraft:the_nether
-[17:09:59] [Server thread/INFO] (Minecraft) Saving chunks for level 'ServerLevel[CommandMaker Test World]'/minecraft:the_end
-[17:10:07] [Render thread/INFO] (Minecraft) [System] [CHAT] §6§lFetching available functions...
-[17:10:07] [Render thread/INFO] (Minecraft) [System] [CHAT] §6§l📦 Downloadable Functions (22) 📦
-[17:10:07] [Render thread/INFO] (Minecraft) [System] [CHAT] §7Use §e/commandmaker downloadfunction <name> §7to download.
-[17:10:07] [Render thread/INFO] (Minecraft) [System] [CHAT] §7─────────────────────────────
-[17:10:07] [Render thread/INFO] (Minecraft) [System] [CHAT] §a • §fbase_protection
-[17:10:07] [Render thread/INFO] (Minecraft) [System] [CHAT] §a • §fbetter_dance_party
-[17:10:07] [Render thread/INFO] (Minecraft) [System] [CHAT] §a • §fboss_arena
-[17:10:07] [Render thread/INFO] (Minecraft) [System] [CHAT] §a • §fcampsite
-[17:10:07] [Render thread/INFO] (Minecraft) [System] [CHAT] §a • §fcopilot
-[17:10:07] [Render thread/INFO] (Minecraft) [System] [CHAT] §a • §fcraycray
-[17:10:07] [Render thread/INFO] (Minecraft) [System] [CHAT] §a • §fdance_party
-[17:10:07] [Render thread/INFO] (Minecraft) [System] [CHAT] §a • §fdanceparty
-[17:10:07] [Render thread/INFO] (Minecraft) [System] [CHAT] §a • §fexample
-[17:10:07] [Render thread/INFO] (Minecraft) [System] [CHAT] §a • §fextratntrain
-[17:10:07] [Render thread/INFO] (Minecraft) [System] [CHAT] §a • §ffireworkshow
-[17:10:07] [Render thread/INFO] (Minecraft) [System] [CHAT] §a • §fgravity_flip
-[17:10:07] [Render thread/INFO] (Minecraft) [System] [CHAT] §a • §fhelloworld
-[17:10:07] [Render thread/INFO] (Minecraft) [System] [CHAT] §a • §fmeteor_shower
-[17:10:07] [Render thread/INFO] (Minecraft) [System] [CHAT] §a • §fmob_army
-[17:10:07] [Render thread/INFO] (Minecraft) [System] [CHAT] §a • §fmobsoff
-[17:10:07] [Render thread/INFO] (Minecraft) [System] [CHAT] §a • §frainbow_road
-[17:10:07] [Render thread/INFO] (Minecraft) [System] [CHAT] §a • §fscorched_earth
-[17:10:07] [Render thread/INFO] (Minecraft) [System] [CHAT] §a • §fsound
-[17:10:07] [Render thread/INFO] (Minecraft) [System] [CHAT] §a • §fstarter_kit
-[17:10:07] [Render thread/INFO] (Minecraft) [System] [CHAT] §a • §ftntrain
-[17:10:07] [Render thread/INFO] (Minecraft) [System] [CHAT] §a • §ftreehouse
-[17:10:07] [Render thread/INFO] (Minecraft) [System] [CHAT] §7─────────────────────────────
-[17:10:25] [Render thread/INFO] (Minecraft) [System] [CHAT] Aliases:
-[17:10:25] [Render thread/INFO] (Minecraft) [System] [CHAT]   /helloworld -> function:helloworld
-[17:10:25] [Render thread/INFO] (Minecraft) [System] [CHAT]   /lagwithmob -> execute at @e run summon
-[17:10:25] [Render thread/INFO] (Minecraft) [System] [CHAT]   /copilot -> function:copilot
-[17:10:25] [Render thread/INFO] (Minecraft) [System] [CHAT]   /extratntrain -> function:extratntrain
-[17:10:25] [Render thread/INFO] (Minecraft) [System] [CHAT]   /deletealiases-gui -> cmd gui
-[17:10:25] [Render thread/INFO] (Minecraft) [System] [CHAT]   /treehouse -> function:treehouse
-[17:10:25] [Render thread/INFO] (Minecraft) [System] [CHAT]   /sound -> function:sound
-[17:10:25] [Render thread/INFO] (Minecraft) [System] [CHAT]   /danceparty -> function:danceparty
-[17:10:25] [Render thread/INFO] (Minecraft) [System] [CHAT]   /fireworkshow -> function:fireworkshow
-[17:10:25] [Render thread/INFO] (Minecraft) [System] [CHAT]   /example -> function:example
-[17:10:25] [Render thread/INFO] (Minecraft) [System] [CHAT]   /mobsoff -> function:mobsoff
-[17:10:25] [Render thread/INFO] (Minecraft) [System] [CHAT]   /tntrain -> function:tntrain
-[17:10:25] [Render thread/INFO] (Minecraft) [System] [CHAT]   /starter_kit -> function:starter_kit
-[17:10:25] [Render thread/INFO] (Minecraft) [System] [CHAT]   /nuke -> extratntrain
-[17:10:25] [Render thread/INFO] (Minecraft) [System] [CHAT]   /helloooooo -> say {$hello}
-[17:10:25] [Render thread/INFO] (Minecraft) [System] [CHAT]   /craycray -> function:craycray
-[17:10:25] [Render thread/INFO] (Minecraft) [System] [CHAT]   /campsite -> function:campsite
-[17:10:25] [Render thread/INFO] (Minecraft) [System] [CHAT]   /meteor_shower -> function:meteor_shower
-[17:10:25] [Render thread/INFO] (Minecraft) [System] [CHAT]   /rainbow_road -> function:rainbow_road
-[17:10:25] [Render thread/INFO] (Minecraft) [System] [CHAT]   /better_dance_party -> function:better_dance_party
-[17:10:25] [Render thread/INFO] (Minecraft) [System] [CHAT]   /testcommand -> say Hello World
-[17:10:25] [Render thread/INFO] (Minecraft) [System] [CHAT] Functions:
-[17:10:25] [Render thread/INFO] (Minecraft) [System] [CHAT]   copilot
-[17:10:25] [Render thread/INFO] (Minecraft) [System] [CHAT]   craycray
-[17:10:25] [Render thread/INFO] (Minecraft) [System] [CHAT]   danceparty
-[17:10:25] [Render thread/INFO] (Minecraft) [System] [CHAT]   example
-[17:10:25] [Render thread/INFO] (Minecraft) [System] [CHAT]   extratntrain
-[17:10:25] [Render thread/INFO] (Minecraft) [System] [CHAT]   fireworkshow
-[17:10:25] [Render thread/INFO] (Minecraft) [System] [CHAT]   helloworld
-[17:10:25] [Render thread/INFO] (Minecraft) [System] [CHAT]   mobsoff
-[17:10:25] [Render thread/INFO] (Minecraft) [System] [CHAT]   sound
-[17:10:25] [Render thread/INFO] (Minecraft) [System] [CHAT]   tntrain
-[17:10:41] [Render thread/INFO] (Minecraft) [System] [CHAT] Function 'better_dance_party' not found.
-[17:10:42] [Render thread/INFO] (Minecraft) Resizing Dynamic Transforms UBO, capacity limit of 256 reached during a single frame. New capacity will be 512.
-[17:10:49] [Render thread/INFO] (Minecraft) [System] [CHAT] Downloaded function 'better_dance_party' successfully.
-[17:10:50] [Server thread/INFO] (Minecraft) [Player609: Showing new title for Player609]
-[17:10:50] [Server thread/INFO] (Minecraft) [Player609: Showing new subtitle for Player609]
-[17:10:50] [Server thread/INFO] (Minecraft) [Player609: Set the time to 18000]
-[17:10:50] [Server thread/INFO] (Minecraft) [Player609: Set the weather to clear]
-[17:10:50] [Server thread/INFO] (Minecraft) [Player609: Gamerule doDaylightCycle is now set to: false]
-[17:10:50] [Server thread/INFO] (Minecraft) [Player609: Played sound minecraft:music_disc.otherside to Player609]
-[17:10:50] [Server thread/INFO] (Minecraft) [Player609: Played sound minecraft:entity.firework_rocket.blast to Player609]
-[17:10:50] [Server thread/INFO] (Minecraft) [Player609: Applied effect Speed to Player609]
-[17:10:50] [Server thread/INFO] (Minecraft) [Player609: Applied effect Jump Boost to Player609]
-[17:10:50] [Server thread/INFO] (Minecraft) [Player609: Applied effect Haste to Player609]
-[17:10:50] [Server thread/INFO] (Minecraft) [Player609: Applied effect Night Vision to Player609]
-[17:10:50] [Server thread/INFO] (Minecraft) [Player609: Applied effect Glowing to Player609]
-[17:10:50] [Render thread/INFO] (Minecraft) [System] [CHAT] Showing new title for Player609
-[17:10:50] [Render thread/INFO] (Minecraft) [System] [CHAT] Showing new subtitle for Player609
-[17:10:50] [Render thread/INFO] (Minecraft) [System] [CHAT] [DJ] The dance floor is open! LET'S GO!
-[17:10:50] [Render thread/INFO] (Minecraft) [System] [CHAT] Set the time to 18000
-[17:10:50] [Render thread/INFO] (Minecraft) [System] [CHAT] Set the weather to clear
-[17:10:50] [Render thread/INFO] (Minecraft) [System] [CHAT] Gamerule doDaylightCycle is now set to: false
-[17:10:50] [Render thread/INFO] (Minecraft) [System] [CHAT] Played sound minecraft:music_disc.otherside to Player609
-[17:10:50] [Render thread/INFO] (Minecraft) [System] [CHAT] Played sound minecraft:entity.firework_rocket.blast to Player609
-[17:10:50] [Render thread/INFO] (Minecraft) [System] [CHAT] Applied effect Speed to Player609
-[17:10:50] [Render thread/INFO] (Minecraft) [System] [CHAT] Applied effect Jump Boost to Player609
-[17:10:50] [Render thread/INFO] (Minecraft) [System] [CHAT] Applied effect Haste to Player609
-[17:10:50] [Render thread/INFO] (Minecraft) [System] [CHAT] Applied effect Night Vision to Player609
-[17:10:50] [Render thread/INFO] (Minecraft) [System] [CHAT] Applied effect Glowing to Player609
-[17:10:50] [Server thread/INFO] (Minecraft) [Player609: Successfully filled 25 block(s)]
-[17:10:50] [Render thread/INFO] (Minecraft) [System] [CHAT] Successfully filled 25 block(s)
-[17:10:50] [Server thread/INFO] (Minecraft) [Player609: Changed the block at 107, -61, 44]
-[17:10:50] [Server thread/INFO] (Minecraft) [Player609: Changed the block at 109, -61, 46]
-[17:10:50] [Server thread/INFO] (Minecraft) [Player609: Changed the block at 105, -61, 42]
-[17:10:50] [Server thread/INFO] (Minecraft) [Player609: Changed the block at 109, -61, 42]
-[17:10:50] [Server thread/INFO] (Minecraft) [Player609: Changed the block at 105, -61, 46]
-[17:10:50] [Render thread/INFO] (Minecraft) [System] [CHAT] Changed the block at 107, -61, 44
-[17:10:50] [Render thread/INFO] (Minecraft) [System] [CHAT] Changed the block at 109, -61, 46
-[17:10:50] [Render thread/INFO] (Minecraft) [System] [CHAT] Changed the block at 105, -61, 42
-[17:10:50] [Render thread/INFO] (Minecraft) [System] [CHAT] Changed the block at 109, -61, 42
-[17:10:50] [Render thread/INFO] (Minecraft) [System] [CHAT] Changed the block at 105, -61, 46
-[17:10:50] [Server thread/INFO] (Minecraft) [Player609: Summoned new DANCE]
-[17:10:50] [Server thread/INFO] (Minecraft) [Player609: Summoned new DANCE]
-[17:10:50] [Server thread/INFO] (Minecraft) [Player609: Summoned new DANCE]
-[17:10:50] [Server thread/INFO] (Minecraft) [Player609: Summoned new DANCE]
-[17:10:50] [Server thread/INFO] (Minecraft) [Player609: Displaying particle minecraft:note]
-[17:10:50] [Server thread/INFO] (Minecraft) [Player609: Displaying particle minecraft:end_rod]
-[17:10:50] [Server thread/INFO] (Minecraft) [Player609: Displaying particle minecraft:totem_of_undying]
-[17:10:50] [Render thread/INFO] (Minecraft) [System] [CHAT] Summoned new DANCE
-[17:10:50] [Render thread/INFO] (Minecraft) [System] [CHAT] Summoned new DANCE
-[17:10:50] [Server thread/INFO] (Minecraft) [Player609: Displaying particle minecraft:firework]
-[17:10:50] [Render thread/INFO] (Minecraft) [System] [CHAT] Summoned new DANCE
-[17:10:50] [Server thread/INFO] (Minecraft) [Player609: Displaying particle minecraft:witch]
-[17:10:50] [Render thread/INFO] (Minecraft) [System] [CHAT] Summoned new DANCE
-[17:10:50] [Render thread/INFO] (Minecraft) [System] [CHAT] Displaying particle minecraft:note
-[17:10:50] [Render thread/INFO] (Minecraft) [System] [CHAT] Displaying particle minecraft:end_rod
-[17:10:50] [Render thread/INFO] (Minecraft) [System] [CHAT] Displaying particle minecraft:totem_of_undying
-[17:10:50] [Server thread/INFO] (Minecraft) [Player609: Summoned new Firework Rocket]
-[17:10:50] [Server thread/INFO] (Minecraft) [Player609: Summoned new Firework Rocket]
-[17:10:50] [Server thread/INFO] (Minecraft) [Player609: Summoned new Firework Rocket]
-[17:10:50] [Render thread/INFO] (Minecraft) [System] [CHAT] Displaying particle minecraft:firework
-[17:10:50] [Server thread/INFO] (Minecraft) [Player609: Summoned new Firework Rocket]
-[17:10:50] [Render thread/INFO] (Minecraft) [System] [CHAT] Displaying particle minecraft:witch
-[17:10:50] [Render thread/INFO] (Minecraft) [System] [CHAT] Summoned new Firework Rocket
-[17:10:50] [Render thread/INFO] (Minecraft) [System] [CHAT] Summoned new Firework Rocket
-[17:10:50] [Server thread/INFO] (Minecraft) [Player609: Summoned new Firework Rocket]
-[17:10:50] [Render thread/INFO] (Minecraft) [System] [CHAT] Summoned new Firework Rocket
-[17:10:50] [Render thread/INFO] (Minecraft) [System] [CHAT] Summoned new Firework Rocket
-[17:10:50] [Render thread/INFO] (Minecraft) [System] [CHAT] Summoned new Firework Rocket
-[17:10:50] [Server thread/INFO] (Minecraft) [Player609: Summoned new Firework Rocket]
-[17:10:50] [Server thread/INFO] (Minecraft) [Player609: Played sound minecraft:entity.player.levelup to Player609]
-[17:10:50] [Server thread/INFO] (Minecraft) [Player609: Played sound minecraft:block.note_block.pling to Player609]
-[17:10:50] [Server thread/INFO] (Minecraft) [Player609: Played sound minecraft:block.note_block.bass to Player609]
-[17:10:50] [Server thread/INFO] (Minecraft) [Player609: Played sound minecraft:block.note_block.snare to Player609]
-[17:10:51] [Render thread/INFO] (Minecraft) [System] [CHAT] Summoned new Firework Rocket
-[17:10:51] [Render thread/INFO] (Minecraft) [System] [CHAT] Played sound minecraft:entity.player.levelup to Player609
-[17:10:51] [Render thread/INFO] (Minecraft) [System] [CHAT] Played sound minecraft:block.note_block.pling to Player609
-[17:10:51] [Render thread/INFO] (Minecraft) [System] [CHAT] Played sound minecraft:block.note_block.bass to Player609
-[17:10:51] [Render thread/INFO] (Minecraft) [System] [CHAT] Played sound minecraft:block.note_block.snare to Player609
-[17:10:51] [Render thread/INFO] (Minecraft) [System] [CHAT] [DJ] Don't forget to /jump around! You've got Jump Boost III!
-[17:11:06] [Server thread/INFO] (Minecraft) Saving and pausing game...
-[17:11:06] [Server thread/INFO] (Minecraft) Saving chunks for level 'ServerLevel[CommandMaker Test World]'/minecraft:overworld
-[17:11:06] [Server thread/INFO] (Minecraft) Saving chunks for level 'ServerLevel[CommandMaker Test World]'/minecraft:the_nether
-[17:11:06] [Server thread/INFO] (Minecraft) Saving chunks for level 'ServerLevel[CommandMaker Test World]'/minecraft:the_end
-[17:11:13] [IO-Worker-4/INFO] (Minecraft) System default audio device has changed!
-[17:11:14] [Render thread/INFO] (Minecraft) OpenAL initialized on device OpenAL Soft on Speaker (Logi Z207)
-[17:11:14] [Render thread/INFO] (Minecraft) Sound engine started
-[17:11:37] [Server thread/INFO] (Minecraft) Saving and pausing game...
-[17:11:37] [Server thread/INFO] (Minecraft) Saving chunks for level 'ServerLevel[CommandMaker Test World]'/minecraft:overworld
-[17:11:37] [Server thread/INFO] (Minecraft) Saving chunks for level 'ServerLevel[CommandMaker Test World]'/minecraft:the_nether
-[17:11:37] [Server thread/INFO] (Minecraft) Saving chunks for level 'ServerLevel[CommandMaker Test World]'/minecraft:the_end
-[17:11:40] [Render thread/INFO] (Minecraft) Stopping!
-[17:11:40] [Server thread/INFO] (Minecraft) Player609 lost connection: Disconnected
-[17:11:40] [Server thread/INFO] (Minecraft) Player609 left the game
-[17:11:40] [Server thread/INFO] (Minecraft) Stopping singleplayer server as player logged out
-[17:11:40] [Server thread/INFO] (Minecraft) Stopping server
-[17:11:40] [Server thread/INFO] (Minecraft) Saving players
-[17:11:40] [Server thread/INFO] (Minecraft) Saving worlds
-[17:11:41] [Server thread/INFO] (Minecraft) Saving chunks for level 'ServerLevel[CommandMaker Test World]'/minecraft:overworld
-[17:11:41] [Server thread/INFO] (Minecraft) Saving chunks for level 'ServerLevel[CommandMaker Test World]'/minecraft:the_nether
-[17:11:41] [Server thread/INFO] (Minecraft) Saving chunks for level 'ServerLevel[CommandMaker Test World]'/minecraft:the_end
-[17:11:41] [Server thread/INFO] (Minecraft) ThreadedAnvilChunkStorage (CommandMaker Test World): All chunks are saved
-[17:11:41] [Server thread/INFO] (Minecraft) ThreadedAnvilChunkStorage (DIM-1): All chunks are saved
-[17:11:41] [Server thread/INFO] (Minecraft) ThreadedAnvilChunkStorage (DIM1): All chunks are saved
-[17:11:41] [Server thread/INFO] (Minecraft) ThreadedAnvilChunkStorage: All dimensions are saved
+[17:22:31] [Render thread/INFO] (Minecraft) Loaded 1461 recipes
+[17:22:31] [Render thread/INFO] (Minecraft) Loaded 1574 advancements
+[17:22:31] [Render thread/INFO] (BiomeModificationImpl) Applied 0 biome modifications to 0 of 65 new biomes in 1.451 ms
+[17:22:31] [Server thread/INFO] (Minecraft) Starting integrated minecraft server version 1.21.9
+[17:22:31] [Server thread/INFO] (Minecraft) Generating keypair
+[17:22:32] [Server thread/INFO] (Minecraft) Loading 0 persistent chunks...
+[17:22:32] [Server thread/INFO] (Minecraft) Preparing spawn area: 16%
+[17:22:32] [Server thread/INFO] (Minecraft) Loading 49 chunks for player spawn...
+[17:22:32] [Server thread/INFO] (Minecraft) Preparing spawn area: 16%
+[17:22:33] [Server thread/INFO] (Minecraft) Preparing spawn area: 16%
+[17:22:33] [Server thread/INFO] (Minecraft) Time elapsed: 1211 ms
+[17:22:33] [Server thread/INFO] (Minecraft) Player810[local:E:02f1538e] logged in with entity id 80 at (107.8345684524115, -60.0, 45.12097839036161)
+[17:22:33] [Server thread/INFO] (Minecraft) Player810 joined the game
+[17:22:34] [Render thread/INFO] (Minecraft) Resizing Dynamic Transforms UBO, capacity limit of 2 reached during a single frame. New capacity will be 4.
+[17:22:34] [Render thread/INFO] (Minecraft) Resizing Dynamic Transforms UBO, capacity limit of 4 reached during a single frame. New capacity will be 8.
+[17:22:34] [Render thread/INFO] (Minecraft) Loaded 2 advancements
+[17:22:34] [Server thread/INFO] (Minecraft) Changing view distance to 12, from 10
+[17:22:34] [Server thread/INFO] (Minecraft) Changing simulation distance to 12, from 0
+[17:22:34] [Render thread/INFO] (Minecraft) Resizing Dynamic Transforms UBO, capacity limit of 8 reached during a single frame. New capacity will be 16.
+[17:22:35] [Render thread/INFO] (Minecraft) Resizing Dynamic Transforms UBO, capacity limit of 16 reached during a single frame. New capacity will be 32.
+[17:22:35] [Render thread/INFO] (Minecraft) Resizing Dynamic Transforms UBO, capacity limit of 32 reached during a single frame. New capacity will be 64.
+[17:22:35] [Render thread/INFO] (Minecraft) Resizing Dynamic Transforms UBO, capacity limit of 64 reached during a single frame. New capacity will be 128.
+[17:22:36] [Render thread/INFO] (Minecraft) Resizing Dynamic Transforms UBO, capacity limit of 128 reached during a single frame. New capacity will be 256.
+[17:22:37] [Render thread/INFO] (Minecraft) Resizing Dynamic Transforms UBO, capacity limit of 256 reached during a single frame. New capacity will be 512.
+[17:22:48] [Render thread/INFO] (Minecraft) [System] [CHAT] Downloaded function 'base_protection' successfully.
+[17:22:59] [Render thread/INFO] (Minecraft) [System] [CHAT] Unknown or incomplete command. See below for error
+[17:22:59] [Render thread/INFO] (Minecraft) [System] [CHAT] base_protection<--[HERE]
+[17:23:09] [Render thread/INFO] (Minecraft) [System] [CHAT] Unknown or incomplete command. See below for error
+[17:23:09] [Render thread/INFO] (Minecraft) [System] [CHAT] base_protection<--[HERE]
+[17:23:12] [Server thread/INFO] (cmdmaker) Loaded 21 aliases from JSON config
+[17:23:12] [Server thread/INFO] (cmdmaker) Auto-loaded 1 function aliases from Functions folder
+[17:23:12] [Server thread/INFO] (cmdmaker) Loaded custom syntax: tpa -> /tpa <player>
+[17:23:12] [Server thread/INFO] (cmdmaker) Loaded custom syntax: give -> /give <item> <amount>
+[17:23:12] [Server thread/INFO] (cmdmaker) Loaded custom syntax: msg -> /msg <player> <message>
+[17:23:12] [Render thread/INFO] (Minecraft) [System] [CHAT] §6Reloaded aliases, functions, and syntax definitions.
+[17:23:13] [Server thread/INFO] (Minecraft) [Player810: Changed the block at 112, -60, 23]
+[17:23:13] [Server thread/INFO] (Minecraft) [Player810: Changed the block at 102, -60, 23]
+[17:23:13] [Server thread/INFO] (Minecraft) [Player810: Changed the block at 107, -60, 28]
+[17:23:13] [Server thread/INFO] (Minecraft) [Player810: Changed the block at 107, -60, 18]
+[17:23:13] [Server thread/INFO] (Minecraft) [Player810: Changed the block at 111, -60, 26]
+[17:23:13] [Server thread/INFO] (Minecraft) [Player810: Changed the block at 103, -60, 26]
+[17:23:13] [Server thread/INFO] (Minecraft) [Player810: Changed the block at 111, -60, 20]
+[17:23:13] [Server thread/INFO] (Minecraft) [Player810: Changed the block at 103, -60, 20]
+[17:23:13] [Server thread/INFO] (Minecraft) [Player810: Changed the block at 110, -60, 27]
+[17:23:13] [Server thread/INFO] (Minecraft) [Player810: Changed the block at 104, -60, 27]
+[17:23:13] [Server thread/INFO] (Minecraft) [Player810: Changed the block at 110, -60, 19]
+[17:23:13] [Server thread/INFO] (Minecraft) [Player810: Changed the block at 104, -60, 19]
+[17:23:13] [Server thread/INFO] (Minecraft) [Player810: Changed the block at 117, -60, 23]
+[17:23:13] [Server thread/INFO] (Minecraft) [Player810: Changed the block at 97, -60, 23]
+[17:23:13] [Server thread/INFO] (Minecraft) [Player810: Changed the block at 107, -60, 33]
+[17:23:13] [Server thread/INFO] (Minecraft) [Player810: Changed the block at 107, -60, 13]
+[17:23:13] [Server thread/INFO] (Minecraft) [Player810: Changed the block at 114, -60, 30]
+[17:23:13] [Server thread/INFO] (Minecraft) [Player810: Changed the block at 100, -60, 30]
+[17:23:13] [Server thread/INFO] (Minecraft) [Player810: Changed the block at 114, -60, 16]
+[17:23:13] [Server thread/INFO] (Minecraft) [Player810: Changed the block at 100, -60, 16]
+[17:23:13] [Server thread/INFO] (Minecraft) [Player810: Changed the block at 122, -60, 23]
+[17:23:13] [Server thread/INFO] (Minecraft) [Player810: Changed the block at 92, -60, 23]
+[17:23:13] [Server thread/INFO] (Minecraft) [Player810: Changed the block at 107, -60, 38]
+[17:23:13] [Server thread/INFO] (Minecraft) [Player810: Changed the block at 107, -60, 8]
+[17:23:13] [Server thread/INFO] (Minecraft) [Player810: Changed the block at 118, -60, 34]
+[17:23:13] [Server thread/INFO] (Minecraft) [Player810: Changed the block at 96, -60, 34]
+[17:23:13] [Server thread/INFO] (Minecraft) [Player810: Changed the block at 118, -60, 12]
+[17:23:13] [Render thread/INFO] (Minecraft) [System] [CHAT] [Base Protection] Securing the area...
+[17:23:13] [Server thread/INFO] (Minecraft) [Player810: Changed the block at 96, -60, 12]
+[17:23:13] [Render thread/INFO] (Minecraft) [System] [CHAT] Changed the block at 112, -60, 23
+[17:23:13] [Render thread/INFO] (Minecraft) [System] [CHAT] Changed the block at 102, -60, 23
+[17:23:13] [Render thread/INFO] (Minecraft) [System] [CHAT] Changed the block at 107, -60, 28
+[17:23:13] [Render thread/INFO] (Minecraft) [System] [CHAT] Changed the block at 107, -60, 18
+[17:23:13] [Render thread/INFO] (Minecraft) [System] [CHAT] Changed the block at 111, -60, 26
+[17:23:13] [Render thread/INFO] (Minecraft) [System] [CHAT] Changed the block at 103, -60, 26
+[17:23:13] [Server thread/INFO] (Minecraft) [Player810: Changed the block at 110, -60, 23]
+[17:23:13] [Render thread/INFO] (Minecraft) [System] [CHAT] Changed the block at 111, -60, 20
+[17:23:13] [Render thread/INFO] (Minecraft) [System] [CHAT] Changed the block at 103, -60, 20
+[17:23:13] [Render thread/INFO] (Minecraft) [System] [CHAT] Changed the block at 110, -60, 27
+[17:23:13] [Server thread/INFO] (Minecraft) [Player810: Changed the block at 104, -60, 23]
+[17:23:13] [Render thread/INFO] (Minecraft) [System] [CHAT] Changed the block at 104, -60, 27
+[17:23:13] [Render thread/INFO] (Minecraft) [System] [CHAT] Changed the block at 110, -60, 19
+[17:23:13] [Render thread/INFO] (Minecraft) [System] [CHAT] Changed the block at 104, -60, 19
+[17:23:13] [Server thread/INFO] (Minecraft) [Player810: Changed the block at 107, -60, 26]
+[17:23:13] [Render thread/INFO] (Minecraft) [System] [CHAT] Changed the block at 117, -60, 23
+[17:23:13] [Render thread/INFO] (Minecraft) [System] [CHAT] Changed the block at 97, -60, 23
+[17:23:13] [Server thread/INFO] (Minecraft) [Player810: Changed the block at 107, -60, 20]
+[17:23:13] [Render thread/INFO] (Minecraft) [System] [CHAT] Changed the block at 107, -60, 33
+[17:23:13] [Render thread/INFO] (Minecraft) [System] [CHAT] Changed the block at 107, -60, 13
+[17:23:13] [Render thread/INFO] (Minecraft) [System] [CHAT] Changed the block at 114, -60, 30
+[17:23:13] [Render thread/INFO] (Minecraft) [System] [CHAT] Changed the block at 100, -60, 30
+[17:23:13] [Render thread/INFO] (Minecraft) [System] [CHAT] Changed the block at 114, -60, 16
+[17:23:13] [Render thread/INFO] (Minecraft) [System] [CHAT] Changed the block at 100, -60, 16
+[17:23:13] [Render thread/INFO] (Minecraft) [System] [CHAT] Changed the block at 122, -60, 23
+[17:23:13] [Render thread/INFO] (Minecraft) [System] [CHAT] Changed the block at 92, -60, 23
+[17:23:13] [Render thread/INFO] (Minecraft) [System] [CHAT] Changed the block at 107, -60, 38
+[17:23:13] [Render thread/INFO] (Minecraft) [System] [CHAT] Changed the block at 107, -60, 8
+[17:23:13] [Render thread/INFO] (Minecraft) [System] [CHAT] Changed the block at 118, -60, 34
+[17:23:13] [Render thread/INFO] (Minecraft) [System] [CHAT] Changed the block at 96, -60, 34
+[17:23:13] [Render thread/INFO] (Minecraft) [System] [CHAT] Changed the block at 118, -60, 12
+[17:23:13] [Render thread/INFO] (Minecraft) [System] [CHAT] Changed the block at 96, -60, 12
+[17:23:13] [Render thread/INFO] (Minecraft) [System] [CHAT] Changed the block at 110, -60, 23
+[17:23:13] [Render thread/INFO] (Minecraft) [System] [CHAT] Changed the block at 104, -60, 23
+[17:23:13] [Render thread/INFO] (Minecraft) [System] [CHAT] Changed the block at 107, -60, 26
+[17:23:13] [Render thread/INFO] (Minecraft) [System] [CHAT] Changed the block at 107, -60, 20
+[17:23:13] [Server thread/INFO] (Minecraft) [Player810: Summoned new Iron Golem]
+[17:23:13] [Server thread/INFO] (Minecraft) [Player810: Summoned new Iron Golem]
+[17:23:13] [Server thread/INFO] (Minecraft) [Player810: Summoned new Iron Golem]
+[17:23:13] [Server thread/INFO] (Minecraft) [Player810: Summoned new Iron Golem]
+[17:23:13] [Server thread/INFO] (Minecraft) [Player810: Changed the block at 107, -60, 23]
+[17:23:13] [Server thread/INFO] (Minecraft) [Player810: Played sound minecraft:block.anvil.use to Player810]
+[17:23:13] [Server thread/INFO] (Minecraft) [Player810: Displaying particle minecraft:composter]
+[17:23:13] [Render thread/INFO] (Minecraft) [System] [CHAT] Summoned new Iron Golem
+[17:23:13] [Render thread/INFO] (Minecraft) [System] [CHAT] Summoned new Iron Golem
+[17:23:13] [Render thread/INFO] (Minecraft) [System] [CHAT] Summoned new Iron Golem
+[17:23:13] [Render thread/INFO] (Minecraft) [System] [CHAT] Summoned new Iron Golem
+[17:23:13] [Render thread/INFO] (Minecraft) [System] [CHAT] Changed the block at 107, -60, 23
+[17:23:13] [Render thread/INFO] (Minecraft) [System] [CHAT] Played sound minecraft:block.anvil.use to Player810
+[17:23:13] [Render thread/INFO] (Minecraft) [System] [CHAT] Displaying particle minecraft:composter
+[17:23:13] [Render thread/INFO] (Minecraft) [System] [CHAT] [Base Protection] Area secured! 4 Iron Golems on patrol, lights placed in a 15-block radius.
+[17:23:20] [Render thread/INFO] (Minecraft) Loaded 4 advancements
+[17:23:36] [Render thread/INFO] (Minecraft) [System] [CHAT] Downloaded function 'copilot' successfully.
+[17:23:38] [Server thread/INFO] (Minecraft) [Player810: Created new objective [RandomChaos Ticks]]
+[17:23:38] [Server thread/INFO] (Minecraft) [Player810: Created new objective [RandomChaos RNG]]
+[17:23:38] [Server thread/INFO] (Minecraft) [Player810: Created new objective [RandomChaos Event]]
+[17:23:38] [Server thread/INFO] (Minecraft) [Player810: Created new objective [RandomChaos State]]
+[17:23:38] [Server thread/INFO] (Minecraft) [Player810: Created new objective [RandomChaos Combo]]
+[17:23:38] [Server thread/INFO] (Minecraft) [Player810: Summoned new Marker]
+[17:23:38] [Server thread/INFO] (Minecraft) [Marker: Added 1 to [RandomChaos Ticks] for Marker (now 1)]
+[17:23:38] [Server thread/ERROR] (cmdmaker) Failed to execute function 'copilot' at line 26: scoreboard players random @e[type=marker,tag=rc.global,limit=1] rc.rng 0 9999
+com.mojang.brigadier.exceptions.CommandSyntaxException: Incorrect argument for command at position 19: ...d players <--[HERE]
+[17:23:38] [Render thread/INFO] (Minecraft) [System] [CHAT] Created new objective [RandomChaos Ticks]
+[17:23:38] [Render thread/INFO] (Minecraft) [System] [CHAT] Created new objective [RandomChaos RNG]
+[17:23:38] [Render thread/INFO] (Minecraft) [System] [CHAT] Created new objective [RandomChaos Event]
+[17:23:38] [Render thread/INFO] (Minecraft) [System] [CHAT] Created new objective [RandomChaos State]
+[17:23:38] [Render thread/INFO] (Minecraft) [System] [CHAT] Created new objective [RandomChaos Combo]
+[17:23:38] [Render thread/INFO] (Minecraft) [System] [CHAT] Summoned new Marker
+[17:23:38] [Render thread/INFO] (Minecraft) [System] [CHAT] Added 1 to [RandomChaos Ticks] for Marker (now 1)
+[17:23:38] [Render thread/INFO] (Minecraft) [System] [CHAT] Error executing function 'copilot' line 26: Incorrect argument for command at position 19: ...d players <--[HERE]
+[17:23:41] [Render thread/INFO] (Minecraft) Loaded 6 advancements
+[17:23:41] [Render thread/INFO] (Minecraft) Loaded 7 advancements
+[17:23:43] [Server thread/ERROR] (cmdmaker) Failed to execute function 'copilot' at line 9: scoreboard objectives add rc.tick dummy "RandomChaos Ticks"
+com.mojang.brigadier.exceptions.CommandSyntaxException: An objective already exists by that name
+[17:23:43] [Render thread/INFO] (Minecraft) [System] [CHAT] Error executing function 'copilot' line 9: An objective already exists by that name
+[17:23:43] [Server thread/ERROR] (cmdmaker) Failed to execute function 'copilot' at line 9: scoreboard objectives add rc.tick dummy "RandomChaos Ticks"
+com.mojang.brigadier.exceptions.CommandSyntaxException: An objective already exists by that name
+[17:23:43] [Render thread/INFO] (Minecraft) [System] [CHAT] Error executing function 'copilot' line 9: An objective already exists by that name
+[17:23:44] [Server thread/ERROR] (cmdmaker) Failed to execute function 'copilot' at line 9: scoreboard objectives add rc.tick dummy "RandomChaos Ticks"
+com.mojang.brigadier.exceptions.CommandSyntaxException: An objective already exists by that name
+[17:23:44] [Render thread/INFO] (Minecraft) [System] [CHAT] Error executing function 'copilot' line 9: An objective already exists by that name
+[17:23:49] [Render thread/INFO] (Minecraft) [System] [CHAT] Downloaded function 'craycray' successfully.
+[17:23:51] [Server thread/INFO] (Minecraft) [Player810: Summoned new Creeper]
+[17:23:51] [Server thread/INFO] (Minecraft) [Player810: Summoned new Zombie]
+[17:23:51] [Render thread/INFO] (Minecraft) [System] [CHAT] Summoned new Creeper
+[17:23:51] [Server thread/INFO] (Minecraft) [Player810: Summoned new Skeleton]
+[17:23:51] [Render thread/INFO] (Minecraft) [System] [CHAT] Summoned new Zombie
+[17:23:51] [Server thread/INFO] (Minecraft) [Player810: Summoned new Spider]
+[17:23:51] [Server thread/INFO] (Minecraft) [Player810: Summoned new Enderman]
+[17:23:51] [Server thread/INFO] (Minecraft) [Player810: Displaying particle minecraft:explosion]
+[17:23:51] [Server thread/INFO] (Minecraft) [Player810: Displaying particle minecraft:flame]
+[17:23:51] [Server thread/INFO] (Minecraft) [Player810: Displaying particle minecraft:heart]
+[17:23:51] [Server thread/INFO] (Minecraft) [Player810: Played sound minecraft:entity.generic.explode to Player810]
+[17:23:51] [Server thread/INFO] (Minecraft) [Player810: Played sound minecraft:entity.ender_dragon.growl to Player810]
+[17:23:51] [Server thread/INFO] (Minecraft) [Player810: Played sound minecraft:ambient.cave.cave to Player810]
+[17:23:51] [Server thread/INFO] (Minecraft) [Player810: Applied effect Levitation to Player810]
+[17:23:51] [Server thread/INFO] (Minecraft) [Player810: Applied effect Speed to Player810]
+[17:23:51] [Server thread/INFO] (Minecraft) [Player810: Applied effect Jump Boost to Player810]
+[17:23:51] [Server thread/INFO] (Minecraft) [Player810: Summoned new Primed TNT]
+[17:23:51] [Server thread/INFO] (Minecraft) [Player810: Summoned new Primed TNT]
+[17:23:51] [Server thread/INFO] (Minecraft) [Player810: Summoned new Primed TNT]
+[17:23:51] [Server thread/INFO] (Minecraft) [Player810: Summoned new Primed TNT]
+[17:23:51] [Server thread/INFO] (Minecraft) [Player810: Teleported Player810 to 107.240273, -60.000000, 37.004423]
+[17:23:51] [Render thread/INFO] (Minecraft) [System] [CHAT] Summoned new Skeleton
+[17:23:51] [Render thread/INFO] (Minecraft) [System] [CHAT] Summoned new Spider
+[17:23:51] [Render thread/INFO] (Minecraft) [System] [CHAT] Summoned new Enderman
+[17:23:51] [Server thread/ERROR] (cmdmaker) Failed to execute function 'craycray' at line 42: execute at @p run summon minecraft:firework_rocket ~ ~ ~ {FireworksItem:{id:"minecraft:firework_rocket",Count:1,tag:{Fireworks:{Explosions:[{Type:1,Colors:[16711680],FadeColors:[16776960]}]}}}}}
+com.mojang.brigadier.exceptions.CommandSyntaxException: Expected whitespace to end one argument, but found trailing data at position 193: ...960]}]}}}}<--[HERE]
+[17:23:51] [Render thread/INFO] (Minecraft) [System] [CHAT] Displaying particle minecraft:explosion
+[17:23:51] [Render thread/INFO] (Minecraft) [System] [CHAT] Displaying particle minecraft:flame
+[17:23:51] [Render thread/INFO] (Minecraft) [System] [CHAT] Displaying particle minecraft:heart
+[17:23:51] [Render thread/INFO] (Minecraft) [System] [CHAT] Played sound minecraft:entity.generic.explode to Player810
+[17:23:51] [Render thread/INFO] (Minecraft) [System] [CHAT] Played sound minecraft:entity.ender_dragon.growl to Player810
+[17:23:51] [Render thread/WARN] (Minecraft) Unable to play unknown soundEvent: minecraft:ambient.cave.cave
+[17:23:51] [Render thread/INFO] (Minecraft) [System] [CHAT] Played sound minecraft:ambient.cave.cave to Player810
+[17:23:51] [Render thread/INFO] (Minecraft) [System] [CHAT] Applied effect Levitation to Player810
+[17:23:51] [Render thread/INFO] (Minecraft) [System] [CHAT] Applied effect Speed to Player810
+[17:23:51] [Render thread/INFO] (Minecraft) [System] [CHAT] Applied effect Jump Boost to Player810
+[17:23:51] [Render thread/INFO] (Minecraft) [System] [CHAT] Summoned new Primed TNT
+[17:23:51] [Render thread/INFO] (Minecraft) [System] [CHAT] Summoned new Primed TNT
+[17:23:51] [Render thread/INFO] (Minecraft) [System] [CHAT] Summoned new Primed TNT
+[17:23:51] [Render thread/INFO] (Minecraft) [System] [CHAT] Summoned new Primed TNT
+[17:23:51] [Render thread/INFO] (Minecraft) [System] [CHAT] Teleported Player810 to 107.240273, -60.000000, 37.004423
+[17:23:51] [Render thread/INFO] (Minecraft) [System] [CHAT] CRAY CRAY TIME!
+[17:23:51] [Render thread/INFO] (Minecraft) [System] [CHAT] Error executing function 'craycray' line 42: Expected whitespace to end one argument, but found trailing data at position 193: ...960]}]}}}}<--[HERE]
+[17:23:55] [Render thread/INFO] (Minecraft) Resizing Dynamic Transforms UBO, capacity limit of 512 reached during a single frame. New capacity will be 1024.
+[17:23:59] [Server thread/INFO] (Minecraft) [Player810: Summoned new Creeper]
+[17:23:59] [Server thread/INFO] (Minecraft) [Player810: Summoned new Zombie]
+[17:23:59] [Server thread/INFO] (Minecraft) [Player810: Summoned new Skeleton]
+[17:23:59] [Server thread/INFO] (Minecraft) [Player810: Summoned new Spider]
+[17:23:59] [Server thread/INFO] (Minecraft) [Player810: Summoned new Enderman]
+[17:23:59] [Server thread/INFO] (Minecraft) [Player810: Displaying particle minecraft:explosion]
+[17:23:59] [Server thread/INFO] (Minecraft) [Player810: Displaying particle minecraft:flame]
+[17:23:59] [Server thread/INFO] (Minecraft) [Player810: Displaying particle minecraft:heart]
+[17:23:59] [Server thread/INFO] (Minecraft) [Player810: Played sound minecraft:entity.generic.explode to Player810]
+[17:23:59] [Server thread/INFO] (Minecraft) [Player810: Played sound minecraft:entity.ender_dragon.growl to Player810]
+[17:23:59] [Server thread/INFO] (Minecraft) [Player810: Played sound minecraft:ambient.cave.cave to Player810]
+[17:23:59] [Server thread/INFO] (Minecraft) [Player810: Applied effect Levitation to Player810]
+[17:23:59] [Server thread/INFO] (Minecraft) [Player810: Applied effect Speed to Player810]
+[17:23:59] [Server thread/INFO] (Minecraft) [Player810: Applied effect Jump Boost to Player810]
+[17:23:59] [Server thread/INFO] (Minecraft) [Player810: Summoned new Primed TNT]
+[17:23:59] [Server thread/INFO] (Minecraft) [Player810: Summoned new Primed TNT]
+[17:23:59] [Server thread/INFO] (Minecraft) [Player810: Summoned new Primed TNT]
+[17:23:59] [Server thread/INFO] (Minecraft) [Player810: Summoned new Primed TNT]
+[17:23:59] [Server thread/INFO] (Minecraft) [Player810: Teleported Player810 to 116.925401, -60.000000, 46.979875]
+[17:23:59] [Server thread/ERROR] (cmdmaker) Failed to execute function 'craycray' at line 42: execute at @p run summon minecraft:firework_rocket ~ ~ ~ {FireworksItem:{id:"minecraft:firework_rocket",Count:1,tag:{Fireworks:{Explosions:[{Type:1,Colors:[16711680],FadeColors:[16776960]}]}}}}}
+com.mojang.brigadier.exceptions.CommandSyntaxException: Expected whitespace to end one argument, but found trailing data at position 193: ...960]}]}}}}<--[HERE]
+[17:23:59] [Render thread/INFO] (Minecraft) [System] [CHAT] Summoned new Creeper
+[17:23:59] [Render thread/INFO] (Minecraft) [System] [CHAT] Summoned new Zombie
+[17:23:59] [Render thread/INFO] (Minecraft) [System] [CHAT] Summoned new Skeleton
+[17:23:59] [Render thread/INFO] (Minecraft) [System] [CHAT] Summoned new Spider
+[17:23:59] [Render thread/INFO] (Minecraft) [System] [CHAT] Summoned new Enderman
+[17:23:59] [Render thread/INFO] (Minecraft) [System] [CHAT] Displaying particle minecraft:explosion
+[17:23:59] [Render thread/INFO] (Minecraft) [System] [CHAT] Displaying particle minecraft:flame
+[17:23:59] [Render thread/INFO] (Minecraft) [System] [CHAT] Displaying particle minecraft:heart
+[17:23:59] [Render thread/INFO] (Minecraft) [System] [CHAT] Played sound minecraft:entity.generic.explode to Player810
+[17:23:59] [Render thread/INFO] (Minecraft) [System] [CHAT] Played sound minecraft:entity.ender_dragon.growl to Player810
+[17:23:59] [Render thread/INFO] (Minecraft) [System] [CHAT] Played sound minecraft:ambient.cave.cave to Player810
+[17:23:59] [Render thread/INFO] (Minecraft) [System] [CHAT] Applied effect Levitation to Player810
+[17:23:59] [Render thread/INFO] (Minecraft) [System] [CHAT] Applied effect Speed to Player810
+[17:23:59] [Render thread/INFO] (Minecraft) [System] [CHAT] Applied effect Jump Boost to Player810
+[17:23:59] [Render thread/INFO] (Minecraft) [System] [CHAT] Summoned new Primed TNT
+[17:23:59] [Render thread/INFO] (Minecraft) [System] [CHAT] Summoned new Primed TNT
+[17:23:59] [Render thread/INFO] (Minecraft) [System] [CHAT] Summoned new Primed TNT
+[17:23:59] [Render thread/INFO] (Minecraft) [System] [CHAT] Summoned new Primed TNT
+[17:23:59] [Render thread/INFO] (Minecraft) [System] [CHAT] Teleported Player810 to 116.925401, -60.000000, 46.979875
+[17:23:59] [Render thread/INFO] (Minecraft) [System] [CHAT] CRAY CRAY TIME!
+[17:23:59] [Render thread/INFO] (Minecraft) [System] [CHAT] Error executing function 'craycray' line 42: Expected whitespace to end one argument, but found trailing data at position 193: ...960]}]}}}}<--[HERE]
+[17:24:21] [Render thread/INFO] (Minecraft) [System] [CHAT] Downloaded function 'boss_arena' successfully.
+[17:24:27] [Server thread/INFO] (cmdmaker) Loaded 21 aliases from JSON config
+[17:24:27] [Server thread/INFO] (cmdmaker) Auto-loaded 2 function aliases from Functions folder
+[17:24:27] [Server thread/INFO] (cmdmaker) Loaded custom syntax: tpa -> /tpa <player>
+[17:24:27] [Server thread/INFO] (cmdmaker) Loaded custom syntax: give -> /give <item> <amount>
+[17:24:27] [Server thread/INFO] (cmdmaker) Loaded custom syntax: msg -> /msg <player> <message>
+[17:24:27] [Render thread/INFO] (Minecraft) [System] [CHAT] §6Reloaded aliases, functions, and syntax definitions.
+[17:24:32] [Server thread/INFO] (Minecraft) [Player810: Showing new title for Player810]
+[17:24:32] [Server thread/INFO] (Minecraft) [Player810: Showing new subtitle for Player810]
+[17:24:32] [Render thread/INFO] (Minecraft) [System] [CHAT] Showing new title for Player810
+[17:24:32] [Render thread/INFO] (Minecraft) [System] [CHAT] Showing new subtitle for Player810
+[17:24:32] [Render thread/INFO] (Minecraft) [System] [CHAT] [Arena] A boss arena has been summoned! Gear up!
+[17:24:32] [Server thread/INFO] (Minecraft) [Player810: Successfully filled 441 block(s)]
+[17:24:32] [Server thread/INFO] (Minecraft) [Player810: Successfully filled 22 block(s)]
+[17:24:32] [Server thread/INFO] (Minecraft) [Player810: Successfully filled 92 block(s)]
+[17:24:32] [Server thread/INFO] (Minecraft) [Player810: Successfully filled 92 block(s)]
+[17:24:32] [Render thread/INFO] (Minecraft) [System] [CHAT] Successfully filled 441 block(s)
+[17:24:32] [Server thread/INFO] (Minecraft) [Player810: Successfully filled 84 block(s)]
+[17:24:32] [Render thread/INFO] (Minecraft) [System] [CHAT] Successfully filled 22 block(s)
+[17:24:32] [Render thread/INFO] (Minecraft) [System] [CHAT] Successfully filled 92 block(s)
+[17:24:32] [Render thread/INFO] (Minecraft) [System] [CHAT] Successfully filled 92 block(s)
+[17:24:32] [Render thread/INFO] (Minecraft) [System] [CHAT] Successfully filled 84 block(s)
+[17:24:32] [Server thread/INFO] (Minecraft) [Player810: Successfully filled 84 block(s)]
+[17:24:32] [Server thread/INFO] (Minecraft) [Player810: Successfully filled 6 block(s)]
+[17:24:32] [Server thread/INFO] (Minecraft) [Player810: Successfully filled 6 block(s)]
+[17:24:32] [Server thread/INFO] (Minecraft) [Player810: Successfully filled 6 block(s)]
+[17:24:32] [Server thread/INFO] (Minecraft) [Player810: Successfully filled 6 block(s)]
+[17:24:32] [Server thread/INFO] (Minecraft) [Player810: Changed the block at 105, -54, 35]
+[17:24:32] [Server thread/INFO] (Minecraft) [Player810: Changed the block at 127, -54, 35]
+[17:24:32] [Server thread/INFO] (Minecraft) [Player810: Changed the block at 105, -54, 57]
+[17:24:32] [Server thread/INFO] (Minecraft) [Player810: Changed the block at 127, -54, 57]
+[17:24:32] [Server thread/INFO] (Minecraft) [Player810: Changed the block at 106, -60, 46]
+[17:24:32] [Server thread/INFO] (Minecraft) [Player810: Changed the block at 126, -60, 46]
+[17:24:32] [Server thread/INFO] (Minecraft) [Player810: Applied effect Strength to Player810]
+[17:24:32] [Server thread/INFO] (Minecraft) [Player810: Applied effect Resistance to Player810]
+[17:24:32] [Server thread/INFO] (Minecraft) [Player810: Applied effect Regeneration to Player810]
+[17:24:32] [Server thread/INFO] (Minecraft) [Player810: Applied effect Fire Resistance to Player810]
+[17:24:32] [Server thread/INFO] (Minecraft) [Player810: Applied effect Night Vision to Player810]
+[17:24:32] [Render thread/INFO] (Minecraft) [System] [CHAT] Successfully filled 84 block(s)
+[17:24:32] [Render thread/INFO] (Minecraft) [System] [CHAT] Successfully filled 6 block(s)
+[17:24:32] [Render thread/INFO] (Minecraft) [System] [CHAT] Successfully filled 6 block(s)
+[17:24:32] [Render thread/INFO] (Minecraft) [System] [CHAT] Successfully filled 6 block(s)
+[17:24:32] [Render thread/INFO] (Minecraft) [System] [CHAT] Successfully filled 6 block(s)
+[17:24:32] [Render thread/INFO] (Minecraft) [System] [CHAT] Changed the block at 105, -54, 35
+[17:24:32] [Render thread/INFO] (Minecraft) [System] [CHAT] Changed the block at 127, -54, 35
+[17:24:32] [Render thread/INFO] (Minecraft) [System] [CHAT] Changed the block at 105, -54, 57
+[17:24:32] [Render thread/INFO] (Minecraft) [System] [CHAT] Changed the block at 127, -54, 57
+[17:24:32] [Render thread/INFO] (Minecraft) [System] [CHAT] Changed the block at 106, -60, 46
+[17:24:32] [Render thread/INFO] (Minecraft) [System] [CHAT] Changed the block at 126, -60, 46
+[17:24:32] [Render thread/INFO] (Minecraft) [System] [CHAT] Applied effect Strength to Player810
+[17:24:32] [Render thread/INFO] (Minecraft) [System] [CHAT] Applied effect Resistance to Player810
+[17:24:32] [Render thread/INFO] (Minecraft) [System] [CHAT] Applied effect Regeneration to Player810
+[17:24:32] [Render thread/INFO] (Minecraft) [System] [CHAT] Applied effect Fire Resistance to Player810
+[17:24:32] [Render thread/INFO] (Minecraft) [System] [CHAT] Applied effect Night Vision to Player810
+[17:24:32] [Server thread/INFO] (Minecraft) [Player810: Gave 1 [Diamond Sword] to Player810]
+[17:24:32] [Server thread/INFO] (Minecraft) [Player810: Gave 1 [Bow] to Player810]
+[17:24:32] [Server thread/INFO] (Minecraft) [Player810: Gave 64 [Arrow] to Player810]
+[17:24:32] [Server thread/INFO] (Minecraft) [Player810: Gave 5 [Golden Apple] to Player810]
+[17:24:32] [Server thread/INFO] (Minecraft) [Player810: Gave 1 [Shield] to Player810]
+[17:24:32] [Server thread/INFO] (Minecraft) [Player810: Played sound minecraft:entity.wither.spawn to Player810]
+[17:24:32] [Server thread/INFO] (Minecraft) [Player810: Played sound minecraft:entity.ender_dragon.growl to Player810]
+[17:24:32] [Server thread/INFO] (Minecraft) [Player810: Displaying particle minecraft:smoke]
+[17:24:32] [Server thread/INFO] (Minecraft) [Player810: Displaying particle minecraft:flame]
+[17:24:32] [Render thread/INFO] (Minecraft) [System] [CHAT] Gave 1 [Diamond Sword] to Player810
+[17:24:32] [Render thread/INFO] (Minecraft) [System] [CHAT] Gave 1 [Bow] to Player810
+[17:24:32] [Render thread/INFO] (Minecraft) [System] [CHAT] Gave 64 [Arrow] to Player810
+[17:24:32] [Render thread/INFO] (Minecraft) [System] [CHAT] Gave 5 [Golden Apple] to Player810
+[17:24:32] [Render thread/INFO] (Minecraft) [System] [CHAT] Gave 1 [Shield] to Player810
+[17:24:32] [Render thread/INFO] (Minecraft) [System] [CHAT] Played sound minecraft:entity.wither.spawn to Player810
+[17:24:32] [Render thread/INFO] (Minecraft) [System] [CHAT] Played sound minecraft:entity.ender_dragon.growl to Player810
+[17:24:32] [Render thread/INFO] (Minecraft) [System] [CHAT] Displaying particle minecraft:smoke
+[17:24:32] [Render thread/INFO] (Minecraft) [System] [CHAT] Displaying particle minecraft:flame
+[17:24:32] [Server thread/INFO] (Minecraft) [Player810: Summoned new Wither]
+[17:24:32] [Server thread/INFO] (Minecraft) [Player810: Played sound minecraft:music_disc.pigstep to Player810]
+[17:24:32] [Render thread/INFO] (Minecraft) [System] [CHAT] Summoned new Wither
+[17:24:32] [Render thread/INFO] (Minecraft) [System] [CHAT] Played sound minecraft:music_disc.pigstep to Player810
+[17:24:32] [Render thread/INFO] (Minecraft) [System] [CHAT] [Arena] The Wither has arrived! FIGHT!
+[17:24:32] [Render thread/INFO] (Minecraft) Loaded 9 advancements
+[17:24:47] [Server thread/INFO] (Minecraft) [Player810: Showing new title for Player810]
+[17:24:47] [Server thread/INFO] (Minecraft) [Player810: Showing new subtitle for Player810]
+[17:24:47] [Server thread/INFO] (Minecraft) [Player810: Successfully filled 441 block(s)]
+[17:24:47] [Server thread/INFO] (Minecraft) [Player810: Successfully filled 92 block(s)]
+[17:24:47] [Server thread/INFO] (Minecraft) [Player810: Successfully filled 92 block(s)]
+[17:24:47] [Server thread/INFO] (Minecraft) [Player810: Successfully filled 84 block(s)]
+[17:24:47] [Server thread/INFO] (Minecraft) [Player810: Successfully filled 84 block(s)]
+[17:24:47] [Server thread/INFO] (Minecraft) [Player810: Successfully filled 6 block(s)]
+[17:24:47] [Server thread/INFO] (Minecraft) [Player810: Successfully filled 6 block(s)]
+[17:24:47] [Server thread/INFO] (Minecraft) [Player810: Successfully filled 6 block(s)]
+[17:24:47] [Server thread/INFO] (Minecraft) [Player810: Successfully filled 6 block(s)]
+[17:24:47] [Server thread/INFO] (Minecraft) [Player810: Changed the block at 151, -54, 5]
+[17:24:47] [Server thread/INFO] (Minecraft) [Player810: Changed the block at 173, -54, 5]
+[17:24:47] [Server thread/INFO] (Minecraft) [Player810: Changed the block at 151, -54, 27]
+[17:24:47] [Server thread/INFO] (Minecraft) [Player810: Changed the block at 173, -54, 27]
+[17:24:47] [Server thread/INFO] (Minecraft) [Player810: Changed the block at 152, -60, 16]
+[17:24:47] [Server thread/INFO] (Minecraft) [Player810: Changed the block at 172, -60, 16]
+[17:24:47] [Server thread/INFO] (Minecraft) [Player810: Applied effect Strength to Player810]
+[17:24:47] [Server thread/INFO] (Minecraft) [Player810: Applied effect Resistance to Player810]
+[17:24:47] [Server thread/INFO] (Minecraft) [Player810: Applied effect Regeneration to Player810]
+[17:24:47] [Server thread/INFO] (Minecraft) [Player810: Applied effect Fire Resistance to Player810]
+[17:24:47] [Server thread/INFO] (Minecraft) [Player810: Applied effect Night Vision to Player810]
+[17:24:47] [Server thread/INFO] (Minecraft) [Player810: Gave 1 [Diamond Sword] to Player810]
+[17:24:47] [Server thread/INFO] (Minecraft) [Player810: Gave 1 [Bow] to Player810]
+[17:24:47] [Server thread/INFO] (Minecraft) [Player810: Gave 64 [Arrow] to Player810]
+[17:24:47] [Server thread/INFO] (Minecraft) [Player810: Gave 5 [Golden Apple] to Player810]
+[17:24:47] [Server thread/INFO] (Minecraft) [Player810: Gave 1 [Shield] to Player810]
+[17:24:47] [Server thread/INFO] (Minecraft) [Player810: Played sound minecraft:entity.wither.spawn to Player810]
+[17:24:47] [Server thread/INFO] (Minecraft) [Player810: Played sound minecraft:entity.ender_dragon.growl to Player810]
+[17:24:47] [Render thread/INFO] (Minecraft) [System] [CHAT] Showing new title for Player810
+[17:24:47] [Server thread/INFO] (Minecraft) [Player810: Displaying particle minecraft:smoke]
+[17:24:47] [Server thread/INFO] (Minecraft) [Player810: Displaying particle minecraft:flame]
+[17:24:47] [Render thread/INFO] (Minecraft) [System] [CHAT] Showing new subtitle for Player810
+[17:24:47] [Render thread/INFO] (Minecraft) [System] [CHAT] [Arena] A boss arena has been summoned! Gear up!
+[17:24:47] [Render thread/INFO] (Minecraft) [System] [CHAT] Successfully filled 441 block(s)
+[17:24:47] [Render thread/INFO] (Minecraft) [System] [CHAT] Successfully filled 92 block(s)
+[17:24:47] [Render thread/INFO] (Minecraft) [System] [CHAT] Successfully filled 92 block(s)
+[17:24:47] [Server thread/INFO] (Minecraft) [Player810: Summoned new Wither]
+[17:24:47] [Render thread/INFO] (Minecraft) [System] [CHAT] Successfully filled 84 block(s)
+[17:24:47] [Render thread/INFO] (Minecraft) [System] [CHAT] Successfully filled 84 block(s)
+[17:24:47] [Server thread/INFO] (Minecraft) [Player810: Played sound minecraft:music_disc.pigstep to Player810]
+[17:24:47] [Render thread/INFO] (Minecraft) [System] [CHAT] Successfully filled 6 block(s)
+[17:24:47] [Render thread/INFO] (Minecraft) [System] [CHAT] Successfully filled 6 block(s)
+[17:24:47] [Render thread/INFO] (Minecraft) [System] [CHAT] Successfully filled 6 block(s)
+[17:24:47] [Render thread/INFO] (Minecraft) [System] [CHAT] Successfully filled 6 block(s)
+[17:24:47] [Render thread/INFO] (Minecraft) [System] [CHAT] Changed the block at 151, -54, 5
+[17:24:47] [Render thread/INFO] (Minecraft) [System] [CHAT] Changed the block at 173, -54, 5
+[17:24:47] [Render thread/INFO] (Minecraft) [System] [CHAT] Changed the block at 151, -54, 27
+[17:24:47] [Render thread/INFO] (Minecraft) [System] [CHAT] Changed the block at 173, -54, 27
+[17:24:47] [Render thread/INFO] (Minecraft) [System] [CHAT] Changed the block at 152, -60, 16
+[17:24:47] [Render thread/INFO] (Minecraft) [System] [CHAT] Changed the block at 172, -60, 16
+[17:24:47] [Render thread/INFO] (Minecraft) [System] [CHAT] Applied effect Strength to Player810
+[17:24:47] [Render thread/INFO] (Minecraft) [System] [CHAT] Applied effect Resistance to Player810
+[17:24:47] [Render thread/INFO] (Minecraft) [System] [CHAT] Applied effect Regeneration to Player810
+[17:24:47] [Render thread/INFO] (Minecraft) [System] [CHAT] Applied effect Fire Resistance to Player810
+[17:24:47] [Render thread/INFO] (Minecraft) [System] [CHAT] Applied effect Night Vision to Player810
+[17:24:47] [Render thread/INFO] (Minecraft) [System] [CHAT] Gave 1 [Diamond Sword] to Player810
+[17:24:47] [Render thread/INFO] (Minecraft) [System] [CHAT] Gave 1 [Bow] to Player810
+[17:24:47] [Render thread/INFO] (Minecraft) [System] [CHAT] Gave 64 [Arrow] to Player810
+[17:24:47] [Render thread/INFO] (Minecraft) [System] [CHAT] Gave 5 [Golden Apple] to Player810
+[17:24:47] [Render thread/INFO] (Minecraft) [System] [CHAT] Gave 1 [Shield] to Player810
+[17:24:47] [Render thread/INFO] (Minecraft) [System] [CHAT] Played sound minecraft:entity.wither.spawn to Player810
+[17:24:47] [Render thread/INFO] (Minecraft) [System] [CHAT] Played sound minecraft:entity.ender_dragon.growl to Player810
+[17:24:47] [Render thread/INFO] (Minecraft) [System] [CHAT] Displaying particle minecraft:smoke
+[17:24:47] [Render thread/INFO] (Minecraft) [System] [CHAT] Displaying particle minecraft:flame
+[17:24:47] [Render thread/INFO] (Minecraft) [System] [CHAT] Summoned new Wither
+[17:24:47] [Render thread/INFO] (Minecraft) [System] [CHAT] Played sound minecraft:music_disc.pigstep to Player810
+[17:24:47] [Render thread/INFO] (Minecraft) [System] [CHAT] [Arena] The Wither has arrived! FIGHT!
+[17:24:54] [Server thread/INFO] (Minecraft) [Player810: Set own game mode to Survival Mode]
+[17:24:54] [Render thread/INFO] (Minecraft) [System] [CHAT] Set own game mode to Survival Mode
+[17:24:57] [Server thread/INFO] (Minecraft) Saving and pausing game...
+[17:24:57] [Server thread/INFO] (Minecraft) Saving chunks for level 'ServerLevel[CommandMaker Test World]'/minecraft:overworld
+[17:24:57] [Server thread/INFO] (Minecraft) Saving chunks for level 'ServerLevel[CommandMaker Test World]'/minecraft:the_nether
+[17:24:57] [Server thread/INFO] (Minecraft) Saving chunks for level 'ServerLevel[CommandMaker Test World]'/minecraft:the_end
+[17:34:27] [Server thread/INFO] (Minecraft) Saving and pausing game...
+[17:34:27] [Server thread/INFO] (Minecraft) Saving chunks for level 'ServerLevel[CommandMaker Test World]'/minecraft:overworld
+[17:34:27] [Server thread/INFO] (Minecraft) Saving chunks for level 'ServerLevel[CommandMaker Test World]'/minecraft:the_nether
+[17:34:27] [Server thread/INFO] (Minecraft) Saving chunks for level 'ServerLevel[CommandMaker Test World]'/minecraft:the_end
+[17:34:35] [Server thread/INFO] (Minecraft) Player810 has made the advancement [Take Aim]
+[17:34:35] [Render thread/INFO] (Minecraft) [System] [CHAT] Player810 has made the advancement [Take Aim]
+[17:34:35] [Render thread/INFO] (Minecraft) Loaded 14 advancements
+[17:34:52] [Server thread/INFO] (Minecraft) Player810 has made the advancement [Monster Hunter]
+[17:34:52] [Render thread/INFO] (Minecraft) [System] [CHAT] Player810 has made the advancement [Monster Hunter]
+[17:34:52] [Render thread/INFO] (Minecraft) Loaded 50 advancements
+[17:34:58] [Render thread/INFO] (Minecraft) Loaded 50 advancements
+[17:34:59] [Render thread/INFO] (Minecraft) Loaded 59 advancements
+[17:35:06] [Server thread/INFO] (Minecraft) Saving and pausing game...
+[17:35:06] [Server thread/INFO] (Minecraft) Saving chunks for level 'ServerLevel[CommandMaker Test World]'/minecraft:overworld
+[17:35:06] [Server thread/INFO] (Minecraft) Saving chunks for level 'ServerLevel[CommandMaker Test World]'/minecraft:the_nether
+[17:35:06] [Server thread/INFO] (Minecraft) Saving chunks for level 'ServerLevel[CommandMaker Test World]'/minecraft:the_end
