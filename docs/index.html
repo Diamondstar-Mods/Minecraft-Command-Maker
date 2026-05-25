@@ -1,120 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Command Maker Wiki - Minecraft Mod Documentation</title>
+    <meta name="description" content="Nek's Command Maker — the ultimate Minecraft command alias and custom syntax mod for Fabric servers. Create aliases, custom commands, and complex systems with no coding.">
     <link rel="stylesheet" href="styles.css">
-    <link rel="icon" href="https://diamondstar-mods.github.io/Minecraft-Command-Maker/favicon.ico">
+    <link rel="icon" href="favicon.ico">
 </head>
 <body>
-    <!-- Navigation Bar -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-logo">
-                <a href="index.html"><img class="logo-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/favicon.ico" alt="Non-Legacy Command Maker Icon"> Command Maker Wiki</a>
-            </div>
-            <div class="nav-menu">
-                <a href="index.html" class="nav-link active">Home</a>
-                <a href="download.html" class="nav-link">Downloads</a>
-                <a href="getting-started.html" class="nav-link">Getting Started</a>
-                <a href="syntax-system.html" class="nav-link">Custom Syntax</a>
-                <a href="functions.html" class="nav-link">Functions</a>
-                <a href="function-catalog.html" class="nav-link">📦 Catalog</a>
-                <a href="gui-system.html" class="nav-link">GUI</a>
-                <div class="dropdown">
-                    <button class="dropdown-toggle">Admin ▼</button>
-                    <div class="dropdown-menu">
-                        <a href="advanced-permissions-guide.html">Advanced Permissions</a>
-                        <a href="commands.html">Commands Reference</a>
-                        <a href="best-practices.html">Best Practices</a>
-                    </div>
-                </div>
-                <div class="dropdown">
-                    <button class="dropdown-toggle">Systems ▼</button>
-                    <div class="dropdown-menu">
-                        <a href="economy-system.html">Economy System</a>
-                        <a href="kit-system.html">Kit System</a>
-                        <a href="home-system.html">Home System</a>
-                        <a href="shop-system.html">Shop System</a>
-                        <a href="jail-system.html">Jail System</a>
-                        <a href="mute-system.html">Mute System</a>
-                        <a href="vote-system.html">Vote System</a>
-                        <a href="rank-system.html">Rank System</a>
-                        <a href="achievement-system.html">Achievement System</a>
-                        <a href="event-system.html">Event System</a>
-                    </div>
-                </div>
-                <a href="faq.html" class="nav-link">FAQ</a>
-                <a href="forum.html" class="nav-link">Forum</a>
-            </div>
-            <div class="nav-donate">
-                <a href="https://commandmakerwiki.lucasgeitgey.com/donate.html" class="nav-link" target="_blank">❤️ Donate</a>
-            </div>
-            <select id="theme-select" style="display: none;">
-                <option value="light">Light (default)</option>
-                <option value="dark">Dark (beta)</option>
-            </select>
-            <div class="nav-search">
-                <input type="text" id="searchBox" placeholder="Search documentation..." class="search-input">
-            </div>
-        </div>
-    </nav>
+    <nav id="navbar" class="navbar" role="navigation" aria-label="Main navigation"></nav>
 
-    </nav>
+    <div class="layout">
+        <aside id="sidebar" class="sidebar" role="complementary" aria-label="Side navigation"></aside>
 
-    <!-- Main Content -->
-    <div class="main-wrapper">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-widget">
-                <h3 class="widget-title">📚 Documentation</h3>
-                <ul class="widget-list">
-                    <li><a href="getting-started.html">Getting Started</a></li>
-                    <li><a href="installation.html">Installation</a></li>
-                    <li><a href="configuration.html">Configuration</a></li>
-                    <li><a href="aliases.html">Creating Aliases</a></li>
-                </ul>
-            </div>
-
-            <div class="sidebar-widget">
-                <h3 class="widget-title">⚡ Features</h3>
-                <ul class="widget-list">
-                    <li><a href="syntax-system.html">Custom Syntax System</a></li>                    <li><a href="functions.html">Functions System</a></li>                    <li><a href="variables.html">Variables & Substitution</a></li>
-                    <li><a href="gui-system.html">GUI System</a></li>
-                    <li><a href="chat-messages.html">Chat Messages</a></li>
-                    <li><a href="advanced-permissions-guide.html"><strong>🔐 Advanced Permissions</strong></a></li>
-                </ul>
-            </div>
-
-            <div class="sidebar-widget">
-                <h3 class="widget-title">🎮 Examples</h3>
-                <ul class="widget-list">
-                    <li><a href="tpa-system.html">TPA System</a></li>
-                    <li><a href="ban-system.html">Ban System</a></li>
-                    <li><a href="warp-system.html">Warp System</a></li>
-                    <li><a href="custom-commands.html">Custom Commands</a></li>
-                </ul>
-            </div>
-
-            <div class="sidebar-widget">
-                <h3 class="widget-title">❓ Help</h3>
-                <ul class="widget-list">
-                    <li><a href="troubleshooting.html">Troubleshooting</a></li>
-                    <li><a href="faq.html">Frequently Asked Questions</a></li>
-                    <li><a href="best-practices.html">Best Practices</a></li>
-                </ul>
-            </div>
-        </aside>
-
-        <!-- Content Area -->
-        <main class="content">
-            <h1 id="docs-path" data-subpath="index.html"></h1>
-            <iframe style="border: none; font-style: italic;" id="last-commit-iframe" src="" width="400" height="100"></iframe>
-            <script>
-                document.getElementById('last-commit-iframe').src = 'last-commit.html?path=' + document.getElementById('docs-path').dataset.subpath;
-            </script>
-            <!-- Hero Section -->
+        <main class="content" role="main">
+            <!-- Hero -->
             <div class="hero">
                 <div class="hero-content">
                     <h1 class="hero-title">Nek's Command Maker</h1>
@@ -126,87 +27,67 @@
                 </div>
             </div>
 
-            <!-- Feature Cards -->
-            <section id="features" class="features-section">
+            <!-- Features -->
+            <section class="features-section">
                 <h2 class="section-title">What You Can Do</h2>
                 <div class="features-grid">
                     <div class="feature-card">
                         <div class="feature-icon">📝</div>
                         <h3>Create Aliases</h3>
                         <p>Turn long commands into short, easy-to-use aliases. Perfect for frequently used commands.</p>
-                        <a href="aliases.html" class="card-link">Learn →</a>
+                        <a href="aliases.html" class="card-link">Learn more →</a>
                     </div>
-
                     <div class="feature-card">
                         <div class="feature-icon">🧩</div>
                         <h3>Custom Syntax</h3>
                         <p>Define your own command patterns with parameters. Create commands exactly the way you want them.</p>
                         <a href="syntax-system.html" class="card-link">Explore →</a>
                     </div>
-
                     <div class="feature-card">
                         <div class="feature-icon">⚡</div>
                         <h3>Functions</h3>
-                        <p>Chain multiple commands together using .mcfunction files. Aliases are automatically created - just create the file and use the command!</p>
-                        <a href="functions.html" class="card-link">Learn →</a>
+                        <p>Chain multiple commands using .mcfunction files. Aliases auto-created — just create the file and use it!</p>
+                        <a href="functions.html" class="card-link">Learn more →</a>
                     </div>
-
                     <div class="feature-card">
                         <div class="feature-icon">🔤</div>
                         <h3>Variables</h3>
-                        <p>Use built-in variables like ${player}, ${x}, ${y}, ${z} and create custom variables.</p>
+                        <p>Use built-in variables like ${player}, ${x}, ${y}, ${z} and create custom variables for dynamic commands.</p>
                         <a href="variables.html" class="card-link">Discover →</a>
                     </div>
-
                     <div class="feature-card">
                         <div class="feature-icon">💬</div>
                         <h3>Chat Integration</h3>
-                        <p>Send colored messages, confirmations, and feedback directly to players in chat.</p>
-                        <a href="chat-messages.html" class="card-link">Read →</a>
+                        <p>Send colored messages, confirmations, and feedback directly to players in chat with full formatting.</p>
+                        <a href="chat-messages.html" class="card-link">Read more →</a>
                     </div>
-
                     <div class="feature-card">
                         <div class="feature-icon">⚙️</div>
-                        <h3>Configuration</h3>
-                        <p>Simple JSON-based configuration. No code required, just edit and reload.</p>
+                        <h3>Simple Configuration</h3>
+                        <p>JSON-based config files. No coding required — just edit and reload with /cmd reload.</p>
                         <a href="configuration.html" class="card-link">Configure →</a>
                     </div>
-
-                    <div class="feature-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                    <div class="feature-card" style="border-color: #667eea; border-width: 2px;">
                         <div class="feature-icon">🔐</div>
                         <h3>Advanced Permissions</h3>
-                        <p>Control who can use aliases and commands with LuckPerms integration or built-in permission system. Fine-grained access control for your server.</p>
-                        <a href="advanced-permissions-guide.html" class="card-link" style="color: #ffd700; font-weight: bold;">Learn More →</a>
-                        <span style="display: inline-block; background: #ffd700; color: #764ba2; padding: 4px 8px; border-radius: 4px; font-size: 0.85em; margin-top: 8px; font-weight: bold;">🆕 NEW</span>
+                        <p>Fine-grained access control with LuckPerms integration. Control who can use every alias and command.</p>
+                        <a href="advanced-permissions-guide.html" class="card-link">Learn more →</a>
+                        <span class="card-badge" style="background:#667eea;color:#fff;">NEW</span>
                     </div>
-
-                    <div class="feature-card" style="background: linear-gradient(135deg, #1b5e20 0%, #4caf50 100%); color: white;">
+                    <div class="feature-card" style="border-color: #059669; border-width: 2px;">
                         <div class="feature-icon">📦</div>
                         <h3>Function Library</h3>
-                        <p>37 pre-made downloadable functions: mini-games, combat arenas, building tools, party effects, and server utilities. Install with one click!</p>
-                        <a href="function-catalog.html" class="card-link" style="color: #a5d6a7; font-weight: bold;">Browse Catalog →</a>
-                        <span style="display: inline-block; background: #a5d6a7; color: #1b5e20; padding: 4px 8px; border-radius: 4px; font-size: 0.85em; margin-top: 8px; font-weight: bold;">🆕 v3.1.0</span>
+                        <p>37 pre-made downloadable functions: mini-games, combat, building, party effects, and utilities. One-click install!</p>
+                        <a href="function-catalog.html" class="card-link">Browse catalog →</a>
+                        <span class="card-badge" style="background:#059669;color:#fff;">v3.1.0</span>
                     </div>
-
-                    <div class="feature-card" style="background: linear-gradient(135deg, #e65100 0%, #ff9800 100%); color: white;">
+                    <div class="feature-card" style="border-color: #e65100; border-width: 2px;">
                         <div class="feature-icon">🖥️</div>
                         <h3>Chest GUI</h3>
-                        <p>Browse, download, run, and create functions from a visual chest inventory GUI. Tab-complete with descriptions right in the autocomplete!</p>
-                        <a href="gui-system.html" class="card-link" style="color: #ffe0b2; font-weight: bold;">Open the GUI →</a>
-                        <span style="display: inline-block; background: #ffe0b2; color: #e65100; padding: 4px 8px; border-radius: 4px; font-size: 0.85em; margin-top: 8px; font-weight: bold;">🆕 v3.1.0</span>
+                        <p>Browse, download, run, and create functions from an in-game chest GUI inventory. Tab-complete with descriptions!</p>
+                        <a href="gui-system.html" class="card-link">Open the GUI →</a>
+                        <span class="card-badge" style="background:#e65100;color:#fff;">NEW</span>
                     </div>
-                </div>
-            </section>
-
-            <!-- Installation Video -->
-            <section id="install-video" class="install-video">
-                <h2 class="section-title">Installation Video</h2>
-                <p>Watch this short video to learn how to download and install Command Maker (mods folder + launcher setup).</p>
-                <div class="video-container" style="max-width:800px;">
-                    <video controls playsinline style="width:100%; height:auto; border-radius:8px; background:#000;">
-                        <source src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/videos/commandmaker.mp4" type="video/mp4">
-                        Your browser does not support the video tag. You can <a href="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/commandmaker.mp4">download the video</a> instead.
-                    </video>
                 </div>
             </section>
 
@@ -217,140 +98,72 @@
                     <div class="step">
                         <div class="step-number">1</div>
                         <h3>Download & Install</h3>
-                        <p>Download the mod JAR from <a href="download.html">here</a> and drop it into your .minecraft/mods folder.</p>
+                        <p>Download the mod JAR from the <a href="download.html">downloads page</a> and drop it into your mods folder.</p>
                     </div>
                     <div class="step">
                         <div class="step-number">2</div>
                         <h3>Launch Minecraft</h3>
-                        <p>Start Minecraft with <a href=https://fabricmc.net>Fabric</a>. Config files auto-create on first load.</p>
+                        <p>Start Minecraft with <a href="https://fabricmc.net">Fabric</a>. Config files are created automatically on first load.</p>
                     </div>
                     <div class="step">
                         <div class="step-number">3</div>
                         <h3>Edit Config</h3>
-                        <p>Edit config/CommandMaker/ JSON files to create your aliases.</p>
+                        <p>Edit <code>config/CommandMaker/</code> JSON files to create aliases, or use in-game commands.</p>
                     </div>
                     <div class="step">
                         <div class="step-number">4</div>
                         <h3>Reload & Play</h3>
-                        <p>Use /cmd reload and your aliases are ready to use!</p>
+                        <p>Run <code>/cmd reload</code> and your aliases are live. That's it!</p>
                     </div>
                 </div>
             </section>
 
             <!-- Popular Pages -->
-            <section class="popular-section">
+            <section>
                 <h2 class="section-title">Popular Pages</h2>
                 <div class="articles-grid">
                     <article class="article-card">
                         <h3><a href="tpa-system.html">TPA System</a></h3>
-                        <p>Learn how to create a complete teleport request system with custom syntax.</p>
+                        <p>Create a complete teleport request system with custom syntax.</p>
                         <span class="article-meta">⭐ Most Popular</span>
                     </article>
-
                     <article class="article-card">
                         <h3><a href="syntax-system.html">Custom Syntax System</a></h3>
-                        <p>Master the powerful custom syntax system for unlimited possibilities.</p>
-                        <span class="article-meta">🆕 New Feature</span>
+                        <p>Master the powerful pattern matching system for unlimited command possibilities.</p>
+                        <span class="article-meta">Core Feature</span>
                     </article>
-
-                    <article class="article-card" style="border: 2px solid #667eea; background: #f8f9ff;">
-                        <h3><a href="advanced-permissions-guide.html" style="color: #667eea;">Advanced Permissions System</a></h3>
-                        <p>Now available in v3.0.0 — control who can use aliases and commands. Includes LuckPerms integration and a direct <a href="download.html">Downloads page</a> link.</p>
-                        <span class="article-meta">🔐 NEW in v3.0.0</span>
-                    </article>
-
                     <article class="article-card">
-                        <h3><a href="commands.html">Complete Command Reference</a></h3>
+                        <h3><a href="advanced-permissions-guide.html">Advanced Permissions</a></h3>
+                        <p>Control who can use aliases and commands. LuckPerms integration and granular permissions.</p>
+                        <span class="article-meta">🔐 v3.0.0</span>
+                    </article>
+                    <article class="article-card">
+                        <h3><a href="commands.html">Command Reference</a></h3>
                         <p>Full documentation of all available commands and their usage.</p>
                         <span class="article-meta">📖 Reference</span>
                     </article>
-
                     <article class="article-card">
-                        <h3><a href="faq.html">Frequently Asked Questions</a></h3>
+                        <h3><a href="faq.html">FAQ</a></h3>
                         <p>Common questions and answers about the mod and its features.</p>
                         <span class="article-meta">❓ Help</span>
                     </article>
-
                     <article class="article-card">
                         <h3><a href="economy-system.html">Economy System</a></h3>
-                        <p>Create virtual currency, shops, and player balances.</p>
+                        <p>Create virtual currency, shops, and player balances with scoreboard integration.</p>
                         <span class="article-meta">💰 Advanced</span>
-                    </article>
-
-                    <article class="article-card">
-                        <h3><a href="kit-system.html">Kit System</a></h3>
-                        <p>Design and distribute item kits with cooldowns and permissions.</p>
-                        <span class="article-meta">🎒 Popular</span>
-                    </article>
-
-                    <article class="article-card">
-                        <h3><a href="home-system.html">Home System</a></h3>
-                        <p>Allow players to set and teleport to personal home locations.</p>
-                        <span class="article-meta">🏠 Essential</span>
-                    </article>
-
-                    <article class="article-card">
-                        <h3><a href="shop-system.html">Shop System</a></h3>
-                        <p>Build comprehensive shops where players can buy items and resources.</p>
-                        <span class="article-meta">🛒 Commerce</span>
-                    </article>
-
-                    <article class="article-card">
-                        <h3><a href="rank-system.html">Rank System</a></h3>
-                        <p>Implement player ranks with permissions and special abilities.</p>
-                        <span class="article-meta">👑 Management</span>
                     </article>
                 </div>
             </section>
 
-            <!-- Info Box -->
-            <section class="info-box">
-                <h3>💡 Did You Know?</h3>
-                <p>With the Custom Syntax System, you can create commands like <code>/tpa steve</code> that automatically substitute into your aliases. No coding required!</p>
-            </section>
+            <div class="callout callout-tip" style="margin-top:2rem;">
+                <strong>Did you know?</strong> With the Custom Syntax System, you can create commands like <code>/tpa steve</code> that automatically substitute parameters into your aliases. No coding required!
+            </div>
         </main>
     </div>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-section">
-                <h4>Documentation</h4>
-                <ul>
-                    <li><a href="getting-started.html">Getting Started</a></li>
-                    <li><a href="commands.html">Commands</a></li>
-                    <li><a href="syntax-system.html">Custom Syntax</a></li>
-                    <li><a href="examples.html">Examples</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h4>Resources</h4>
-                <ul>
-                    <li><a href="troubleshooting.html">Troubleshooting</a></li>
-                    <li><a href="faq.html">FAQ</a></li>
-                    <li><a href="best-practices.html">Best Practices</a></li>
-                    <li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">GitHub</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h4>Community</h4>
-                <ul>
-                    <li><a href="https://modrinth.com/mod/command-maker">Modrinth</a></li>
-                    <li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">Report Issues</a></li>
-                    <li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">Contribute</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2025 - 2026 Diamondstar Mods. Built with ❤️ for Minecraft players.</p>
-        </div>
-    </footer>
+    <footer id="footer" class="footer" role="contentinfo"></footer>
 
+    <script src="components.js"></script>
     <script src="script.js"></script>
-<script>
-  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
-</script>
-<script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>
-

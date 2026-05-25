@@ -1,116 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Creating Aliases - Command Maker Wiki</title>
+    <meta name="description" content="Learn how to create and manage command aliases in Command Maker - from simple shortcuts to powerful parameterized commands.">
     <link rel="stylesheet" href="styles.css">
-    <link rel="icon" href="https://diamondstar-mods.github.io/Minecraft-Command-Maker/favicon.ico">
+    <link rel="icon" href="favicon.ico">
 </head>
 <body>
-    <!-- Navigation Bar -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-logo">
-                <a href="index.html"><img class="logo-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/favicon.ico" alt="Command Maker Icon"> Command Maker Wiki</a>
-            </div>
-            <div class="nav-menu">
-                <a href="index.html" class="nav-link">Home</a>
-                <a href="getting-started.html" class="nav-link">Getting Started</a>
-                <a href="commands.html" class="nav-link">Commands</a>
-                <a href="syntax-system.html" class="nav-link">Custom Syntax</a>
-                <div class="dropdown">
-                    <button class="dropdown-toggle">Systems ▼</button>
-                    <div class="dropdown-menu">
-                        <a href="economy-system.html">Economy System</a>
-                        <a href="kit-system.html">Kit System</a>
-                        <a href="home-system.html">Home System</a>
-                        <a href="shop-system.html">Shop System</a>
-                        <a href="jail-system.html">Jail System</a>
-                        <a href="mute-system.html">Mute System</a>
-                        <a href="vote-system.html">Vote System</a>
-                        <a href="rank-system.html">Rank System</a>
-                        <a href="achievement-system.html">Achievement System</a>
-                        <a href="event-system.html">Event System</a>
-                    </div>
-                </div>
-                <a href="faq.html" class="nav-link">FAQ</a>
-                <a href="forum.html" class="nav-link">Forum</a>
-                <a href="download.html" class="nav-link">Downloads</a>
-            </div>
-            <div class="nav-donate">
-                <a href="https://commandmakerwiki.lucasgeitgey.com/donate.html" class="nav-link" target="_blank">❤️ Donate</a>
-            </div>
-            <select id="theme-select" style="display: none;">
-                <option value="light">Light (default)</option>
-                <option value="dark">Dark (beta)</option>
-            </select>
-            <div class="nav-search">
-                <input type="text" id="searchBox" placeholder="Search documentation..." class="search-input">
-            </div>
-        </div>
-    </nav>
-
-    </nav>
-
-    <!-- Main Content -->
-    <div class="main-wrapper">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-widget">
-                <h3 class="widget-title">📚 Documentation</h3>
-                <ul class="widget-list">
-                    <li><a href="getting-started.html">Getting Started</a></li>
-                    <li><a href="installation.html">Installation</a></li>
-                    <li><a href="configuration.html">Configuration</a></li>
-                    <li><a href="aliases.html">Creating Aliases</a></li>
-                </ul>
-            </div>
-
-            <div class="sidebar-widget">
-                <h3 class="widget-title">⚡ Features</h3>
-                <ul class="widget-list">
-                    <li><a href="syntax-system.html">Custom Syntax System</a></li>
-                    <li><a href="variables.html">Variables & Substitution</a></li>
-                    <li><a href="gui-system.html">GUI System</a></li>
-                    <li><a href="chat-messages.html">Chat Messages</a></li>
-                </ul>
-            </div>
-
-            <div class="sidebar-widget">
-                <h3 class="widget-title">🎮 Examples</h3>
-                <ul class="widget-list">
-                    <li><a href="tpa-system.html">TPA System</a></li>
-                    <li><a href="ban-system.html">Ban System</a></li>
-                    <li><a href="warp-system.html">Warp System</a></li>
-                    <li><a href="custom-commands.html">Custom Commands</a></li>
-                </ul>
-            </div>
-
-            <div class="sidebar-widget">
-                <h3 class="widget-title">❓ Help</h3>
-                <ul class="widget-list">
-                    <li><a href="troubleshooting.html">Troubleshooting</a></li>
-                    <li><a href="faq.html">Frequently Asked Questions</a></li>
-                    <li><a href="best-practices.html">Best Practices</a></li>
-                </ul>
-            </div>
-        </aside>
-
-        <!-- Content Area -->
-        <main class="content">
-            <h1 id="docs-path" data-subpath="aliases.html"></h1>
-            <iframe style="border: none; font-style: italic;" id="last-commit-iframe" src="" width="400" height="100"></iframe>
-            <script>
-                document.getElementById('last-commit-iframe').src = 'last-commit.html?path=' + document.getElementById('docs-path').dataset.subpath;
-            </script>
+    <nav id="navbar" class="navbar" role="navigation" aria-label="Main navigation"></nav>
+    <div class="layout">
+        <aside id="sidebar" class="sidebar" role="complementary" aria-label="Side navigation"></aside>
+        <main class="content" role="main">
             <h1>Creating Aliases</h1>
             <p>Learn how to create command aliases that will save you time and make complex commands simple.</p>
 
             <section>
                 <h2>What is an Alias?</h2>
                 <p>An alias is a short name for a command (or group of commands) that you use frequently. Instead of typing the full command every time, you can create a shortcut.</p>
-
                 <p><strong>Example:</strong><br>
                 Instead of: <code>/teleport @s 0 64 0</code><br>
                 Type: <code>/home</code></p>
@@ -121,7 +29,6 @@
                 <pre><code>{
   "alias_name": "actual command"
 }</code></pre>
-
                 <p>In your <code>aliases.json</code> file:</p>
                 <ul>
                     <li><strong>Key</strong> (left side): The short name you'll type</li>
@@ -186,7 +93,6 @@
                 <h3>Method 2: Use In-Game Command</h3>
                 <p>Add aliases without editing files:</p>
                 <pre><code>/cmd add myalias "my command"</code></pre>
-
                 <p>The alias is immediately available to use.</p>
 
                 <h3>Method 3: Custom Syntax</h3>
@@ -221,9 +127,8 @@
                     <li>Avoid special characters except underscores</li>
                     <li>Don't use existing Minecraft command names</li>
                 </ul>
-
-                <p><strong>❌ Poor Names:</strong> <code>H</code>, <code>tp_player_to_coords_123</code><br>
-                <strong>✅ Good Names:</strong> <code>home</code>, <code>pvp_arena</code></p>
+                <p><strong>Poor Names:</strong> <code>H</code>, <code>tp_player_to_coords_123</code><br>
+                <strong>Good Names:</strong> <code>home</code>, <code>pvp_arena</code></p>
             </section>
 
             <section>
@@ -239,7 +144,6 @@
                 <h3>Delete an Alias</h3>
                 <p>Use the in-game command:</p>
                 <pre><code>/cmd del myalias</code></pre>
-
                 <p>Or open the GUI:</p>
                 <pre><code>/deletealiases-gui</code></pre>
             </section>
@@ -247,14 +151,14 @@
             <section>
                 <h2>Common Issues</h2>
 
-                <p><strong>❌ Alias not working?</strong></p>
+                <p><strong>Alias not working?</strong></p>
                 <ul>
                     <li>Did you reload with <code>/cmd reload</code>?</li>
                     <li>Is the command valid Minecraft syntax?</li>
                     <li>Check for typos in the alias name</li>
                 </ul>
 
-                <p><strong>❌ Syntax error message?</strong></p>
+                <p><strong>Syntax error message?</strong></p>
                 <ul>
                     <li>Check your JSON formatting</li>
                     <li>Ensure quotes are matched correctly</li>
@@ -273,47 +177,8 @@
             </section>
         </main>
     </div>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-section">
-                <h4>Documentation</h4>
-                <ul>
-                    <li><a href="getting-started.html">Getting Started</a></li>
-                    <li><a href="commands.html">Commands</a></li>
-                    <li><a href="syntax-system.html">Custom Syntax</a></li>
-                    <li><a href="examples.html">Examples</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h4>Resources</h4>
-                <ul>
-                    <li><a href="troubleshooting.html">Troubleshooting</a></li>
-                    <li><a href="faq.html">FAQ</a></li>
-                    <li><a href="best-practices.html">Best Practices</a></li>
-                    <li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">GitHub</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h4>Community</h4>
-                <ul>
-                    <li><a href="https://modrinth.com/mod/command-maker">Modrinth</a></li>
-                    <li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">Report Issues</a></li>
-                    <li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">Contribute</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2025 - 2026 Command Maker Wiki. Built with ❤️ for Minecraft players.</p>
-        </div>
-    </footer>
-
+    <footer id="footer" class="footer" role="contentinfo"></footer>
+    <script src="components.js"></script>
     <script src="script.js"></script>
-<script>
-  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
-</script>
-<script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>
-

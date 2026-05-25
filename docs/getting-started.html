@@ -1,116 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Getting Started - Command Maker Wiki</title>
+    <meta name="description" content="Learn how to get started with Command Maker - create command aliases, define custom syntax, use variables, and build complex systems for your Minecraft server.">
     <link rel="stylesheet" href="styles.css">
-    <link rel="icon" href="https://diamondstar-mods.github.io/Minecraft-Command-Maker/favicon.ico">
+    <link rel="icon" href="favicon.ico">
 </head>
 <body>
-    <!-- Navigation Bar -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-logo">
-                <a href="index.html"><img class="logo-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/favicon.ico" alt="Command Maker Icon"> Command Maker Wiki</a>
-            </div>
-            <div class="nav-menu">
-                <a href="index.html" class="nav-link">Home</a>
-                <a href="getting-started.html" class="nav-link active">Getting Started</a>
-                <a href="commands.html" class="nav-link">Commands</a>
-                <a href="syntax-system.html" class="nav-link">Custom Syntax</a>
-                <div class="dropdown">
-                    <button class="dropdown-toggle">Systems ▼</button>
-                    <div class="dropdown-menu">
-                        <a href="economy-system.html">Economy System</a>
-                        <a href="kit-system.html">Kit System</a>
-                        <a href="home-system.html">Home System</a>
-                        <a href="shop-system.html">Shop System</a>
-                        <a href="jail-system.html">Jail System</a>
-                        <a href="mute-system.html">Mute System</a>
-                        <a href="vote-system.html">Vote System</a>
-                        <a href="rank-system.html">Rank System</a>
-                        <a href="achievement-system.html">Achievement System</a>
-                        <a href="event-system.html">Event System</a>
-                    </div>
-                </div>
-                <a href="faq.html" class="nav-link">FAQ</a>
-                <a href="forum.html" class="nav-link">Forum</a>
-                <a href="download.html" class="nav-link">Downloads</a>
-            </div>
-            <div class="nav-donate">
-                <a href="https://commandmakerwiki.lucasgeitgey.com/donate.html" class="nav-link" target="_blank">❤️ Donate</a>
-            </div>
-            <select id="theme-select" style="display: none;">
-                <option value="light">Light (default)</option>
-                <option value="dark">Dark (beta)</option>
-            </select>
-            <div class="nav-search">
-                <input type="text" id="searchBox" placeholder="Search documentation..." class="search-input">
-            </div>
-        </div>
-    </nav>
-
-    </nav>
-
-    <!-- Main Content -->
-    <div class="main-wrapper">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-widget">
-                <h3 class="widget-title">📚 Documentation</h3>
-                <ul class="widget-list">
-                    <li><a href="getting-started.html">Getting Started</a></li>
-                    <li><a href="installation.html">Installation</a></li>
-                    <li><a href="configuration.html">Configuration</a></li>
-                    <li><a href="aliases.html">Creating Aliases</a></li>
-                </ul>
-            </div>
-
-            <div class="sidebar-widget">
-                <h3 class="widget-title">⚡ Features</h3>
-                <ul class="widget-list">
-                    <li><a href="syntax-system.html">Custom Syntax System</a></li>
-                    <li><a href="variables.html">Variables & Substitution</a></li>
-                    <li><a href="gui-system.html">GUI System</a></li>
-                    <li><a href="chat-messages.html">Chat Messages</a></li>
-                </ul>
-            </div>
-
-            <div class="sidebar-widget">
-                <h3 class="widget-title">🎮 Examples</h3>
-                <ul class="widget-list">
-                    <li><a href="tpa-system.html">TPA System</a></li>
-                    <li><a href="ban-system.html">Ban System</a></li>
-                    <li><a href="warp-system.html">Warp System</a></li>
-                    <li><a href="custom-commands.html">Custom Commands</a></li>
-                </ul>
-            </div>
-
-            <div class="sidebar-widget">
-                <h3 class="widget-title">❓ Help</h3>
-                <ul class="widget-list">
-                    <li><a href="troubleshooting.html">Troubleshooting</a></li>
-                    <li><a href="faq.html">Frequently Asked Questions</a></li>
-                    <li><a href="best-practices.html">Best Practices</a></li>
-                </ul>
-            </div>
-        </aside>
-
-        <!-- Content Area -->
-        <main class="content">
-            <h1 id="docs-path" data-subpath="getting-started.html"></h1>
-            <iframe style="border: none; font-style: italic;" id="last-commit-iframe" src="" width="400" height="100"></iframe>
-            <script>
-                document.getElementById('last-commit-iframe').src = 'last-commit.html?path=' + document.getElementById('docs-path').dataset.subpath;
-            </script>
+    <nav id="navbar" class="navbar" role="navigation" aria-label="Main navigation"></nav>
+    <div class="layout">
+        <aside id="sidebar" class="sidebar" role="complementary" aria-label="Side navigation"></aside>
+        <main class="content" role="main">
             <h1>Getting Started with Command Maker</h1>
-            
             <p>Welcome to Command Maker! This guide will walk you through everything you need to get started with the mod.</p>
 
             <h2>What is Command Maker?</h2>
             <p>Command Maker is a powerful Minecraft mod for Fabric servers that allows you to:</p>
-            <ul style="margin-left: 20px; margin-bottom: 20px;">
+            <ul>
                 <li><strong>Create command aliases:</strong> Turn long commands into short, easy-to-remember aliases</li>
                 <li><strong>Define custom syntax:</strong> Create your own command patterns with parameters</li>
                 <li><strong>Use variables:</strong> Automatically substitute player names, coordinates, and custom values</li>
@@ -118,16 +26,16 @@
             </ul>
 
             <h2>Requirements</h2>
-            <ul style="margin-left: 20px; margin-bottom: 20px;">
+            <ul>
                 <li>Minecraft 1.20+ (for modern Fabric/Quilt) or 1.8-1.13.2 (for Legacy Fabric)</li>
                 <li>Fabric Loader 0.16.14+ (modern) or 0.18.4 (legacy)</li>
                 <li>Fabric API 0.134.0+ (modern) or not required (legacy)</li>
                 <li>Java 8+ (for legacy versions) or Java 18-25 (modern)</li>
             </ul>
-            
+
             <h2>Legacy Fabric Support (Minecraft 1.8-1.13.2)</h2>
             <p>Command Maker now supports <strong>Legacy Fabric</strong> for older Minecraft versions! You can use Command Maker with:</p>
-            <ul style="margin-left: 20px; margin-bottom: 20px;">
+            <ul>
                 <li>Minecraft 1.8 through 1.13.2</li>
                 <li>Legacy Fabric with Fabric Loader 0.18.4</li>
                 <li>Java 8 compatibility</li>
@@ -136,7 +44,7 @@
             <p><strong>Note:</strong> Legacy versions have limited feature support compared to modern versions but provide access to classic Minecraft experiences. Download the "Legacy" editions from the downloads page to use these versions.</p>
 
             <h2>Installation</h2>
-            <ol style="margin-left: 20px; margin-bottom: 20px;">
+            <ol>
                 <li><strong>Download the mod:</strong> Get the latest JAR from <a href="https://modrinth.com/mod/command-maker">Modrinth</a></li>
                 <li><strong>Locate mods folder:</strong> Open <code>.minecraft/mods</code></li>
                 <li><strong>Drop the JAR:</strong> Copy the downloaded JAR into the mods folder</li>
@@ -148,7 +56,7 @@
             <h2>First Steps</h2>
 
             <h3>Step 1: Launch Minecraft</h3>
-            <p>Start your Minecraft world or server. You should see the message: <code style="background: #e8f4f8;">Nek's Command Maker successfully loaded!</code> in green.(note: this feature has been removed in 2.1.0+ due to it causing too many bugs.)</p>
+            <p>Start your Minecraft world or server. You should see the message: <code>Nek's Command Maker successfully loaded!</code> in green.(note: this feature has been removed in 2.1.0+ due to it causing too many bugs.)</p>
 
             <h3>Step 2: Create Your First Alias</h3>
             <p>In-game, type:</p>
@@ -189,7 +97,7 @@
 
             <h3>Variables</h3>
             <p>Variables are placeholders that get replaced when you execute a command:</p>
-            <ul style="margin-left: 20px; margin-bottom: 20px;">
+            <ul>
                 <li><code>${player}</code> - Your username</li>
                 <li><code>${x}</code>, <code>${y}</code>, <code>${z}</code> - Your coordinates</li>
                 <li><code>${custom_var}</code> - Custom variables you set</li>
@@ -238,60 +146,21 @@
             <p>Lists all defined aliases</p>
 
             <h2>Next Steps</h2>
-            <ul style="margin-left: 20px;">
+            <ul>
                 <li>Read <a href="aliases.html">Creating Aliases</a> for more detailed alias creation</li>
                 <li>Learn about <a href="syntax-system.html">Custom Syntax System</a></li>
                 <li>Check out <a href="examples.html">Examples</a> like TPA, Ban, and Warp systems</li>
                 <li>Browse <a href="faq.html">FAQ</a> for common questions</li>
             </ul>
 
-            <div class="info-box">
-                <h3>💡 Pro Tip</h3>
+            <div class="callout callout-tip">
+                <h3>Pro Tip</h3>
                 <p>Visit your server's <code>config/CommandMaker/</code> folder to directly edit JSON files for faster configuration without in-game commands.</p>
             </div>
         </main>
     </div>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-section">
-                <h4>Documentation</h4>
-                <ul>
-                    <li><a href="getting-started.html">Getting Started</a></li>
-                    <li><a href="commands.html">Commands</a></li>
-                    <li><a href="syntax-system.html">Custom Syntax</a></li>
-                    <li><a href="examples.html">Examples</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h4>Resources</h4>
-                <ul>
-                    <li><a href="troubleshooting.html">Troubleshooting</a></li>
-                    <li><a href="faq.html">FAQ</a></li>
-                    <li><a href="best-practices.html">Best Practices</a></li>
-                    <li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">GitHub</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h4>Community</h4>
-                <ul>
-                    <li><a href="https://modrinth.com/mod/command-maker">Modrinth</a></li>
-                    <li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">Report Issues</a></li>
-                    <li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">Contribute</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2025 - 2026 Command Maker Wiki. Built with ❤️ for Minecraft players.</p>
-        </div>
-    </footer>
-
+    <footer id="footer" class="footer" role="contentinfo"></footer>
+    <script src="components.js"></script>
     <script src="script.js"></script>
-<script>
-  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
-</script>
-<script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>
-

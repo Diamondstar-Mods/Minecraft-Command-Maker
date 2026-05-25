@@ -1,112 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Configuration - Command Maker Wiki</title>
+    <meta name="description" content="Complete guide to configuring Command Maker using JSON files, including aliases.json, variable substitution, and in-game commands.">
     <link rel="stylesheet" href="styles.css">
-    <link rel="icon" href="https://diamondstar-mods.github.io/Minecraft-Command-Maker/favicon.ico">
+    <link rel="icon" href="favicon.ico">
 </head>
 <body>
-    <!-- Navigation Bar -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-logo">
-                <a href="index.html"><img class="logo-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/favicon.ico" alt="Command Maker Icon"> Command Maker Wiki</a>
-            </div>
-            <div class="nav-menu">
-                <a href="index.html" class="nav-link">Home</a>
-                <a href="getting-started.html" class="nav-link">Getting Started</a>
-                <a href="commands.html" class="nav-link">Commands</a>
-                <a href="syntax-system.html" class="nav-link">Custom Syntax</a>
-                <div class="dropdown">
-                    <button class="dropdown-toggle">Systems ▼</button>
-                    <div class="dropdown-menu">
-                        <a href="economy-system.html">Economy System</a>
-                        <a href="kit-system.html">Kit System</a>
-                        <a href="home-system.html">Home System</a>
-                        <a href="shop-system.html">Shop System</a>
-                        <a href="jail-system.html">Jail System</a>
-                        <a href="mute-system.html">Mute System</a>
-                        <a href="vote-system.html">Vote System</a>
-                        <a href="rank-system.html">Rank System</a>
-                        <a href="achievement-system.html">Achievement System</a>
-                        <a href="event-system.html">Event System</a>
-                    </div>
-                </div>
-                <a href="faq.html" class="nav-link">FAQ</a>
-                <a href="forum.html" class="nav-link">Forum</a>
-                <a href="download.html" class="nav-link">Downloads</a>
-            </div>
-            <div class="nav-donate">
-                <a href="https://commandmakerwiki.lucasgeitgey.com/donate.html" class="nav-link" target="_blank">❤️ Donate</a>
-            </div>
-            <select id="theme-select" style="display: none;">
-                <option value="light">Light (default)</option>
-                <option value="dark">Dark (beta)</option>
-            </select>
-            <div class="nav-search">
-                <input type="text" id="searchBox" placeholder="Search documentation..." class="search-input">
-            </div>
-        </div>
-    </nav>
-
-    </nav>
-
-    <!-- Main Content -->
-    <div class="main-wrapper">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-widget">
-                <h3 class="widget-title">📚 Documentation</h3>
-                <ul class="widget-list">
-                    <li><a href="getting-started.html">Getting Started</a></li>
-                    <li><a href="installation.html">Installation</a></li>
-                    <li><a href="configuration.html">Configuration</a></li>
-                    <li><a href="aliases.html">Creating Aliases</a></li>
-                </ul>
-            </div>
-
-            <div class="sidebar-widget">
-                <h3 class="widget-title">⚡ Features</h3>
-                <ul class="widget-list">
-                    <li><a href="syntax-system.html">Custom Syntax System</a></li>
-                    <li><a href="variables.html">Variables & Substitution</a></li>
-                    <li><a href="gui-system.html">GUI System</a></li>
-                    <li><a href="chat-messages.html">Chat Messages</a></li>
-                </ul>
-            </div>
-
-            <div class="sidebar-widget">
-                <h3 class="widget-title">🎮 Examples</h3>
-                <ul class="widget-list">
-                    <li><a href="tpa-system.html">TPA System</a></li>
-                    <li><a href="ban-system.html">Ban System</a></li>
-                    <li><a href="warp-system.html">Warp System</a></li>
-                    <li><a href="custom-commands.html">Custom Commands</a></li>
-                </ul>
-            </div>
-
-            <div class="sidebar-widget">
-                <h3 class="widget-title">❓ Help</h3>
-                <ul class="widget-list">
-                    <li><a href="troubleshooting.html">Troubleshooting</a></li>
-                    <li><a href="faq.html">Frequently Asked Questions</a></li>
-                    <li><a href="best-practices.html">Best Practices</a></li>
-                </ul>
-            </div>
-        </aside>
-
-        <!-- Content Area -->
-        <main class="content">
-            <h1 id="docs-path" data-subpath="configuration.html"></h1>
-            <iframe style="border: none; font-style: italic;" id="last-commit-iframe" src="" width="400" height="100"></iframe>
-            <script>
-                document.getElementById('last-commit-iframe').src = 'last-commit.html?path=' + document.getElementById('docs-path').dataset.subpath;
-            </script>
+    <nav id="navbar" class="navbar" role="navigation" aria-label="Main navigation"></nav>
+    <div class="layout">
+        <aside id="sidebar" class="sidebar" role="complementary" aria-label="Side navigation"></aside>
+        <main class="content" role="main">
             <h1>Configuration</h1>
             <p>Learn how to configure Command Maker for your needs. All configuration is done through simple JSON files.</p>
-            <p>If you want a simpler way to set up commands <strong>in game</strong> then check the <a href=getting-started.html>Getting Started</a> page for more information on <strong>/cmd</strong></p>
+            <p>If you want a simpler way to set up commands <strong>in game</strong> then check the <a href="getting-started.html">Getting Started</a> page for more information on <strong>/cmd</strong></p>
 
             <section>
                 <h2>Configuration File Locations</h2>
@@ -116,7 +25,6 @@
                     <li><strong>Servers:</strong> <code>config/CommandMaker/</code></li>
                     <li><strong>Launchers:</strong> <code>instance-name/minecraft/config/CommandMaker/</code></li>
                 </ul>
-
                 <p>The folder is automatically created on first launch.</p>
             </section>
 
@@ -153,7 +61,6 @@
                 <h2>Reloading Configuration</h2>
                 <p>After editing your <code>aliases.json</code>, reload the configuration with:</p>
                 <pre><code>/cmd reload</code></pre>
-
                 <p>You should see a message confirming the aliases were loaded.</p>
             </section>
 
@@ -198,9 +105,7 @@
                     <li><code>${y}</code> - Player's Y coordinate</li>
                     <li><code>${z}</code> - Player's Z coordinate</li>
                 </ul>
-
                 <p>Example: <code>"home": "tp ${player} ${x} 64 ${z}"</code></p>
-
                 <p>Learn more: <a href="variables.html">Variables & Substitution</a></p>
             </section>
 
@@ -208,25 +113,23 @@
                 <h2>JSON Validation</h2>
                 <p>Your <code>aliases.json</code> must be valid JSON. Common mistakes:</p>
                 <ul>
-                    <li>❌ Missing commas between entries</li>
-                    <li>❌ Single quotes instead of double quotes</li>
-                    <li>❌ Trailing commas after the last entry</li>
-                    <li>❌ Unescaped special characters</li>
+                    <li>Missing commas between entries</li>
+                    <li>Single quotes instead of double quotes</li>
+                    <li>Trailing commas after the last entry</li>
+                    <li>Unescaped special characters</li>
                 </ul>
-
                 <p>Use a <a href="https://jsonlint.com/" target="_blank" rel="noopener">JSON validator</a> to check your file.</p>
             </section>
 
             <section>
                 <h2>Troubleshooting Configuration</h2>
-                <p><strong>❌ Aliases not loading?</strong></p>
+                <p><strong>Aliases not loading?</strong></p>
                 <ul>
                     <li>Check that <code>aliases.json</code> is valid JSON</li>
                     <li>Ensure the file is in the correct location</li>
                     <li>Use <code>/cmd reload</code> after making changes</li>
                     <li>Check the console for error messages</li>
                 </ul>
-
                 <p>More help: <a href="troubleshooting.html">Troubleshooting Guide</a></p>
             </section>
 
@@ -241,47 +144,8 @@
             </section>
         </main>
     </div>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-section">
-                <h4>Documentation</h4>
-                <ul>
-                    <li><a href="getting-started.html">Getting Started</a></li>
-                    <li><a href="commands.html">Commands</a></li>
-                    <li><a href="syntax-system.html">Custom Syntax</a></li>
-                    <li><a href="examples.html">Examples</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h4>Resources</h4>
-                <ul>
-                    <li><a href="troubleshooting.html">Troubleshooting</a></li>
-                    <li><a href="faq.html">FAQ</a></li>
-                    <li><a href="best-practices.html">Best Practices</a></li>
-                    <li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">GitHub</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h4>Community</h4>
-                <ul>
-                    <li><a href="https://modrinth.com/mod/command-maker">Modrinth</a></li>
-                    <li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">Report Issues</a></li>
-                    <li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">Contribute</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2025 - 2026 Command Maker Wiki. Built with ❤️ for Minecraft players.</p>
-        </div>
-    </footer>
-
+    <footer id="footer" class="footer" role="contentinfo"></footer>
+    <script src="components.js"></script>
     <script src="script.js"></script>
-<script>
-  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
-</script>
-<script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>
-

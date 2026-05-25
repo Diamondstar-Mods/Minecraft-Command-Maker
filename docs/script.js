@@ -1,363 +1,303 @@
-// Search functionality
-document.addEventListener("DOMContentLoaded", function () {
-  // Theme switching
-  const themeSelect = document.getElementById("theme-select");
-  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-  const savedTheme = localStorage.getItem("theme");
+/**
+ * Command Maker Wiki — Interactive Features
+ * Theme toggle, mobile menu, search, ToC generation, code copy, dropdowns.
+ * Depends on components.js (CM namespace) being loaded first.
+ */
+(function () {
+  "use strict";
 
-  // Determine initial theme
-  let currentTheme = savedTheme || (prefersDark ? "dark" : "light");
+  // ============ Theme ============
+  const Theme = {
+    init() {
+      const saved = localStorage.getItem("cm-theme");
+      const prefers = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      this.set(saved || (prefers ? "dark" : "light"));
 
-  // Apply theme
-  function applyTheme(theme) {
-    document.body.className = theme + "-theme";
-    if (themeSelect) {
-      themeSelect.value = theme;
-    }
-    localStorage.setItem("theme", theme);
-  }
-
-  applyTheme(currentTheme);
-
-  // Show dropdown only if user prefers dark mode
-  if (prefersDark && !savedTheme) {
-    if (themeSelect) {
-      themeSelect.style.display = "block";
-    }
-  } else if (savedTheme) {
-    if (themeSelect) {
-      themeSelect.style.display = "block";
-    }
-  }
-
-  // Handle theme change
-  if (themeSelect) {
-    themeSelect.addEventListener("change", function () {
-      applyTheme(this.value);
-    });
-  }
-
-  // Dropdown menu functionality
-  const dropdowns = document.querySelectorAll(".dropdown");
-  dropdowns.forEach((dropdown) => {
-    const toggle = dropdown.querySelector(".dropdown-toggle");
-    const menu = dropdown.querySelector(".dropdown-menu");
-
-    toggle.addEventListener("click", function (e) {
-      e.preventDefault();
-      menu.classList.toggle("show");
-    });
-
-    // Close dropdown when clicking outside
-    document.addEventListener("click", function (e) {
-      if (!dropdown.contains(e.target)) {
-        menu.classList.remove("show");
-      }
-    });
-  });
-
-  const searchBox = document.getElementById("searchBox");
-
-  if (searchBox) {
-    // Reduce interference from browser extensions/OS autofill/spellcheck by disabling these features
-    try {
-      searchBox.setAttribute("autocomplete", "off");
-      searchBox.setAttribute("autocorrect", "off");
-      searchBox.setAttribute("autocapitalize", "off");
-      searchBox.setAttribute("spellcheck", "false");
-      searchBox.setAttribute("role", "search");
-    } catch (e) {
-      // ignore attribute setting failures in older browsers
-      console.debug("Could not set search input attributes:", e);
-    }
-    // Search index: visible label => filename
-    const pages = {
-      Home: "index.html",
-      "Getting Started": "getting-started.html",
-      Installation: "installation.html",
-      Configuration: "configuration.html",
-      "Creating Aliases": "aliases.html",
-      "Custom Syntax": "syntax-system.html",
-      Functions: "functions.html",
-      "Variables & Substitution": "variables.html",
-      "GUI System": "gui-system.html",
-      "Chat Messages": "chat-messages.html",
-      "TPA System": "tpa-system.html",
-      "Ban System": "ban-system.html",
-      "Warp System": "warp-system.html",
-      Commands: "commands.html",
-      Examples: "examples.html",
-      "Economy System": "economy-system.html",
-      "Kit System": "kit-system.html",
-      "Home System": "home-system.html",
-      "Shop System": "shop-system.html",
-      "Jail System": "jail-system.html",
-      "Mute System": "mute-system.html",
-      "Vote System": "vote-system.html",
-      "Rank System": "rank-system.html",
-      "Achievement System": "achievement-system.html",
-      "Event System": "event-system.html",
-      FAQ: "faq.html",
-      Troubleshooting: "troubleshooting.html",
-      "Best Practices": "best-practices.html",
-      "Custom Commands": "custom-commands.html",
-      Download: "download.html",
-      Forum: "forum.html",
-      Donate: "donate.html",
-      License: "license.html",
-      "Last Commit": "last-commit.html",
-      Template: "template.html",
-      "Vercel Analytics": "vercel-web-analytics.html",
-      "Modrinth Redirect": "redirects/modrinth.html",
-      "Telemetry Redirect": "redirects/telementry.html",
-    };
-
-    // Create results container
-    const results = document.createElement("div");
-    results.id = "searchResults";
-    results.className = "search-results";
-    results.style.display = "none";
-
-    // Insert after the search input
-    searchBox.parentNode.style.position = "relative";
-    searchBox.parentNode.appendChild(results);
-
-    function renderResults(matches) {
-      results.innerHTML = "";
-      if (!matches || matches.length === 0) {
-        results.style.display = "none";
-        return;
+      const btn = document.querySelector(".theme-toggle");
+      if (btn) {
+        btn.addEventListener("click", () => {
+          const next = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+          this.set(next);
+        });
+        this.updateIcon(btn);
       }
 
-      matches.forEach((match) => {
-        const item = document.createElement("div");
-        item.className = "search-result-item";
-        item.textContent = match.label;
-        item.onclick = () => {
-          window.location.href = match.url;
-        };
-        results.appendChild(item);
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
+        if (!localStorage.getItem("cm-theme")) this.set(e.matches ? "dark" : "light");
       });
-      results.style.display = "block";
-    }
+    },
 
-    function findMatches(query) {
-      if (!query) return [];
-      const q = query.toLowerCase();
-      const matches = [];
-      for (const [label, file] of Object.entries(pages)) {
-        const labelLower = label.toLowerCase();
-        const fileLower = file.toLowerCase();
-        if (labelLower.includes(q) || fileLower.includes(q)) {
-          matches.push({ label, url: file });
-        } else {
-          // also allow splitting words
-          const parts = labelLower.split(/\s+/);
-          if (parts.some((p) => p.startsWith(q)))
-            matches.push({ label, url: file });
-        }
+    set(theme) {
+      document.documentElement.setAttribute("data-theme", theme);
+      localStorage.setItem("cm-theme", theme);
+      const btn = document.querySelector(".theme-toggle");
+      if (btn) this.updateIcon(btn);
+    },
+
+    updateIcon(btn) {
+      const theme = document.documentElement.getAttribute("data-theme");
+      btn.textContent = theme === "dark" ? "☀️" : "🌙";
+    }
+  };
+
+  // ============ Mobile Menu ============
+  const Mobile = {
+    init() {
+      const hamburger = document.querySelector(".hamburger");
+      const sidebar = document.getElementById("sidebar");
+      const navMenu = document.querySelector(".nav-menu");
+
+      if (!hamburger || !sidebar) return;
+
+      let overlay = document.querySelector(".sidebar-overlay");
+      if (!overlay) {
+        overlay = document.createElement("div");
+        overlay.className = "sidebar-overlay";
+        document.body.appendChild(overlay);
       }
-      return matches.slice(0, 8);
-    }
 
-    // Show suggestions on input
-    try {
-      searchBox.addEventListener("input", function (e) {
-        const q = e.target.value.trim();
-        if (q.length === 0) {
-          renderResults([]);
-          return;
-        }
-        const matches = findMatches(q);
-        renderResults(matches);
+      function close() {
+        hamburger.classList.remove("open");
+        hamburger.setAttribute("aria-expanded", "false");
+        sidebar.classList.remove("open");
+        overlay.classList.remove("show");
+        if (navMenu) navMenu.style.display = "";
+      }
+
+      function open() {
+        hamburger.classList.add("open");
+        hamburger.setAttribute("aria-expanded", "true");
+        sidebar.classList.add("open");
+        overlay.classList.add("show");
+        if (navMenu) navMenu.style.display = "flex";
+      }
+
+      hamburger.addEventListener("click", () => {
+        sidebar.classList.contains("open") ? close() : open();
       });
-    } catch (err) {
-      console.warn("Failed to attach input handler for searchBox:", err);
+
+      overlay.addEventListener("click", close);
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && sidebar.classList.contains("open")) close();
+      });
     }
+  };
 
-    // Handle keyboard navigation and enter
-    try {
-      searchBox.addEventListener("keydown", function (e) {
-        const visible = results.style.display === "block";
-        const items = Array.from(
-          results.querySelectorAll(".search-result-item"),
-        );
-        const active = results.querySelector(".active");
+  // ============ Search ============
+  const Search = {
+    init() {
+      const box = document.getElementById("searchBox");
+      if (!box) return;
 
-        if (e.key === "ArrowDown" && visible) {
-          e.preventDefault();
-          if (!active && items.length) {
-            items[0].classList.add("active");
-          } else if (active) {
-            const idx = items.indexOf(active);
-            if (idx < items.length - 1) {
-              active.classList.remove("active");
-              items[idx + 1].classList.add("active");
-            }
+      box.setAttribute("autocomplete", "off");
+      box.setAttribute("spellcheck", "false");
+
+      const results = document.createElement("div");
+      results.className = "search-results";
+      results.id = "searchResults";
+      box.parentNode.style.position = "relative";
+      box.parentNode.appendChild(results);
+
+      let activeIdx = -1;
+
+      function render(matches) {
+        results.innerHTML = "";
+        activeIdx = -1;
+        if (!matches || !matches.length) { results.style.display = "none"; return; }
+        matches.forEach((m, i) => {
+          const el = document.createElement("div");
+          el.className = "search-result-item";
+          el.textContent = m.label;
+          el.addEventListener("click", () => { window.location.href = m.url; });
+          el.addEventListener("mouseenter", () => {
+            results.querySelectorAll(".active").forEach(a => a.classList.remove("active"));
+            el.classList.add("active");
+            activeIdx = i;
+          });
+          results.appendChild(el);
+        });
+        results.style.display = "block";
+      }
+
+      function find(query) {
+        if (!query) return [];
+        const q = query.toLowerCase();
+        const out = [];
+        for (const [label, file] of Object.entries(CM.pages || {})) {
+          const ll = label.toLowerCase();
+          const fl = file.toLowerCase();
+          if (ll.includes(q) || fl.includes(q) || ll.split(/\s+/).some(p => p.startsWith(q))) {
+            out.push({ label, url: file });
           }
-        } else if (e.key === "ArrowUp" && visible) {
+        }
+        return out.slice(0, 8);
+      }
+
+      box.addEventListener("input", () => render(find(box.value.trim())));
+
+      box.addEventListener("keydown", (e) => {
+        const items = results.querySelectorAll(".search-result-item");
+        if (e.key === "ArrowDown") {
           e.preventDefault();
-          if (active) {
-            const idx = items.indexOf(active);
-            active.classList.remove("active");
-            if (idx > 0) items[idx - 1].classList.add("active");
-          }
+          if (activeIdx < items.length - 1) activeIdx++;
+        } else if (e.key === "ArrowUp") {
+          e.preventDefault();
+          if (activeIdx > 0) activeIdx--;
         } else if (e.key === "Enter") {
-          const q = searchBox.value.trim();
-          const matches = findMatches(q);
-          if (visible && active) {
-            active.click();
-          } else if (matches.length === 1) {
-            window.location.href = matches[0].url;
+          const matches = find(box.value.trim());
+          if (activeIdx >= 0 && items[activeIdx]) {
+            items[activeIdx].click();
           } else if (matches.length > 0) {
-            // go to the first match
             window.location.href = matches[0].url;
           }
         } else if (e.key === "Escape") {
-          renderResults([]);
+          results.style.display = "none";
+          activeIdx = -1;
+        }
+        items.forEach((el, i) => el.classList.toggle("active", i === activeIdx));
+      });
+
+      document.addEventListener("click", (ev) => {
+        if (!box.contains(ev.target) && !results.contains(ev.target)) {
+          results.style.display = "none";
         }
       });
-    } catch (err) {
-      console.warn("Failed to attach keydown handler for searchBox:", err);
-    }
 
-    // Close when clicking outside
-    try {
-      document.addEventListener("click", function (ev) {
-        try {
-          if (!searchBox.contains(ev.target) && !results.contains(ev.target)) {
-            renderResults([]);
+      // Keyboard shortcut: / to focus search
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "/" && document.activeElement !== box && document.activeElement.tagName !== "INPUT" && document.activeElement.tagName !== "TEXTAREA") {
+          e.preventDefault();
+          box.focus();
+        }
+      });
+    }
+  };
+
+  // ============ Dropdowns ============
+  const Dropdowns = {
+    init() {
+      document.querySelectorAll(".dropdown").forEach(dd => {
+        const toggle = dd.querySelector(".dropdown-toggle");
+        const menu = dd.querySelector(".dropdown-menu");
+        if (!toggle || !menu) return;
+
+        toggle.addEventListener("click", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          const wasOpen = menu.classList.contains("show");
+          document.querySelectorAll(".dropdown-menu.show").forEach(m => m.classList.remove("show"));
+          if (!wasOpen) menu.classList.add("show");
+        });
+
+        dd.addEventListener("mouseenter", () => {
+          // Don't auto-open on touch devices
+          if (window.matchMedia("(hover: hover)").matches) {
+            document.querySelectorAll(".dropdown-menu.show").forEach(m => m.classList.remove("show"));
+            menu.classList.add("show");
           }
-        } catch (inner) {
-          // defensive: ignore errors coming from third-party content scripts
+        });
+        dd.addEventListener("mouseleave", () => menu.classList.remove("show"));
+      });
+
+      document.addEventListener("click", () => {
+        document.querySelectorAll(".dropdown-menu.show").forEach(m => m.classList.remove("show"));
+      });
+    }
+  };
+
+  // ============ Table of Contents ============
+  const ToC = {
+    init() {
+      const container = document.getElementById("table-of-contents");
+      const content = document.querySelector(".content");
+      if (!container || !content) return;
+
+      const headings = content.querySelectorAll("h2, h3");
+      if (headings.length < 2) { container.style.display = "none"; return; }
+
+      const ul = document.createElement("ul");
+      headings.forEach((h, i) => {
+        if (!h.id) h.id = "heading-" + i;
+        const li = document.createElement("li");
+        li.className = h.tagName === "H3" ? "toc-h3" : "";
+        const a = document.createElement("a");
+        a.href = "#" + h.id;
+        a.textContent = h.textContent;
+        li.appendChild(a);
+        ul.appendChild(li);
+      });
+
+      container.innerHTML = "";
+      const title = document.createElement("div");
+      title.className = "toc-title";
+      title.textContent = "On this page";
+      container.appendChild(title);
+      container.appendChild(ul);
+
+      // Scroll spy
+      const links = ul.querySelectorAll("a");
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            links.forEach(a => a.classList.remove("active"));
+            const link = ul.querySelector(`a[href="#${entry.target.id}"]`);
+            if (link) link.classList.add("active");
+          }
+        });
+      }, { rootMargin: "-80px 0px -70% 0px" });
+      headings.forEach(h => observer.observe(h));
+    }
+  };
+
+  // ============ Code Copy ============
+  const CodeCopy = {
+    init() {
+      document.querySelectorAll("pre").forEach(block => {
+        if (block.querySelector(".copy-btn")) return;
+        const btn = document.createElement("button");
+        btn.className = "copy-btn";
+        btn.textContent = "Copy";
+        btn.addEventListener("click", () => {
+          const code = block.querySelector("code");
+          const text = code ? code.textContent : block.textContent;
+          navigator.clipboard.writeText(text).then(() => {
+            btn.textContent = "Copied!";
+            setTimeout(() => { btn.textContent = "Copy"; }, 2000);
+          }).catch(() => {});
+        });
+        block.style.position = "relative";
+        block.appendChild(btn);
+      });
+    }
+  };
+
+  // ============ Smooth Scroll ============
+  const SmoothScroll = {
+    init() {
+      document.addEventListener("click", (e) => {
+        const a = e.target.closest('a[href^="#"]');
+        if (!a) return;
+        const target = document.querySelector(a.getAttribute("href"));
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: "smooth", block: "start" });
         }
       });
-    } catch (err) {
-      console.warn(
-        "Failed to attach global click handler for search results:",
-        err,
-      );
     }
-  }
+  };
 
-  // Set active navigation link based on current page
-  const currentPage = window.location.pathname.split("/").pop() || "index.html";
-  document.querySelectorAll(".nav-link").forEach((link) => {
-    const href = link.getAttribute("href");
-    if (href === currentPage) {
-      link.classList.add("active");
-    } else {
-      link.classList.remove("active");
-    }
+  // ============ Init ============
+  document.addEventListener("DOMContentLoaded", () => {
+    Theme.init();
+    Mobile.init();
+    Search.init();
+    Dropdowns.init();
+    CodeCopy.init();
+    SmoothScroll.init();
   });
-});
 
-// Smooth scrolling for anchor links
-document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-  anchor.addEventListener("click", function (e) {
-    e.preventDefault();
-    const target = document.querySelector(this.getAttribute("href"));
-    if (target) {
-      target.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    }
+  window.addEventListener("load", () => {
+    ToC.init();
   });
-});
-
-// Table of contents generation for long pages
-function generateTableOfContents() {
-  const headings = document.querySelectorAll("h2, h3");
-  const toc = document.getElementById("table-of-contents");
-
-  if (toc && headings.length > 0) {
-    const list = document.createElement("ul");
-
-    headings.forEach((heading, index) => {
-      const id = heading.id || `heading-${index}`;
-      heading.id = id;
-
-      const li = document.createElement("li");
-      const level = heading.tagName === "H2" ? 0 : 1;
-      li.style.marginLeft = `${level * 20}px`;
-
-      const a = document.createElement("a");
-      a.href = `#${id}`;
-      a.textContent = heading.textContent;
-
-      li.appendChild(a);
-      list.appendChild(li);
-    });
-
-    toc.appendChild(list);
-  }
-}
-
-// Syntax highlighting for code blocks
-function highlightCode() {
-  document.querySelectorAll("pre code").forEach((block) => {
-    // Simple highlighting - can be extended
-    let text = block.textContent;
-
-    // Highlight JSON
-    if (block.className.includes("json")) {
-      text = text.replace(/(".*?")\s*:/g, '<span class="json-key">$1</span>:');
-      text = text.replace(
-        /:\s*(".*?")/g,
-        ': <span class="json-string">$1</span>',
-      );
-    }
-
-    block.innerHTML = text;
-  });
-}
-
-// Copy to clipboard for code blocks
-function addCopyButtons() {
-  document.querySelectorAll("pre").forEach((block) => {
-    const button = document.createElement("button");
-    button.className = "copy-button";
-    button.textContent = "Copy";
-    button.onclick = function () {
-      const code = block.querySelector("code").textContent;
-      navigator.clipboard.writeText(code).then(() => {
-        button.textContent = "Copied!";
-        setTimeout(() => {
-          button.textContent = "Copy";
-        }, 2000);
-      });
-    };
-    block.appendChild(button);
-  });
-}
-
-// Initialize page
-window.addEventListener("load", function () {
-  generateTableOfContents();
-  highlightCode();
-  addCopyButtons();
-});
-
-// Inject an "Edit" button in the top-right that opens the GitHub edit page for the current file
-window.addEventListener("load", function () {
-  try {
-    // Determine the filename (fallback to index.html)
-    const filename = window.location.pathname.split("/").pop() || "index.html";
-    const branch = "3.x-fabric-1.22";
-    const editUrl = `https://github.com/Diamondstar-Mods/Minecraft-Command-Maker/edit/${branch}/docs/${filename}`;
-
-    const link = document.createElement("a");
-    link.className = "edit-button";
-    link.href = editUrl;
-    link.target = "_blank";
-    link.rel = "noopener noreferrer";
-    link.textContent = "Edit";
-
-    // Append to body so it floats over page content in the top-right
-    document.body.appendChild(link);
-  } catch (err) {
-    // Fail silently but log to console for debugging
-    console.error("Failed to inject edit button:", err);
-  }
-});
+})();

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Build Commands
 
-The Gradle wrapper scripts (`gradlew` / `gradlew.bat`) use JDK paths from `gradle.properties`. The project uses **Fabric Loom** (v1.11.8) as the Gradle plugin for Minecraft mod development.
+The Gradle wrapper scripts (`gradlew` / `gradlew.bat`) use Gradle 9.5.1 with JDK paths from `gradle.properties`. The project uses **Fabric Loom** (v1.16.2) as the Gradle plugin. Note: Loom versions below ~1.14 are incompatible with Gradle 9.x — server-1.22 overrides the root `loom_version` in its own `gradle.properties`.
 
 ### Active subprojects (registered in `settings.gradle`)
 
@@ -42,13 +42,9 @@ Output JARs land in `<subproject>/build/libs/`.
 ./gradlew :server-1.21:runClient  # Fabric server + client
 ```
 
-### Website (Next.js 14)
+### Website (Static html!)
 
-```bash
-npm run dev    # Dev server with hot reload (runs scripts/copyDocs.js first)
-npm run build  # Production build
-npm start      # Run production build
-```
+---
 
 ## Project Architecture
 
@@ -70,7 +66,7 @@ Each module contains a full copy of the Java source under `src/main/java/com/exa
 | `quilt-server/` | Quilt | 26.1 | 17 | Server |
 | `quilt-client/` | Quilt | 1.21.9 | 17 | Client |
 
-`server-1.21/` is the primary/current module. `server-1.22/` is for the next Minecraft version target.
+`server-1.21/` is the primary/current module. `server-1.22/` is for minecraft 26.1.
 
 The mod's mod ID is `nekkycommandmaker`. The main Fabric entry point is `CommandMaker` (implements `ModInitializer`), and the client entry point is `CommandMakerClient` (implements `ClientModInitializer`). Quilt modules re-use the same entry point class.
 
@@ -110,7 +106,12 @@ Located in `gui/` subpackage:
 
 ### Website
 
-Next.js 14 app serving a static documentation wiki. The catch-all page `pages/[[...slug]].js` serves HTML files from `docs/` (copied to `public/` during build via `scripts/copyDocs.js`). `docs/` contains ~40 hand-authored HTML pages. Deployed on Vercel.
+Pure static HTML docs in `docs/`. Key files:
+- `components.js` — Shared UI (nav, sidebar, footer injected via JS)
+- `styles.css` — Design system with light/dark themes
+- `script.js` — Theme toggle, mobile menu, search, ToC, code copy
+
+Each page contains only article content — chrome is injected by `components.js`. No build step; works on any static host.
 
 ## Branch conventions (from CONTRIBUTING.md)
 
