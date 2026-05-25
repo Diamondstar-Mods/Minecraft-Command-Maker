@@ -5,7 +5,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.ParseResults;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
@@ -31,7 +31,7 @@ public class CommandMaker implements ModInitializer {
         SyntaxManager.loadSyntaxDefinitions();
         PermissionManager.initialize();
         ModScreens.register();
-        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
+        CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> {
             registerCmdCommand(dispatcher);
             registerAddCommand(dispatcher);
             registerAliases(dispatcher);
@@ -58,12 +58,12 @@ public class CommandMaker implements ModInitializer {
                                 String alias = StringArgumentType.getString(ctx, "alias");
                                 String command = StringArgumentType.getString(ctx, "command");
                                 if (AliasManager.hasAlias(alias)) {
-                                    ctx.getSource().sendFeedback(() -> Text.literal("§cAlias '§f" + alias + "§c' already exists. Use /cmd del " + alias + " first."), false);
+                                    ctx.getSource().sendFeedback(Text.literal("§cAlias '§f" + alias + "§c' already exists. Use /cmd del " + alias + " first."), false);
                                     return 0;
                                 }
                                 AliasManager.addAlias(alias, command);
                                 registerAlias(dispatcher, alias, command);
-                                ctx.getSource().sendFeedback(() -> Text.literal("§6Added alias: §f/" + alias + " §7-> §f" + command), false);
+                                ctx.getSource().sendFeedback(Text.literal("§6Added alias: §f/" + alias + " §7-> §f" + command), false);
                                 return 1;
                             })
                         )
@@ -77,9 +77,9 @@ public class CommandMaker implements ModInitializer {
                             String alias = StringArgumentType.getString(ctx, "alias");
                             if (AliasManager.removeAlias(alias)) {
                                 dispatcher.getRoot().getChildren().removeIf(node -> node.getName().equals(alias));
-                                ctx.getSource().sendFeedback(() -> Text.literal("§6[" + alias + "] was deleted"), false);
+                                ctx.getSource().sendFeedback(Text.literal("§6[" + alias + "] was deleted"), false);
                             } else {
-                                ctx.getSource().sendFeedback(() -> Text.literal("§cAlias '§f" + alias + "§c' not found."), false);
+                                ctx.getSource().sendFeedback(Text.literal("§cAlias '§f" + alias + "§c' not found."), false);
                             }
                             return 1;
                         })
@@ -95,7 +95,7 @@ public class CommandMaker implements ModInitializer {
                             dispatcher.getRoot().getChildren().removeIf(node -> node.getName().equals(alias));
                         }
                         registerAliases(dispatcher);
-                        ctx.getSource().sendFeedback(() -> Text.literal("§6Reloaded aliases, functions, and syntax definitions."), false);
+                        ctx.getSource().sendFeedback(Text.literal("§6Reloaded aliases, functions, and syntax definitions."), false);
                         return 1;
                     })
                 )
@@ -112,13 +112,13 @@ public class CommandMaker implements ModInitializer {
                 .then(CommandManager.literal("list")
                     .executes(ctx -> {
                         ServerCommandSource source = ctx.getSource();
-                        source.sendFeedback(() -> Text.literal("Aliases:"), false);
+                        source.sendFeedback(Text.literal("Aliases:"), false);
                         for (Map.Entry<String, String> entry : AliasManager.getAliases().entrySet()) {
                             source.sendFeedback(() -> Text.literal("  /" + entry.getKey() + " -> " + entry.getValue()), false);
                         }
-                        source.sendFeedback(() -> Text.literal("Functions:"), false);
+                        source.sendFeedback(Text.literal("Functions:"), false);
                         for (String name : FunctionManager.listLocalFunctions()) {
-                            source.sendFeedback(() -> Text.literal("  " + name), false);
+                            source.sendFeedback(Text.literal("  " + name), false);
                         }
                         return 1;
                     })
@@ -133,7 +133,7 @@ public class CommandMaker implements ModInitializer {
                                 Text.literal("Command Maker - Functions")
                             ));
                         } else {
-                            ctx.getSource().sendFeedback(() -> Text.literal("§cThis command can only be used by a player"), false);
+                            ctx.getSource().sendFeedback(Text.literal("§cThis command can only be used by a player"), false);
                         }
                         return 1;
                     })
@@ -148,7 +148,7 @@ public class CommandMaker implements ModInitializer {
                                 Text.literal("Command Maker - Functions")
                             ));
                         } else {
-                            ctx.getSource().sendFeedback(() -> Text.literal("§cThis command can only be used by a player"), false);
+                            ctx.getSource().sendFeedback(Text.literal("§cThis command can only be used by a player"), false);
                         }
                         return 1;
                     })
@@ -160,19 +160,19 @@ public class CommandMaker implements ModInitializer {
                             .executes(ctx -> {
                                 String name = StringArgumentType.getString(ctx, "name");
                                 if (name.contains("..") || name.contains("/") || name.contains("\\")) {
-                                    ctx.getSource().sendFeedback(() -> Text.literal("§c✖ Invalid function name — don't use §f.. / \\ §cin names"), false);
+                                    ctx.getSource().sendFeedback(Text.literal("§c✖ Invalid function name — don't use §f.. / \\ §cin names"), false);
                                     return 0;
                                 }
                                 try {
                                     Path file = AliasManager.getFunctionsPath().resolve(name + ".mcfunction");
                                     if (Files.exists(file)) {
-                                        ctx.getSource().sendFeedback(() -> Text.literal("§c✖ Function §f" + name + "§c already exists"), false);
+                                        ctx.getSource().sendFeedback(Text.literal("§c✖ Function §f" + name + "§c already exists"), false);
                                         return 0;
                                     }
                                     Files.createDirectories(file.getParent());
                                     String content = "# " + name + "\n# Created with Command Maker\n\n# Add your Minecraft commands below\n# Lines starting with # are comments\n";
                                     Files.writeString(file, content);
-                                    ctx.getSource().sendFeedback(() -> Text.literal("§a✔ Created §f" + name + " §7| Edit: config/CommandMaker/Functions/" + name + ".mcfunction"), false);
+                                    ctx.getSource().sendFeedback(Text.literal("§a✔ Created §f" + name + " §7| Edit: config/CommandMaker/Functions/" + name + ".mcfunction"), false);
                                     return 1;
                                 } catch (Exception e) {
                                     ctx.getSource().sendFeedback(() -> Text.literal("§c✖ Error: §7" + e.getMessage()), false);
@@ -194,10 +194,10 @@ public class CommandMaker implements ModInitializer {
                                 try {
                                     Path file = AliasManager.getFunctionsPath().resolve(name + ".mcfunction");
                                     if (Files.deleteIfExists(file)) {
-                                        ctx.getSource().sendFeedback(() -> Text.literal("§c🗑 Deleted §f" + name), false);
+                                        ctx.getSource().sendFeedback(Text.literal("§c🗑 Deleted §f" + name), false);
                                         return 1;
                                     } else {
-                                        ctx.getSource().sendFeedback(() -> Text.literal("§c✖ Function §f" + name + "§c not found"), false);
+                                        ctx.getSource().sendFeedback(Text.literal("§c✖ Function §f" + name + "§c not found"), false);
                                         return 0;
                                     }
                                 } catch (Exception e) {
@@ -214,10 +214,10 @@ public class CommandMaker implements ModInitializer {
                         ServerCommandSource source = ctx.getSource();
                         Map<String, CommandSyntax> syntaxes = SyntaxManager.getAllSyntaxes();
                         if (syntaxes.isEmpty()) {
-                            source.sendFeedback(() -> Text.literal("§cNo custom syntaxes defined."), false);
+                            source.sendFeedback(Text.literal("§cNo custom syntaxes defined."), false);
                             return 0;
                         }
-                        source.sendFeedback(() -> Text.literal("§6Available Custom Syntaxes:"), false);
+                        source.sendFeedback(Text.literal("§6Available Custom Syntaxes:"), false);
                         for (String name : syntaxes.keySet()) {
                             CommandSyntax syntax = syntaxes.get(name);
                             String desc = syntax.getDescription().isEmpty() ? "" : " - " + syntax.getDescription();
@@ -242,12 +242,12 @@ public class CommandMaker implements ModInitializer {
                 .then(CommandManager.literal("donate")
                     .executes(ctx -> {
                         ServerCommandSource source = ctx.getSource();
-                        source.sendFeedback(() -> Text.literal("§6§l❤️ Support us on Patreon! ❤️"), false);
+                        source.sendFeedback(Text.literal("§6§l❤️ Support us on Patreon! ❤️"), false);
                         String tellrawCmd = "tellraw " + source.getName() + " {\"text\":\"https://commandmakerwiki.lucasgeitgey.com/donate.html\",\"color\":\"blue\",\"underlined\":true,\"clickEvent\":{\"action\":\"open_url\",\"value\":\"https://commandmakerwiki.lucasgeitgey.com/donate.html\"}}";
                         var cmdDispatcher = source.getServer().getCommandManager().getDispatcher();
                         var parsed = cmdDispatcher.parse(tellrawCmd, source);
                         cmdDispatcher.execute(parsed);
-                        source.sendFeedback(() -> Text.literal("§7Click the link above to open in your browser!"), false);
+                        source.sendFeedback(Text.literal("§7Click the link above to open in your browser!"), false);
                         return 1;
                     })
                 )
@@ -255,12 +255,12 @@ public class CommandMaker implements ModInitializer {
                 .then(CommandManager.literal("wiki")
                     .executes(ctx -> {
                         ServerCommandSource source = ctx.getSource();
-                        source.sendFeedback(() -> Text.literal("§6§l📚 Command Maker Wiki 📚"), false);
+                        source.sendFeedback(Text.literal("§6§l📚 Command Maker Wiki 📚"), false);
                         String tellrawCmd = "tellraw " + source.getName() + " {\"text\":\"https://commandmakerwiki.lucasgeitgey.com\",\"color\":\"blue\",\"underlined\":true,\"clickEvent\":{\"action\":\"open_url\",\"value\":\"https://commandmakerwiki.lucasgeitgey.com\"}}";
                         var cmdDispatcher = source.getServer().getCommandManager().getDispatcher();
                         var parsed = cmdDispatcher.parse(tellrawCmd, source);
                         cmdDispatcher.execute(parsed);
-                        source.sendFeedback(() -> Text.literal("§7Click the link above to open the wiki in your browser!"), false);
+                        source.sendFeedback(Text.literal("§7Click the link above to open the wiki in your browser!"), false);
                         return 1;
                     })
                 )
@@ -308,14 +308,14 @@ public class CommandMaker implements ModInitializer {
                         .then(CommandManager.argument("command", StringArgumentType.greedyString())
                             .executes(ctx -> {
                                 if (!PermissionManager.canManageAliases(ctx.getSource())) {
-                                    ctx.getSource().sendFeedback(() -> Text.literal("You don't have permission to add aliases."), false);
+                                    ctx.getSource().sendFeedback(Text.literal("You don't have permission to add aliases."), false);
                                     return 0;
                                 }
                                 String alias = StringArgumentType.getString(ctx, "alias");
                                 String command = StringArgumentType.getString(ctx, "command");
                                 AliasManager.addAlias(alias, command);
                                 registerAlias(dispatcher, alias, command);
-                                ctx.getSource().sendFeedback(() -> Text.literal("Alias /" + alias + " -> " + command + " added."), false);
+                                ctx.getSource().sendFeedback(Text.literal("Alias /" + alias + " -> " + command + " added."), false);
                                 return 1;
                             })
                         )
@@ -325,15 +325,15 @@ public class CommandMaker implements ModInitializer {
                     .then(CommandManager.argument("alias", StringArgumentType.word())
                         .executes(ctx -> {
                             if (!PermissionManager.canManageAliases(ctx.getSource())) {
-                                ctx.getSource().sendFeedback(() -> Text.literal("You don't have permission to delete aliases."), false);
+                                ctx.getSource().sendFeedback(Text.literal("You don't have permission to delete aliases."), false);
                                 return 0;
                             }
                             String alias = StringArgumentType.getString(ctx, "alias");
                             if (AliasManager.removeAlias(alias)) {
                                 dispatcher.getRoot().getChildren().removeIf(node -> node.getName().equals(alias));
-                                ctx.getSource().sendFeedback(() -> Text.literal("Alias /" + alias + " removed."), false);
+                                ctx.getSource().sendFeedback(Text.literal("Alias /" + alias + " removed."), false);
                             } else {
-                                ctx.getSource().sendFeedback(() -> Text.literal("Alias /" + alias + " not found."), false);
+                                ctx.getSource().sendFeedback(Text.literal("Alias /" + alias + " not found."), false);
                             }
                             return 1;
                         })
@@ -346,7 +346,7 @@ public class CommandMaker implements ModInitializer {
                             dispatcher.getRoot().getChildren().removeIf(node -> node.getName().equals(alias));
                         }
                         registerAliases(dispatcher);
-                        ctx.getSource().sendFeedback(() -> Text.literal("Aliases reloaded."), false);
+                        ctx.getSource().sendFeedback(Text.literal("Aliases reloaded."), false);
                         return 1;
                     })
                 )
@@ -385,7 +385,7 @@ public class CommandMaker implements ModInitializer {
                 .executes(ctx -> {
                     ServerCommandSource source = ctx.getSource();
                     if (!PermissionManager.canUseAlias(source, alias)) {
-                        source.sendFeedback(() -> Text.literal("You don't have permission to use this alias."), false);
+                        source.sendFeedback(Text.literal("You don't have permission to use this alias."), false);
                         return 0;
                     }
                     if (target.startsWith("function:")) {
@@ -400,7 +400,7 @@ public class CommandMaker implements ModInitializer {
                     .executes(ctx -> {
                         ServerCommandSource source = ctx.getSource();
                         if (!PermissionManager.canUseAlias(source, alias)) {
-                            source.sendFeedback(() -> Text.literal("You don't have permission to use this alias."), false);
+                            source.sendFeedback(Text.literal("You don't have permission to use this alias."), false);
                             return 0;
                         }
                         if (target.startsWith("function:")) {
@@ -434,18 +434,18 @@ public class CommandMaker implements ModInitializer {
                     ServerCommandSource source = ctx.getSource();
                     Map<String, String> snapshot = AliasManager.getAliases();
                     if (snapshot.isEmpty()) {
-                        source.sendFeedback(() -> Text.literal("§cNo aliases to delete."), false);
+                        source.sendFeedback(Text.literal("§cNo aliases to delete."), false);
                         return 0;
                     }
-                    source.sendFeedback(() -> Text.literal("§6Delete Aliases Menu:"), false);
+                    source.sendFeedback(Text.literal("§6Delete Aliases Menu:"), false);
                     final int[] index = {1};
                     for (String alias : snapshot.keySet()) {
                         String cmd = snapshot.get(alias);
                         int idx = index[0];
-                        source.sendFeedback(() -> Text.literal("  §f[" + idx + "] §6/" + alias + " §7-> §f" + cmd), false);
+                        source.sendFeedback(Text.literal("  §f[" + idx + "] §6/" + alias + " §7-> §f" + cmd), false);
                         index[0]++;
                     }
-                    source.sendFeedback(() -> Text.literal("§7Use: §f/cmd del <alias>§7 to delete"), false);
+                    source.sendFeedback(Text.literal("§7Use: §f/cmd del <alias>§7 to delete"), false);
                     return 1;
                 })
                 .then(CommandManager.argument("alias", StringArgumentType.word())
@@ -454,9 +454,9 @@ public class CommandMaker implements ModInitializer {
                         ServerCommandSource source = ctx.getSource();
                         if (AliasManager.removeAlias(alias)) {
                             dispatcher.getRoot().getChildren().removeIf(node -> node.getName().equals(alias));
-                            source.sendFeedback(() -> Text.literal("§6[" + alias + "] was deleted"), false);
+                            source.sendFeedback(Text.literal("§6[" + alias + "] was deleted"), false);
                         } else {
-                            source.sendFeedback(() -> Text.literal("§cAlias '§f" + alias + "§c' not found."), false);
+                            source.sendFeedback(Text.literal("§cAlias '§f" + alias + "§c' not found."), false);
                         }
                         return 1;
                     })
@@ -473,10 +473,10 @@ public class CommandMaker implements ModInitializer {
                     ServerCommandSource source = ctx.getSource();
                     Map<String, CommandSyntax> syntaxes = SyntaxManager.getAllSyntaxes();
                     if (syntaxes.isEmpty()) {
-                        source.sendFeedback(() -> Text.literal("§cNo custom syntaxes defined."), false);
+                        source.sendFeedback(Text.literal("§cNo custom syntaxes defined."), false);
                         return 0;
                     }
-                    source.sendFeedback(() -> Text.literal("§6Available Custom Syntaxes:"), false);
+                    source.sendFeedback(Text.literal("§6Available Custom Syntaxes:"), false);
                     for (String name : syntaxes.keySet()) {
                         CommandSyntax syntax = syntaxes.get(name);
                         String desc = syntax.getDescription().isEmpty() ? "" : " - " + syntax.getDescription();
@@ -499,7 +499,7 @@ public class CommandMaker implements ModInitializer {
                             .executes(ctx -> {
                                 String playerName = StringArgumentType.getString(ctx, "player");
                                 ctx.getSource().getServer().getPlayerManager().getPlayer(playerName);
-                                ctx.getSource().sendFeedback(() -> Text.literal("§cNote: For full permission management, use LuckPerms or edit permissions.json directly"), false);
+                                ctx.getSource().sendFeedback(Text.literal("§cNote: For full permission management, use LuckPerms or edit permissions.json directly"), false);
                                 return 1;
                             })
                         )
@@ -509,7 +509,7 @@ public class CommandMaker implements ModInitializer {
                     .then(CommandManager.argument("player", StringArgumentType.word())
                         .then(CommandManager.argument("permission", StringArgumentType.greedyString())
                             .executes(ctx -> {
-                                ctx.getSource().sendFeedback(() -> Text.literal("§cNote: For full permission management, use LuckPerms or edit permissions.json directly"), false);
+                                ctx.getSource().sendFeedback(Text.literal("§cNote: For full permission management, use LuckPerms or edit permissions.json directly"), false);
                                 return 1;
                             })
                         )
@@ -519,7 +519,7 @@ public class CommandMaker implements ModInitializer {
                     .then(CommandManager.argument("player", StringArgumentType.word())
                         .then(CommandManager.argument("permission", StringArgumentType.greedyString())
                             .executes(ctx -> {
-                                ctx.getSource().sendFeedback(() -> Text.literal("§cNote: For full permission checking, use LuckPerms"), false);
+                                ctx.getSource().sendFeedback(Text.literal("§cNote: For full permission checking, use LuckPerms"), false);
                                 return 1;
                             })
                         )
@@ -528,7 +528,7 @@ public class CommandMaker implements ModInitializer {
                 .then(CommandManager.literal("reload")
                     .executes(ctx -> {
                         PermissionManager.initialize();
-                        ctx.getSource().sendFeedback(() -> Text.literal("§aPermission config reloaded!"), false);
+                        ctx.getSource().sendFeedback(Text.literal("§aPermission config reloaded!"), false);
                         return 1;
                     })
                 )

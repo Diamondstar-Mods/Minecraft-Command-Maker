@@ -1,6 +1,6 @@
 package com.example.gui;
 
-import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 import com.google.gson.*;
@@ -81,20 +81,20 @@ public class FunctionManagerScreen extends Screen {
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        this.renderBackground(context, mouseX, mouseY, delta);
+    public void render(MatrixStack context, int mouseX, int mouseY, float delta) {
+        this.renderBackground(matrices);
         super.render(context, mouseX, mouseY, delta);
 
         // Draw chest-like background (dark border + light interior)
-        context.fill(guiLeft - 2, guiTop - 2, guiLeft + TEXTURE_W + 2, guiTop + TEXTURE_H + 2, 0xFF000000);
-        context.fill(guiLeft, guiTop, guiLeft + TEXTURE_W, guiTop + TEXTURE_H, 0xFFC6C6C6);
+        fill(matrices, guiLeft - 2, guiTop - 2, guiLeft + TEXTURE_W + 2, guiTop + TEXTURE_H + 2, 0xFF000000);
+        fill(matrices, guiLeft, guiTop, guiLeft + TEXTURE_W, guiTop + TEXTURE_H, 0xFFC6C6C6);
 
         // Title bar
-        context.fill(guiLeft, guiTop, guiLeft + TEXTURE_W, guiTop + 16, 0xFF404040);
-        context.drawText(this.textRenderer, Text.literal("§6§lCommand Maker - Functions"), guiLeft + 8, guiTop + 4, 0xFFFFFF, false);
+        fill(matrices, guiLeft, guiTop, guiLeft + TEXTURE_W, guiTop + 16, 0xFF404040);
+        this.textRenderer.draw(matrices, Text.literal("§6§lCommand Maker - Functions"), guiLeft + 8, guiTop + 4, 0xFFFFFF, false);
 
         if (loading) {
-            context.drawText(this.textRenderer, Text.literal(statusMessage), guiLeft + 8, guiTop + 30, 0xFFFFFF, false);
+            this.textRenderer.draw(matrices, Text.literal(statusMessage), guiLeft + 8, guiTop + 30, 0xFFFFFF, false);
             return;
         }
 
@@ -113,9 +113,9 @@ public class FunctionManagerScreen extends Screen {
             int tabColor = active ? 0xFF3D3D3D : 0xFF5A5A5A;
             int textColor = active ? 0xFFFF55 : 0xAAAAAA;
 
-            context.fill(x, tabY, x + 50, tabY + 14, tabColor);
-            context.fill(x, tabY, x + 50, tabY + 1, active ? 0xFF55FF55 : 0xFF3D3D3D); // green underline for active
-            context.drawText(this.textRenderer, Text.literal(labels[i]), x + 4, tabY + 3, textColor, false);
+            fill(matrices, x, tabY, x + 50, tabY + 14, tabColor);
+            fill(matrices, x, tabY, x + 50, tabY + 1, active ? 0xFF55FF55 : 0xFF3D3D3D); // green underline for active
+            this.textRenderer.draw(matrices, Text.literal(labels[i]), x + 4, tabY + 3, textColor, false);
         }
     }
 
@@ -138,15 +138,14 @@ public class FunctionManagerScreen extends Screen {
                     drawSlot(context, x, y, slot, mouseX, mouseY);
                 } else {
                     // Empty slot
-                    context.fill(x, y, x + SLOT_SIZE, y + SLOT_SIZE, 0xFF8B8B8B);
-                    context.fill(x + 1, y + 1, x + SLOT_SIZE - 1, y + SLOT_SIZE - 1, 0xFF666666);
+                    fill(matrices, x, y, x + SLOT_SIZE, y + SLOT_SIZE, 0xFF8B8B8B);
+                    fill(matrices, x + 1, y + 1, x + SLOT_SIZE - 1, y + SLOT_SIZE - 1, 0xFF666666);
                 }
             }
         }
 
         int infoY = startY + slotAreaRows * SLOT_SIZE + 4;
-        context.drawText(this.textRenderer,
-            Text.literal("Page " + (currentPage + 1) + " - " + slots.size() + " items"),
+        this.textRenderer.draw(matrices, Text.literal("Page " + (currentPage + 1) + " - " + slots.size() + " items"),
             guiLeft + 8, infoY, 0x808080, false);
     }
 
@@ -183,8 +182,8 @@ public class FunctionManagerScreen extends Screen {
 
         // Slot background
         int bgColor = hovered ? 0xFFFFFFFF : 0xFF8B8B8B;
-        context.fill(x, y, x + SLOT_SIZE, y + SLOT_SIZE, 0xFF373737);
-        context.fill(x + 1, y + 1, x + SLOT_SIZE - 1, y + SLOT_SIZE - 1, bgColor);
+        fill(matrices, x, y, x + SLOT_SIZE, y + SLOT_SIZE, 0xFF373737);
+        fill(matrices, x + 1, y + 1, x + SLOT_SIZE - 1, y + SLOT_SIZE - 1, bgColor);
 
         // Item color indicator
         int iconColor = switch (slot.action) {
@@ -193,11 +192,11 @@ public class FunctionManagerScreen extends Screen {
             case CREATE_EMPTY, CREATE_COMMAND, CREATE_MOB, CREATE_BUILD -> 0xFF8B8B3D;
             default -> 0xFF666666;
         };
-        context.fill(x + 3, y + 3, x + SLOT_SIZE - 3, y + SLOT_SIZE - 3, iconColor);
+        fill(matrices, x + 3, y + 3, x + SLOT_SIZE - 3, y + SLOT_SIZE - 3, iconColor);
 
         // First letter of slot name as icon
         String letter = slot.name.substring(0, 1).toUpperCase();
-        context.drawText(this.textRenderer, Text.literal("§f" + letter), x + 6, y + 4, 0xFFFFFF, false);
+        this.textRenderer.draw(matrices, Text.literal("§f" + letter), x + 6, y + 4, 0xFFFFFF, false);
 
         if (hovered && slot.description != null && !slot.description.isEmpty()) {
             List<Text> tooltip = new ArrayList<>();
@@ -212,7 +211,7 @@ public class FunctionManagerScreen extends Screen {
             if (!actionHint.isEmpty()) {
                 tooltip.add(Text.literal(actionHint));
             }
-            context.drawTooltip(this.textRenderer, tooltip, mouseX + 5, mouseY + 5);
+            renderTooltip(matrices, tooltip, mouseX + 5, mouseY + 5);
         }
     }
 
@@ -225,22 +224,22 @@ public class FunctionManagerScreen extends Screen {
         // Page info
         String pageInfo = "Page " + (currentPage + 1) + " / " + (maxPage + 1);
         int infoWidth = this.textRenderer.getWidth(pageInfo);
-        context.drawText(this.textRenderer, Text.literal(pageInfo), guiLeft + (TEXTURE_W - infoWidth) / 2, navY + 4, 0xFFFFFF, false);
+        this.textRenderer.draw(matrices, Text.literal(pageInfo), guiLeft + (TEXTURE_W - infoWidth) / 2, navY + 4, 0xFFFFFF, false);
 
         // Prev button
         if (currentPage > 0) {
             int px = guiLeft + 8;
-            context.fill(px, navY, px + 20, navY + 16, 0xFF3D8B3D);
-            context.fill(px + 1, navY + 1, px + 19, navY + 15, 0xFF55FF55);
-            context.drawText(this.textRenderer, Text.literal("§0<"), px + 7, navY + 3, 0xFFFFFF, false);
+            fill(matrices, px, navY, px + 20, navY + 16, 0xFF3D8B3D);
+            fill(matrices, px + 1, navY + 1, px + 19, navY + 15, 0xFF55FF55);
+            this.textRenderer.draw(matrices, Text.literal("§0<"), px + 7, navY + 3, 0xFFFFFF, false);
         }
 
         // Next button
         if (currentPage < maxPage) {
             int nx = guiLeft + TEXTURE_W - 28;
-            context.fill(nx, navY, nx + 20, navY + 16, 0xFF3D8B3D);
-            context.fill(nx + 1, navY + 1, nx + 19, navY + 15, 0xFF55FF55);
-            context.drawText(this.textRenderer, Text.literal("§0>"), nx + 7, navY + 3, 0xFFFFFF, false);
+            fill(matrices, nx, navY, nx + 20, navY + 16, 0xFF3D8B3D);
+            fill(matrices, nx + 1, navY + 1, nx + 19, navY + 15, 0xFF55FF55);
+            this.textRenderer.draw(matrices, Text.literal("§0>"), nx + 7, navY + 3, 0xFFFFFF, false);
         }
     }
 

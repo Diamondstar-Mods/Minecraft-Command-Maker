@@ -47,3 +47,4 @@ server/run/
 .vercel
 .env*.local
 .env*
+JAVAFILES/

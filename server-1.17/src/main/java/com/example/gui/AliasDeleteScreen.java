@@ -1,6 +1,6 @@
 package com.example.gui;
 
-import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 
@@ -33,9 +33,9 @@ public class AliasDeleteScreen extends Screen {
 	}
 
 	@Override
-	public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-		this.renderBackground(context, mouseX, mouseY, delta);
-		context.fill(0, 0, this.width, this.height, 0xFF8B8B8B);
+	public void render(MatrixStack context, int mouseX, int mouseY, float delta) {
+		this.renderBackground(matrices);
+		fill(matrices, 0, 0, this.width, this.height, 0xFF8B8B8B);
 
 		int titleY = PADDING;
 		context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, titleY, 0xFFFFFF);
@@ -45,8 +45,8 @@ public class AliasDeleteScreen extends Screen {
 		int endX = this.width - PADDING;
 		int endY = startY + (SLOT_SIZE * visibleRows);
 
-		context.fill(startX - 2, startY - 2, endX + 2, endY + 2, 0xFF000000);
-		context.fill(startX, startY, endX, endY, 0xFF3F3F3F);
+		fill(matrices, startX - 2, startY - 2, endX + 2, endY + 2, 0xFF000000);
+		fill(matrices, startX, startY, endX, endY, 0xFF3F3F3F);
 
 		int slotIndex = scrollOffset * COLUMNS;
 
@@ -74,19 +74,19 @@ public class AliasDeleteScreen extends Screen {
 		boolean isHovered = mouseX >= x && mouseX < x + SLOT_SIZE && mouseY >= y && mouseY < y + SLOT_SIZE;
 
 		int bgColor = isHovered ? 0xFF5F5F5F : 0xFF4F4F4F;
-		context.fill(x, y, x + SLOT_SIZE, y + SLOT_SIZE, bgColor);
-		context.fill(x + 2, y + 2, x + SLOT_SIZE - 2, y + SLOT_SIZE - 2, 0xFF8B8B8B);
+		fill(matrices, x, y, x + SLOT_SIZE, y + SLOT_SIZE, bgColor);
+		fill(matrices, x + 2, y + 2, x + SLOT_SIZE - 2, y + SLOT_SIZE - 2, 0xFF8B8B8B);
 
-		context.fill(x, y, x + SLOT_SIZE, y + 1, 0xFFFFFFFF);
-		context.fill(x, y, x + 1, y + SLOT_SIZE, 0xFFFFFFFF);
-		context.fill(x + SLOT_SIZE - 1, y, x + SLOT_SIZE, y + SLOT_SIZE, 0xFF333333);
-		context.fill(x, y + SLOT_SIZE - 1, x + SLOT_SIZE, y + SLOT_SIZE, 0xFF333333);
+		fill(matrices, x, y, x + SLOT_SIZE, y + 1, 0xFFFFFFFF);
+		fill(matrices, x, y, x + 1, y + SLOT_SIZE, 0xFFFFFFFF);
+		fill(matrices, x + SLOT_SIZE - 1, y, x + SLOT_SIZE, y + SLOT_SIZE, 0xFF333333);
+		fill(matrices, x, y + SLOT_SIZE - 1, x + SLOT_SIZE, y + SLOT_SIZE, 0xFF333333);
 
 		if (isHovered) {
 			List<Text> tooltip = new ArrayList<>();
 			tooltip.add(Text.literal("§6/" + alias));
 			tooltip.add(Text.literal("§7Command: " + command));
-			context.drawTooltip(this.textRenderer, tooltip, mouseX + 5, mouseY + 5);
+			renderTooltip(matrices, tooltip, mouseX + 5, mouseY + 5);
 		}
 	}
 
