@@ -1,89 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Best Practices - Command Maker Wiki</title>
+    <meta name="description" content="Guidelines for creating effective and maintainable commands with Command Maker, including naming conventions, security, organization, and performance.">
     <link rel="stylesheet" href="styles.css">
-    <link rel="icon" href="https://diamondstar-mods.github.io/Minecraft-Command-Maker/favicon.ico">
+    <link rel="icon" href="favicon.ico">
 </head>
 <body>
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-logo"><a href="index.html"><img class="logo-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/favicon.ico" alt="Command Maker Icon"> Command Maker Wiki</a></div>
-            <div class="nav-menu">
-                <a href="index.html" class="nav-link">Home</a>
-                <a href="getting-started.html" class="nav-link">Getting Started</a>
-                <a href="commands.html" class="nav-link">Commands</a>
-                <a href="syntax-system.html" class="nav-link">Custom Syntax</a>
-                <div class="dropdown">
-                    <button class="dropdown-toggle">Systems ▼</button>
-                    <div class="dropdown-menu">
-                        <a href="economy-system.html">Economy System</a>
-                        <a href="kit-system.html">Kit System</a>
-                        <a href="home-system.html">Home System</a>
-                        <a href="shop-system.html">Shop System</a>
-                        <a href="jail-system.html">Jail System</a>
-                        <a href="mute-system.html">Mute System</a>
-                        <a href="vote-system.html">Vote System</a>
-                        <a href="rank-system.html">Rank System</a>
-                        <a href="achievement-system.html">Achievement System</a>
-                        <a href="event-system.html">Event System</a>
-                    </div>
-                </div>
-                <a href="faq.html" class="nav-link">FAQ</a>
-                <a href="forum.html" class="nav-link">Forum</a>
-                <a href="download.html" class="nav-link">Downloads</a>
-            </div>
-            <div class="nav-donate">
-                <a href="https://commandmakerwiki.lucasgeitgey.com/donate.html" class="nav-link" target="_blank">❤️ Donate</a>
-            </div>
-            <select id="theme-select" style="display: none;">
-                <option value="light">Light (default)</option>
-                <option value="dark">Dark (beta)</option>
-            </select>
-            <div class="nav-search"><input type="text" id="searchBox" placeholder="Search documentation..." class="search-input"></div>
-        </div>
-    </nav>
-
-    </nav>
-
-    <div class="main-wrapper">
-        <aside class="sidebar">
-            <div class="sidebar-widget">
-                <h3 class="widget-title">❓ Help</h3>
-                <ul class="widget-list">
-                    <li><a href="faq.html">FAQ</a></li>
-                    <li><a href="troubleshooting.html">Troubleshooting</a></li>
-                    <li><a href="best-practices.html">Best Practices</a></li>
-                </ul>
-            </div>
-            <div class="sidebar-widget">
-                <h3 class="widget-title">📚 Documentation</h3>
-                <ul class="widget-list">
-                    <li><a href="getting-started.html">Getting Started</a></li>
-                    <li><a href="installation.html">Installation</a></li>
-                    <li><a href="configuration.html">Configuration</a></li>
-                    <li><a href="aliases.html">Creating Aliases</a></li>
-                </ul>
-            </div>
-            <div class="sidebar-widget">
-                <h3 class="widget-title">⚡ Features</h3>
-                <ul class="widget-list">
-                    <li><a href="syntax-system.html">Custom Syntax System</a></li>
-                    <li><a href="variables.html">Variables & Substitution</a></li>
-                    <li><a href="gui-system.html">GUI System</a></li>
-                    <li><a href="chat-messages.html">Chat Messages</a></li>
-                </ul>
-            </div>
-        </aside>
-
-        <main class="content">
-            <h1 id="docs-path" data-subpath="best-practices.html"></h1>
-            <iframe style="border: none; font-style: italic;" id="last-commit-iframe" src="" width="400" height="100"></iframe>
-            <script>
-                document.getElementById('last-commit-iframe').src = 'last-commit.html?path=' + document.getElementById('docs-path').dataset.subpath;
-            </script>
+    <nav id="navbar" class="navbar" role="navigation" aria-label="Main navigation"></nav>
+    <div class="layout">
+        <aside id="sidebar" class="sidebar" role="complementary" aria-label="Side navigation"></aside>
+        <main class="content" role="main">
             <h1>Best Practices</h1>
             <p>Guidelines for creating effective and maintainable commands with Command Maker.</p>
 
@@ -130,11 +59,11 @@ ${SpawnCoords}</code></pre>
   "spawn": "tp ${player} 0 65 0",
   "home": "tp ${player} ${home_coords}",
   "arena": "tp ${player} ${arena_coords}",
-  
+
   // === PLAYER COMMANDS ===
   "heal": "effect give @s instant_health 1",
   "feed": "effect give @s saturation 1",
-  
+
   // === ADMIN COMMANDS ===
   "announce": "say [ANNOUNCEMENT] ",
   "shutdown": "say Server shutting down..."
@@ -204,7 +133,7 @@ ${SpawnCoords}</code></pre>
 
             <h3>Clear Feedback</h3>
             <p>Always tell users the command worked:</p>
-            <pre><code>GOOD: 
+            <pre><code>GOOD:
 "spawn": "tp ${player} 0 65 0 && say Teleported to spawn!"
 
 AVOID:
@@ -286,7 +215,7 @@ AVOID: 100+ particles
             <h3>Documentation</h3>
             <p>Document your custom syntax patterns:</p>
             <pre><code">// TPA System - Allows players to request teleportation
-// Usage: /tpa <player_name>
+// Usage: /tpa &lt;player_name&gt;
 // The target player receives a message with /tpaccept and /tpadeny commands
 "tpa": {
   "pattern": "/tpa &lt;player&gt;",
@@ -367,7 +296,7 @@ config/CommandMaker/*.tmp</code></pre>
   "admin_say": "execute if entity @s[gamemode=creative] run say ${message} || say No permission"
 }</code></pre>
 
-            <div class="info-box">
+            <div class="callout-tip">
                 <h3>✨ Summary</h3>
                 <p>Follow these practices for maintainable, user-friendly commands:</p>
                 <ul>
@@ -382,30 +311,8 @@ config/CommandMaker/*.tmp</code></pre>
             </div>
         </main>
     </div>
-
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-section">
-                <h4>Help & Support</h4>
-                <ul><li><a href="faq.html">FAQ</a></li><li><a href="troubleshooting.html">Troubleshooting</a></li><li><a href="best-practices.html">Best Practices</a></li></ul>
-            </div>
-            <div class="footer-section">
-                <h4>Resources</h4>
-                <ul><li><a href="getting-started.html">Getting Started</a></li><li><a href="syntax-system.html">Custom Syntax</a></li><li><a href="examples.html">Examples</a></li></ul>
-            </div>
-            <div class="footer-section">
-                <h4>Community</h4>
-                <ul><li><a href="https://modrinth.com/mod/command-maker">Modrinth</a></li><li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">GitHub</a></li></ul>
-            </div>
-        </div>
-        <div class="footer-bottom"><p>&copy; 2025 - 2026 Command Maker Wiki.</p></div>
-    </footer>
-
+    <footer id="footer" class="footer" role="contentinfo"></footer>
+    <script src="components.js"></script>
     <script src="script.js"></script>
-<script>
-  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
-</script>
-<script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>
-

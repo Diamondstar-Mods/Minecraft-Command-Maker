@@ -1,156 +1,131 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Local Server Downloads - Command Maker Wiki</title>
-    <link rel="stylesheet" href="styles.css" />
-    <link rel="icon" href="https://diamondstar-mods.github.io/Minecraft-Command-Maker/favicon.ico" />
+    <meta name="description" content="Browse and download local server files for Command Maker. Direct links to hosted CDN files with GitHub commit timestamps.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon.ico">
     <style>
-      .modal { position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.4); display:flex; align-items:center; justify-content:center; }
-      .modal-content { background-color:#fefefe; padding:20px; border:1px solid #888; border-radius:5px; text-align:center; max-width:500px; width:90%; }
-      .download-row { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px; border-bottom:1px solid #eee; }
-      .file-meta { font-size:0.9rem; color:#555; }
-      .download-list { max-width:900px; margin:0 auto; }
-      .download-link { padding:8px 12px; background:#007bff; color:#fff; text-decoration:none; border-radius:4px; }
-      .download-link:hover { background:#0056b3; }
+        .modal { position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.4); display:flex; align-items:center; justify-content:center; }
+        .modal-content { background-color:#fefefe; padding:20px; border:1px solid #888; border-radius:5px; text-align:center; max-width:500px; width:90%; }
+        .download-row { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px; border-bottom:1px solid #eee; }
+        .file-meta { font-size:0.9rem; color:#555; }
+        .download-list { max-width:900px; margin:0 auto; }
+        .download-link { padding:8px 12px; background:#007bff; color:#fff; text-decoration:none; border-radius:4px; }
+        .download-link:hover { background:#0056b3; }
     </style>
-  </head>
-  <body class="download-page">
-    <nav class="navbar">
-      <div class="nav-container">
-        <div class="nav-logo"><a href="index.html"><img class="logo-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/favicon.ico" alt="Command Maker Icon"> Command Maker Wiki</a></div>
-        <div class="nav-menu">
-          <a href="index.html" class="nav-link">Home</a>
-          <a href="getting-started.html" class="nav-link">Getting Started</a>
-          <a href="commands.html" class="nav-link">Commands</a>
-          <a href="syntax-system.html" class="nav-link">Custom Syntax</a>
-          <a href="download.html" class="nav-link">Downloads</a>
-        </div>
-      </div>
-    </nav>
+</head>
+<body class="download-page">
+    <nav id="navbar" class="navbar" role="navigation" aria-label="Main navigation"></nav>
+    <div class="layout">
+        <aside id="sidebar" class="sidebar" role="complementary" aria-label="Side navigation"></aside>
+        <main class="content" role="main">
+            <h1>Local Server Downloads</h1>
+            <p>List of files under <code>docs/cdn/files/</code>. Links are direct to the hosted files (relative <code>cdn/files/</code>) and the page will show the last edit time using GitHub's API where available.</p>
 
-    <div class="main-wrapper">
-      <aside class="sidebar">
-        <div class="sidebar-widget">
-          <h3 class="widget-title">📚 Documentation</h3>
-          <ul class="widget-list">
-            <li><a href="getting-started.html">Getting Started</a></li>
-            <li><a href="installation.html">Installation</a></li>
-            <li><a href="configuration.html">Configuration</a></li>
-          </ul>
-        </div>
-      </aside>
-
-      <main class="content">
-        <h1>Local Server Downloads</h1>
-        <p>List of files under <code>docs/cdn/files/</code>. Links are direct to the hosted files (relative <code>cdn/files/</code>) and the page will show the last edit time using GitHub's API where available.</p>
-
-        <div id="downloadContainer" class="download-list">Loading…</div>
-      </main>
+            <div id="downloadContainer" class="download-list">Loading&hellip;</div>
+        </main>
     </div>
 
     <div id="error-modal" class="modal" style="display:none;">
-      <div class="modal-content">
-        <p>Error loading files. Please try again later.</p>
-        <button id="retry">Retry</button>
-      </div>
+        <div class="modal-content">
+            <p>Error loading files. Please try again later.</p>
+            <button id="retry">Retry</button>
+        </div>
     </div>
 
-    <footer class="footer">
-      <div class="footer-bottom"><p>&copy; 2025 - 2026 Command Maker. All rights reserved.</p></div>
-    </footer>
-
+    <footer id="footer" class="footer" role="contentinfo"></footer>
+    <script src="components.js"></script>
+    <script src="script.js"></script>
     <script>
-      const owner = 'Diamondstar-Mods';
-      const repo = 'Minecraft-Command-Maker';
-      const filesPath = 'docs/cdn/files';
-      const container = document.getElementById('downloadContainer');
+        const owner = 'Diamondstar-Mods';
+        const repo = 'Minecraft-Command-Maker';
+        const filesPath = 'docs/cdn/files';
+        const container = document.getElementById('downloadContainer');
 
-      function formatDate(iso) {
-        if (!iso) return 'Unknown';
-        const d = new Date(iso);
-        try { return d.toLocaleString(undefined, { dateStyle:'medium', timeStyle:'short' }); } catch(e) { return d.toString(); }
-      }
-
-      function formatSize(bytes) {
-        if (!bytes || bytes <= 0) return 'Unknown size';
-        const units = ['B','KB','MB','GB']; let i=0; while(bytes>=1024 && i<units.length-1){bytes/=1024;i++;} return `${bytes.toFixed(bytes<10&&i>0?1:0)} ${units[i]}`;
-      }
-
-      async function getFilesList() {
-        try {
-          const resp = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${filesPath}`);
-          if (!resp.ok) throw new Error('Failed to fetch contents');
-          const data = await resp.json();
-          // Filter files only
-          return data.filter(item => item.type === 'file');
-        } catch (err) {
-          console.error(err);
-          throw err;
+        function formatDate(iso) {
+            if (!iso) return 'Unknown';
+            const d = new Date(iso);
+            try { return d.toLocaleString(undefined, { dateStyle:'medium', timeStyle:'short' }); } catch(e) { return d.toString(); }
         }
-      }
 
-      async function getLastCommitForPath(path) {
-        try {
-          const resp = await fetch(`https://api.github.com/repos/${owner}/${repo}/commits?path=${encodeURIComponent(path)}&per_page=1`);
-          if (!resp.ok) return null;
-          const data = await resp.json();
-          if (!Array.isArray(data) || data.length === 0) return null;
-          return data[0].commit?.committer?.date || null;
-        } catch (err) {
-          console.warn('commit lookup failed', path, err);
-          return null;
+        function formatSize(bytes) {
+            if (!bytes || bytes <= 0) return 'Unknown size';
+            const units = ['B','KB','MB','GB']; let i=0; while(bytes>=1024 && i<units.length-1){bytes/=1024;i++;} return `${bytes.toFixed(bytes<10&&i>0?1:0)} ${units[i]}`;
         }
-      }
 
-      async function render() {
-        container.innerHTML = '';
-        try {
-          const files = await getFilesList();
-          if (!files.length) {
-            container.innerHTML = '<p>No files found in cdn/files/.</p>';
-            return;
-          }
-
-          // For each file show name, size, last edited, and direct link to cdn/files/<name>
-          for (const f of files.sort((a,b)=> a.name.localeCompare(b.name, undefined, {numeric:true})) ) {
-            const row = document.createElement('div');
-            row.className = 'download-row';
-
-            const left = document.createElement('div');
-            left.innerHTML = `<strong>${f.name}</strong><div class="file-meta">Path: ${f.path} • Size: ${formatSize(f.size)}</div>`;
-
-            const right = document.createElement('div');
-            const lastCommit = await getLastCommitForPath(f.path);
-            const lastText = lastCommit ? `Last edited: ${formatDate(lastCommit)}` : 'Last edited: Unknown';
-            const meta = document.createElement('div');
-            meta.className = 'file-meta';
-            meta.textContent = lastText;
-
-            const link = document.createElement('a');
-            // direct link to hosted file relative to site
-            link.href = `cdn/files/${encodeURIComponent(f.name)}`;
-            link.className = 'download-link';
-            link.textContent = 'Download';
-            link.setAttribute('download','');
-
-            right.appendChild(meta);
-            right.appendChild(link);
-
-            row.appendChild(left);
-            row.appendChild(right);
-            container.appendChild(row);
-          }
-        } catch (err) {
-          document.getElementById('error-modal').style.display = 'flex';
-          container.innerHTML = '<p>Failed to load files.</p>';
+        async function getFilesList() {
+            try {
+                const resp = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${filesPath}`);
+                if (!resp.ok) throw new Error('Failed to fetch contents');
+                const data = await resp.json();
+                return data.filter(item => item.type === 'file');
+            } catch (err) {
+                console.error(err);
+                throw err;
+            }
         }
-      }
 
-      document.getElementById('retry').addEventListener('click', ()=>{ document.getElementById('error-modal').style.display='none'; render(); });
+        async function getLastCommitForPath(path) {
+            try {
+                const resp = await fetch(`https://api.github.com/repos/${owner}/${repo}/commits?path=${encodeURIComponent(path)}&per_page=1`);
+                if (!resp.ok) return null;
+                const data = await resp.json();
+                if (!Array.isArray(data) || data.length === 0) return null;
+                return data[0].commit?.committer?.date || null;
+            } catch (err) {
+                console.warn('commit lookup failed', path, err);
+                return null;
+            }
+        }
 
-      render();
+        async function render() {
+            container.innerHTML = '';
+            try {
+                const files = await getFilesList();
+                if (!files.length) {
+                    container.innerHTML = '<p>No files found in cdn/files/.</p>';
+                    return;
+                }
+
+                for (const f of files.sort((a,b)=> a.name.localeCompare(b.name, undefined, {numeric:true})) ) {
+                    const row = document.createElement('div');
+                    row.className = 'download-row';
+
+                    const left = document.createElement('div');
+                    left.innerHTML = `<strong>${f.name}</strong><div class="file-meta">Path: ${f.path} &bull; Size: ${formatSize(f.size)}</div>`;
+
+                    const right = document.createElement('div');
+                    const lastCommit = await getLastCommitForPath(f.path);
+                    const lastText = lastCommit ? `Last edited: ${formatDate(lastCommit)}` : 'Last edited: Unknown';
+                    const meta = document.createElement('div');
+                    meta.className = 'file-meta';
+                    meta.textContent = lastText;
+
+                    const link = document.createElement('a');
+                    link.href = `cdn/files/${encodeURIComponent(f.name)}`;
+                    link.className = 'download-link';
+                    link.textContent = 'Download';
+                    link.setAttribute('download','');
+
+                    right.appendChild(meta);
+                    right.appendChild(link);
+
+                    row.appendChild(left);
+                    row.appendChild(right);
+                    container.appendChild(row);
+                }
+            } catch (err) {
+                document.getElementById('error-modal').style.display = 'flex';
+                container.innerHTML = '<p>Failed to load files.</p>';
+            }
+        }
+
+        document.getElementById('retry').addEventListener('click', ()=>{ document.getElementById('error-modal').style.display='none'; render(); });
+
+        render();
     </script>
-  </body>
+</body>
 </html>

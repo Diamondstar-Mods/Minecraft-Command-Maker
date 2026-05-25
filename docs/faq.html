@@ -1,88 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FAQ - Command Maker Wiki</title>
+    <meta name="description" content="Find answers to common questions about Command Maker installation, aliases, custom syntax, configuration, and troubleshooting.">
     <link rel="stylesheet" href="styles.css">
-    <link rel="icon" href="https://diamondstar-mods.github.io/Minecraft-Command-Maker/favicon.ico">
+    <link rel="icon" href="favicon.ico">
 </head>
 <body>
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-logo"><a href="index.html"><img class="logo-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/favicon.ico" alt="Command Maker Icon"> Command Maker Wiki</a></div>
-            <div class="nav-menu">
-                <a href="index.html" class="nav-link">Home</a>
-                <a href="getting-started.html" class="nav-link">Getting Started</a>
-                <a href="commands.html" class="nav-link">Commands</a>
-                <a href="syntax-system.html" class="nav-link">Custom Syntax</a>
-                <div class="dropdown">
-                    <button class="dropdown-toggle">Systems ▼</button>
-                    <div class="dropdown-menu">
-                        <a href="economy-system.html">Economy System</a>
-                        <a href="kit-system.html">Kit System</a>
-                        <a href="home-system.html">Home System</a>
-                        <a href="shop-system.html">Shop System</a>
-                        <a href="jail-system.html">Jail System</a>
-                        <a href="mute-system.html">Mute System</a>
-                        <a href="vote-system.html">Vote System</a>
-                        <a href="rank-system.html">Rank System</a>
-                        <a href="achievement-system.html">Achievement System</a>
-                        <a href="event-system.html">Event System</a>
-                    </div>
-                </div>
-                <a href="faq.html" class="nav-link active">FAQ</a>
-                <a href="forum.html" class="nav-link">Forum</a>
-                <a href="download.html" class="nav-link">Downloads</a>
-            </div>
-            <div class="nav-donate">
-                <a href="https://commandmakerwiki.lucasgeitgey.com/donate.html" class="nav-link" target="_blank">❤️ Donate</a>
-            </div>
-            <select id="theme-select" style="display: none;">
-                <option value="light">Light (default)</option>
-                <option value="dark">Dark (beta)</option>
-            </select>
-            <div class="nav-search"><input type="text" id="searchBox" placeholder="Search documentation..." class="search-input"></div>
-        </div>
-    </nav>
-
-    </nav>
-
-    <div class="main-wrapper">
-        <aside class="sidebar">
-            <div class="sidebar-widget">
-                <h3 class="widget-title">❓ Help</h3>
-                <ul class="widget-list">
-                    <li><a href="faq.html">FAQ</a></li>
-                    <li><a href="troubleshooting.html">Troubleshooting</a></li>
-                    <li><a href="best-practices.html">Best Practices</a></li>
-                </ul>
-            </div>
-            <div class="sidebar-widget">
-                <h3 class="widget-title">🎮 Examples</h3>
-                <ul class="widget-list">
-                    <li><a href="tpa-system.html">TPA System</a></li>
-                    <li><a href="ban-system.html">Ban System</a></li>
-                    <li><a href="warp-system.html">Warp System</a></li>
-                    <li><a href="custom-commands.html">Custom Commands</a></li>
-                </ul>
-            </div>
-            <div class="sidebar-widget">
-                <h3 class="widget-title">📚 Documentation</h3>
-                <ul class="widget-list">
-                    <li><a href="getting-started.html">Getting Started</a></li>
-                    <li><a href="installation.html">Installation</a></li>
-                    <li><a href="configuration.html">Configuration</a></li>
-                </ul>
-            </div>
-        </aside>
-
-        <main class="content">
-            <h1 id="docs-path" data-subpath="faq.html"></h1>
-            <iframe style="border: none; font-style: italic;" id="last-commit-iframe" src="" width="400" height="100"></iframe>
-            <script>
-                document.getElementById('last-commit-iframe').src = 'last-commit.html?path=' + document.getElementById('docs-path').dataset.subpath;
-            </script>
+    <nav id="navbar" class="navbar" role="navigation" aria-label="Main navigation"></nav>
+    <div class="layout">
+        <aside id="sidebar" class="sidebar" role="complementary" aria-label="Side navigation"></aside>
+        <main class="content" role="main">
             <h1>Frequently Asked Questions</h1>
             <p>Find answers to common questions about Command Maker.</p>
 
@@ -96,7 +26,7 @@
 
             <h3>Can I use Command Maker on Forge?</h3>
             <p>No, Command Maker is built for Fabric only. We have no plans for Forge support at this time because I don't know how. There are some forge downloads on Modrinth but they are all alpha and none of them work.</p>
-<img src="https://media.forgecdn.net/attachments/442/895/kneecaps.png"></img>
+            <img src="https://media.forgecdn.net/attachments/442/895/kneecaps.png" alt="Kneecaps">
 
             <h3>How do I install the mod?</h3>
             <p>See the <a href="installation.html">Installation Guide</a> for step-by-step instructions.</p>
@@ -160,13 +90,12 @@
             <h2>Configuration & Files</h2>
 
             <h3>Where are the config files located?</h3>
-            <p>Configuration files are in <code>config/CommandMaker/</code> directory:
+            <p>Configuration files are in <code>config/CommandMaker/</code> directory:</p>
             <ul>
                 <li><code>aliases.json</code> - Your custom aliases</li>
                 <li><code>syntax.json</code> - Custom syntax patterns</li>
                 <li><code>variables.json</code> - Persistent custom variables</li>
             </ul>
-            </p>
 
             <h3>Can I edit config files directly?</h3>
             <p>Yes, you can edit JSON files directly with any text editor. After editing, run <code>/cmd reload</code> to apply changes.</p>
@@ -231,36 +160,14 @@
             <h3>Performance: Will lots of aliases slow down my server?</h3>
             <p>No. Aliases are cached after first load and have minimal performance impact.</p>
 
-            <div class="info-box">
+            <div class="callout-info">
                 <h3>❓ Still Have Questions?</h3>
                 <p>Check the <a href="troubleshooting.html">Troubleshooting Guide</a>, see <a href="examples.html">Examples</a>, or visit our GitHub community!</p>
             </div>
         </main>
     </div>
-
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-section">
-                <h4>Help & Support</h4>
-                <ul><li><a href="faq.html">FAQ</a></li><li><a href="troubleshooting.html">Troubleshooting</a></li><li><a href="best-practices.html">Best Practices</a></li></ul>
-            </div>
-            <div class="footer-section">
-                <h4>Resources</h4>
-                <ul><li><a href="getting-started.html">Getting Started</a></li><li><a href="syntax-system.html">Custom Syntax</a></li><li><a href="examples.html">Examples</a></li></ul>
-            </div>
-            <div class="footer-section">
-                <h4>Community</h4>
-                <ul><li><a href="https://modrinth.com/mod/command-maker">Modrinth</a></li><li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">GitHub</a></li></ul>
-            </div>
-        </div>
-        <div class="footer-bottom"><p>&copy; 2025 - 2026 Command Maker Wiki.</p></div>
-    </footer>
-
+    <footer id="footer" class="footer" role="contentinfo"></footer>
+    <script src="components.js"></script>
     <script src="script.js"></script>
-<script>
-  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
-</script>
-<script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>
-

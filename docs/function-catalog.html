@@ -1,108 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Function Catalog - Command Maker Wiki</title>
+    <meta name="description" content="Complete catalog of all 37 downloadable functions available in the Command Maker online library.">
     <link rel="stylesheet" href="styles.css">
-    <link rel="icon" href="https://diamondstar-mods.github.io/Minecraft-Command-Maker/favicon.ico">
+    <link rel="icon" href="favicon.ico">
 </head>
 <body>
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-logo"><a href="index.html"><img class="logo-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/favicon.ico" alt="Command Maker Icon"> Command Maker Wiki</a></div>
-            <div class="nav-menu">
-                <a href="index.html" class="nav-link">Home</a>
-                <a href="getting-started.html" class="nav-link">Getting Started</a>
-                <a href="commands.html" class="nav-link">Commands</a>
-                <a href="syntax-system.html" class="nav-link">Custom Syntax</a>
-                <a href="functions.html" class="nav-link active">Functions</a>
-                <div class="dropdown">
-                    <button class="dropdown-toggle">Systems ▼</button>
-                    <div class="dropdown-menu">
-                        <a href="economy-system.html">Economy System</a>
-                        <a href="kit-system.html">Kit System</a>
-                        <a href="home-system.html">Home System</a>
-                        <a href="shop-system.html">Shop System</a>
-                        <a href="jail-system.html">Jail System</a>
-                        <a href="mute-system.html">Mute System</a>
-                        <a href="vote-system.html">Vote System</a>
-                        <a href="rank-system.html">Rank System</a>
-                        <a href="achievement-system.html">Achievement System</a>
-                        <a href="event-system.html">Event System</a>
-                    </div>
-                </div>
-                <a href="faq.html" class="nav-link">FAQ</a>
-                <a href="forum.html" class="nav-link">Forum</a>
-                <a href="download.html" class="nav-link">Downloads</a>
-            </div>
-            <div class="nav-donate">
-                <a href="https://commandmakerwiki.lucasgeitgey.com/donate.html" class="nav-link" target="_blank">❤️ Donate</a>
-            </div>
-            <select id="theme-select" style="display: none;"><option value="light">Light (default)</option><option value="dark">Dark (beta)</option></select>
-            <div class="nav-search"><input type="text" id="searchBox" placeholder="Search documentation..." class="search-input"></div>
-        </div>
-    </nav>
+    <nav id="navbar" class="navbar" role="navigation" aria-label="Main navigation"></nav>
+    <div class="layout">
+        <aside id="sidebar" class="sidebar" role="complementary" aria-label="Side navigation"></aside>
+        <main class="content" role="main">
+            <h1>Function Catalog</h1>
+            <p>All 37 downloadable functions available in the Command Maker online library. Use <code>/cmd downloadfunction &lt;name&gt;</code> to install any of these.</p>
 
-    <div class="main-wrapper">
-        <aside class="sidebar">
-            <div class="sidebar-widget">
-                <h3 class="widget-title">📚 Documentation</h3>
-                <ul class="widget-list">
-                    <li><a href="getting-started.html">Getting Started</a></li>
-                    <li><a href="installation.html">Installation</a></li>
-                    <li><a href="configuration.html">Configuration</a></li>
-                    <li><a href="aliases.html">Creating Aliases</a></li>
-                </ul>
-            </div>
-            <div class="sidebar-widget">
-                <h3 class="widget-title">⚡ Features</h3>
-                <ul class="widget-list">
-                    <li><a href="syntax-system.html">Custom Syntax System</a></li>
-                    <li><a href="functions.html">Functions System</a></li>
-                    <li><a href="variables.html">Variables & Substitution</a></li>
-                    <li><a href="gui-system.html">GUI System</a></li>
-                    <li><a href="chat-messages.html">Chat Messages</a></li>
-                </ul>
-            </div>
-            <div class="sidebar-widget">
-                <h3 class="widget-title">🎮 Examples</h3>
-                <ul class="widget-list">
-                    <li><a href="tpa-system.html">TPA System</a></li>
-                    <li><a href="ban-system.html">Ban System</a></li>
-                    <li><a href="warp-system.html">Warp System</a></li>
-                    <li><a href="custom-commands.html">Custom Commands</a></li>
-                </ul>
-            </div>
-            <div class="sidebar-widget">
-                <h3 class="widget-title">❓ Help</h3>
-                <ul class="widget-list">
-                    <li><a href="troubleshooting.html">Troubleshooting</a></li>
-                    <li><a href="faq.html">Frequently Asked Questions</a></li>
-                    <li><a href="best-practices.html">Best Practices</a></li>
-                </ul>
-            </div>
-        </aside>
-
-        <main class="content">
-            <h1 id="docs-path" data-subpath="function-catalog.html"></h1>
-            <iframe style="border: none; font-style: italic;" id="last-commit-iframe" src="" width="400" height="100"></iframe>
-            <script>
-                document.getElementById('last-commit-iframe').src = 'last-commit.html?path=' + document.getElementById('docs-path').dataset.subpath;
-            </script>
-
-            <h1>📦 Function Catalog</h1>
-            <p class="lead">All 37 downloadable functions available in the Command Maker online library. Use <code>/cmd downloadfunction &lt;name&gt;</code> to install any of these.</p>
-
-            <div class="info-box">
-                <h3>✨ How to Download</h3>
+            <div class="callout callout-info">
+                <h3>How to Download</h3>
                 <p>Type <code>/cmd downloadfunction &lt;name&gt;</code> in-game, or open the <a href="gui-system.html">Function Manager GUI</a> with <code>/cmd gui</code> to browse and download visually. Tab-complete shows descriptions!</p>
             </div>
 
             <!-- Mini-Games -->
-            <h2>🎮 Mini-Games</h2>
+            <h2>Mini-Games</h2>
             <table>
-                <tr><th>Function</th><th>Description</th><th style="min-width:120px">Type</th></tr>
+                <tr><th>Function</th><th>Description</th><th>Type</th></tr>
                 <tr><td><code>spleef_arena</code></td><td>Builds a floating snow arena in the sky for spleef matches — diamond shovels, last one standing wins</td><td>Mini-Game</td></tr>
                 <tr><td><code>parkour_course</code></td><td>Generates a parkour course with colored checkpoints and a diamond tower finish line</td><td>Mini-Game</td></tr>
                 <tr><td><code>hide_and_seek</code></td><td>Classic hide and seek: invisibility for hiders, compass tracker for the seeker</td><td>Mini-Game</td></tr>
@@ -110,18 +32,18 @@
             </table>
 
             <!-- Combat -->
-            <h2>⚔️ Combat & Survival</h2>
+            <h2>Combat & Survival</h2>
             <table>
-                <tr><th>Function</th><th>Description</th><th style="min-width:120px">Type</th></tr>
+                <tr><th>Function</th><th>Description</th><th>Type</th></tr>
                 <tr><td><code>zombie_siege</code></td><td>Builds a wooden fort with arrow slits, then sends 5 escalating waves of zombies ending with the boss "General Zombo"</td><td>Combat</td></tr>
                 <tr><td><code>mob_army</code></td><td>Summons 50+ mobs in 4 escalating waves: chickens, armored zombies, skeletons, and creepers</td><td>Combat</td></tr>
                 <tr><td><code>boss_arena</code></td><td>Builds an obsidian arena, buffs all players, and summons a Wither boss for an epic fight</td><td>Combat</td></tr>
             </table>
 
             <!-- Building -->
-            <h2>🏗️ Building & Structures</h2>
+            <h2>Building & Structures</h2>
             <table>
-                <tr><th>Function</th><th>Description</th><th style="min-width:120px">Type</th></tr>
+                <tr><th>Function</th><th>Description</th><th>Type</th></tr>
                 <tr><td><code>bridge_builder</code></td><td>Builds a 3-wide stone bridge with railings, torches, and support pillars — 30 blocks forward</td><td>Building</td></tr>
                 <tr><td><code>underground_base</code></td><td>Excavates a furnished underground bunker with crafting room, storage, beds, and nether portal frame</td><td>Building</td></tr>
                 <tr><td><code>lighthouse</code></td><td>Constructs a 16-block red-and-white striped lighthouse with glass viewing deck and beacon</td><td>Building</td></tr>
@@ -132,9 +54,9 @@
             </table>
 
             <!-- Visual & Party -->
-            <h2>🎆 Visual Spectacle & Party</h2>
+            <h2>Visual Spectacle & Party</h2>
             <table>
-                <tr><th>Function</th><th>Description</th><th style="min-width:120px">Type</th></tr>
+                <tr><th>Function</th><th>Description</th><th>Type</th></tr>
                 <tr><td><code>light_show</code></td><td>8-act synchronized beacon and note block light performance with colored particle effects</td><td>Visual</td></tr>
                 <tr><td><code>bubble_party</code></td><td>Fills the area with bubbles, dolphin's grace, underwater sparkles, and upbeat music</td><td>Party</td></tr>
                 <tr><td><code>fireworkshow</code></td><td>Launches a spectacular firework display with party effects and music</td><td>Party</td></tr>
@@ -146,9 +68,9 @@
             </table>
 
             <!-- Chaos & Fun -->
-            <h2>💥 Chaos & Mayhem</h2>
+            <h2>Chaos & Mayhem</h2>
             <table>
-                <tr><th>Function</th><th>Description</th><th style="min-width:120px">Type</th></tr>
+                <tr><th>Function</th><th>Description</th><th>Type</th></tr>
                 <tr><td><code>tntrain</code></td><td>Rains TNT from the sky around the player with timed fuses</td><td>Chaos</td></tr>
                 <tr><td><code>extratntrain</code></td><td>Even more intense TNT rain — chains multiple TNT storms together for maximum destruction</td><td>Chaos</td></tr>
                 <tr><td><code>meteor_shower</code></td><td>Rains flaming meteors from the sky with dramatic particle trails — dramatic but mostly safe</td><td>Chaos</td></tr>
@@ -159,9 +81,9 @@
             </table>
 
             <!-- Utility -->
-            <h2>🔧 Server Utility</h2>
+            <h2>Server Utility</h2>
             <table>
-                <tr><th>Function</th><th>Description</th><th style="min-width:120px">Type</th></tr>
+                <tr><th>Function</th><th>Description</th><th>Type</th></tr>
                 <tr><td><code>lag_cleaner</code></td><td>Clears all ground items, excess unnamed hostile mobs, projectiles, and resets weather/time</td><td>Utility</td></tr>
                 <tr><td><code>time_locker</code></td><td>Locks the world at eternal noon with clear weather — disables day/night cycle and fire spread</td><td>Utility</td></tr>
                 <tr><td><code>mobsoff</code></td><td>Disables all monster spawns for peaceful building sessions</td><td>Utility</td></tr>
@@ -170,41 +92,22 @@
             </table>
 
             <!-- Templates -->
-            <h2>📝 Templates & Examples</h2>
+            <h2>Templates & Examples</h2>
             <table>
-                <tr><th>Function</th><th>Description</th><th style="min-width:120px">Type</th></tr>
+                <tr><th>Function</th><th>Description</th><th>Type</th></tr>
                 <tr><td><code>helloworld</code></td><td>Simple hello world example for testing function downloads</td><td>Template</td></tr>
                 <tr><td><code>example</code></td><td>A template function showing best practices for creating your own functions</td><td>Template</td></tr>
                 <tr><td><code>sound</code></td><td>Plays various sound effects for testing and fun</td><td>Template</td></tr>
             </table>
 
-            <div class="info-box">
-                <h3>🎨 Create Your Own</h3>
+            <div class="callout callout-info">
+                <h3>Create Your Own</h3>
                 <p>Want to create and share your own functions? Check out the <a href="functions.html">Functions System</a> guide. Use the templates in the Function Manager GUI to get started with empty, command, mob spawner, or building templates!</p>
             </div>
         </main>
     </div>
-
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-section">
-                <h4>Documentation</h4>
-                <ul><li><a href="getting-started.html">Getting Started</a></li><li><a href="commands.html">Commands</a></li><li><a href="syntax-system.html">Custom Syntax</a></li><li><a href="examples.html">Examples</a></li></ul>
-            </div>
-            <div class="footer-section">
-                <h4>Resources</h4>
-                <ul><li><a href="troubleshooting.html">Troubleshooting</a></li><li><a href="faq.html">FAQ</a></li><li><a href="best-practices.html">Best Practices</a></li><li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">GitHub</a></li></ul>
-            </div>
-            <div class="footer-section">
-                <h4>Community</h4>
-                <ul><li><a href="https://modrinth.com/mod/command-maker">Modrinth</a></li><li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">Report Issues</a></li><li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">Contribute</a></li></ul>
-            </div>
-        </div>
-        <div class="footer-bottom"><p>&copy; 2025 - 2026 Command Maker Wiki. Built with ❤️ for Minecraft players.</p></div>
-    </footer>
-
+    <footer id="footer" class="footer" role="contentinfo"></footer>
+    <script src="components.js"></script>
     <script src="script.js"></script>
-<script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)};</script>
-<script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>

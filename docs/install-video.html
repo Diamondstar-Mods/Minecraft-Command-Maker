@@ -1,80 +1,33 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Install Command Maker — Video</title>
-    <link rel="stylesheet" href="styles.css" />
-    <link rel="icon" href="https://diamondstar-mods.github.io/Minecraft-Command-Maker/favicon.ico" />
-  </head>
-  <body>
-    <nav class="navbar">
-      <div class="nav-container">
-        <div class="nav-logo">
-          <a href="index.html">
-            <img class="logo-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/favicon.ico" alt="Command Maker Icon" />
-            Command Maker Wiki
-          </a>
-        </div>
-        <div class="nav-menu">
-          <a href="index.html" class="nav-link">Home</a>
-          <a href="getting-started.html" class="nav-link">Getting Started</a>
-          <a href="download.html" class="nav-link">Downloads</a>
-        </div>
-      </div>
-    </nav>
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Install Command Maker - Video Guide - Command Maker Wiki</title>
+    <meta name="description" content="Watch a video guide for installing Command Maker 2.3.3 on Minecraft 1.21.11. Step-by-step installation walkthrough.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon.ico">
+</head>
+<body>
+    <nav id="navbar" class="navbar" role="navigation" aria-label="Main navigation"></nav>
+    <div class="layout">
+        <aside id="sidebar" class="sidebar" role="complementary" aria-label="Side navigation"></aside>
+        <main class="content" role="main">
+            <p>Video for CMDMaker 2.3.3 - 1.21.11 (videos will be updated over time)</p>
 
-    <div class="main-wrapper">
-      <aside class="sidebar">
-        <div class="sidebar-widget">
-          <h3 class="widget-title">📚 Documentation</h3>
-          <ul class="widget-list">
-            <li><a href="getting-started.html">Getting Started</a></li>
-            <li><a href="installation.html">Installation</a></li>
-            <li><a href="configuration.html">Configuration</a></li>
-          </ul>
-        </div>
-      </aside>
-      Video for CMDMaker 2.3.3 - 1.21.11 (videos will be updated over time)
-      <main class="content">
-        <h1 id="docs-path" data-subpath="install-video.html"></h1>
-        <iframe style="border: none; font-style: italic" id="last-commit-iframe" src="" width="400" height="100"></iframe>
-        <script>
-          document.getElementById('last-commit-iframe').src = 'last-commit.html?path=' + document.getElementById('docs-path').dataset.subpath;
-        </script>
-
-        <!-- Video Only Content -->
-        <section id="install-video" style="display:flex; justify-content:center; padding: 40px 0;">
-          <div style="width:100%; max-width:900px;">
-            <video controls playsinline style="width:100%; height:auto; border-radius:8px; background:#000;">
-              <source src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/videos/commandmaker.mp4" type="video/mp4">
-              Your browser does not support the video tag. You can <a href="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/videos/commandmaker.mp4">download the video</a> instead.
-            </video>
-          </div>
-        </section>
-      </main>
+            <section id="install-video" style="display:flex; justify-content:center; padding: 40px 0;">
+                <div style="width:100%; max-width:900px;">
+                    <video controls playsinline style="width:100%; height:auto; border-radius:8px; background:#000;">
+                        <source src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/videos/commandmaker.mp4" type="video/mp4">
+                        Your browser does not support the video tag. You can <a href="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/videos/commandmaker.mp4">download the video</a> instead.
+                    </video>
+                </div>
+            </section>
+        </main>
     </div>
 
-    <footer class="footer">
-      <div class="footer-content">
-        <div class="footer-section">
-          <h4>Documentation</h4>
-          <ul>
-            <li><a href="getting-started.html">Getting Started</a></li>
-            <li><a href="commands.html">Commands</a></li>
-            <li><a href="syntax-system.html">Custom Syntax</a></li>
-          </ul>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <p>&copy; 2025 - 2026 Diamondstar Mods. Built with ❤️ for Minecraft players.</p>
-      </div>
-    </footer>
-
+    <footer id="footer" class="footer" role="contentinfo"></footer>
+    <script src="components.js"></script>
     <script src="script.js"></script>
-    <script>
-      window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
-    </script>
-    <script defer src="/_vercel/insights/script.js"></script>
-  </body>
+</body>
 </html>

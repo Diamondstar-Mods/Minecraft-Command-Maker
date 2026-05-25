@@ -1,337 +1,162 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Client Downloads - Command Maker Wiki</title>
-    <link rel="stylesheet" href="styles.css" />
-    <link
-      rel="icon"
-      href="https://diamondstar-mods.github.io/Minecraft-Command-Maker/favicon.ico"
-    />
+    <meta name="description" content="Download legacy client versions of Command Maker for Minecraft. Browse available versions from the GitHub CDN.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon.ico">
     <style>
-      .modal {
-        position: fixed;
-        z-index: 1000;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.4);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      .modal-content {
-        background-color: #fefefe;
-        padding: 20px;
-        border: 1px solid #888;
-        border-radius: 5px;
-        text-align: center;
-        max-width: 400px;
-        width: 90%;
-      }
-      .modal-content button {
-        margin: 10px;
-        padding: 10px 20px;
-        border: none;
-        cursor: pointer;
-        background-color: #007bff;
-        color: white;
-        border-radius: 3px;
-      }
-      .modal-content button:hover {
-        background-color: #0056b3;
-      }
-      body.dark .modal-content {
-        background-color: #333;
-        color: #fff;
-      }
-      body.dark .modal-content button {
-        background-color: #555;
-        color: #fff;
-      }
-      body.dark .modal-content button:hover {
-        background-color: #777;
-      }
-      .edition-selector {
-        margin-bottom: 20px;
-        text-align: center;
-      }
-      .edition-selector label {
-        font-weight: bold;
-        margin-right: 10px;
-      }
-      .edition-selector select {
-        padding: 8px 12px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        font-size: 16px;
-        background-color: #fff;
-        color: #333;
-      }
-      body.dark .edition-selector select {
-        background-color: #333;
-        color: #fff;
-        border-color: #555;
-      }
+        .modal {
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            padding: 20px;
+            border: 1px solid #888;
+            border-radius: 5px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+        .modal-content button {
+            margin: 10px;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border-radius: 3px;
+        }
+        .modal-content button:hover {
+            background-color: #0056b3;
+        }
+        body.dark .modal-content {
+            background-color: #333;
+            color: #fff;
+        }
+        body.dark .modal-content button {
+            background-color: #555;
+            color: #fff;
+        }
+        body.dark .modal-content button:hover {
+            background-color: #777;
+        }
+        .edition-selector {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .edition-selector label {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .edition-selector select {
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            background-color: #fff;
+            color: #333;
+        }
+        body.dark .edition-selector select {
+            background-color: #333;
+            color: #fff;
+            border-color: #555;
+        }
     </style>
-  </head>
-  <body class="download-page">
-    <nav class="navbar">
-      <div class="nav-container">
-        <div class="nav-logo">
-          <a href="index.html"
-            ><img
-              class="logo-icon"
-              src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/favicon.ico"
-              alt="Command Maker Icon"
-            />
-            Command Maker Wiki</a
-          >
-        </div>
-        <div class="nav-menu">
-          <a href="index.html" class="nav-link">Home</a>
-          <a href="getting-started.html" class="nav-link">Getting Started</a>
-          <a href="commands.html" class="nav-link">Commands</a>
-          <a href="syntax-system.html" class="nav-link">Custom Syntax</a>
-          <a href="functions.html" class="nav-link">Functions</a>
-          <div class="dropdown">
-            <button class="dropdown-toggle">Systems ▼</button>
-            <div class="dropdown-menu">
-              <a href="economy-system.html">Economy System</a>
-              <a href="kit-system.html">Kit System</a>
-              <a href="home-system.html">Home System</a>
-              <a href="shop-system.html">Shop System</a>
-              <a href="jail-system.html">Jail System</a>
-              <a href="mute-system.html">Mute System</a>
-              <a href="vote-system.html">Vote System</a>
-              <a href="rank-system.html">Rank System</a>
-              <a href="achievement-system.html">Achievement System</a>
-              <a href="event-system.html">Event System</a>
+</head>
+<body class="download-page">
+    <nav id="navbar" class="navbar" role="navigation" aria-label="Main navigation"></nav>
+    <div class="layout">
+        <aside id="sidebar" class="sidebar" role="complementary" aria-label="Side navigation"></aside>
+        <main class="content" role="main">
+            <h1>Legacy Client Downloads for Command Maker</h1>
+            <p>Download client versions of Command Maker from our CDN. Choose between Client Edition or Server Edition for each version.</p>
+
+            <div id="versions">Loading&hellip;</div>
+
+            <div id="pagination">
+                <button id="prevBtn">Previous</button>
+                <span id="pageInfo">Page 1 of 1</span>
+                <button id="nextBtn">Next</button>
             </div>
-          </div>
-          <a href="faq.html" class="nav-link">FAQ</a>
-          <a href="forum.html" class="nav-link">Forum</a>
-          <a href="download.html" class="nav-link">Downloads</a>
-        </div>
-        <div class="nav-donate">
-          <a
-            href="https://commandmakerwiki.lucasgeitgey.com/donate.html"
-            class="nav-link"
-            target="_blank"
-            >❤️ Donate</a
-          >
-        </div>
-        <select id="theme-select" style="display: none">
-          <option value="light">Light (default)</option>
-          <option value="dark">Dark (beta)</option>
-        </select>
-        <div class="nav-search">
-          <input
-            type="text"
-            id="searchBox"
-            placeholder="Search documentation..."
-            class="search-input"
-          />
-        </div>
-      </div>
-    </nav>
-
-    <div class="main-wrapper">
-      <aside class="sidebar">
-        <div class="sidebar-widget">
-          <h3 class="widget-title">📚 Documentation</h3>
-          <ul class="widget-list">
-            <li><a href="getting-started.html">Getting Started</a></li>
-            <li><a href="installation.html">Installation</a></li>
-            <li><a href="configuration.html">Configuration</a></li>
-            <li><a href="aliases.html">Creating Aliases</a></li>
-          </ul>
-        </div>
-
-        <div class="sidebar-widget">
-          <h3 class="widget-title">⚡ Features</h3>
-          <ul class="widget-list">
-            <li><a href="syntax-system.html">Custom Syntax System</a></li>
-            <li><a href="functions.html">Functions System</a></li>
-            <li><a href="variables.html">Variables & Substitution</a></li>
-            <li><a href="gui-system.html">GUI System</a></li>
-            <li><a href="chat-messages.html">Chat Messages</a></li>
-          </ul>
-        </div>
-
-        <div class="sidebar-widget">
-          <h3 class="widget-title">🎮 Examples</h3>
-          <ul class="widget-list">
-            <li><a href="tpa-system.html">TPA System</a></li>
-            <li><a href="ban-system.html">Ban System</a></li>
-            <li><a href="warp-system.html">Warp System</a></li>
-            <li><a href="custom-commands.html">Custom Commands</a></li>
-          </ul>
-        </div>
-
-        <div class="sidebar-widget">
-          <h3 class="widget-title">❓ Help</h3>
-          <ul class="widget-list">
-            <li><a href="troubleshooting.html">Troubleshooting</a></li>
-            <li><a href="faq.html">Frequently Asked Questions</a></li>
-            <li><a href="best-practices.html">Best Practices</a></li>
-          </ul>
-        </div>
-      </aside>
-
-      <main class="content">
-        <h1 id="docs-path" data-subpath="downloadClient.html"></h1>
-        <iframe
-          style="border: none; font-style: italic"
-          id="last-commit-iframe"
-          src=""
-          width="400"
-          height="100"
-        ></iframe>
-        <script>
-          document.getElementById("last-commit-iframe").src =
-            "last-commit.html?path=" +
-            document.getElementById("docs-path").dataset.subpath;
-        </script>
-
-        <h1>Legacy Client Downloads for Command Maker</h1>
-        <p>
-          Download client versions of Command Maker from our CDN. Choose between
-          Client Edition or Server Edition for each version.
-        </p>
-
-        <div id="versions">Loading…</div>
-
-        <div id="pagination">
-          <button id="prevBtn">Previous</button>
-          <span id="pageInfo">Page 1 of 1</span>
-          <button id="nextBtn">Next</button>
-        </div>
-      </main>
+        </main>
     </div>
 
-    <div id="error-modal" class="modal" style="display: none">
-      <div class="modal-content">
-        <p style="color: black">
-          Error loading versions. Please try again later.
-        </p>
-        <button id="retry-btn">Retry</button>
-      </div>
+    <div id="error-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <p style="color: black;">Error loading versions. Please try again later.</p>
+            <button id="retry-btn">Retry</button>
+        </div>
     </div>
 
-    <footer class="footer">
-      <div class="footer-content">
-        <div class="footer-section">
-          <h4>Documentation</h4>
-          <ul>
-            <li><a href="getting-started.html">Getting Started</a></li>
-            <li><a href="commands.html">Commands</a></li>
-            <li><a href="syntax-system.html">Custom Syntax</a></li>
-            <li><a href="examples.html">Examples</a></li>
-          </ul>
-        </div>
-        <div class="footer-section">
-          <h4>Resources</h4>
-          <ul>
-            <li><a href="troubleshooting.html">Troubleshooting</a></li>
-            <li><a href="faq.html">Frequently Asked Questions</a></li>
-            <li><a href="best-practices.html">Best Practices</a></li>
-            <li>
-              <a
-                href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker"
-                >GitHub</a
-              >
-            </li>
-          </ul>
-        </div>
-        <div class="footer-section">
-          <h4>Community</h4>
-          <ul>
-            <li>
-              <a href="https://modrinth.com/mod/command-maker">Modrinth</a>
-            </li>
-            <li>
-              <a
-                href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker"
-                >Report Issues</a
-              >
-            </li>
-            <li>
-              <a
-                href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker"
-                >Contribute</a
-              >
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <p>
-          &copy; 2025 Command Maker Wiki. Built with ❤️ for Minecraft players.
-        </p>
-      </div>
-    </footer>
-
+    <footer id="footer" class="footer" role="contentinfo"></footer>
+    <script src="components.js"></script>
     <script src="script.js"></script>
     <script>
-      let versions = [];
-      let currentPage = 1;
-      let totalPages = 1;
-      const itemsPerPage = 5;
+        let versions = [];
+        let currentPage = 1;
+        let totalPages = 1;
+        const itemsPerPage = 5;
 
-      function formatFileSize(bytes) {
-        if (typeof bytes !== "number" || bytes <= 0) return "Unknown size";
-        const units = ["B", "KB", "MB", "GB"];
-        let i = 0;
-        while (bytes >= 1024 && i < units.length - 1) {
-          bytes /= 1024;
-          i++;
+        function formatFileSize(bytes) {
+            if (typeof bytes !== "number" || bytes <= 0) return "Unknown size";
+            const units = ["B", "KB", "MB", "GB"];
+            let i = 0;
+            while (bytes >= 1024 && i < units.length - 1) {
+                bytes /= 1024;
+                i++;
+            }
+            return `${bytes.toFixed(bytes < 10 && i > 0 ? 1 : 0)} ${units[i]}`;
         }
-        return `${bytes.toFixed(bytes < 10 && i > 0 ? 1 : 0)} ${units[i]}`;
-      }
 
-      async function loadVersions() {
-        const container = document.getElementById("versions");
-        try {
-          const response = await fetch(
-            "https://api.github.com/repos/Diamondstar-Mods/Minecraft-Command-Maker/contents/docs/cdn/versions/",
-          );
-          const data = await response.json();
-          versions = data
-            .filter((item) => item.type === "dir")
-            .map((item) => ({ name: item.name, path: item.path }));
-          versions.sort((a, b) =>
-            b.name.localeCompare(a.name, undefined, {
-              numeric: true,
-              sensitivity: "base",
-            }),
-          ); // Sort descending
-          totalPages = Math.max(1, Math.ceil(versions.length / itemsPerPage));
-          currentPage = 1;
-          await displayPage(1);
-          updatePagination();
-        } catch (err) {
-          container.innerHTML =
-            "Failed to load versions. Please check the console for details.";
-          document.getElementById("error-modal").style.display = "flex";
-          console.error(err);
+        async function loadVersions() {
+            const container = document.getElementById("versions");
+            try {
+                const response = await fetch("https://api.github.com/repos/Diamondstar-Mods/Minecraft-Command-Maker/contents/docs/cdn/versions/");
+                const data = await response.json();
+                versions = data
+                    .filter((item) => item.type === "dir")
+                    .map((item) => ({ name: item.name, path: item.path }));
+                versions.sort((a, b) =>
+                    b.name.localeCompare(a.name, undefined, {
+                        numeric: true,
+                        sensitivity: "base",
+                    })
+                ); // Sort descending
+                totalPages = Math.max(1, Math.ceil(versions.length / itemsPerPage));
+                currentPage = 1;
+                await displayPage(1);
+                updatePagination();
+            } catch (err) {
+                container.innerHTML = "Failed to load versions. Please check the console for details.";
+                document.getElementById("error-modal").style.display = "flex";
+                console.error(err);
+            }
         }
-      }
 
-      async function displayPage(page) {
-        const container = document.getElementById("versions");
-        container.innerHTML = "";
-        const start = (page - 1) * itemsPerPage;
-        const end = start + itemsPerPage;
-        const pageVersions = versions.slice(start, end);
+        async function displayPage(page) {
+            const container = document.getElementById("versions");
+            container.innerHTML = "";
+            const start = (page - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const pageVersions = versions.slice(start, end);
 
-        for (const v of pageVersions) {
-          const div = document.createElement("div");
-          div.className = "version";
+            for (const v of pageVersions) {
+                const div = document.createElement("div");
+                div.className = "version";
 
-          div.innerHTML = `
+                div.innerHTML = `
                     <h2>Version ${v.name}</h2>
                     <div class="edition-selector">
                         <label for="edition-${v.name}">Select Edition:</label>
@@ -345,67 +170,51 @@
                     </div>
                 `;
 
-          container.appendChild(div);
+                container.appendChild(div);
 
-          // Add event listener to update download link
-          document
-            .getElementById(`edition-${v.name}`)
-            .addEventListener("change", (event) => {
-              const selectedEdition = event.target.value;
-              const link = document.getElementById(`download-link-${v.name}`);
-              link.href = `cdn/versions/${v.name}/${selectedEdition}.jar`;
-              link.textContent = `Download ${selectedEdition.charAt(0).toUpperCase() + selectedEdition.slice(1)} Edition`;
-            });
+                // Add event listener to update download link
+                document
+                    .getElementById(`edition-${v.name}`)
+                    .addEventListener("change", (event) => {
+                        const selectedEdition = event.target.value;
+                        const link = document.getElementById(`download-link-${v.name}`);
+                        link.href = `cdn/versions/${v.name}/${selectedEdition}.jar`;
+                        link.textContent = `Download ${selectedEdition.charAt(0).toUpperCase() + selectedEdition.slice(1)} Edition`;
+                    });
+            }
         }
-      }
 
-      function updatePagination() {
-        const prevBtn = document.getElementById("prevBtn");
-        const nextBtn = document.getElementById("nextBtn");
-        const pageInfo = document.getElementById("pageInfo");
-        prevBtn.disabled = currentPage === 1;
-        nextBtn.disabled = currentPage === totalPages;
-        pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
-      }
-
-      document.getElementById("prevBtn").addEventListener("click", async () => {
-        if (currentPage > 1) {
-          currentPage--;
-          await displayPage(currentPage);
-          updatePagination();
+        function updatePagination() {
+            const prevBtn = document.getElementById("prevBtn");
+            const nextBtn = document.getElementById("nextBtn");
+            const pageInfo = document.getElementById("pageInfo");
+            prevBtn.disabled = currentPage === 1;
+            nextBtn.disabled = currentPage === totalPages;
+            pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
         }
-      });
 
-      document.getElementById("nextBtn").addEventListener("click", async () => {
-        if (currentPage < totalPages) {
-          currentPage++;
-          await displayPage(currentPage);
-          updatePagination();
-        }
-      });
+        document.getElementById("prevBtn").addEventListener("click", async () => {
+            if (currentPage > 1) {
+                currentPage--;
+                await displayPage(currentPage);
+                updatePagination();
+            }
+        });
 
-      loadVersions();
+        document.getElementById("nextBtn").addEventListener("click", async () => {
+            if (currentPage < totalPages) {
+                currentPage++;
+                await displayPage(currentPage);
+                updatePagination();
+            }
+        });
 
-      document.getElementById("retry-btn").addEventListener("click", () => {
-        document.getElementById("error-modal").style.display = "none";
         loadVersions();
-      });
+
+        document.getElementById("retry-btn").addEventListener("click", () => {
+            document.getElementById("error-modal").style.display = "none";
+            loadVersions();
+        });
     </script>
-    <script>
-      window.va =
-        window.va ||
-        function () {
-          (window.vaq = window.vaq || []).push(arguments);
-        };
-    </script>
-    <script defer src="/_vercel/insights/script.js"></script>
-    <script>
-      window.si =
-        window.si ||
-        function () {
-          (window.siq = window.siq || []).push(arguments);
-        };
-    </script>
-    <script defer src="/_vercel/speed-insights/script.js"></script>
-  </body>
+</body>
 </html>

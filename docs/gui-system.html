@@ -1,112 +1,34 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GUI System - Command Maker Wiki</title>
+    <meta name="description" content="Guide to the Function Manager GUI in Command Maker - browse, download, and create functions with the visual chest-style inventory interface.">
     <link rel="stylesheet" href="styles.css">
-    <link rel="icon" href="https://diamondstar-mods.github.io/Minecraft-Command-Maker/favicon.ico">
+    <link rel="icon" href="favicon.ico">
 </head>
 <body>
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-logo"><a href="index.html"><img class="logo-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/favicon.ico" alt="Command Maker Icon"> Command Maker Wiki</a></div>
-            <div class="nav-menu">
-                <a href="index.html" class="nav-link">Home</a>
-                <a href="getting-started.html" class="nav-link">Getting Started</a>
-                <a href="commands.html" class="nav-link">Commands</a>
-                <a href="syntax-system.html" class="nav-link">Custom Syntax</a>
-                <a href="functions.html" class="nav-link">Functions</a>
-                <div class="dropdown">
-                    <button class="dropdown-toggle">Systems ▼</button>
-                    <div class="dropdown-menu">
-                        <a href="economy-system.html">Economy System</a>
-                        <a href="kit-system.html">Kit System</a>
-                        <a href="home-system.html">Home System</a>
-                        <a href="shop-system.html">Shop System</a>
-                        <a href="jail-system.html">Jail System</a>
-                        <a href="mute-system.html">Mute System</a>
-                        <a href="vote-system.html">Vote System</a>
-                        <a href="rank-system.html">Rank System</a>
-                        <a href="achievement-system.html">Achievement System</a>
-                        <a href="event-system.html">Event System</a>
-                    </div>
-                </div>
-                <a href="faq.html" class="nav-link">FAQ</a>
-                <a href="forum.html" class="nav-link">Forum</a>
-                <a href="download.html" class="nav-link">Downloads</a>
-            </div>
-            <div class="nav-donate">
-                <a href="https://commandmakerwiki.lucasgeitgey.com/donate.html" class="nav-link" target="_blank">❤️ Donate</a>
-            </div>
-            <select id="theme-select" style="display: none;"><option value="light">Light (default)</option><option value="dark">Dark (beta)</option></select>
-            <div class="nav-search"><input type="text" id="searchBox" placeholder="Search documentation..." class="search-input"></div>
-        </div>
-    </nav>
-
-    <div class="main-wrapper">
-        <aside class="sidebar">
-            <div class="sidebar-widget">
-                <h3 class="widget-title">📚 Documentation</h3>
-                <ul class="widget-list">
-                    <li><a href="getting-started.html">Getting Started</a></li>
-                    <li><a href="installation.html">Installation</a></li>
-                    <li><a href="configuration.html">Configuration</a></li>
-                    <li><a href="aliases.html">Creating Aliases</a></li>
-                </ul>
-            </div>
-            <div class="sidebar-widget">
-                <h3 class="widget-title">⚡ Features</h3>
-                <ul class="widget-list">
-                    <li><a href="syntax-system.html">Custom Syntax System</a></li>
-                    <li><a href="functions.html">Functions System</a></li>
-                    <li><a href="variables.html">Variables & Substitution</a></li>
-                    <li><a href="gui-system.html">GUI System</a></li>
-                    <li><a href="chat-messages.html">Chat Messages</a></li>
-                </ul>
-            </div>
-            <div class="sidebar-widget">
-                <h3 class="widget-title">🎮 Examples</h3>
-                <ul class="widget-list">
-                    <li><a href="tpa-system.html">TPA System</a></li>
-                    <li><a href="ban-system.html">Ban System</a></li>
-                    <li><a href="warp-system.html">Warp System</a></li>
-                    <li><a href="custom-commands.html">Custom Commands</a></li>
-                </ul>
-            </div>
-            <div class="sidebar-widget">
-                <h3 class="widget-title">❓ Help</h3>
-                <ul class="widget-list">
-                    <li><a href="troubleshooting.html">Troubleshooting</a></li>
-                    <li><a href="faq.html">Frequently Asked Questions</a></li>
-                    <li><a href="best-practices.html">Best Practices</a></li>
-                </ul>
-            </div>
-        </aside>
-
-        <main class="content">
-            <h1 id="docs-path" data-subpath="gui-system.html"></h1>
-            <iframe style="border: none; font-style: italic;" id="last-commit-iframe" src="" width="400" height="100"></iframe>
-            <script>
-                document.getElementById('last-commit-iframe').src = 'last-commit.html?path=' + document.getElementById('docs-path').dataset.subpath;
-            </script>
-
+    <nav id="navbar" class="navbar" role="navigation" aria-label="Main navigation"></nav>
+    <div class="layout">
+        <aside id="sidebar" class="sidebar" role="complementary" aria-label="Side navigation"></aside>
+        <main class="content" role="main">
             <h1>GUI System</h1>
-            <p class="lead">Manage functions and aliases visually with Command Maker's built-in graphical interfaces.</p>
+            <p>Manage functions and aliases visually with Command Maker's built-in graphical interfaces.</p>
 
-            <div class="info-box">
-                <h3>✨ New in 3.1.0</h3>
+            <div class="callout callout-info">
+                <h3>New in 3.1.0</h3>
                 <p>The brand-new <strong>Function Manager GUI</strong> replaces the old alias-delete screen. Open it with <code>/cmd gui</code> to browse, download, delete, and create functions — all from a chest-style inventory interface!</p>
             </div>
 
             <!-- Function Manager GUI -->
             <section>
-                <h2>📦 Function Manager GUI</h2>
+                <h2>Function Manager GUI</h2>
                 <p>The main GUI for managing all your functions. Open it with:</p>
                 <pre><code>/cmd gui</code></pre>
                 <p>This opens a 6-row chest inventory with three tabs:</p>
 
-                <h3>🟢 Download Tab</h3>
+                <h3>Download Tab</h3>
                 <p>Browse all downloadable functions from the online library. Each function appears as a paper item with its name. Functions you already have installed are automatically hidden.</p>
                 <ul>
                     <li><strong>Click</strong> any function to download it instantly</li>
@@ -114,7 +36,7 @@
                     <li>Green items = available for download</li>
                 </ul>
 
-                <h3>🔵 My Functions Tab</h3>
+                <h3>My Functions Tab</h3>
                 <p>View and manage your locally installed functions. Each function appears as a book item.</p>
                 <ul>
                     <li><strong>Left-click</strong> to run the function immediately</li>
@@ -122,7 +44,7 @@
                     <li>Blue items = currently installed</li>
                 </ul>
 
-                <h3>🟡 Create Tab</h3>
+                <h3>Create Tab</h3>
                 <p>Create new function files from templates. Each template appears as a writable book.</p>
                 <ul>
                     <li><strong>Empty Function</strong> — Blank file with comment header</li>
@@ -142,7 +64,7 @@
 
             <!-- Alias Management -->
             <section>
-                <h2>📋 Alias Management</h2>
+                <h2>Alias Management</h2>
                 <p>For managing aliases, use:</p>
                 <pre><code>/deletealias</code></pre>
                 <p>This lists all aliases in chat with their commands. Use <code>/cmd del &lt;alias&gt;</code> to remove specific aliases, or <code>/cmd add</code> to create new ones.</p>
@@ -151,34 +73,34 @@
             <!-- Command Tips -->
             <section>
                 <h2>Comparison: GUI vs Commands vs Files</h2>
-                <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+                <table class="comparison-table">
                     <thead>
-                        <tr style="background-color: #f0f0f0;">
-                            <th style="border: 1px solid #ccc; padding: 8px;">Method</th>
-                            <th style="border: 1px solid #ccc; padding: 8px;">Best For</th>
-                            <th style="border: 1px solid #ccc; padding: 8px;">Ease</th>
+                        <tr>
+                            <th>Method</th>
+                            <th>Best For</th>
+                            <th>Ease</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td style="border: 1px solid #ccc; padding: 8px;"><strong>Function Manager GUI</strong></td>
-                            <td style="border: 1px solid #ccc; padding: 8px;">Browsing, downloading, creating functions</td>
-                            <td style="border: 1px solid #ccc; padding: 8px;">⭐⭐⭐⭐⭐</td>
-                        </tr>
-                        <tr style="background-color: #f9f9f9;">
-                            <td style="border: 1px solid #ccc; padding: 8px;"><strong>Commands</strong></td>
-                            <td style="border: 1px solid #ccc; padding: 8px;">Adding simple aliases, running functions</td>
-                            <td style="border: 1px solid #ccc; padding: 8px;">⭐⭐⭐⭐</td>
+                            <td><strong>Function Manager GUI</strong></td>
+                            <td>Browsing, downloading, creating functions</td>
+                            <td>Very Easy</td>
                         </tr>
                         <tr>
-                            <td style="border: 1px solid #ccc; padding: 8px;"><strong>JSON Files</strong></td>
-                            <td style="border: 1px solid #ccc; padding: 8px;">Bulk editing aliases, complex setup</td>
-                            <td style="border: 1px solid #ccc; padding: 8px;">⭐⭐⭐</td>
+                            <td><strong>Commands</strong></td>
+                            <td>Adding simple aliases, running functions</td>
+                            <td>Easy</td>
                         </tr>
-                        <tr style="background-color: #f9f9f9;">
-                            <td style="border: 1px solid #ccc; padding: 8px;"><strong>Function Files</strong></td>
-                            <td style="border: 1px solid #ccc; padding: 8px;">Writing multi-command sequences</td>
-                            <td style="border: 1px solid #ccc; padding: 8px;">⭐⭐⭐</td>
+                        <tr>
+                            <td><strong>JSON Files</strong></td>
+                            <td>Bulk editing aliases, complex setup</td>
+                            <td>Moderate</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Function Files</strong></td>
+                            <td>Writing multi-command sequences</td>
+                            <td>Moderate</td>
                         </tr>
                     </tbody>
                 </table>
@@ -217,27 +139,8 @@
             </section>
         </main>
     </div>
-
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-section">
-                <h4>Documentation</h4>
-                <ul><li><a href="getting-started.html">Getting Started</a></li><li><a href="commands.html">Commands</a></li><li><a href="syntax-system.html">Custom Syntax</a></li><li><a href="examples.html">Examples</a></li></ul>
-            </div>
-            <div class="footer-section">
-                <h4>Resources</h4>
-                <ul><li><a href="troubleshooting.html">Troubleshooting</a></li><li><a href="faq.html">FAQ</a></li><li><a href="best-practices.html">Best Practices</a></li><li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">GitHub</a></li></ul>
-            </div>
-            <div class="footer-section">
-                <h4>Community</h4>
-                <ul><li><a href="https://modrinth.com/mod/command-maker">Modrinth</a></li><li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">Report Issues</a></li><li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">Contribute</a></li></ul>
-            </div>
-        </div>
-        <div class="footer-bottom"><p>&copy; 2025 - 2026 Command Maker Wiki. Built with ❤️ for Minecraft players.</p></div>
-    </footer>
-
+    <footer id="footer" class="footer" role="contentinfo"></footer>
+    <script src="components.js"></script>
     <script src="script.js"></script>
-<script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)};</script>
-<script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>

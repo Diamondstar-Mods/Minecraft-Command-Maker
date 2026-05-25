@@ -1,88 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Variables & Substitution - Command Maker Wiki</title>
+    <meta name="description" content="Complete guide to using variables and substitution in Command Maker aliases - built-in variables, custom variables, and syntax parameters.">
     <link rel="stylesheet" href="styles.css">
-    <link rel="icon" href="https://diamondstar-mods.github.io/Minecraft-Command-Maker/favicon.ico">
+    <link rel="icon" href="favicon.ico">
 </head>
 <body>
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-logo"><a href="index.html"><img class="logo-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/favicon.ico" alt="Command Maker Icon"> Command Maker Wiki</a></div>
-            <div class="nav-menu">
-                <a href="index.html" class="nav-link">Home</a>
-                <a href="getting-started.html" class="nav-link">Getting Started</a>
-                <a href="commands.html" class="nav-link">Commands</a>
-                <a href="syntax-system.html" class="nav-link">Custom Syntax</a>
-                <div class="dropdown">
-                    <button class="dropdown-toggle">Systems ▼</button>
-                    <div class="dropdown-menu">
-                        <a href="economy-system.html">Economy System</a>
-                        <a href="kit-system.html">Kit System</a>
-                        <a href="home-system.html">Home System</a>
-                        <a href="shop-system.html">Shop System</a>
-                        <a href="jail-system.html">Jail System</a>
-                        <a href="mute-system.html">Mute System</a>
-                        <a href="vote-system.html">Vote System</a>
-                        <a href="rank-system.html">Rank System</a>
-                        <a href="achievement-system.html">Achievement System</a>
-                        <a href="event-system.html">Event System</a>
-                    </div>
-                </div>
-                <a href="faq.html" class="nav-link">FAQ</a>
-                <a href="forum.html" class="nav-link">Forum</a>
-                <a href="download.html" class="nav-link">Downloads</a>
-            </div>
-            <div class="nav-donate">
-                <a href="https://commandmakerwiki.lucasgeitgey.com/donate.html" class="nav-link" target="_blank">❤️ Donate</a>
-            </div>
-            <select id="theme-select" style="display: none;">
-                <option value="light">Light (default)</option>
-                <option value="dark">Dark (beta)</option>
-            </select>
-            <div class="nav-search"><input type="text" id="searchBox" placeholder="Search documentation..." class="search-input"></div>
-        </div>
-    </nav>
-
-    <div class="main-wrapper">
-        <aside class="sidebar">
-            <div class="sidebar-widget">
-                <h3 class="widget-title">⚡ Features</h3>
-                <ul class="widget-list">
-                    <li><a href="syntax-system.html">Custom Syntax System</a></li>
-                    <li><a href="variables.html">Variables & Substitution</a></li>
-                    <li><a href="gui-system.html">GUI System</a></li>
-                    <li><a href="chat-messages.html">Chat Messages</a></li>
-                </ul>
-            </div>
-            <div class="sidebar-widget">
-                <h3 class="widget-title">📚 Documentation</h3>
-                <ul class="widget-list">
-                    <li><a href="getting-started.html">Getting Started</a></li>
-                    <li><a href="installation.html">Installation</a></li>
-                    <li><a href="configuration.html">Configuration</a></li>
-                    <li><a href="aliases.html">Creating Aliases</a></li>
-                </ul>
-            </div>
-            <div class="sidebar-widget">
-                <h3 class="widget-title">🎮 Examples</h3>
-                <ul class="widget-list">
-                    <li><a href="tpa-system.html">TPA System</a></li>
-                    <li><a href="ban-system.html">Ban System</a></li>
-                    <li><a href="warp-system.html">Warp System</a></li>
-                    <li><a href="custom-commands.html">Custom Commands</a></li>
-                </ul>
-            </div>
-        </aside>
-
-        <main class="content">
-            <h1 id="docs-path" data-subpath="variables.html"></h1>
-            <iframe style="border: none; font-style: italic;" id="last-commit-iframe" src="" width="400" height="50"></iframe>
-            <script>
-                document.getElementById('last-commit-iframe').src = 'last-commit.html?path=' + document.getElementById('docs-path').dataset.subpath;
-            </script>
+    <nav id="navbar" class="navbar" role="navigation" aria-label="Main navigation"></nav>
+    <div class="layout">
+        <aside id="sidebar" class="sidebar" role="complementary" aria-label="Side navigation"></aside>
+        <main class="content" role="main">
             <h1>Variables & Substitution</h1>
             <p>Learn how to use variables to make your aliases dynamic and powerful.</p>
 
@@ -214,7 +144,7 @@
   "ban": "ban-ip ${ban_player} && say [BAN] ${ban_player} banned for: ${ban_reason}"
 }</code></pre>
 
-            <h2>Three Parameter Example</h3>
+            <h2>Three Parameter Example</h2>
 
             <pre><code>{
   "msg": {
@@ -254,7 +184,7 @@
             <pre><code>/cmd add status say Status: ${player} - OK (${server_name})</code></pre>
 
             <h3>Variables in Selectors</h3>
-            <pre><code">/cmd add heal effect give @s instant_health 1 && say Healed ${player}</code></pre>
+            <pre><code>/cmd add heal effect give @s instant_health 1 && say Healed ${player}</code></pre>
 
             <h2>Variable Examples</h2>
 
@@ -273,7 +203,7 @@
 /cmd add arena tp ${player} ${pvp_arena}</code></pre>
 
             <h3>Moderation System</h3>
-            <pre><code">/setcmdvariable kick_reason "Breaking server rules"
+            <pre><code>/setcmdvariable kick_reason "Breaking server rules"
 /setcmdvariable ban_reason "Permanent ban for serious violations"
 
 /cmd add kick kick ${player} ${kick_reason}
@@ -297,8 +227,8 @@
                 <li>Substitution happens instantly</li>
             </ul>
 
-            <div class="info-box">
-                <h3>💡 Pro Tip</h3>
+            <div class="callout callout-tip">
+                <h3>Pro Tip</h3>
                 <p>Use meaningful variable names like <code>${server_ip}</code> instead of <code>${a}</code> for readability!</p>
             </div>
 
@@ -322,30 +252,8 @@ RIGHT: /cmd add test say ${player}</code></pre>
 3. Reload: /cmd reload</code></pre>
         </main>
     </div>
-
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-section">
-                <h4>Features</h4>
-                <ul><li><a href="syntax-system.html">Custom Syntax</a></li><li><a href="variables.html">Variables</a></li><li><a href="gui-system.html">GUI System</a></li><li><a href="chat-messages.html">Chat Messages</a></li></ul>
-            </div>
-            <div class="footer-section">
-                <h4>Documentation</h4>
-                <ul><li><a href="getting-started.html">Getting Started</a></li><li><a href="installation.html">Installation</a></li><li><a href="configuration.html">Configuration</a></li></ul>
-            </div>
-            <div class="footer-section">
-                <h4>Community</h4>
-                <ul><li><a href="https://modrinth.com/mod/command-maker">Modrinth</a></li><li><a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker">GitHub</a></li></ul>
-            </div>
-        </div>
-        <div class="footer-bottom"><p>&copy; 2025 - 2026 Command Maker Wiki.</p></div>
-    </footer>
-
+    <footer id="footer" class="footer" role="contentinfo"></footer>
+    <script src="components.js"></script>
     <script src="script.js"></script>
-<script>
-  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
-</script>
-<script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>
-
