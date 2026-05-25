@@ -228,13 +228,10 @@ tr:nth-child(even) td { background: var(--bg-secondary); }
 .dropdown-menu a:hover { background: var(--bg-secondary); color: var(--primary); text-decoration: none; }
 .dropdown-menu a.active { color: var(--primary); font-weight: 600; }
 
-/* Theme toggle */
-.theme-toggle {
-  background: none; border: 1px solid var(--border); border-radius: var(--radius-sm);
-  padding: .35rem .5rem; cursor: pointer; font-size: 1rem; line-height: 1;
-  transition: background .15s;
+/* Theme dropdown toggle */
+.theme-toggle-btn {
+  font-size: .85rem; padding: .35rem .55rem;
 }
-.theme-toggle:hover { background: var(--bg-secondary); }
 
 /* Search */
 .nav-search { position: relative; }

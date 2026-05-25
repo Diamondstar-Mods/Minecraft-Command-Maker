@@ -11,32 +11,49 @@
     init() {
       const saved = localStorage.getItem("cm-theme");
       const prefers = window.matchMedia("(prefers-color-scheme: dark)").matches;
-      this.set(saved || (prefers ? "dark" : "light"));
+      this.apply(saved || "auto");
 
-      const btn = document.querySelector(".theme-toggle");
-      if (btn) {
-        btn.addEventListener("click", () => {
-          const next = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
-          this.set(next);
+      // Dropdown option clicks
+      document.querySelectorAll(".theme-option").forEach(link => {
+        link.addEventListener("click", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          this.apply(link.dataset.theme);
+          // Close dropdown
+          link.closest(".dropdown-menu").classList.remove("show");
         });
-        this.updateIcon(btn);
-      }
+      });
 
-      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
-        if (!localStorage.getItem("cm-theme")) this.set(e.matches ? "dark" : "light");
+      // System preference change — only if set to "auto"
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
+        if (localStorage.getItem("cm-theme") === "auto") {
+          this.apply("auto");
+        }
       });
     },
 
-    set(theme) {
-      document.documentElement.setAttribute("data-theme", theme);
-      localStorage.setItem("cm-theme", theme);
-      const btn = document.querySelector(".theme-toggle");
-      if (btn) this.updateIcon(btn);
+    resolve(theme) {
+      if (theme === "auto") {
+        return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      }
+      return theme;
     },
 
-    updateIcon(btn) {
-      const theme = document.documentElement.getAttribute("data-theme");
-      btn.textContent = theme === "dark" ? "☀️" : "🌙";
+    apply(theme) {
+      document.documentElement.setAttribute("data-theme", this.resolve(theme));
+      localStorage.setItem("cm-theme", theme);
+      this.highlightActive(theme);
+    },
+
+    highlightActive(theme) {
+      document.querySelectorAll(".theme-option").forEach(a => {
+        a.classList.toggle("active", a.dataset.theme === theme);
+      });
+      const btn = document.querySelector(".theme-toggle-btn");
+      if (btn) {
+        const icons = { light: "☀️", dark: "🌙", auto: "💻" };
+        btn.textContent = `${icons[theme] || "🌓"} Theme ▼`;
+      }
     }
   };
 
