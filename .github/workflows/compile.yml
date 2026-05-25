@@ -3,7 +3,7 @@ name: Build All Servers
 on:
   workflow_dispatch:
   push:
-    branches: *
+    branches: [ 3.x-fabric-1.22 ]
   pull_request:
 
 jobs:
