@@ -10,9 +10,14 @@ The Gradle wrapper scripts (`gradlew` / `gradlew.bat`) use JDK paths from `gradl
 
 ```bash
 ./gradlew :server-1.21:build    # Fabric server, MC 1.21.9, Java 17
-./gradlew :server-1.22:build    # Fabric server, MC 26.1, Java 25
+./gradlew :server-1.22:build    # Fabric server, MC 26.1, Java 25 [WIP — does NOT compile yet]
 ./gradlew build                 # Build all registered subprojects
+./gradlew check                 # Run all checks (compilation + validation)
 ```
+
+`build.bat` is a convenience wrapper that runs `gradlew.bat build`.
+
+**server-1.22 WIP note:** The source is copied from server-1.21 but has NOT been updated for MC 26.1 API changes. MC 26.1 renamed/moved many classes (e.g., `ScreenHandler` → different package, `DrawContext` renamed). Expect ~100 compilation errors until the migration is done. The gradle config also differs: no Yarn mappings, uses `implementation` instead of `modImplementation` for fabric-loader/fabric-api.
 
 ### Inactive/standalone subprojects (on disk but not in `settings.gradle`)
 
@@ -121,3 +126,11 @@ Commit messages start with a verb (Add, Fix, Update, Improve).
 - Java naming: camelCase variables/methods, PascalCase classes
 - 4-space indent or 1 tab, max 120 chars per line
 - Javadoc on public methods/classes
+
+## Testing
+
+There are **no automated tests**. All testing is manual in-game via `./gradlew :server-1.21:runClient` (or `:client:runClient` for the client module). The `./gradlew check` command only validates compilation — it runs no unit tests.
+
+## Mixins
+
+Each module has `modid.mixins.json` and `modid.client.mixins.json` in `src/main/resources/`, referenced by `fabric.mod.json`. These are Fabric Mixin configs used to inject into vanilla Minecraft code at runtime. Check these configs (and any mixin Java classes) when dealing with cross-cutting concerns or class transformation issues.
