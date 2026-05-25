@@ -26,6 +26,7 @@ These must be built independently by adding them to `settings.gradle` first, or 
 ./gradlew :client-legacy:build   # Legacy Fabric client, MC 1.8-1.13.2, Java 8
 ./gradlew :server-legacy:build   # Legacy Fabric server, MC 1.8-1.13.2, Java 8
 ```
+Note that minecraft 1.20-1.20.4 runs java 17, but minecraft 1.20.5 runs java 21.
 
 Output JARs land in `<subproject>/build/libs/`.
 

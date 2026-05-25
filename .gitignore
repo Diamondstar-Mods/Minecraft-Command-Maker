@@ -48,3 +48,4 @@ server/run/
 .env*.local
 .env*
 JAVAFILES/
+.claude
