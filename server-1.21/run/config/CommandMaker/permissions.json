@@ -1,0 +1,33 @@
+{
+  "version": "1.0",
+  "description": "CMDMaker Advanced Permissions Configuration",
+  "useLuckPerms": true,
+  "enablePerAliasPermissions": true,
+  "aliases": {
+    "home": {
+      "permission": "cmdmaker.alias.home",
+      "description": "Allow players to use the home alias",
+      "enabled": true
+    },
+    "tp": {
+      "permission": "cmdmaker.alias.tp",
+      "description": "Allow players to use the teleport alias",
+      "enabled": true
+    }
+  },
+  "globalPermissions": {
+    "cmdmaker.cmd": "Allow use of /cmd command",
+    "cmdmaker.addcommand": "Allow use of /addcommand",
+    "cmdmaker.manage.alias": "Allow managing aliases",
+    "cmdmaker.manage.permissions": "Allow managing permissions",
+    "cmdmaker.*": "Allow all cmdmaker features"
+  },
+  "players": {
+    "permissions": {}
+  },
+  "luckperms": {
+    "syncInterval": 300,
+    "enabled": true,
+    "groupPrefix": "cmdmaker"
+  }
+}

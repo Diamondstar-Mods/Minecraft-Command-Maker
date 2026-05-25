@@ -1,23 +1,23 @@
 pluginManagement {
-	repositories {
-		maven {
-			name = 'Fabric'
-			url = 'https://maven.fabricmc.net/'
-		}
-		maven {
-			name = 'LegacyFabric'
-			url = 'https://repo.legacyfabric.net/maven/'
-		}
-		mavenCentral()
-		gradlePluginPortal()
-	}
+    repositories {
+        maven {
+            name = 'Fabric'
+            url = 'https://maven.fabricmc.net/'
+        }
+        maven {
+            name = 'LegacyFabric'
+            url = 'https://repo.legacyfabric.net/maven/'
+        }
+        mavenCentral()
+        gradlePluginPortal()
+    }
 }
 
 rootProject.name = 'Minecraft-Command-Maker'
-include 'server'
-include 'client'
-// Disabled older/quilt variants while focusing on main Fabric server/client builds
-// include 'quilt-server'
-// include 'quilt-client'
-// include 'server-legacy'
-// include 'client-legacy'
+
+// Multi-version server builds
+// NOTE: Uncomment once source code is adapted for that MC version
+// include 'server-1.17'           // MC 1.17.x — needs code adaptation from 1.21 API
+// include 'server-1.18-1.19-1.20' // MC 1.18-1.20 — needs code adaptation from 1.21 API
+include 'server-1.21'              // MC 1.21.x — current active build
+// include 'server-1.22'           // MC 1.22.x — needs Fabric API artifacts to exist
