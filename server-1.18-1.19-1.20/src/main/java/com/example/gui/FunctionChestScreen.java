@@ -7,7 +7,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 public class FunctionChestScreen extends HandledScreen<FunctionChestHandler> {
-    private static final Identifier TEXTURE = Identifier.of("minecraft", "textures/gui/container/generic_54.png");
+    private static final Identifier TEXTURE = new Identifier("minecraft", "textures/gui/container/generic_54.png");
 
     public FunctionChestScreen(FunctionChestHandler handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title);

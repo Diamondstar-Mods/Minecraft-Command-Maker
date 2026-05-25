@@ -7,11 +7,11 @@ import net.minecraft.util.Identifier;
 
 public class ModScreens {
     public static final ScreenHandlerType<FunctionChestHandler> FUNCTION_CHEST =
-        new ScreenHandlerType<FunctionChestHandler>(FunctionChestHandler::new, net.minecraft.resource.featuretoggle.FeatureSet.empty());
+        new ScreenHandlerType<>(FunctionChestHandler::new);
 
     public static void register() {
         Registry.register(Registries.SCREEN_HANDLER,
-            Identifier.of("nekkycommandmaker", "function_chest"),
+            new Identifier("nekkycommandmaker", "function_chest"),
             FUNCTION_CHEST);
     }
 }

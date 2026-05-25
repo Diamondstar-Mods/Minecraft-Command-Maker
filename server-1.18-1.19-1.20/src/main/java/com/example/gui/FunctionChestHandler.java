@@ -7,7 +7,6 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.component.DataComponentTypes;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.slot.Slot;
@@ -134,7 +133,7 @@ public class FunctionChestHandler extends ScreenHandler {
 
     private ItemStack makeItem(net.minecraft.item.Item item, String name) {
         ItemStack stack = new ItemStack(item);
-        stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal(name));
+        stack.setCustomName(Text.literal(name));
         return stack;
     }
 
@@ -253,7 +252,7 @@ public class FunctionChestHandler extends ScreenHandler {
                 default -> "§e";
             };
             ItemStack stack = new ItemStack(item);
-            stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal(prefix + name));
+            stack.setCustomName(Text.literal(prefix + name));
             return stack;
         }
     }
