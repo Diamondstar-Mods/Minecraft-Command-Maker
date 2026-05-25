@@ -7,7 +7,9 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.component.DataComponentTypes;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtList;
+import net.minecraft.nbt.NbtString;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.slot.Slot;
@@ -134,8 +136,17 @@ public class FunctionChestHandler extends ScreenHandler {
 
     private ItemStack makeItem(net.minecraft.item.Item item, String name) {
         ItemStack stack = new ItemStack(item);
-        stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal(name));
+        setItemName(stack, name);
         return stack;
+    }
+
+    private static void setItemName(ItemStack stack, String name) {
+        NbtCompound nbt = stack.getOrCreateNbt();
+        NbtCompound display = new NbtCompound();
+        // Escape the name for JSON
+        String escaped = name.replace("\\", "\\\\").replace("\"", "\\\"");
+        display.putString("Name", "{\"text\":\"" + escaped + "\"}");
+        nbt.put("display", display);
     }
 
     @Override
@@ -253,7 +264,7 @@ public class FunctionChestHandler extends ScreenHandler {
                 default -> "§e";
             };
             ItemStack stack = new ItemStack(item);
-            stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal(prefix + name));
+            setItemName(stack, prefix + name);
             return stack;
         }
     }
