@@ -41,15 +41,15 @@
         .modal-content button:hover {
             background-color: #0056b3;
         }
-        body.dark .modal-content {
+        [data-theme="dark"] .modal-content {
             background-color: #333;
             color: #fff;
         }
-        body.dark .modal-content button {
+        [data-theme="dark"] .modal-content button {
             background-color: #555;
             color: #fff;
         }
-        body.dark .modal-content button:hover {
+        [data-theme="dark"] .modal-content button:hover {
             background-color: #777;
         }
         .edition-selector {
@@ -68,7 +68,7 @@
             background-color: #fff;
             color: #333;
         }
-        body.dark .edition-selector select {
+        [data-theme="dark"] .edition-selector select {
             background-color: #333;
             color: #fff;
             border-color: #555;
@@ -88,11 +88,28 @@
         .download-finder-btn:hover {
             background: #0056b3;
         }
-        body.dark .download-finder-btn {
+        [data-theme="dark"] .download-finder-btn {
             background: #555;
         }
-        body.dark .download-finder-btn:hover {
+        [data-theme="dark"] .download-finder-btn:hover {
             background: #777;
+        }
+        .download-btn {
+            display: inline-block;
+            padding: 10px 18px;
+            background: #28a745;
+            color: #fff;
+            text-decoration: none;
+            border: 2px solid #28a745;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: background .15s, border-color .15s;
+        }
+        .download-btn:hover {
+            background: #218838;
+            border-color: #1e7e34;
+            text-decoration: none;
+            color: #fff;
         }
         .download-btn img.modrinth-icon,
         .additional-download-btn img.modrinth-icon {
@@ -124,7 +141,7 @@
             overflow-y: auto;
             position: relative;
         }
-        body.dark .download-finder-content {
+        [data-theme="dark"] .download-finder-content {
             background-color: #333;
             color: #fff;
         }
@@ -162,8 +179,8 @@
             font-size: 14px;
             box-sizing: border-box;
         }
-        body.dark .download-finder-section select,
-        body.dark .download-finder-section input {
+        [data-theme="dark"] .download-finder-section select,
+        [data-theme="dark"] .download-finder-section input {
             background-color: #555;
             color: #fff;
             border-color: #777;
@@ -176,7 +193,7 @@
             padding: 10px;
             background: #f9f9f9;
         }
-        body.dark .download-finder-results {
+        [data-theme="dark"] .download-finder-results {
             background-color: #444;
             border-color: #555;
         }
@@ -187,7 +204,7 @@
             border-radius: 4px;
             background: white;
         }
-        body.dark .version-result {
+        [data-theme="dark"] .version-result {
             background-color: #555;
             border-color: #666;
         }
@@ -200,7 +217,7 @@
             color: #666;
             margin: 4px 0;
         }
-        body.dark .version-result .meta {
+        [data-theme="dark"] .version-result .meta {
             color: #aaa;
         }
         .version-result .type-badge {
@@ -226,6 +243,56 @@
         .version-result .download-btn {
             display: inline-block;
             margin-top: 8px;
+            border: 2px solid #28a745;
+            border-radius: 6px;
+        }
+        .version-result .download-btn:hover {
+            background: #218838;
+            border-color: #1e7e34;
+        }
+        .additional-download-btn {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 10px 18px;
+            background: transparent;
+            color: #333;
+            text-decoration: none;
+            border: 2px solid #333;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+        .additional-download-btn:hover {
+            background: #f0f0f0;
+        }
+        .collapsible {
+            cursor: pointer;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        .collapsible::before {
+            content: "▶ ";
+            display: inline-block;
+            transition: transform 0.2s;
+            font-size: 0.7em;
+            vertical-align: middle;
+        }
+        .collapsible.active::before {
+            transform: rotate(90deg);
+        }
+        .collapsible-content {
+            display: none;
+            margin-left: 15px;
+            margin-top: 5px;
+            padding: 8px 12px;
+            background: #f5f5f5;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        [data-theme="dark"] .collapsible-content {
+            background: #2a2a2a;
+        }
+        .collapsible.active + .collapsible-content {
+            display: block;
         }
     </style>
 </head>
@@ -252,7 +319,7 @@
             <div id="versions">Loading&hellip;</div>
 
             <div style="margin-top:16px; text-align:center;">
-                <a href="download-local.html" class="download-btn" style="display:inline-block; padding:10px 18px; background:#28a745; color:#fff; text-decoration:none; border-radius:4px;">Local Server Downloads</a>
+                <a href="download-local.html" class="download-btn">Local Server Downloads</a>
             </div>
             <div id="pagination">
                 <button id="prevBtn">Previous</button>

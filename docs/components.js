@@ -28,17 +28,14 @@ CM.nav = {
     { label: "Home", href: "index.html" },
     { label: "Getting Started", href: "getting-started.html" },
     { label: "Downloads", href: "download.html" },
-    { label: "Commands", href: "commands.html" },
-    { label: "Custom Syntax", href: "syntax-system.html" },
-    { label: "Functions", href: "functions.html" },
-    { label: "Catalog", href: "function-catalog.html" },
-    { label: "GUI", href: "gui-system.html" },
-    { label: "Admin", href: "#", dropdown: [
+    { label: "Features", href: "#", dropdown: [
+      { label: "Custom Syntax System", href: "syntax-system.html" },
+      { label: "Functions System", href: "functions.html" },
+      { label: "Function Catalog", href: "function-catalog.html" },
+      { label: "GUI System", href: "gui-system.html" },
+      { label: "Variables & Substitution", href: "variables.html" },
+      { label: "Chat Messages", href: "chat-messages.html" },
       { label: "Advanced Permissions", href: "advanced-permissions-guide.html" },
-      { label: "Commands Reference", href: "commands.html" },
-      { label: "Best Practices", href: "best-practices.html" }
-    ]},
-    { label: "Systems", href: "#", dropdown: [
       { label: "Economy System", href: "economy-system.html" },
       { label: "Kit System", href: "kit-system.html" },
       { label: "Home System", href: "home-system.html" },
@@ -50,8 +47,14 @@ CM.nav = {
       { label: "Achievement System", href: "achievement-system.html" },
       { label: "Event System", href: "event-system.html" }
     ]},
-    { label: "FAQ", href: "faq.html" },
-    { label: "Forum", href: "forum.html" }
+    { label: "Help", href: "#", dropdown: [
+      { label: "Commands Reference", href: "commands.html" },
+      { label: "FAQ", href: "faq.html" },
+      { label: "Best Practices", href: "best-practices.html" },
+      { label: "Troubleshooting", href: "troubleshooting.html" },
+      { label: "Examples", href: "examples.html" },
+      { label: "Forum", href: "forum.html" }
+    ]}
   ],
 
   render() {
@@ -226,7 +229,7 @@ CM.renderEditButton = function () {
 // Last commit iframe
 CM.renderLastCommit = function () {
   const fn = CM.config.currentFile();
-  return `<iframe style="border:none;font-style:italic;opacity:0.7;margin-bottom:1rem;" src="last-commit.html?path=${fn}" width="300" height="24" title="Last commit info"></iframe>`;
+  return `<iframe style="border:none;font-style:italic;opacity:0.7;margin-bottom:1rem;" src="last-commit.html?path=${fn}" width="400" height="70" title="Last commit info"></iframe>`;
 };
 
 // Init — inject all chrome into the page
@@ -247,7 +250,14 @@ CM.init = function () {
         </button>
         <div class="nav-menu">${CM.nav.render()}</div>
         <div class="nav-actions">
-          <button class="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">🌓</button>
+          <div class="dropdown theme-dropdown">
+            <button class="dropdown-toggle theme-toggle-btn" aria-label="Change theme">🌓 Theme ▼</button>
+            <div class="dropdown-menu">
+              <a href="#" data-theme="light" class="theme-option">☀️ Light</a>
+              <a href="#" data-theme="dark" class="theme-option">🌙 Dark</a>
+              <a href="#" data-theme="auto" class="theme-option">💻 System</a>
+            </div>
+          </div>
           <div class="nav-search">
             <input type="text" id="searchBox" placeholder="Search..." class="search-input" autocomplete="off" role="search">
           </div>
@@ -261,6 +271,13 @@ CM.init = function () {
 
   if (footer) {
     footer.innerHTML = CM.footer.render();
+  }
+
+  // Inject last-commit iframe at top of content
+  if (content) {
+    const lastCommit = document.createElement("div");
+    lastCommit.innerHTML = CM.renderLastCommit();
+    content.insertBefore(lastCommit.firstElementChild, content.firstChild);
   }
 
   // Inject edit button into body
