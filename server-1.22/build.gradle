@@ -51,7 +51,6 @@ processResources {
 tasks.withType(JavaCompile).configureEach {
     it.options.release = 25
 }
-
 java {
     withSourcesJar()
     sourceCompatibility = JavaVersion.toVersion(25)

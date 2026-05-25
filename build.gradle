@@ -15,13 +15,9 @@ allprojects {
         maven { url 'https://maven.quiltmc.org/repository/snapshot' }
     }
 
-    tasks.withType(JavaCompile).configureEach {
-        it.options.release = 17
-    }
+    // Java release version is set per subproject
 }
 
 subprojects {
-    tasks.withType(JavaCompile).configureEach {
-        it.options.release = 17
-    }
+    // Java release version is set per subproject
 }
