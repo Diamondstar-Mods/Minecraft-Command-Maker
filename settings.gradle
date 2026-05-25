@@ -16,8 +16,8 @@ pluginManagement {
 rootProject.name = 'Minecraft-Command-Maker'
 
 // Multi-version server builds
-// NOTE: Uncomment once source code is adapted for that MC version
-// include 'server-1.17'           // MC 1.17.x — needs code adaptation from 1.21 API
-// include 'server-1.18-1.19-1.20' // MC 1.18-1.20 — needs code adaptation from 1.21 API
+// NOTE: Uncomment older versions once source code is adapted for those MC APIs
+// include 'server-1.17'           // MC 1.17.x — needs code adaptation (pre-v2 commands, pre-DrawContext, pre-Identifier.of)
+// include 'server-1.18-1.19-1.20' // MC 1.18-1.20.x — needs code adaptation (pre-DataComponentTypes, pre-Identifier.of)
 include 'server-1.21'              // MC 1.21.x — current active build
-// include 'server-1.22'           // MC 1.22.x — needs Fabric API artifacts to exist
+// include 'server-1.22'           // MC 26.1 — build requires Java 25 JDK installed

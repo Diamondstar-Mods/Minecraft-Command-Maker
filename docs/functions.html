@@ -102,47 +102,63 @@
             </script>
 
             <h1>Functions System</h1>
-            <p class="lead">Chain multiple commands together using .mcfunction files for complex command sequences.</p>
+            <p class="lead">Chain commands using .mcfunction files, download pre-made functions, or create your own from templates.</p>
+
+            <!-- Downloadable Functions -->
+            <section>
+                <h2>📦 Downloadable Functions (NEW in 3.1.0)</h2>
+                <p>Command Maker now includes an <strong>online function library</strong> with 37 pre-made functions you can download directly in-game!</p>
+                <div class="highlight-box">
+                    <h3>✨ How to Download</h3>
+                    <p>Use <code>/cmd downloadfunction &lt;name&gt;</code> to download any function, or open the <a href="gui-system.html">Function Manager GUI</a> with <code>/cmd gui</code> to browse visually. Tab-complete shows descriptions!</p>
+                </div>
+                <h3>Available Categories</h3>
+                <ul>
+                    <li><strong>🎮 Mini-Games</strong> — Spleef, Parkour, Hide & Seek, PvP Arena</li>
+                    <li><strong>⚔️ Combat</strong> — Zombie Siege, Mob Army, Boss Arena</li>
+                    <li><strong>🏗️ Building</strong> — Bridge Builder, Underground Base, Lighthouse, Treehouse, Spawn Setup</li>
+                    <li><strong>🎆 Party & Visual</strong> — Light Show, Bubble Party, Firework Show, Dance Parties, New Year</li>
+                    <li><strong>💥 Chaos</strong> — TNT Rain, Meteor Shower, Scorched Earth, Gravity Flip</li>
+                    <li><strong>🔧 Utility</strong> — Lag Cleaner, Time Locker, Mob Off, Base Protection, Starter Kit</li>
+                    <li><strong>🎃 Seasonal</strong> — Halloween Spook, New Year Countdown</li>
+                </ul>
+                <p><a href="function-catalog.html">📋 View Full Function Catalog →</a></p>
+            </section>
 
             <section>
                 <h2>What Are Functions?</h2>
                 <p>Functions allow you to execute multiple commands in sequence from a single alias. Instead of running one command, your alias can reference a .mcfunction file that contains a list of commands to run one after another.</p>
-
-                <p>This is perfect for complex operations like:</p>
-                <ul>
-                    <li>Server announcements with multiple effects</li>
-                    <li>Multi-step setup processes</li>
-                    <li>Chained game mechanics</li>
-                    <li>Automated sequences</li>
-                </ul>
+                <p>Perfect for server announcements, multi-step setups, chained game mechanics, and automated sequences.</p>
             </section>
 
             <section>
-                <h2>How It Works</h2>
-
-                <p>The Functions folder (<code>config/CommandMaker/Functions/</code>) is automatically created when the mod loads. An example function file is also created for you.</p>
-
+                <h2>Creating Functions</h2>
                 <div class="highlight-box">
                     <h3>✨ Automatic Alias Creation</h3>
-                    <p><strong>NEW:</strong> Aliases are now automatically created for any .mcfunction file! If you create <code>mobsoff.mcfunction</code>, the command <code>/mobsoff</code> will automatically work without needing to edit aliases.json.</p>
+                    <p>Aliases are automatically created for any .mcfunction file! If you create <code>mobsoff.mcfunction</code>, the command <code>/mobsoff</code> will automatically work.</p>
                 </div>
-
-                <h3>Step 1: Create a Function File</h3>
+                <h3>Via the GUI (Easiest)</h3>
+                <ol><li>Open with <code>/cmd gui</code></li><li>Go to the <strong>Create</strong> tab</li><li>Click a template</li><li>Edit the generated file</li></ol>
+                <h3>Via Commands</h3>
+                <pre><code>/cmd function create my_function</code></pre>
+                <h3>Manually</h3>
                 <p>Create a .mcfunction file in <code>config/CommandMaker/Functions/</code></p>
-                <p><strong>Example:</strong> <code>mobsoff.mcfunction</code></p>
                 <pre><code>spawn rates monster 0
 say Monster spawns disabled!</code></pre>
+            </section>
 
-                <h3>Step 2: Use It In-Game (Automatic!)</h3>
-                <pre><code>/mobsoff</code></pre>
-                <p>The alias is automatically created - no manual configuration needed!</p>
-
-                <h4>Manual Alias Creation (Optional)</h4>
-                <p>If you want custom alias names or additional configuration, you can still manually add aliases in <code>aliases.json</code>:</p>
-                <pre><code>{
-  "mobsoff": "function:mobsoff",
-  "disable_mobs": "function:mobsoff"  // Custom alias name
-}</code></pre>
+            <section>
+                <h2>Managing Functions</h2>
+                <table>
+                    <tr><th>Action</th><th>Command</th></tr>
+                    <tr><td>Run a function</td><td><code>/cmd function &lt;name&gt;</code></td></tr>
+                    <tr><td>Create a function</td><td><code>/cmd function create &lt;name&gt;</code></td></tr>
+                    <tr><td>Delete a function</td><td><code>/cmd function delete &lt;name&gt;</code></td></tr>
+                    <tr><td>Download from library</td><td><code>/cmd downloadfunction &lt;name&gt;</code></td></tr>
+                    <tr><td>Browse library</td><td><code>/cmd listdownloadablefunctions</code></td></tr>
+                    <tr><td>List local functions</td><td><code>/cmd list</code></td></tr>
+                    <tr><td>Open GUI</td><td><code>/cmd gui</code></td></tr>
+                </table>
             </section>
 
             <section>
@@ -150,34 +166,21 @@ say Monster spawns disabled!</code></pre>
                 <ul>
                     <li>Each line is a separate command</li>
                     <li>Empty lines and lines starting with # are ignored</li>
-                    <li>Variables like ${player}, ${x}, ${y}, ${z} work in functions</li>
+                    <li>Variables like , , ,  work in functions</li>
                     <li>Commands execute in the order they appear</li>
                 </ul>
-
-                <h3>Example Function: server_restart.mcfunction</h3>
                 <pre><code># Announce the restart
 say §c[SERVER] Server restarting in 30 seconds!
-
-# Save the world
 save-all
-
-# Wait 30 seconds (using schedule if available)
-schedule function minecraft:restart_warning 25s
-
-# Actually restart (this would need a restart command or plugin)
-# stop</code></pre>
+schedule function minecraft:restart_warning 25s</code></pre>
             </section>
 
             <section>
                 <h2>Advanced Usage</h2>
-
                 <h3>Variables in Functions</h3>
-                <p>All variables work in function files:</p>
-                <pre><code>tp ${player} 0 100 0
-say ${player} has been teleported to spawn!</code></pre>
-
+                <pre><code>tp  0 100 0
+say  has been teleported to spawn!</code></pre>
                 <h3>Conditional Logic</h3>
-                <p>Use Minecraft's conditional commands:</p>
                 <pre><code>execute if entity @a[name=Admin] run say Admin is online!
 execute unless entity @a[name=Admin] run say Admin is offline!</code></pre>
             </section>
@@ -189,8 +192,10 @@ execute unless entity @a[name=Admin] run say Admin is offline!</code></pre>
                     <li>Check that the filename matches exactly (case-sensitive)</li>
                     <li>Verify commands are valid Minecraft commands</li>
                     <li>Use <code>/cmd reload</code> after editing files</li>
+                    <li>Downloaded functions go to <code>config/CommandMaker/Functions/</code></li>
                 </ul>
             </section>
+
         </main>
     </div>
 

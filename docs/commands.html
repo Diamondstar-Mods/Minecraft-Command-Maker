@@ -16,6 +16,7 @@
                 <a href="getting-started.html" class="nav-link">Getting Started</a>
                 <a href="commands.html" class="nav-link active">Commands</a>
                 <a href="syntax-system.html" class="nav-link">Custom Syntax</a>
+                <a href="functions.html" class="nav-link">Functions</a>
                 <div class="dropdown">
                     <button class="dropdown-toggle">Systems ▼</button>
                     <div class="dropdown-menu">
@@ -38,14 +39,9 @@
             <div class="nav-donate">
                 <a href="https://commandmakerwiki.lucasgeitgey.com/donate.html" class="nav-link" target="_blank">❤️ Donate</a>
             </div>
-            <select id="theme-select" style="display: none;">
-                <option value="light">Light (default)</option>
-                <option value="dark">Dark (beta)</option>
-            </select>
+            <select id="theme-select" style="display: none;"><option value="light">Light (default)</option><option value="dark">Dark (beta)</option></select>
             <div class="nav-search"><input type="text" id="searchBox" placeholder="Search documentation..." class="search-input"></div>
         </div>
-    </nav>
-
     </nav>
 
     <div class="main-wrapper">
@@ -63,6 +59,7 @@
                 <h3 class="widget-title">⚡ Features</h3>
                 <ul class="widget-list">
                     <li><a href="syntax-system.html">Custom Syntax System</a></li>
+                    <li><a href="functions.html">Functions System</a></li>
                     <li><a href="variables.html">Variables & Substitution</a></li>
                     <li><a href="gui-system.html">GUI System</a></li>
                     <li><a href="chat-messages.html">Chat Messages</a></li>
@@ -93,90 +90,49 @@
             <script>
                 document.getElementById('last-commit-iframe').src = 'last-commit.html?path=' + document.getElementById('docs-path').dataset.subpath;
             </script>
+
             <h1>Complete Command Reference</h1>
+            <p class="lead">All commands available in Command Maker, including the new Function Manager and downloadable functions system.</p>
 
-            <h2>/cmd</h2>
-            <p><strong>Description:</strong> Manage command aliases</p>
-            
-            <h3>Subcommands</h3>
-            <table>
-                <tr><th>Command</th><th>Description</th><th>Example</th></tr>
-                <tr>
-                    <td><code>/cmd reload</code></td>
-                    <td>Reload aliases and syntax from config files</td>
-                    <td><code>/cmd reload</code></td>
-                </tr>
-                <tr>
-                    <td><code>/cmd add</code></td>
-                    <td>Create a new alias</td>
-                    <td><code>/cmd add hello say Hello!</code></td>
-                </tr>
-                <tr>
-                    <td><code>/cmd del</code></td>
-                    <td>Delete an alias</td>
-                    <td><code>/cmd del hello</code></td>
-                </tr>
-                <tr>
-                    <td><code>/cmd function</code></td>
-                    <td>Execute a function from the Functions folder</td>
-                    <td><code>/cmd function test</code></td>
-                </tr>
-            </table>
-
-            <h2>/setcmdvariable</h2>
-            <p><strong>Description:</strong> Set custom variables for your player</p>
-            <p><strong>Usage:</strong> <code>/setcmdvariable &lt;variable&gt; &lt;value&gt;</code></p>
-            <p><strong>Example:</strong> <code>/setcmdvariable home 100 64 -200</code></p>
-            <p><strong>Use in alias:</strong> <code>${home}</code></p>
-
-            <h2>/deletealias</h2>
-            <p><strong>Description:</strong> List all aliases or delete a specific one</p>
-            <p><strong>Usage:</strong></p>
-            <ul>
-                <li><code>/deletealias</code> - Lists all aliases</li>
-                <li><code>/deletealias &lt;alias&gt;</code> - Delete specific alias</li>
-            </ul>
-
-            <h2>/deletealiases-gui</h2>
-            <p><strong>Description:</strong> Opens GUI for managing aliases</p>
-            <p><strong>Features:</strong></p>
-            <ul>
-                <li>View all aliases as clickable stone blocks</li>
-                <li>Hover to see alias name and target command</li>
-                <li>Click to delete</li>
-                <li>Scroll with mouse wheel</li>
-            </ul>
-
-            <h2>/syntax</h2>
-            <p><strong>Description:</strong> View all custom syntax patterns</p>
-            <p><strong>Usage:</strong> <code>/syntax</code></p>
-            <p><strong>Shows:</strong> All defined custom syntax patterns with descriptions</p>
-
-            <h2>/cmd</h2>
-            <p><strong>Description:</strong> Shortcut command for common operations</p>
-            
-            <h3>Subcommands</h3>
+            <!-- /cmd -->
+            <h2>/cmd — Main Command Hub</h2>
+            <p><strong>Description:</strong> Central command for managing aliases, functions, and the GUI.</p>
             <table>
                 <tr><th>Command</th><th>Description</th><th>Example</th></tr>
                 <tr>
                     <td><code>/cmd add &lt;alias&gt; &lt;command&gt;</code></td>
-                    <td>Create a new alias</td>
+                    <td>Create a new command alias</td>
                     <td><code>/cmd add hello say Hello!</code></td>
                 </tr>
                 <tr>
                     <td><code>/cmd del &lt;alias&gt;</code></td>
-                    <td>Delete an alias</td>
+                    <td>Delete an existing alias</td>
                     <td><code>/cmd del hello</code></td>
                 </tr>
                 <tr>
                     <td><code>/cmd reload</code></td>
-                    <td>Reload aliases and syntax from config files</td>
+                    <td>Reload all aliases, functions, and syntax from config</td>
                     <td><code>/cmd reload</code></td>
                 </tr>
                 <tr>
+                    <td><code>/cmd list</code></td>
+                    <td>List all aliases and local functions</td>
+                    <td><code>/cmd list</code></td>
+                </tr>
+                <tr>
+                    <td><code>/cmd function &lt;name&gt;</code></td>
+                    <td>Execute a local function</td>
+                    <td><code>/cmd function mobsoff</code></td>
+                </tr>
+                <tr>
                     <td><code>/cmd gui</code></td>
-                    <td>Open GUI for managing aliases</td>
+                    <td>Open the Function Manager chest GUI</td>
                     <td><code>/cmd gui</code></td>
+                </tr>
+                <tr>
+                    <td><code>/cmd functions</code></td>
+                    <td>Open the Function Manager chest GUI (alias)</td>
+                    <td><code>/cmd functions</code></td>
                 </tr>
                 <tr>
                     <td><code>/cmd syntax</code></td>
@@ -188,54 +144,101 @@
                     <td>Set a custom variable</td>
                     <td><code>/cmd setvar home 100 64 -200</code></td>
                 </tr>
+                <tr>
+                    <td><code>/cmd donate</code></td>
+                    <td>Open the donation page link</td>
+                    <td><code>/cmd donate</code></td>
+                </tr>
+                <tr>
+                    <td><code>/cmd wiki</code></td>
+                    <td>Open the Command Maker wiki link</td>
+                    <td><code>/cmd wiki</code></td>
+                </tr>
             </table>
 
+            <!-- /cmd function subcommands -->
+            <h2>/cmd function — Function Management</h2>
+            <p><strong>Description:</strong> Create, delete, and manage function files directly from chat.</p>
+            <table>
+                <tr><th>Command</th><th>Description</th><th>Example</th></tr>
+                <tr>
+                    <td><code>/cmd function &lt;name&gt;</code></td>
+                    <td>Run a local .mcfunction file</td>
+                    <td><code>/cmd function fireworkshow</code></td>
+                </tr>
+                <tr>
+                    <td><code>/cmd function create &lt;name&gt;</code></td>
+                    <td>Create a new empty function file</td>
+                    <td><code>/cmd function create my_script</code></td>
+                </tr>
+                <tr>
+                    <td><code>/cmd function delete &lt;name&gt;</code></td>
+                    <td>Delete a local function file</td>
+                    <td><code>/cmd function delete my_script</code></td>
+                </tr>
+            </table>
+
+            <!-- Downloadable Functions -->
+            <h2>/cmd — Downloadable Functions</h2>
+            <p><strong>NEW in 3.1.0:</strong> Browse and download pre-made functions from the online library.</p>
+            <table>
+                <tr><th>Command</th><th>Description</th><th>Example</th></tr>
+                <tr>
+                    <td><code>/cmd downloadfunction &lt;name&gt;</code></td>
+                    <td>Download a function from the online library</td>
+                    <td><code>/cmd downloadfunction zombie_siege</code></td>
+                </tr>
+                <tr>
+                    <td><code>/cmd listdownloadablefunctions</code></td>
+                    <td>Browse all downloadable functions with descriptions</td>
+                    <td><code>/cmd listdownloadablefunctions</code></td>
+                </tr>
+            </table>
+            <div class="info-box">
+                <h3>💡 Tip</h3>
+                <p>Tab-complete <code>/cmd downloadfunction</code> to see function descriptions right in the autocomplete! Or open the <a href="gui-system.html">Function Manager GUI</a> with <code>/cmd gui</code> for a visual browser.</p>
+            </div>
+
+            <!-- Other Commands -->
+            <h2>Other Commands</h2>
+            <table>
+                <tr><th>Command</th><th>Description</th><th>Example</th></tr>
+                <tr>
+                    <td><code>/setcmdvariable &lt;var&gt; &lt;value&gt;</code></td>
+                    <td>Set a custom variable for use with <code>${var}</code></td>
+                    <td><code>/setcmdvariable home 100 64 -200</code></td>
+                </tr>
+                <tr>
+                    <td><code>/deletealias [alias]</code></td>
+                    <td>List all aliases (no args) or delete one</td>
+                    <td><code>/deletealias hello</code></td>
+                </tr>
+                <tr>
+                    <td><code>/syntax</code></td>
+                    <td>View all custom syntax definitions</td>
+                    <td><code>/syntax</code></td>
+                </tr>
+                <tr>
+                    <td><code>/cmmakerperm</code></td>
+                    <td>Permission management (op-only)</td>
+                    <td><code>/cmmakerperm reload</code></td>
+                </tr>
+            </table>
+
+            <!-- Built-in Variables -->
             <h2>Built-in Variables</h2>
             <table>
-                <tr><th>Variable</th><th>Description</th><th>Example</th></tr>
-                <tr>
-                    <td><code>${player}</code></td>
-                    <td>Your player name</td>
-                    <td>steve</td>
-                </tr>
-                <tr>
-                    <td><code>${x}</code></td>
-                    <td>Your X coordinate</td>
-                    <td>100</td>
-                </tr>
-                <tr>
-                    <td><code>${y}</code></td>
-                    <td>Your Y coordinate</td>
-                    <td>64</td>
-                </tr>
-                <tr>
-                    <td><code>${z}</code></td>
-                    <td>Your Z coordinate</td>
-                    <td>-200</td>
-                </tr>
-                <tr>
-                    <td><code>${custom_var}</code></td>
-                    <td>Custom variable you set</td>
-                    <td>myvalue</td>
-                </tr>
-                <tr>
-                    <td><code>${syntax_param}</code></td>
-                    <td>Custom syntax parameter</td>
-                    <td>steve</td>
-                </tr>
+                <tr><th>Variable</th><th>Description</th><th>Example Value</th></tr>
+                <tr><td><code>${player}</code></td><td>Your player name</td><td>steve</td></tr>
+                <tr><td><code>${x}</code></td><td>Your X coordinate</td><td>100</td></tr>
+                <tr><td><code>${y}</code></td><td>Your Y coordinate</td><td>64</td></tr>
+                <tr><td><code>${z}</code></td><td>Your Z coordinate</td><td>-200</td></tr>
+                <tr><td><code>${custom_var}</code></td><td>Custom variable you set with <code>/cmd setvar</code></td><td>myvalue</td></tr>
             </table>
 
-            <h2>Functions</h2>
-            <p><strong>Description:</strong> Execute multi-line command sequences stored in function files</p>
+            <h2>Function Files</h2>
             <p><strong>Location:</strong> <code>config/CommandMaker/Functions/&lt;name&gt;.mcfunction</code></p>
-            <p><strong>Usage:</strong></p>
-            <ul>
-                <li>Create a <code>.mcfunction</code> file in the Functions folder</li>
-                <li>Each line is executed as a separate command</li>
-                <li>Lines starting with <code>#</code> are comments and ignored</li>
-                <li>Use <code>/cmd function &lt;name&gt;</code> to execute</li>
-                <li>Variables like <code>${player}</code> work in functions</li>
-            </ul>
+            <p>Each line is a command. Lines starting with <code>#</code> are comments. Variables like <code>${player}</code> work in functions.</p>
             <p><strong>Example function file (<code>test.mcfunction</code>):</strong></p>
             <pre><code># Test function
 say Hello from function!
@@ -243,7 +246,7 @@ tellraw @s {"text":"Function executed!","color":"green"}</code></pre>
 
             <div class="info-box">
                 <h3>💡 Tip</h3>
-                <p>All aliases you create are also commands! Type <code>/alias_name [args]</code> to execute them.</p>
+                <p>All aliases you create are also commands! Type <code>/alias_name [args]</code> to execute them. Browse our <a href="function-catalog.html">Function Catalog</a> for ready-to-use functions!</p>
             </div>
         </main>
     </div>
@@ -267,10 +270,7 @@ tellraw @s {"text":"Function executed!","color":"green"}</code></pre>
     </footer>
 
     <script src="script.js"></script>
-<script>
-  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
-</script>
+<script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)};</script>
 <script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>
-
