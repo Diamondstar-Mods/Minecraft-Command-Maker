@@ -104,15 +104,20 @@
   // ============ Search ============
   const Search = {
     init() {
-      const box = document.getElementById("searchBox");
-      if (!box) return;
+      // Support both desktop and mobile search boxes
+      const boxes = document.querySelectorAll("#searchBox, #mobileSearchBox");
+      if (!boxes.length) return;
 
+      boxes.forEach(box => this.initBox(box));
+    },
+
+    initBox(box) {
       box.setAttribute("autocomplete", "off");
       box.setAttribute("spellcheck", "false");
 
       const results = document.createElement("div");
       results.className = "search-results";
-      results.id = "searchResults";
+      results.id = "searchResults-" + box.id;
       box.parentNode.style.position = "relative";
       box.parentNode.appendChild(results);
 
@@ -181,13 +186,15 @@
         }
       });
 
-      // Keyboard shortcut: / to focus search
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "/" && document.activeElement !== box && document.activeElement.tagName !== "INPUT" && document.activeElement.tagName !== "TEXTAREA") {
-          e.preventDefault();
-          box.focus();
-        }
-      });
+      // Keyboard shortcut: / to focus search (only for desktop search)
+      if (box.id === "searchBox") {
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "/" && document.activeElement !== box && document.activeElement.tagName !== "INPUT" && document.activeElement.tagName !== "TEXTAREA") {
+            e.preventDefault();
+            box.focus();
+          }
+        });
+      }
     }
   };
 

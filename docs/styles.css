@@ -427,6 +427,15 @@ tr:nth-child(even) td { background: var(--bg-secondary); }
   max-width: 500px; width: 90%; box-shadow: var(--shadow-lg);
 }
 
+/* ---- Mobile Search ---- */
+.mobile-search {
+  display: none;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  padding: 0.5rem 1rem;
+}
+.mobile-search .search-input { width: 100%; }
+
 /* ---- Responsive ---- */
 @media (max-width: 1024px) {
   .layout { grid-template-columns: 1fr; }
@@ -440,6 +449,8 @@ tr:nth-child(even) td { background: var(--bg-secondary); }
   }
   .hamburger { display: flex; }
   .nav-menu { display: none; }
+  .nav-search { display: none; }
+  .mobile-search { display: block; }
   .sidebar-overlay {
     display: none; position: fixed; inset: 0; background: rgba(0,0,0,.3);
     z-index: 199;

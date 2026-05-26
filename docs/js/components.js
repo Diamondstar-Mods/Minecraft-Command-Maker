@@ -325,6 +325,11 @@ CM.init = function () {
           </div>
         </div>
       </div>`;
+    // Mobile search bar — shown below navbar on narrow screens
+    var mobileSearch = document.createElement("div");
+    mobileSearch.className = "mobile-search";
+    mobileSearch.innerHTML = '<input type="text" id="mobileSearchBox" placeholder="Search..." class="search-input" autocomplete="off" role="search">';
+    navbar.parentNode.insertBefore(mobileSearch, navbar.nextSibling);
   }
 
   if (sidebar) {
