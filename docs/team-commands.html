@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Commands - Command Maker Wiki</title>
+    <meta name="description" content="Create team-based command systems with Command Maker: team chat triggers, team-specific permissions, scoreboards, and minigame examples.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon.ico">
+</head>
+<body>
+    <nav id="navbar" class="navbar" role="navigation" aria-label="Main navigation"></nav>
+    <div class="layout">
+        <aside id="sidebar" class="sidebar" role="complementary" aria-label="Side navigation"></aside>
+        <main class="content" role="main">
+            <h1>Team Commands</h1>
+            <p>Leverage Minecraft's team system with Command Maker to create organized group mechanics, team-based chat, minigame support, and cooperative gameplay features.</p>
+
+            <h2>Understanding Minecraft Teams</h2>
+            <p>Minecraft's <code>/team</code> command allows you to group players into named teams with shared properties like friendly fire, collision rules, name tag visibility, and prefix/suffix formatting. When combined with Command Maker aliases, teams become a powerful organizational tool.</p>
+
+            <table class="variables-table">
+                <thead>
+                    <tr>
+                        <th>Command</th>
+                        <th>Description</th>
+                        <th>Example</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>/team add &lt;name&gt;</code></td>
+                        <td>Create a new team</td>
+                        <td><code>/team add red</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>/team join &lt;team&gt; &lt;player&gt;</code></td>
+                        <td>Add player to team</td>
+                        <td><code>/team join red Steve</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>/team leave &lt;player&gt;</code></td>
+                        <td>Remove player from team</td>
+                        <td><code>/team leave Steve</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>/team modify &lt;team&gt; &lt;option&gt; &lt;value&gt;</code></td>
+                        <td>Change team settings</td>
+                        <td><code>/team modify red color red</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>/team list [team]</code></td>
+                        <td>List teams or team members</td>
+                        <td><code>/team list red</code></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>Setting Up Teams</h2>
+
+            <h3>Creating Teams for a Minigame</h3>
+            <pre><code># Create teams
+/team add red
+/team modify red color red
+/team modify red prefix "[Red] "
+/team modify red displayName "Red Team"
+/team modify red friendlyfire false
+/team modify red collisionRule pushOwnTeam
+
+/team add blue
+/team modify blue color blue
+/team modify blue prefix "[Blue] "
+/team modify blue displayName "Blue Team"
+/team modify blue friendlyfire false
+/team modify blue collisionRule pushOwnTeam
+
+/team add spectator
+/team modify spectator color gray
+/team modify spectator prefix "[Spectator] "
+/team modify spectator collisionRule never</code></pre>
+
+            <h3>Automated Team Setup Alias</h3>
+            <pre><code>/cmd add setup_teams team add red && team modify red color red && team modify red prefix "[Red] " && team modify red friendlyfire false && team add blue && team modify blue color blue && team modify blue prefix "[Blue] " && team modify blue friendlyfire false && say Teams created!</code></pre>
+
+            <div class="callout-tip">
+                <h3>Pro Tip</h3>
+                <p>Create a single <code>/setup_teams</code> alias that runs all the team creation commands. Use this whenever you reset your minigame or server. This avoids manual re-creation of teams after resets.</p>
+            </div>
+
+            <h2>Team Chat Triggers</h2>
+
+            <h3>Team-Only Chat Alias</h3>
+            <p>Create a team chat system where messages are only visible to team members:</p>
+
+            <pre><code>/cmd add tc tell @a[team=red] [RED] ${player}: ${message}
+/cmd add bc tell @a[team=blue] [BLUE] ${player}: ${message}
+
+# With syntax support for the message parameter
+# In syntax.json:
+{
+  "tc": {
+    "pattern": "/tc &lt;message&gt;",
+    "description": "Send message to red team"
+  },
+  "bc": {
+    "pattern": "/bc &lt;message&gt;",
+    "description": "Send message to blue team"
+  }
+}</code></pre>
+
+            <p>This approach has a limitation -- each team needs its own alias. A more dynamic approach:</p>
+
+            <h3>Dynamic Team Chat with Syntax</h3>
+            <pre><code># In syntax.json:
+{
+  "teamchat": {
+    "pattern": "/teamchat &lt;team&gt; &lt;message&gt;",
+    "description": "Send message to your team"
+  }
+}
+
+# In aliases.json:
+{
+  "teamchat": "tell @a[team=${teamchat_team}] [${teamchat_team}] ${player}: ${teamchat_message}"
+}
+
+# Usage:
+# /teamchat red Hello teammates!
+# /teamchat blue Attack the objective!</code></pre>
+
+            <h3>Self-Detecting Team Chat</h3>
+            <p>For an even better experience, use the <code>/teammsg</code> command (Minecraft's built-in team chat) wrapped in an alias:</p>
+
+            <pre><code>/cmd add t tell @a[team=red] ${player}: ${message}
+# Or use: /cmd add t teammsg ${message}</code></pre>
+
+            <div class="callout-info">
+                <h3>Note</h3>
+                <p>Minecraft's built-in <code>/teammsg</code> command already sends messages to the sender's team. However, Command Maker aliases let you customize the format, add prefixes, or trigger additional effects when team chat is used.</p>
+            </div>
+
+            <h2>Team-Specific Permissions</h2>
+
+            <h3>Restricting Aliases by Team</h3>
+            <p>Use the <code>execute if entity</code> command with team selectors to restrict alias usage to specific teams:</p>
+
+            <pre><code>/cmd add blowup execute if entity @s[team=red] run say Red team used a special ability!
+/cmd add blowup execute if entity @s[team=blue] run say You are not on the red team!
+
+# Or with a permission check:
+/cmd add heal execute if entity @s[team=red] run effect give @s instant_health 1
+/cmd add heal execute if entity @s[team=blue] run effect give @s instant_health 1
+/cmd add heal execute if entity @s[team=spectator] run say Spectators cannot use this!</code></pre>
+
+            <h3>Using Command Maker's Permission System with Teams</h3>
+            <p>Combine Command Maker's permission levels with team membership for granular control:</p>
+
+            <pre><code># In permissions.json:
+{
+  "teams": {
+    "red_leader": 4,
+    "red_member": 2,
+    "blue_leader": 4,
+    "blue_member": 2,
+    "spectator": 1
+  },
+  "aliases": {
+    "red_ability": 2,
+    "blue_ability": 2,
+    "team_setup": 4
+  }
+}
+
+# Alias with permission + team check:
+/cmd add red_ability execute if entity @s[team=red] run say Red power activated!</code></pre>
+
+            <h2>Scoreboards with Teams</h2>
+
+            <h3>Team Scoreboards</h3>
+            <p>Track team scores for minigames and competitions:</p>
+
+            <pre><code># Create a scoreboard for team kills
+/scoreboard objectives add team_kills dummy "Team Kills"
+
+# Alias to add a kill point to the team
+/cmd add team_kill scoreboard players add red team_kills 1 && say Red team scores!
+
+# Check team scores
+/cmd add scores say === Team Scores === && scoreboard objectives setdisplay sidebar team_kills
+
+# Reset scores
+/cmd add reset_scores scoreboard players reset * team_kills && say Scores reset!</code></pre>
+
+            <h3>Team Score Display</h3>
+            <pre><code>/cmd add show_scores tellraw @a [
+  {"text":"=== Team Scores ===\n","color":"gold","bold":true},
+  {"text":"Red: ","color":"red"},
+  {"text":"0","color":"white","score":{"name":"red","objective":"team_kills"}},
+  {"text":"\nBlue: ","color":"blue"},
+  {"text":"0","color":"white","score":{"name":"blue","objective":"team_kills"}}
+]</code></pre>
+
+            <h3>Individual Contribution with Team Score</h3>
+            <pre><code># Track individual kills and team kills simultaneously
+/scoreboard objectives add kills dummy "Kills"
+/scoreboard objectives add team_kills dummy "Team Kills"
+
+# When a player scores a kill:
+/cmd add score_kill scoreboard players add ${player} kills 1 && scoreboard players add ${team} team_kills 1
+
+# But we need to determine the team. Use a syntax approach:
+# In syntax.json:
+{
+  "score_kill": {
+    "pattern": "/score_kill &lt;team&gt;",
+    "description": "Add a kill to a team"
+  }
+}
+
+# In aliases.json:
+{
+  "score_kill": "scoreboard players add ${score_kill_team} team_kills 1 && say Point for ${score_kill_team}!"
+}</code></pre>
+
+            <h2>Example: Capture the Flag Minigame</h2>
+
+            <p>Here is a complete team-based Capture the Flag system using Command Maker aliases:</p>
+
+            <h3>Setup Phase</h3>
+            <pre><code># Create teams (run once)
+/cmd add ctf_setup
+  team add red &&
+  team modify red color red &&
+  team modify red prefix "[Red] " &&
+  team modify red friendlyfire false &&
+  team add blue &&
+  team modify blue color blue &&
+  team modify blue prefix "[Blue] " &&
+  team modify blue friendlyfire false &&
+  scoreboard objectives add ctf_flag dummy "Has Flag" &&
+  scoreboard objectives add ctf_score dummy "CTF Score" &&
+  say Capture the Flag teams created!
+
+# Join a team
+/cmd add join_red team join red ${player} && say ${player} joined Red team!
+/cmd add join_blue team join blue ${player} && say ${player} joined Blue team!</code></pre>
+
+            <h3>Gameplay Phase</h3>
+            <pre><code># Pick up the flag
+/cmd add grab_flag execute if entity @s[team=red] run scoreboard players set @s ctf_flag 1 && say Red player ${player} has the flag!
+/cmd add grab_flag execute if entity @s[team=blue] run scoreboard players set @s ctf_flag 1 && say Blue player ${player} has the flag!
+
+# Score a point (capture at own base)
+/cmd add capture execute if entity @s[team=red,scores={ctf_flag=1}] run
+  scoreboard players add red ctf_score 1 &&
+  scoreboard players set @s ctf_flag 0 &&
+  say Red team scores! Point for Red! &&
+  playsound entity.experience_orb.pickup master @a
+
+/cmd add capture execute if entity @s[team=blue,scores={ctf_flag=1}] run
+  scoreboard players add blue ctf_score 1 &&
+  scoreboard players set @s ctf_flag 0 &&
+  say Blue team scores! Point for Blue! &&
+  playsound entity.experience_orb.pickup master @a
+
+# Show score
+/cmd add ctf_score tellraw @a [
+  {"text":"=== CTF SCORE ===\n","color":"gold","bold":true},
+  {"text":"Red: ","color":"red"},
+  {"text":"0","color":"white","score":{"name":"red","objective":"ctf_score"}},
+  {"text":"    Blue: ","color":"blue"},
+  {"text":"0","color":"white","score":{"name":"blue","objective":"ctf_score"}}
+]</code></pre>
+
+            <h3>Cleanup Phase</h3>
+            <pre><code># Reset the game
+/cmd add ctf_reset
+  scoreboard players reset * ctf_flag &&
+  scoreboard players reset * ctf_score &&
+  team leave @a[team=red] &&
+  team leave @a[team=blue] &&
+  say CTF game reset! Players can join new teams.</code></pre>
+
+            <h2>Example: Team-Based PvP Arena</h2>
+
+            <pre><code># Team PvP setup
+/cmd add pvp_setup
+  team add fighters &&
+  team modify fighters color gold &&
+  team modify fighters prefix "[Fighter] " &&
+  team modify fighters friendlyfire true &&
+  scoreboard objectives add kills dummy "Kills" &&
+  say PvP arena ready!
+
+# Join the arena
+/cmd add join_pvp team join fighters ${player} && tp ${player} 0 50 0 && say ${player} joined the PvP arena!
+
+# Track kills
+/cmd add pvp_kill scoreboard players add ${player} kills 1 && say ${player} got a kill! (Total: ${player_kills})
+
+# Leaderboard
+/cmd add pvp_top scoreboard objectives setdisplay sidebar kills && scoreboard players list
+
+# Leave the arena
+/cmd add leave_pvp team leave ${player} && tp ${player} 0 65 0 && say ${player} left the PvP arena!</code></pre>
+
+            <div class="callout-warning">
+                <h3>Warning</h3>
+                <p>When <code>friendlyfire</code> is set to <code>true</code> on a team, players on the same team can hurt each other. Only enable this for deliberate PvP arenas, never for cooperative games.</p>
+            </div>
+
+            <h2>Advanced: Team Events and Triggers</h2>
+
+            <h3>Automatic Team Assignment on Join</h3>
+            <p>Use Command Maker with a tick function to auto-assign players to the team with fewer members:</p>
+
+            <pre><code># Check every 20 seconds (400 ticks) to balance teams
+/cmd add balance_teams
+  execute if entity @a[team=red] if entity @a[team=blue] unless entity @a[team=red,scores={}] run
+    team join red @p[team=!red,team=!blue,limit=1] &&
+    say Auto-balanced: @p joined Red team!
+
+# Run this from a repeating command block or scheduled function
+/schedule function commandmaker:balance_teams 20s</code></pre>
+
+            <h3>Team Elimination Detection</h3>
+            <pre><code># When all members of a team are eliminated
+/cmd add check_elimination
+  execute unless entity @a[team=red] run say Red team has been eliminated! Blue team wins! &&
+  execute unless entity @a[team=blue] run say Blue team has been eliminated! Red team wins!</code></pre>
+
+            <h2>Best Practices for Team Commands</h2>
+
+            <ul>
+                <li><strong>Always set <code>friendlyfire</code></strong> appropriately for your game mode</li>
+                <li><strong>Use prefixes</strong> to make team membership visible in chat</li>
+                <li><strong>Set <code>collisionRule</code></strong> to prevent team griefing</li>
+                <li><strong>Create a help alias</strong> explaining available team commands</li>
+                <li><strong>Team permissions are not built into Command Maker</strong> -- use <code>execute if entity @s[team=...]</code> for team-based restrictions</li>
+                <li><strong>Reset teams between games</strong> to prevent stale data</li>
+                <li><strong>Test with multiple players</strong> to verify team mechanics work correctly</li>
+                <li><strong>Document your team system</strong> for other server administrators</li>
+            </ul>
+
+            <div class="callout-tip">
+                <h3>Summary</h3>
+                <p>Teams + Command Maker = powerful multiplayer mechanics. Use teams for minigames, organized chat, team-specific abilities, and automated score tracking. The combination of Minecraft's built-in team system and Command Maker's alias flexibility enables complex game systems without any plugins.</p>
+            </div>
+        </main>
+    </div>
+    <footer id="footer" class="footer" role="contentinfo"></footer>
+    <script src="js/components.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>

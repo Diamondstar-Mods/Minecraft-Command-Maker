@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alias Examples - Command Maker Wiki</title>
+    <meta name="description" content="Browse a gallery of 10+ ready-to-use command aliases for Command Maker, organized by category with explanations of what each alias does and why it is useful.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon.ico">
+</head>
+<body>
+    <nav id="navbar" class="navbar" role="navigation" aria-label="Main navigation"></nav>
+    <div class="layout">
+        <aside id="sidebar" class="sidebar" role="complementary" aria-label="Side navigation"></aside>
+        <main class="content" role="main">
+            <h1>Alias Examples</h1>
+            <p>This page collects over a dozen practical aliases you can copy and use on your server right away. Each example includes the <code>/cmd add</code> command, an explanation of how it works, and why it is useful.</p>
+
+            <p>To use any of these, open chat and type the <code>/cmd add</code> command shown, or add the entry to your <code>aliases.json</code> file and run <code>/cmd reload</code>.</p>
+
+            <div class="callout callout-tip">
+                <h3>Pro Tip</h3>
+                <p>Many of these examples use <code>&&</code> to chain multiple commands together. This runs them in sequence, one after the other. You can chain as many commands as you like.</p>
+            </div>
+
+            <h2>Teleportation</h2>
+
+            <h3>Home Teleport</h3>
+            <pre><code>/cmd add home tp ${player} 0 64 0 && say Teleported to spawn!</code></pre>
+            <p><strong>What it does:</strong> Teleports you to the world spawn point and confirms with a chat message. Replace the coordinates <code>0 64 0</code> with your own spawn location.</p>
+            <p><strong>Why it is useful:</strong> One-word teleport is faster than manually typing coordinates. The confirmation message prevents confusion about whether the teleport worked.</p>
+
+            <h3>Teleport to a Friend</h3>
+            <pre><code>/cmd add tphere tp @p[name=${player}] ${x} ${y} ${z}</code></pre>
+            <p><strong>What it does:</strong> Teleports the nearest player with the matching name to your current position.</p>
+            <p><strong>Why it is useful:</strong> When a friend gets lost or needs help, you can pull them to your location instantly. No need to ask for their coordinates.</p>
+
+            <h3>Random Teleport</h3>
+            <pre><code>/cmd add wild spreadplayers ~ ~ 0 1000 false @s && say Exploring the wilderness!</code></pre>
+            <p><strong>What it does:</strong> Teleports you to a random location up to 1000 blocks away.</p>
+            <p><strong>Why it is useful:</strong> Perfect for survival servers that want an exploration mechanic. Adjust the <code>1000</code> value to change the max distance.</p>
+
+            <h2>Chat & Communication</h2>
+
+            <h3>Server Announcement</h3>
+            <pre><code>/cmd add announce say [SERVER] ${*} && title @a title {"text":"${*}","color":"gold"}</code></pre>
+            <p><strong>What it does:</strong> Broadcasts a message to all players in both chat and title format. <code>${*}</code> captures everything you type after the command.</p>
+            <p><strong>Why it is useful:</strong> Announcements are more visible with title formatting. Players cannot miss important messages about restarts, events, or rule reminders.</p>
+
+            <h3>Staff Chat</h3>
+            <pre><code>/cmd add staffmsg execute if entity @s[gamemode=creative] run say [STAFF] ${player}: ${*} || say You do not have permission!</code></pre>
+            <p><strong>What it does:</strong> Sends a tagged message visible to everyone, but only works for players in creative mode (a simple admin check).</p>
+            <p><strong>Why it is useful:</strong> Creates a simple staff communication channel without needing a separate chat plugin. The permission check prevents regular players from using it.</p>
+
+            <h3>Discord Link</h3>
+            <pre><code>/setcmdvariable discord_url "https://discord.gg/example"
+/cmd add discord say Join our Discord: ${discord_url}</code></pre>
+            <p><strong>What it does:</strong> Displays your server's Discord invite link in chat.</p>
+            <p><strong>Why it is useful:</strong> Keeps the invite link in a single configurable variable. If the link changes, update it once with <code>/setcmdvariable</code> and every alias using it updates automatically.</p>
+
+            <h2>Player Utility</h2>
+
+            <h3>Full Heal</h3>
+            <pre><code>/cmd add heal effect give @s instant_health 1 && effect give @s saturation 1 && say You have been healed!</code></pre>
+            <p><strong>What it does:</strong> Restores your health and hunger to maximum.</p>
+            <p><strong>Why it is useful:</strong> Quick recovery after combat or exploration. Much faster than eating food or waiting for natural regeneration.</p>
+
+            <h3>Night Vision Toggle</h3>
+            <pre><code>/cmd add nightvision effect give @s night_vision 600 0 true && say Night vision activated for 10 minutes.</code></pre>
+            <p><strong>What it does:</strong> Grants night vision for 10 minutes. The <code>true</code> flag hides the particle effects for a clean experience.</p>
+            <p><strong>Why it is useful:</strong> Essential for building in the dark or exploring caves. Ten minutes is long enough for most tasks without being permanent.</p>
+
+            <h3>Speed Boost</h3>
+            <pre><code>/cmd add speed effect give @s speed 60 2 && say Speed boost active for 60 seconds!</code></pre>
+            <p><strong>What it does:</strong> Gives you Speed III for 60 seconds.</p>
+            <p><strong>Why it is useful:</strong> Great for crossing large bases quickly or escaping danger. Adjust the duration and amplifier to suit your needs.</p>
+
+            <h3>Inventory Cleanup</h3>
+            <pre><code>/cmd add cleanup clear @s && say Inventory cleared!</code></pre>
+            <p><strong>What it does:</strong> Empties your entire inventory.</p>
+            <p><strong>Why it is useful:</strong> Useful for creative mode builders who want a fresh inventory, or for server events where players need to start from scratch.</p>
+
+            <div class="callout callout-warning">
+                <h3>Use With Caution</h3>
+                <p>The <code>cleanup</code> alias clears your entire inventory with no undo. Consider creating a confirmation step or restricting it to operators.</p>
+            </div>
+
+            <h2>World & Environment</h2>
+
+            <h3>Toggle Day</h3>
+            <pre><code>/cmd add day time set day && say Time set to day.</code></pre>
+            <p><strong>What it does:</strong> Sets the time to 1000 ticks (mid-morning).</p>
+            <p><strong>Why it is useful:</strong> Skips the night instantly. Faster than sleeping in a bed, and works even if multiple players are online.</p>
+
+            <h3>Toggle Rain</h3>
+            <pre><code>/cmd add sunshine weather clear && say Weather set to clear.</code></pre>
+            <p><strong>What it does:</strong> Stops rain and clears the weather.</p>
+            <p><strong>Why it is useful:</strong> Rain can be annoying during building projects. One command clears the skies.</p>
+
+            <h3>Gamerule Quick Set</h3>
+            <pre><code>/cmd add keepinv gamerule keepInventory true && say Keep inventory enabled!</code></pre>
+            <p><strong>What it does:</strong> Enables keepInventory so players do not drop items on death.</p>
+            <p><strong>Why it is useful:</strong> Casual servers often want keepInventory on. This alias makes toggling it fast instead of remembering the full <code>/gamerule</code> syntax.</p>
+
+            <h2>Fun & Special Effects</h2>
+
+            <h3>Firework Launch</h3>
+            <pre><code>/cmd add firework summon minecraft:firework_rocket ~ ~1 ~ && say Launching firework!</code></pre>
+            <p><strong>What it does:</strong> Summons a default firework rocket one block above you.</p>
+            <p><strong>Why it is useful:</strong> Adds a celebratory effect for achievements, events, or just for fun.</p>
+
+            <h3>Disco Floor</h3>
+            <pre><code>/cmd add disco setblock ~ ~-1 ~ minecraft:note_block && playsound block.note_block.harp master @s && say Disco mode activated!</code></pre>
+            <p><strong>What it does:</strong> Places a note block under your feet and plays a sound effect.</p>
+            <p><strong>Why it is useful:</strong> A silly but entertaining alias for parties or just to lighten the mood on your server.</p>
+
+            <h3>Super Jump</h3>
+            <pre><code>/cmd add jump effect give @s jump_boost 10 4 && say Super jump active for 10 seconds!</code></pre>
+            <p><strong>What it does:</strong> Gives Jump Boost V for 10 seconds, letting you leap over walls and buildings.</p>
+            <p><strong>Why it is useful:</strong> Great for parkour practice, exploring, or just having fun. The short duration prevents it from being too overpowered.</p>
+
+            <h2>Server Administration</h2>
+
+            <h3>Graceful Restart</h3>
+            <pre><code>/cmd add restart say [SERVER] Restarting in 30 seconds! && save-all && schedule function server:restart 25s</code></pre>
+            <p><strong>What it does:</strong> Warns all players, saves the world, and triggers a scheduled restart function after 25 seconds.</p>
+            <p><strong>Why it is useful:</strong> Gives players time to finish what they are doing before a restart. The <code>save-all</code> ensures no data loss.</p>
+
+            <h3>Player Info Lookup</h3>
+            <pre><code>/cmd add playerinfo say ${player} is at X:${x} Y:${y} Z:${z} in ${world}</code></pre>
+            <p><strong>What it does:</strong> Displays the player's current coordinates and world.</p>
+            <p><strong>Why it is useful:</strong> Quick debugging tool for moderators to check player locations without opening the debug screen.</p>
+
+            <h2>Combining Examples into a System</h2>
+            <p>These examples work well individually, but they are even better combined. For instance, you can create a full moderation toolkit:</p>
+            <pre><code>/setcmdvariable server_name "My Awesome Server"
+/cmd add heal effect give @s instant_health 1 && effect give @s saturation 1
+/cmd add fly effect give @s levitation 30 0 true
+/cmd add day time set day && weather clear
+/cmd add night time set night && weather clear
+/cmd add help say Commands: /heal, /fly, /day, /night, /discord</code></pre>
+            <p>Then create a <code>/help</code> command so players always know what is available.</p>
+
+            <div class="callout callout-info">
+                <h3>Want More?</h3>
+                <p>Check the <a href="functions.html">Functions System</a> page to learn about creating multi-command <code>.mcfunction</code> files, and the <a href="syntax-system.html">Custom Syntax System</a> to add parameters to your commands.</p>
+            </div>
+        </main>
+    </div>
+    <footer id="footer" class="footer" role="contentinfo"></footer>
+    <script src="js/components.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>

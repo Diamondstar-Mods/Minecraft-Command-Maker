@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Function Examples - Command Maker Wiki</title>
+    <meta name="description" content="A gallery of complete .mcfunction file examples for Command Maker including spawn setup, server restart warnings, player welcome, mob cleanup, weather cycle, game start sequences, safe zones, and fireworks shows.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon.ico">
+</head>
+<body>
+    <nav id="navbar" class="navbar" role="navigation" aria-label="Main navigation"></nav>
+    <div class="layout">
+        <aside id="sidebar" class="sidebar" role="complementary" aria-label="Side navigation"></aside>
+        <main class="content" role="main">
+            <h1>Function Examples</h1>
+            <p>A gallery of complete .mcfunction file examples you can use on your server. Each function is ready to save to <code>config/CommandMaker/Functions/</code> and run with <code>/cmd function &lt;name&gt;</code> or directly by its filename as an alias.</p>
+
+            <div class="callout callout-info">
+                <h3>How to Use These Examples</h3>
+                <p>Create a new .mcfunction file in <code>config/CommandMaker/Functions/</code> with any of the names below, paste the content, then run <code>/cmd reload</code>. The function will be available as a command with the filename (without extension) as the alias. For example, <code>spawn-setup.mcfunction</code> becomes <code>/spawn-setup</code>.</p>
+            </div>
+
+            <h2>Server Management</h2>
+            <p>Functions for server operators to automate routine administration tasks.</p>
+
+            <h3>spawn-setup.mcfunction</h3>
+            <p>Sets up a complete spawn area with world protection, game rules, and teleportation. Run this once when initializing a new world to configure the spawn region.</p>
+            <pre><code># spawn-setup.mcfunction
+# Configures world spawn and protection settings
+# Run once after world initialization
+
+# Set world spawn point
+setworldspawn 0 65 0
+
+# Protect spawn with random tick speed reduction
+gamerule randomTickSpeed 0
+gamerule doDaylightCycle false
+gamerule doWeatherCycle false
+gamerule mobGriefing false
+gamerule keepInventory true
+
+# Set time to noon
+time set 1000
+
+# Clear weather
+weather clear
+
+# Create spawn platform
+fill -5 64 -5 5 63 5 stone
+fill -4 65 -4 4 64 4 grass_block
+fill -1 66 -1 1 65 1 air
+
+# Place welcome sign
+setblock 0 66 2 oak_wall_sign{facing:north,Text1:'{"text":"Welcome!","color":"gold","bold":true}',Text2:'{"text":"Use /help to start"}',Text4:'{"text":"Command Maker","color":"dark_gray","italic":true}'}
+
+# Set border
+worldborder set 500
+worldborder center 0 0
+
+# Announce completion
+say [SERVER] Spawn area has been configured! Use /spawn to return.
+</code></pre>
+
+            <h3>server-restart-warning.mcfunction</h3>
+            <p>Broadcasts a countdown warning before a scheduled server restart. Can be triggered from a cron job or scheduled task to give players time to save their progress.</p>
+            <pre><code># server-restart-warning.mcfunction
+# Sends timed warnings before a server restart
+# Call with: /cmd function server-restart-warning
+
+# Initial warning - 5 minutes before
+say [SERVER] ===== IMPORTANT ANNOUNCEMENT =====
+say [SERVER] The server will restart in 5 minutes for maintenance.
+say [SERVER] Please save your progress and log out.
+say [SERVER] ==================================
+
+# Save the world
+save-all
+
+# Schedule intermediate warnings
+schedule function commandmaker:server-restart-warning-4min 1m
+
+# Register the 4-minute warning as a separate function
+# (Create server-restart-warning-4min.mcfunction with countdown messages)
+</code></pre>
+
+            <div class="callout callout-tip">
+                <h3>Chained Restart Functions</h3>
+                <p>Create companion files like <code>server-restart-warning-1min.mcfunction</code> with final warnings, and <code>server-restart-now.mcfunction</code> that runs <code>stop</code>. Use <code>schedule function</code> to chain them at intervals.</p>
+            </div>
+
+            <h3>mob-cleanup.mcfunction</h3>
+            <p>Clears excess mobs from specific dimensions to reduce lag. This function targets only non-named hostile mobs, preserving named pets and important entities.</p>
+            <pre><code># mob-cleanup.mcfunction
+# Removes excess hostile mobs to reduce server lag
+# Safe to run periodically
+
+# Count current mobs (for logging)
+say [SERVER] Running mob cleanup...
+
+# Remove hostile mobs except named ones and bosses
+execute in minecraft:overworld run kill @e[type=!player,type=!villager,type=!iron_golem,type=!snow_golem,nbt=!{Tags:["protected"]},distance=0..200,limit=500]
+
+# Clear excess items on ground
+execute in minecraft:overworld run kill @e[type=item,limit=200]
+
+# Clear lingering XP orbs if too many
+execute in minecraft:overworld run kill @e[type=experience_orb,limit=100]
+
+say [SERVER] Cleanup complete! Server performance should improve.
+</code></pre>
+
+            <h2>Player Experience</h2>
+            <p>Functions that enhance the player experience with welcome messages, visual effects, and environmental control.</p>
+
+            <h3>player-welcome.mcfunction</h3>
+            <p>A comprehensive welcome sequence for new players. Grants starter items, sets spawn, shows server rules, and provides navigation help. Best triggered from a join event or first-join detection.</p>
+            <pre><code># player-welcome.mcfunction
+# Welcome sequence for new players
+# Variables: ${player}, ${x}, ${y}, ${z}
+
+# Welcome title
+title ${player} title {"text":"Welcome to the Server!","color":"gold","bold":true}
+title ${player} subtitle {"text":"We hope you enjoy your stay","color":"yellow"}
+
+# Play sound
+playsound minecraft:entity.player.levelup player ${player} ${x} ${y} ${z} 1 1
+
+# Give starter items
+give ${player} compass 1
+give ${player} bread 8
+give ${player} oak_boat 1
+
+# Show server rules in chat
+tellraw ${player} [{"text":"\n========== ","color":"gray"},{"text":"SERVER RULES","color":"gold","bold":"true"},{"text":" ==========\n","color":"gray"}]
+tellraw ${player} [{"text":"1. ","color":"gray"},{"text":"Be respectful to other players\n","color":"white"}]
+tellraw ${player} [{"text":"2. ","color":"gray"},{"text":"No griefing or stealing\n","color":"white"}]
+tellraw ${player} [{"text":"3. ","color":"gray"},{"text":"No hacking or exploiting\n","color":"white"}]
+tellraw ${player} [{"text":"4. ","color":"gray"},{"text":"Use common sense\n","color":"white"}]
+tellraw ${player} [{"text":"================================\n","color":"gray"}]
+
+# Set player spawn point
+spawnpoint ${player} 0 65 0
+
+# Teleport to spawn
+tp ${player} 0.5 65 0.5
+
+# Welcome message in chat
+say [SERVER] Please welcome ${player} to the server!
+
+# Give navigation info
+tellraw ${player} [{"text":"Try these commands: ","color":"green"},{"text":"/help","color":"aqua"},{"text":", ","color":"green"},{"text":"/spawn","color":"aqua"},{"text":", ","color":"green"},{"text":"/list","color":"aqua"}]
+</code></pre>
+
+            <h3>weather-cycle.mcfunction</h3>
+            <p>Cycles through different weather and time settings to create an atmospheric experience. Great for hubs or waiting areas. Includes particle effects and sound cues for each weather transition.</p>
+            <pre><code># weather-cycle.mcfunction
+# Cycles through weather patterns with visual effects
+# Run from a repeating command block or clock
+
+# Phase 1: Clear day
+say [Weather] Enjoying a beautiful sunny day...
+time set 1000
+weather clear 120
+particle minecraft:sunflower ~ ~1 ~ 2 1 2 0 50
+
+# Schedule next phase
+schedule function commandmaker:weather-cycle-night 60s
+</code></pre>
+
+            <div class="callout callout-warning">
+                <h3>Function Chaining with schedule</h3>
+                <p>The <code>schedule function</code> command schedules a function to run in the future. The namespace must match the function's location. For Command Maker functions, use <code>commandmaker:&lt;name&gt;</code> when referencing them with <code>schedule function</code>. Keep in mind that scheduled functions run from the server, not from a specific player context.</p>
+            </div>
+
+            <h2>Mini-Games</h2>
+            <p>Functions that power mini-game mechanics on your server.</p>
+
+            <h3>game-start-sequence.mcfunction</h3>
+            <p>Kicks off a mini-game with arena setup, player teleportation, countdown timer, and game rule configuration. Designed to be triggered by a staff member or automated system.</p>
+            <pre><code># game-start-sequence.mcfunction
+# Starts a mini-game with full arena setup
+# Variables: ${player} (the player who starts the game)
+
+# Announce game start
+say =======================================
+say [GAME] A new game is starting!
+say [GAME] Players, prepare yourselves!
+say =======================================
+
+# Set game rules for the arena
+gamerule doMobSpawning false
+gamerule doDaylightCycle false
+gamerule showDeathMessages true
+
+# Set arena time
+time set 6000
+weather clear
+
+# Teleport participating players to arena
+tp @a[tag=game_player] -100 50 -100
+
+# Give game items
+give @a[tag=game_player] diamond_sword 1
+give @a[tag=game_player] bow 1
+give @a[tag=game_player] arrow 16
+give @a[tag=game_player] cooked_beef 8
+
+# Set health and hunger
+effect give @a[tag=game_player] minecraft:health_boost 5 4
+effect give @a[tag=game_player] minecraft:saturation 5 4
+
+# Countdown title
+title @a[tag=game_player] title {"text":"3","color":"red","bold":true}
+playsound minecraft:block.note_block.harp player @a[tag=game_player] ~ ~ ~ 1 1
+
+# Schedule the next countdown ticks
+schedule function commandmaker:game-start-countdown-2 20
+schedule function commandmaker:game-start-countdown-1 40
+schedule function commandmaker:game-start-go 60
+</code></pre>
+
+            <div class="callout callout-info">
+                <h3>Game Countdown Functions</h3>
+                <p>Create separate countdown functions for steps 2, 1, and "Go!":
+                <br><code>game-start-countdown-2.mcfunction</code>: Title "2" with sound pitch 1.5
+                <br><code>game-start-countdown-1.mcfunction</code>: Title "1" with sound pitch 2.0
+                <br><code>game-start-go.mcfunction</code>: Title "GO!" with sound <code>entity.player.levelup</code></p>
+            </div>
+
+            <h3>safe-zone.mcfunction</h3>
+            <p>Creates a temporary safe zone around a player with regeneration, mob blocking, and visual boundary effects. Useful for PvP arenas, spawn protection, or giving players a moment of safety.</p>
+            <pre><code># safe-zone.mcfunction
+# Creates a safe zone around the player
+# Variables: ${player}, ${x}, ${y}, ${z}
+
+# Give regeneration effect (30 seconds)
+effect give ${player} minecraft:regeneration 30 2
+
+# Give resistance (30 seconds)
+effect give ${player} minecraft:resistance 30 3
+
+# Create glass dome visual (partial sphere)
+fill ${x} ${y} ${z} ~5 ~3 ~5 glass
+fill ${x} ${y} ${z} ~-5 ~-1 ~-5 glass
+
+# Place light source
+setblock ${x} ${y}1 ${z} sea_lantern
+
+# Announce safe zone activation
+tellraw ${player} [{"text":"⚠ ","color":"gold"},{"text":"Safe Zone activated! ","color":"green"},{"text":"You have 30 seconds of protection.","color":"white"}]
+
+# Play activation sound
+playsound minecraft:block.beacon.activate player ${player} ${x} ${y} ${z} 1 1
+
+# Spawn protective particles
+particle minecraft:witch ~ ~1 ~ 3 1 3 0.5 100
+
+# Schedule safe zone removal
+schedule function commandmaker:safe-zone-cleanup 30s
+</code></pre>
+
+            <h3>fireworks-show.mcfunction</h3>
+            <p>An elaborate fireworks display with multiple rocket launches in sequence. Perfect for celebrations, New Year events, or server milestones. Each volley uses different colors and flight durations for variety.</p>
+            <pre><code># fireworks-show.mcfunction
+# Launches a coordinated fireworks display
+# Creates multiple colored rocket volleys at spawn
+
+# === VOLLEY 1: Red & Gold ===
+summon minecraft:firework_rocket 0 65 0 {LifeTime:30,FireworksItem:{id:"minecraft:firework_rocket",Count:1,tag:{Fireworks:{Flight:1,Explosions:[{Type:0,Flicker:1,Trail:1,Colors:[I;11743532],FadeColors:[I;14602026]}]}}}}
+summon minecraft:firework_rocket 5 65 5 {LifeTime:30,FireworksItem:{id:"minecraft:firework_rocket",Count:1,tag:{Fireworks:{Flight:1,Explosions:[{Type:1,Colors:[I;11743532],FadeColors:[I;14602026]}]}}}}
+summon minecraft:firework_rocket -5 65 -5 {LifeTime:30,FireworksItem:{id:"minecraft:firework_rocket",Count:1,tag:{Fireworks:{Flight:1,Explosions:[{Type:0,Colors:[I;14602026],FadeColors:[I;11743532]}]}}}}
+
+# === VOLLEY 2: Blue & Cyan (1 second delay) ===
+schedule function commandmaker:fireworks-volley-2 1s
+
+# === VOLLEY 3: Green & Purple (2 seconds) ===
+schedule function commandmaker:fireworks-volley-3 2s
+
+# === VOLLEY 4: Multi-color finale (3 seconds) ===
+schedule function commandmaker:fireworks-volley-4 3s
+
+# Play background music
+playsound minecraft:music_disc.mellohi record @a 0 65 0 1 1
+</code></pre>
+
+            <div class="callout callout-tip">
+                <h3>Customizing Firework Colors</h3>
+                <p>Use these color codes in the <code>Colors</code> and <code>FadeColors</code> arrays: Red=11743532, Orange=14602026, Yellow=15428044, Green=4312372, Blue=4393481, Purple=8073150, White=15790320. The <code>Type</code> field controls explosion shape: 0=small ball, 1=large ball, 2=star, 3=creeper, 4=burst.</p>
+            </div>
+
+            <h2>Running Functions by Category</h2>
+            <p>Here is a quick reference table for the functions covered in this guide:</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Function Name</th>
+                        <th>Category</th>
+                        <th>File Name</th>
+                        <th>Requires OP</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Spawn Setup</td>
+                        <td>Server Management</td>
+                        <td><code>spawn-setup.mcfunction</code></td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td>Server Restart Warning</td>
+                        <td>Server Management</td>
+                        <td><code>server-restart-warning.mcfunction</code></td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td>Mob Cleanup</td>
+                        <td>Server Management</td>
+                        <td><code>mob-cleanup.mcfunction</code></td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td>Player Welcome</td>
+                        <td>Player Experience</td>
+                        <td><code>player-welcome.mcfunction</code></td>
+                        <td>No</td>
+                    </tr>
+                    <tr>
+                        <td>Weather Cycle</td>
+                        <td>Player Experience</td>
+                        <td><code>weather-cycle.mcfunction</code></td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td>Game Start Sequence</td>
+                        <td>Mini-Games</td>
+                        <td><code>game-start-sequence.mcfunction</code></td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td>Safe Zone</td>
+                        <td>Mini-Games</td>
+                        <td><code>safe-zone.mcfunction</code></td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td>Fireworks Show</td>
+                        <td>Mini-Games</td>
+                        <td><code>fireworks-show.mcfunction</code></td>
+                        <td>Yes</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="callout callout-warning">
+                <h3>Permissions for Functions</h3>
+                <p>Some of these functions use operator-level commands (<code>kill</code>, <code>fill</code>, <code>gamerule</code>, <code>schedule function</code>). Make sure the executing player has the appropriate permission level, or assign the function alias the necessary permission via <code>permissions.json</code>. See the <a href="permissions-setup.html">Permissions Setup</a> guide for details.</p>
+            </div>
+
+            <h2>Creating Your Own Functions</h2>
+            <p>Use these examples as templates for your own functions. The best way to learn is to start with a simple function and gradually add complexity:</p>
+            <ol>
+                <li>Start with a single command and test it directly in Minecraft first</li>
+                <li>Add it to a .mcfunction file and test via <code>/cmd function &lt;name&gt;</code></li>
+                <li>Add one line at a time, testing after each addition</li>
+                <li>Use <code>say</code> commands for debug output to track execution progress</li>
+                <li>Once stable, set up permissions and schedule timings</li>
+            </ol>
+
+            <div class="callout callout-info">
+                <h3>More Function Resources</h3>
+                <p>Visit the <a href="function-catalog.html">Function Catalog</a> for the full list of downloadable pre-made functions, or check the <a href="functions.html">Functions System</a> page for general usage instructions.</p>
+            </div>
+        </main>
+    </div>
+    <footer id="footer" class="footer" role="contentinfo"></footer>
+    <script src="js/components.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>

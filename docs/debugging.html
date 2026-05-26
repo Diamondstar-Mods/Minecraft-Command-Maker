@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debugging Aliases - Command Maker Wiki</title>
+    <meta name="description" content="Systematic guide to debugging Command Maker aliases - from JSON validation and permission checks to variable resolution, Minecraft logs, and common error messages.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon.ico">
+</head>
+<body>
+    <nav id="navbar" class="navbar" role="navigation" aria-label="Main navigation"></nav>
+    <div class="layout">
+        <aside id="sidebar" class="sidebar" role="complementary" aria-label="Side navigation"></aside>
+        <main class="content" role="main">
+            <h1>Debugging Aliases</h1>
+            <p>So you created an alias and it doesn't work. Don't worry. This guide walks you through a systematic process to find and fix the problem, from simple JSON validation to advanced debugging techniques.</p>
+
+            <div class="callout callout-tip">
+                <h3>The Golden Rule of Debugging</h3>
+                <p>Never change more than one thing at a time. Change one thing, test, then move on. Changing multiple things simultaneously makes it impossible to know which change fixed (or broke) the problem.</p>
+            </div>
+
+            <h2>Step 1: Check Config Syntax with JSON Validators</h2>
+            <p>Most alias problems start with invalid JSON in <code>aliases.json</code> or <code>permissions.json</code>. Minecraft gives a generic "Syntax error" message, but the real problem is often a missing comma, extra comma, or unquoted string.</p>
+
+            <h3>Common JSON Errors</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Error</th>
+                        <th>Example</th>
+                        <th>Fix</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Trailing comma</td>
+                        <td><code>"a": "1", "b": "2",</code></td>
+                        <td>Remove comma after last entry</td>
+                    </tr>
+                    <tr>
+                        <td>Missing comma</td>
+                        <td><code>"a": "1" "b": "2"</code></td>
+                        <td>Add comma between entries</td>
+                    </tr>
+                    <tr>
+                        <td>Single quotes</td>
+                        <td><code>'key': 'value'</code></td>
+                        <td>Use double quotes: <code>"key": "value"</code></td>
+                    </tr>
+                    <tr>
+                        <td>Unquoted keys</td>
+                        <td><code>{key: "value"}</code></td>
+                        <td>Quote keys: <code>{"key": "value"}</code></td>
+                    </tr>
+                    <tr>
+                        <td>Extra closing brace</td>
+                        <td><code>{"a": "1"}}</code></td>
+                        <td>Match braces properly</td>
+                    </tr>
+                    <tr>
+                        <td>Missing closing brace</td>
+                        <td><code>{"a": "1"</code></td>
+                        <td>Add closing brace</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="callout callout-warning">
+                <h3>Invalid JSON Disables All Aliases</h3>
+                <p>If your <code>aliases.json</code> file contains invalid JSON, Command Maker cannot load <strong>any</strong> aliases, not just the one with the error. Always validate your JSON after editing. Use an online validator like <a href="https://jsonlint.com/" target="_blank" rel="noopener">JSONLint</a> or a code editor with JSON highlighting.</p>
+            </div>
+
+            <h3>Quick JSON Validation Checklist</h3>
+            <ul>
+                <li>Open <code>config/CommandMaker/aliases.json</code> in a text editor with JSON syntax highlighting</li>
+                <li>Look for red underlines (most editors highlight errors)</li>
+                <li>Copy the file contents to <a href="https://jsonlint.com/" target="_blank" rel="noopener">JSONLint</a> and validate</li>
+                <li>Check that all braces <code>{}</code> and brackets <code>[]</code> are properly matched</li>
+                <li>Verify there are no trailing commas after the last item in an object or array</li>
+                <li>Make sure all strings use double quotes, not single quotes</li>
+            </ul>
+
+            <h2>Step 2: Use /cmd reload</h2>
+            <p>After editing any configuration file, you must reload Command Maker for changes to take effect. This is one of the most common reasons aliases don't work after editing.</p>
+
+            <pre><code>/cmd reload</code></pre>
+
+            <div class="callout callout-info">
+                <h3>Check the Reload Output</h3>
+                <p>After running <code>/cmd reload</code>, watch the chat or server console for output. Command Maker will print messages about how many aliases were loaded, or if there were errors. Look for messages like these:</p>
+                <ul>
+                    <li><strong>"Loaded 12 aliases"</strong> -- Everything is fine</li>
+                    <li><strong>"Error loading aliases.json"</strong> -- JSON syntax error (go back to Step 1)</li>
+                    <li><strong>"Skipped invalid alias: alias_name"</strong> -- A specific alias has an invalid command target</li>
+                    <li><strong>"0 aliases loaded"</strong> -- The file is likely empty or completely malformed</li>
+                </ul>
+            </div>
+
+            <h2>Step 3: Check Permissions</h2>
+            <p>If the alias loads correctly but doesn't work for a specific player, the issue is likely permissions. Test the alias while opped first, then test as a regular player.</p>
+
+            <h3>Permission Debugging Questions</h3>
+            <ul>
+                <li>Are you opped on the server? (<code>/op &lt;player&gt;</code>)</li>
+                <li>Does <code>permissions.json</code> have a permission level set for you?</li>
+                <li>Does the alias have a minimum permission level in <code>alias_permissions</code>?</li>
+                <li>If using LuckPerms, do you have the correct <code>cmmaker.*</code> node assigned?</li>
+            </ul>
+
+            <h3>Quick Permission Test</h3>
+            <p>To quickly test if permissions are the issue, temporarily set the alias to <code>ALIAS_USER</code> (the default) in <code>alias_permissions</code>:</p>
+            <pre><code>{
+  "permissions": {
+    "YourName": "ADMIN"
+  },
+  "alias_permissions": {
+    "problem_alias": "ALIAS_USER"
+  }
+}</code></pre>
+            <p>If the alias works after this change, the permission level was set too high. Gradually raise the level until you find the correct one.</p>
+
+            <div class="callout callout-warning">
+                <h3>Permissions and /cmd reload</h3>
+                <p>Remember that permission changes also need <code>/cmd reload</code> to take effect. If you edit <code>permissions.json</code> but forget to reload, the old permissions will still apply.</p>
+            </div>
+
+            <h2>Step 4: Verify Variables Resolve Correctly</h2>
+            <p>If your alias includes <code>${player}</code>, <code>${x}</code>, <code>${y}</code>, <code>${z}</code>, or custom variables, they might not be resolving as expected.</p>
+
+            <h3>Debug Variable Values</h3>
+            <p>Create a simple debug alias to check what variables contain:</p>
+            <pre><code>// Add this to your aliases.json and reload
+"debug_vars": "say Player: ${player}, Position: ${x}, ${y}, ${z}"</code></pre>
+
+            <p>Run <code>/debug_vars</code> and check the output. If you see literal <code>${player}</code> in the chat message instead of your username, variables are not being substituted. This usually means the alias is running in a context where the player is not available (for example, from a command block or function).</p>
+
+            <h3>Check Custom Variables</h3>
+            <p>If you use <code>/setcmdvariable</code> for custom variables, verify they are set correctly:</p>
+            <pre><code>/setcmdvariable YourName my_var "test_value"</code></pre>
+            <p>Then in an alias:</p>
+            <pre><code>"test_var": "say Custom variable value: ${my_var}"</code></pre>
+
+            <div class="callout callout-info">
+                <h3>Variable Resolution Order</h3>
+                <p>Command Maker resolves variables in this order: (1) Built-in variables (<code>${player}</code>, <code>${x}</code>, <code>${y}</code>, <code>${z}</code>), (2) Custom per-player variables (set with <code>/setcmdvariable</code>), (3) Syntax parameter variables (<code>${syntaxName_paramName}</code>). Later variables can reference earlier ones, but not vice versa.</p>
+            </div>
+
+            <h2>Step 5: Test Commands Manually First</h2>
+            <p>Before debugging an alias, test the raw command in Minecraft's chat to make sure it works on its own:</p>
+
+            <ol>
+                <li><strong>Identify the raw command</strong> that your alias is supposed to execute. For example, if your alias is <code>"heal": "effect give @s instant_health 1 1"</code>, the raw command is <code>/effect give @s instant_health 1 1</code>.</li>
+                <li><strong>Type the raw command directly in chat</strong> (with the slash). Does it work?</li>
+                <li><strong>If the raw command fails:</strong> The problem is the Minecraft command itself, not Command Maker. Check Minecraft's command syntax, spelling, and parameter order.</li>
+                <li><strong>If the raw command succeeds:</strong> The problem is in how Command Maker handles the alias. Move to the next debugging step.</li>
+            </ol>
+
+            <div class="callout callout-tip">
+                <h3>Verify Tab Completion</h3>
+                <p>Minecraft provides tab completion for commands. Type the beginning of a command and press Tab to see available options. This is a fast way to check if a command, target selector, or item name is valid. If tab completion doesn't show your alias, run <code>/cmd reload</code> first.</p>
+            </div>
+
+            <h2>Step 6: Check Minecraft Logs</h2>
+            <p>The Minecraft server log (<code>logs/latest.log</code>) contains detailed information about command execution errors. When an alias fails, there is often a stack trace or error message in the log that is not shown in-game.</p>
+
+            <h3>Finding Relevant Log Entries</h3>
+            <p>Look for these patterns in <code>logs/latest.log</code>:</p>
+            <ul>
+                <li><code>[Command Maker]</code> -- Command Maker's own log messages</li>
+                <li><code>[CHAT]</code> -- Chat messages (includes command output)</li>
+                <li><code>Error executing command</code> -- Minecraft command errors</li>
+                <li><code>java.lang.*Exception</code> -- Java exceptions (these always indicate bugs)</li>
+                <li><code>Failed to parse JSON</code> -- JSON parsing errors from Command Maker</li>
+                <li><code>Unknown command</code> -- Command not found or alias not registered</li>
+            </ul>
+
+            <h3>Enabling Verbose Logging</h3>
+            <p>For difficult bugs, you can enable debug logging in Minecraft's <code>server.properties</code>:</p>
+            <pre><code># In server.properties:
+debug=true
+enable-query=true</code></pre>
+            <p>This produces more detailed logs but also more noise. Only enable debug mode while actively debugging, and disable it afterward to avoid filling your disk with log files.</p>
+
+            <h2>Step 7: Common Error Messages and Their Fixes</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Error Message</th>
+                        <th>Likely Cause</th>
+                        <th>Fix</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>Unknown command</code></td>
+                        <td>Alias not registered or not reloaded</td>
+                        <td>Run <code>/cmd reload</code> and verify the alias name has no typos</td>
+                    </tr>
+                    <tr>
+                        <td><code>Incorrect argument for command</code></td>
+                        <td>Wrong syntax or parameter count</td>
+                        <td>Test the raw command in chat first, then check your alias target</td>
+                    </tr>
+                    <tr>
+                        <td><code>You do not have permission</code></td>
+                        <td>Permission level too low</td>
+                        <td>Check <code>permissions.json</code> and the player's OP status</td>
+                    </tr>
+                    <tr>
+                        <td><code>JSON parse error</code> (in console)</td>
+                        <td>Invalid JSON in configuration file</td>
+                        <td>Validate JSON with an online validator</td>
+                    </tr>
+                    <tr>
+                        <td><code>Failed to load aliases</code> (in console)</td>
+                        <td>Corrupted or missing <code>aliases.json</code></td>
+                        <td>Restore from backup or recreate the file</td>
+                    </tr>
+                    <tr>
+                        <td><code>${player} not replaced</code></td>
+                        <td>Variable not resolving</td>
+                        <td>Check that the alias is running in a player context, not from console or command block</td>
+                    </tr>
+                    <tr>
+                        <td><code>No such target selector</code></td>
+                        <td>Wrong selector syntax (e.g. <code>@p</code> vs <code>@s</code>)</td>
+                        <td>Verify selector syntax for your Minecraft version</td>
+                    </tr>
+                    <tr>
+                        <td><code>Alias loops indefinitely</code></td>
+                        <td>Alias calls itself directly or indirectly</td>
+                        <td>Remove the self-reference from the alias or function chain</td>
+                    </tr>
+                    <tr>
+                        <td><code>Function not found</code></td>
+                        <td>.mcfunction file missing or wrong name</td>
+                        <td>Check <code>config/CommandMaker/Functions/</code> for the file with the exact name</td>
+                    </tr>
+                    <tr>
+                        <td><code>Syntax pattern not matched</code></td>
+                        <td>Input doesn't match the defined pattern</td>
+                        <td>Verify the <code>syntax.json</code> pattern against your input</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>Step 8: The Divide and Conquer Method</h2>
+            <p>For complex aliases with multiple chained commands or syntax parameters, use the "divide and conquer" approach to isolate the problem:</p>
+
+            <h3>Example: A Complex Alias</h3>
+            <p>Suppose this alias isn't working:</p>
+            <pre><code>// Complex alias that does multiple things
+"warp_teleport": "title ${player} actionbar {\"text\":\"Warping...\",\"color\":\"gold\"} && playsound minecraft:entity.enderman.teleport player ${player} ~ ~ ~ 1 1 && tp ${player} ${warp_coords} && say ${player} warped to ${warp_name}!"</code></pre>
+
+            <h3>Step-by-Step Isolation</h3>
+            <ol>
+                <li><strong>Split into individual commands:</strong> Create a separate alias for each part:
+                    <pre><code>"test_1": "title ${player} actionbar {\"text\":\"Test\",\"color\":\"gold\"}"
+"test_2": "playsound minecraft:entity.enderman.teleport player ${player} ~ ~ ~ 1 1"
+"test_3": "tp ${player} 0 65 0"
+"test_4": "say ${player} test!"</code></pre>
+                </li>
+                <li><strong>Test each part independently:</strong> Run <code>/test_1</code>, <code>/test_2</code>, etc. Each one either works or doesn't. This tells you exactly which command is failing.</li>
+                <li><strong>Identify the failing component:</strong> Suppose <code>/test_3</code> fails. Now you know the teleport command is the problem.</li>
+                <li><strong>Simplify the failing component:</strong> <code>"test_3_simple": "tp @s 0 65 0"</code>. If this works, the issue was the <code>${player}</code> variable or <code>${warp_coords}</code> variable.</li>
+                <li><strong>Fix and rebuild:</strong> Once each part works individually, combine them back into the full alias one piece at a time.</li>
+            </ol>
+
+            <div class="callout callout-tip">
+                <h3>Command Chaining vs Separate Aliases</h3>
+                <p>The <code>&&</code> chaining operator runs commands sequentially. If the first command fails, subsequent commands may still run, which can mask errors. When debugging, it's better to separate chained commands into individual test aliases so you can see exactly which one fails. Once everything works, you can recombine them.</p>
+            </div>
+
+            <h2>Step 9: Check Version Compatibility</h2>
+            <p>Minecraft commands change between versions. An alias that works in Minecraft 1.21 might fail in 1.22 due to:</p>
+            <ul>
+                <li>Changed item names (e.g., <code>minecraft:grass</code> vs <code>minecraft:grass_block</code>)</li>
+                <li>Removed or renamed commands</li>
+                <li>Changed target selector syntax</li>
+                <li>Different NBT format for entities and blocks</li>
+                <li>Changed particle names</li>
+                <li>Modified sound effect names</li>
+            </ul>
+
+            <div class="callout callout-warning">
+                <h3>Cross-Version Aliases</h3>
+                <p>If you use Command Maker on multiple servers with different Minecraft versions, maintain separate <code>aliases.json</code> files for each version. What works on your 1.21 server may silently fail or behave differently on a 1.22 server due to command changes.</p>
+            </div>
+
+            <h2>Debugging Workflow Summary</h2>
+            <p>When an alias doesn't work, follow this workflow in order:</p>
+
+            <ol>
+                <li><strong>Validate JSON</strong> -- Use a JSON validator to check your config file syntax</li>
+                <li><strong>Reload</strong> -- Run <code>/cmd reload</code> and check for error messages</li>
+                <li><strong>Check permissions</strong> -- Verify the player has sufficient permission level</li>
+                <li><strong>Test raw command</strong> -- Type the command directly in chat without the alias</li>
+                <li><strong>Check variables</strong> -- Create a simple debug alias to verify variable resolution</li>
+                <li><strong>Check logs</strong> -- Look at <code>logs/latest.log</code> for detailed error messages</li>
+                <li><strong>Divide and conquer</strong> -- Split complex aliases into individual parts to isolate the issue</li>
+                <li><strong>Check version</strong> -- Verify command syntax matches your Minecraft version</li>
+            </ol>
+
+            <div class="callout callout-info">
+                <h3>Getting Help</h3>
+                <p>If you've gone through all debugging steps and the alias still doesn't work, check the <a href="faq.html">FAQ</a> for common questions, or review the <a href="troubleshooting.html">Troubleshooting</a> page for more specific scenarios. When asking for help, include: your Minecraft version, the full alias definition, the exact command you're typing, the error message (or a screenshot), and what debugging steps you've already tried.</p>
+            </div>
+        </main>
+    </div>
+    <footer id="footer" class="footer" role="contentinfo"></footer>
+    <script src="js/components.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>

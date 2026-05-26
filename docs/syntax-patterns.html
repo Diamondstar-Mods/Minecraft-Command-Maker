@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Syntax Patterns - Command Maker Wiki</title>
+    <meta name="description" content="Master advanced custom syntax patterns in Command Maker: greedy parameters, multi-parameter patterns, optional parameters, naming conventions, and combining syntax with variables.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon.ico">
+</head>
+<body>
+    <nav id="navbar" class="navbar" role="navigation" aria-label="Main navigation"></nav>
+    <div class="layout">
+        <aside id="sidebar" class="sidebar" role="complementary" aria-label="Side navigation"></aside>
+        <main class="content" role="main">
+            <h1>Advanced Syntax Patterns</h1>
+            <p>Custom syntax patterns are the heart of Command Maker's power. This guide covers advanced techniques for building flexible, robust command patterns that handle real-world server needs.</p>
+
+            <p>If you are new to syntax patterns, read the <a href="syntax-system.html">Custom Syntax System</a> overview first, then return here for the advanced details.</p>
+
+            <h2>Pattern Structure Refresher</h2>
+            <p>Every syntax pattern is an entry in <code>syntax.json</code> with three parts:</p>
+            <pre><code>{
+  "pattern_name": {
+    "pattern": "/command &lt;param1&gt; &lt;param2&gt;",
+    "description": "What this pattern does"
+  }
+}</code></pre>
+            <p>The pattern string starts with <code>/</code> followed by the command name and any parameters in angle brackets. When a player types a command that matches the pattern, the captured parameters become available as variables in your aliases.</p>
+
+            <h2>Greedy Parameters</h2>
+            <p>A greedy parameter captures everything from its position to the end of the command, including spaces. This is essential for parameters that contain free-form text like messages, reasons, or descriptions.</p>
+
+            <h3>How Greedy Works</h3>
+            <p>The last parameter in a pattern is automatically greedy. Consider this pattern:</p>
+            <pre><code>{
+  "msg": {
+    "pattern": "/msg &lt;player&gt; &lt;message&gt;",
+    "description": "Send a private message"
+  }
+}</code></pre>
+            <p>When a player types <code>/msg Steve hey, how are you?</code>, the pattern captures:</p>
+            <ul>
+                <li><code>&lt;player&gt;</code> &rarr; <code>Steve</code></li>
+                <li><code>&lt;message&gt;</code> &rarr; <code>hey, how are you?</code> (everything after Steve)</li>
+            </ul>
+            <p>The alias variable <code>${msg_message}</code> contains the full message text including spaces.</p>
+
+            <h3>Multi-Word Greedy Example</h3>
+            <pre><code>{
+  "ban": {
+    "pattern": "/ban &lt;player&gt; &lt;reason&gt;",
+    "description": "Ban a player with a detailed reason"
+  }
+}</code></pre>
+            <pre><code>/cmd add ban ban ${ban_player} ${ban_reason} && say ${ban_player} was banned for: ${ban_reason}</code></pre>
+            <p>Typing <code>/ban Steve griefing the spawn area</code> bans Steve with the full reason <code>griefing the spawn area</code>. Without greedy behavior, only the first word would be captured.</p>
+
+            <div class="callout callout-warning">
+                <h3>Greedy Limitation</h3>
+                <p>Only the <strong>last</strong> parameter in a pattern is greedy. If you have three parameters, only the third one captures multi-word input. Parameters before the last capture only single words.</p>
+            </div>
+
+            <h2>Multi-Parameter Patterns</h2>
+            <p>You can define patterns with two, three, or more parameters for complex commands.</p>
+
+            <h3>Two Parameters</h3>
+            <pre><code>{
+  "tpcoord": {
+    "pattern": "/tpcoord &lt;x&gt; &lt;z&gt;",
+    "description": "Teleport to specific X and Z coordinates"
+  }
+}</code></pre>
+            <p>Creates variables: <code>${tpcoord_x}</code> and <code>${tpcoord_z}</code>.</p>
+            <pre><code>/cmd add tpxz execute in minecraft:overworld run tp ${player} ${tpcoord_x} 64 ${tpcoord_z}</code></pre>
+
+            <h3>Three Parameters</h3>
+            <pre><code>{
+  "giveitem": {
+    "pattern": "/giveitem &lt;player&gt; &lt;item&gt; &lt;amount&gt;",
+    "description": "Give an item to a player with a specific count"
+  }
+}</code></pre>
+            <p>Creates variables: <code>${giveitem_player}</code>, <code>${giveitem_item}</code>, and <code>${giveitem_amount}</code>.</p>
+            <pre><code>/cmd add giveitem give ${giveitem_player} ${giveitem_item} ${giveitem_amount}</code></pre>
+
+            <h3>Four Parameters</h3>
+            <pre><code>{
+  "editwarp": {
+    "pattern": "/editwarp &lt;name&gt; &lt;x&gt; &lt;y&gt; &lt;z&gt;",
+    "description": "Set a warp point at specific coordinates"
+  }
+}</code></pre>
+            <p>Creates variables: <code>${editwarp_name}</code>, <code>${editwarp_x}</code>, <code>${editwarp_y}</code>, <code>${editwarp_z}</code>.</p>
+            <pre><code>/cmd add setwarp setblock ${editwarp_x} ${editwarp_y} ${editwarp_z} minecraft:beacon && say Warp ${editwarp_name} created!</code></pre>
+
+            <h2>Optional Parameters Concept</h2>
+            <p>Command Maker does not natively support truly optional parameters in syntax patterns. A pattern matches only when exactly the right number of space-separated tokens is provided. However, you can work around this with multiple patterns.</p>
+
+            <h3>Workaround: Multiple Patterns for Overloads</h3>
+            <p>Define two separate patterns that share the same alias target:</p>
+            <pre><code>{
+  "kick_reason": {
+    "pattern": "/kick &lt;player&gt; &lt;reason&gt;",
+    "description": "Kick a player with a reason"
+  },
+  "kick_default": {
+    "pattern": "/kick &lt;player&gt;",
+    "description": "Kick a player with default reason"
+  }
+}</code></pre>
+            <p>Then create two aliases (or use a <code>.mcfunction</code> file to handle both cases):</p>
+            <pre><code>/cmd add kick_reason kick ${kick_reason_player} ${kick_reason_reason}
+/cmd add kick_default kick ${kick_default_player} "No reason given"</code></pre>
+
+            <div class="callout callout-info">
+                <h3>Pattern Matching Priority</h3>
+                <p>When a player types a command, Command Maker tries patterns in the order they appear in <code>syntax.json</code>. The first matching pattern is used. More specific patterns (with more parameters) should come before less specific ones.</p>
+            </div>
+
+            <h2>Pattern Naming Conventions</h2>
+            <p>Good naming makes your patterns readable and maintainable. Follow these conventions:</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Convention</th>
+                        <th>Good Example</th>
+                        <th>Bad Example</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Use lowercase</td>
+                        <td><code>tpa</code></td>
+                        <td><code>TPA_REQUEST</code></td>
+                    </tr>
+                    <tr>
+                        <td>Describe the action</td>
+                        <td><code>warpplayer</code></td>
+                        <td><code>wp</code></td>
+                    </tr>
+                    <tr>
+                        <td>Underscore for readability</td>
+                        <td><code>ban_with_reason</code></td>
+                        <td><code>banwr</code></td>
+                    </tr>
+                    <tr>
+                        <td>Match the command name</td>
+                        <td>Pattern <code>/tp</code> with name <code>tp</code></td>
+                        <td>Pattern <code>/tp</code> with name <code>teleportation</code></td>
+                    </tr>
+                    <tr>
+                        <td>Be consistent across patterns</td>
+                        <td><code>tpa</code>, <code>ban</code>, <code>kick</code></td>
+                        <td><code>tpa</code>, <code>player_ban</code>, <code>kick_user</code></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>Consistent naming matters because the pattern name becomes part of the variable name. A pattern named <code>ban_with_reason</code> with parameter <code>&lt;player&gt;</code> creates the variable <code>${ban_with_reason_player}</code>. Keep pattern names short but descriptive enough that the full variable name remains readable.</p>
+
+            <h2>Combining Syntax with Variables</h2>
+            <p>The real power of Command Maker comes from combining syntax parameters with built-in and custom variables in a single alias.</p>
+
+            <h3>Syntax Parameter + Built-in Variable</h3>
+            <pre><code>{
+  "tpa": {
+    "pattern": "/tpa &lt;player&gt;",
+    "description": "Request to teleport to a player"
+  }
+}</code></pre>
+            <pre><code>/cmd add tpa say ${player} wants to teleport to ${tpa_player} at coordinates ${tpa_player}'s location!</code></pre>
+            <p>Here, <code>${player}</code> is the built-in variable for the command sender, and <code>${tpa_player}</code> is the syntax parameter from the <code>tpa</code> pattern.</p>
+
+            <h3>Syntax + Custom Variable</h3>
+            <pre><code>/setcmdvariable server_prefix "&gt;&gt;&gt;"</code></pre>
+            <pre><code>{
+  "broadcast": {
+    "pattern": "/broadcast &lt;message&gt;",
+    "description": "Broadcast a message"
+  }
+}</code></pre>
+            <pre><code>/cmd add broadcast say ${server_prefix} ${broadcast_message}</code></pre>
+            <p>When you run <code>/broadcast Server restarting soon!</code>, it outputs: <code>&gt;&gt;&gt; Server restarting soon!</code></p>
+
+            <h3>All Three Combined</h3>
+            <pre><code>{
+  "report": {
+    "pattern": "/report &lt;player&gt; &lt;reason&gt;",
+    "description": "Report a player for breaking rules"
+  }
+}</code></pre>
+            <pre><code>/cmd add report say [REPORT] ${player} reported ${report_player} for: ${report_reason} at ${x}, ${y}, ${z}</code></pre>
+            <p>Running <code>/report Steve griefing</code> produces: <code>[REPORT] Alex reported Steve for: griefing at 123, 45, -789</code>. This combines the sender's name (built-in), the target and reason (syntax parameters), and the sender's location (built-in coordinates).</p>
+
+            <h2>Pattern Validation Tips</h2>
+            <p>Debugging syntax patterns can be tricky. Use these tips to ensure your patterns work correctly.</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Issue</th>
+                        <th>Check</th>
+                        <th>Solution</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Pattern does not match</td>
+                        <td>Does the player's input start with <code>/</code>?</td>
+                        <td>Make sure the pattern string starts with <code>/</code>. Patterns without the leading slash will not match chat input.</td>
+                    </tr>
+                    <tr>
+                        <td>Wrong parameter captured</td>
+                        <td>Are parameter names unique within the pattern?</td>
+                        <td>Each parameter name in a pattern must be unique. Duplicate names cause unpredictable capture behavior.</td>
+                    </tr>
+                    <tr>
+                        <td>Multi-word value not captured fully</td>
+                        <td>Is this the last parameter?</td>
+                        <td>Only the last parameter is greedy. If you need a multi-word parameter in the middle, restructure the pattern so the free-text field comes last.</td>
+                    </tr>
+                    <tr>
+                        <td>Variable returns empty</td>
+                        <td>Does the variable name match the pattern?</td>
+                        <td>Variable format: <code>${patternName_paramName}</code>. Both must be lowercase and spelled exactly as defined in <code>syntax.json</code>.</td>
+                    </tr>
+                    <tr>
+                        <td>Pattern conflicts with another</td>
+                        <td>Do two patterns start with the same prefix?</td>
+                        <td>A pattern <code>/msg &lt;player&gt; &lt;msg&gt;</code> and <code>/msg &lt;msg&gt;</code> both match inputs starting with <code>/msg</code>. Make patterns unambiguous or reorder them.</td>
+                    </tr>
+                    <tr>
+                        <td>JSON parse error</td>
+                        <td>Is the syntax.json valid JSON?</td>
+                        <td>Use a JSON validator. Common issues: trailing commas, missing quotes, unescaped quotes inside strings.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Testing Checklist</h3>
+            <p>Before deploying a new pattern on your live server, run through this checklist:</p>
+            <ol>
+                <li>Add the pattern to <code>syntax.json</code> and run <code>/cmd reload</code>.</li>
+                <li>Run <code>/syntax</code> to verify the pattern appears in the list.</li>
+                <li>Type the pattern's command with sample parameters and verify the alias executes.</li>
+                <li>Test edge cases: single-word parameters, multi-word (greedy) parameters, special characters.</li>
+                <li>Test with a non-operator player to check permission behavior.</li>
+                <li>Verify that the alias output uses all captured variables correctly.</li>
+            </ol>
+
+            <div class="callout callout-tip">
+                <h3>Debugging with Tellraw</h3>
+                <p>When debugging patterns, create a simple alias that echoes the captured variables back to you:</p>
+                <pre><code>/cmd add debugpattern say Param1: ${mypattern_param1}, Param2: ${mypattern_param2}</code></pre>
+                <p>This lets you see exactly what each parameter captured.</p>
+            </div>
+
+            <h2>Real-World Pattern Examples</h2>
+
+            <h3>Warp System with Description</h3>
+            <pre><code>{
+  "warp": {
+    "pattern": "/warp &lt;name&gt;",
+    "description": "Warp to a named location"
+  }
+}</code></pre>
+            <pre><code>/cmd add warp tp ${player} ${warp_name} && say Warped to ${warp_name}!</code></pre>
+
+            <h3>Economy Pay System</h3>
+            <pre><code>{
+  "pay": {
+    "pattern": "/pay &lt;target&gt; &lt;amount&gt;",
+    "description": "Pay another player"
+  }
+}</code></pre>
+            <pre><code>/cmd add pay say ${player} paid ${pay_target} ${pay_amount} coins!</code></pre>
+
+            <h3>Server Shop Order</h3>
+            <pre><code>{
+  "order": {
+    "pattern": "/order &lt;item&gt; &lt;quantity&gt; &lt;delivery_location&gt;",
+    "description": "Order items from the server shop"
+  }
+}</code></pre>
+            <pre><code>/cmd add order say ${player} ordered ${order_quantity}x ${order_item} delivered to ${order_delivery_location}</code></pre>
+            <p>Typing <code>/order diamond 64 spawn_tower</code> results in: <code>Alex ordered 64x diamond delivered to spawn_tower</code>.</p>
+
+            <div class="callout callout-info">
+                <h3>Next Steps</h3>
+                <p>Now that you understand advanced patterns, read the <a href="variable-reference.html">Variable Reference</a> for a complete list of available variables, or visit the <a href="alias-examples.html">Alias Examples</a> page for ready-to-use commands built on these patterns.</p>
+            </div>
+        </main>
+    </div>
+    <footer id="footer" class="footer" role="contentinfo"></footer>
+    <script src="js/components.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>

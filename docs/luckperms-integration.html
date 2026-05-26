@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LuckPerms Integration - Command Maker Wiki</title>
+    <meta name="description" content="Step-by-step guide to integrating LuckPerms with Command Maker for advanced permission management, including permission nodes, group setups, per-alias permissions, inheritance, and prefix/suffix support.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon.ico">
+</head>
+<body>
+    <nav id="navbar" class="navbar" role="navigation" aria-label="Main navigation"></nav>
+    <div class="layout">
+        <aside id="sidebar" class="sidebar" role="complementary" aria-label="Side navigation"></aside>
+        <main class="content" role="main">
+            <h1>LuckPerms Integration</h1>
+            <p>Command Maker supports <a href="https://luckperms.net/" target="_blank" rel="noopener">LuckPerms</a> as an optional permission backend. When LuckPerms is installed on your server, Command Maker automatically detects it and reads permission data from LuckPerms instead of (or in addition to) the built-in <code>permissions.json</code> system.</p>
+
+            <div class="callout callout-info">
+                <h3>LuckPerms Is Optional</h3>
+                <p>LuckPerms is not required to use Command Maker. The built-in <a href="permissions-setup.html">permissions.json</a> system works perfectly for most servers. LuckPerms integration is useful when you already use LuckPerms for other plugins and want to manage all permissions from a single place. In the mod's build, LuckPerms is marked as <code>compileOnly</code>, meaning it is not bundled with the mod and must be installed separately.</p>
+            </div>
+
+            <h2>Installation Requirements</h2>
+            <p>Before you begin, make sure both mods are installed and running:</p>
+            <ol>
+                <li><strong>Install LuckPerms:</strong> Download the LuckPerms Fabric jar for your Minecraft version from the <a href="https://luckperms.net/download" target="_blank" rel="noopener">LuckPerms website</a> or Modrinth. Place it in your server's <code>mods/</code> folder.</li>
+                <li><strong>Verify both mods are loaded:</strong> Run <code>/luckperms</code> to check LuckPerms is working, and <code>/cmd</code> to check Command Maker is working.</li>
+                <li><strong>No additional configuration needed:</strong> Command Maker detects LuckPerms automatically. There is no setting to enable or disable the integration.</li>
+            </ol>
+
+            <div class="callout callout-warning">
+                <h3>Server Restart Required</h3>
+                <p>You must restart your server after adding LuckPerms to the mods folder. A simple <code>/reload</code> may not fully initialize the LuckPerms integration with Command Maker.</p>
+            </div>
+
+            <h2>Permission Nodes</h2>
+            <p>Command Maker registers the following LuckPerms permission nodes under the <code>cmmaker</code> root:</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Permission Node</th>
+                        <th>Corresponding Level</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>cmmaker.admin</code></td>
+                        <td><code>ADMIN</code> (4)</td>
+                        <td>Full access to all Command Maker features</td>
+                    </tr>
+                    <tr>
+                        <td><code>cmmaker.moderator</code></td>
+                        <td><code>MODERATOR</code> (3)</td>
+                        <td>Add/delete aliases, manage permissions, reload config</td>
+                    </tr>
+                    <tr>
+                        <td><code>cmmaker.command</code></td>
+                        <td><code>COMMAND_USER</code> (2)</td>
+                        <td>Use /cmd to view info, run all aliases and functions</td>
+                    </tr>
+                    <tr>
+                        <td><code>cmmaker.alias</code></td>
+                        <td><code>ALIAS_USER</code> (1)</td>
+                        <td>Run aliases and functions</td>
+                    </tr>
+                    <tr>
+                        <td><code>cmmaker.*</code></td>
+                        <td><code>ADMIN</code> (4)</td>
+                        <td>Wildcard granting all Command Maker permissions</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>How Nodes Map to Permission Levels</h3>
+            <p>When Command Maker checks a player's permission, it looks for the highest-level node the player has. For example, if a player has <code>cmmaker.alias</code>, they get <code>ALIAS_USER</code>. If they have <code>cmmaker.command</code>, they get <code>COMMAND_USER</code> (which includes all <code>ALIAS_USER</code> abilities). The system checks from highest to lowest and uses the first match.</p>
+
+            <p>The wildcard <code>cmmaker.*</code> grants the equivalent of <code>ADMIN</code> level, giving full access to everything.</p>
+
+            <h2>Setting Up Groups</h2>
+            <p>The recommended approach is to create LuckPerms groups that mirror your server roles and assign the relevant <code>cmmaker.*</code> nodes to each group:</p>
+
+            <h3>Step 1: Create Groups</h3>
+            <pre><code>/lp creategroup admin
+/lp creategroup moderator
+/lp creategroup helper
+/lp creategroup vip
+/lp creategroup default</code></pre>
+
+            <h3>Step 2: Assign Permission Nodes</h3>
+            <pre><code># Admin group - full access
+/lp group admin permission set cmmaker.* true
+
+# Moderator group - moderate and manage
+/lp group moderator permission set cmmaker.moderator true
+
+# Helper group - use commands and aliases
+/lp group helper permission set cmmaker.command true
+
+# VIP group - use aliases and functions
+/lp group vip permission set cmmaker.alias true
+
+# Default group - use aliases and functions (same as VIP)
+/lp group default permission set cmmaker.alias true</code></pre>
+
+            <h3>Step 3: Set Up Inheritance</h3>
+            <p>Use inheritance so higher-ranked groups automatically include lower-ranked permissions. This mirrors the Command Maker permission level hierarchy:</p>
+            <pre><code># Helper inherits from default
+/lp group helper parent add default
+
+# Moderator inherits from helper
+/lp group moderator parent add helper
+
+# Admin inherits from moderator
+/lp group admin parent add moderator</code></pre>
+
+            <div class="callout callout-tip">
+                <h3>Verifying Group Setup</h3>
+                <p>Check your group configuration at any time with <code>/lp group &lt;group&gt; info</code>. This displays all permissions, parents, and members of the group, making it easy to spot misconfigurations.</p>
+            </div>
+
+            <h3>Step 4: Assign Players to Groups</h3>
+            <pre><code>/lp user Steve parent set admin
+/lp user Alex parent set moderator
+/lp user HelperBob parent set helper
+/lp user VIPPlayer parent set vip</code></pre>
+
+            <h2>Per-Alias Permissions via LuckPerms</h2>
+            <p>You can also control access to individual aliases through LuckPerms. When a player tries to use an alias, Command Maker checks the <code>alias_permissions</code> section of <code>permissions.json</code> against the player's LuckPerms-derived permission level. This means you define which aliases require which level in <code>permissions.json</code>, and LuckPerms determines which level each player gets.</p>
+
+            <p>Example <code>permissions.json</code> that relies solely on LuckPerms for player levels:</p>
+            <pre><code>{
+  "permissions": {},
+  "alias_permissions": {
+    "ban": "MODERATOR",
+    "kick": "MODERATOR",
+    "stop": "ADMIN",
+    "broadcast": "COMMAND_USER",
+    "spawn": "ALIAS_USER",
+    "home": "ALIAS_USER"
+  }
+}</code></pre>
+
+            <p>With this setup, the <code>permissions</code> section is empty because player levels are managed through LuckPerms groups and nodes. The <code>alias_permissions</code> section still controls which aliases require which level.</p>
+
+            <h2>Advanced: Contextual Permissions</h2>
+            <p>LuckPerms supports contextual permissions that apply only in certain worlds, at certain times, or under other conditions. You can use this to restrict Command Maker permissions by world:</p>
+
+            <pre><code># cmmaker.alias only in the survival world
+/lp group default permission set cmmaker.alias true world=survival
+
+# Full admin powers in the admin world
+/lp group admin permission set cmmaker.* true world=admin</code></pre>
+
+            <div class="callout callout-warning">
+                <h3>Context Limitations</h3>
+                <p>Command Maker reads the player's global LuckPerms permission state, not world-specific overrides. Contextual permissions may not work as expected in all cases. Test thoroughly if you rely on world-specific permission contexts.</p>
+            </div>
+
+            <h2>Prefix and Suffix Support</h2>
+            <p>Command Maker does not directly use LuckPerms prefix/suffix data, but you can still use LuckPerms prefixes in your aliases by combining them with other chat formatting plugins. The <code>${player}</code> variable always resolves to the player's username. For prefix-aware chat messages, consider using a separate chat formatting plugin alongside Command Maker.</p>
+
+            <p>If you want to include rank prefixes in your alias responses, you can use custom <a href="variables.html">variables</a> set per-player with <code>/setcmdvariable</code>:</p>
+            <pre><code># Set a player's prefix variable (run by an admin)
+/setcmdvariable Steve prefix "[ADMIN] "
+
+# Alias using the custom variable
+"admin_say": "say ${prefix}${player}: ${message}"</code></pre>
+
+            <h2>Debugging LuckPerms Integration</h2>
+            <p>If Command Maker is not respecting your LuckPerms configuration, follow these debugging steps:</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Issue</th>
+                        <th>Check</th>
+                        <th>Solution</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Permission nodes not working</td>
+                        <td>Verify nodes with <code>/lp user &lt;player&gt; permission check cmmaker.alias</code></td>
+                        <td>Re-apply the permission node with <code>/lp user &lt;player&gt; permission set cmmaker.alias true</code></td>
+                    </tr>
+                    <tr>
+                        <td>Group inheritance not working</td>
+                        <td>Check <code>/lp group &lt;group&gt; info</code> for parent groups</td>
+                        <td>Re-apply parent groups and verify the chain: default &lt; helper &lt; moderator &lt; admin</td>
+                    </tr>
+                    <tr>
+                        <td>OP status overriding LuckPerms</td>
+                        <td>Check if player is opped with <code>/lp user &lt;player&gt; info</code></td>
+                        <td>Deop the player with <code>/deop &lt;player&gt;</code> or grant <code>cmmaker.*</code> via LuckPerms</td>
+                    </tr>
+                    <tr>
+                        <td>Permission changes not applied</td>
+                        <td>Run <code>/lp sync</code> to reload all LuckPerms data</td>
+                        <td>Also run <code>/cmd reload</code> to refresh Command Maker's state</td>
+                    </tr>
+                    <tr>
+                        <td>"Unknown permission node" in LP</td>
+                        <td>Command Maker may not have registered its nodes yet</td>
+                        <td>Restart the server with both mods installed; the nodes register on startup</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>Complete Example Setup</h2>
+            <p>Here is a complete example that configures a small server with three tiers:</p>
+
+            <pre><code># === STEP 1: Create groups ===
+/lp creategroup admin
+/lp creategroup staff
+/lp creategroup member
+
+# === STEP 2: Set permissions ===
+/lp group member permission set cmmaker.alias true
+/lp group staff permission set cmmaker.command true
+/lp group staff parent add member
+/lp group admin permission set cmmaker.* true
+/lp group admin parent add staff
+
+# === STEP 3: Assign players ===
+/lp user Steve parent set admin
+/lp user Alex parent set staff
+/lp user GuestPlayer parent set member
+
+# === STEP 4: Verify ===
+/lp user Steve permission check cmmaker.*
+/lp user Alex permission check cmmaker.command
+/lp user GuestPlayer permission check cmmaker.alias</code></pre>
+
+            <p>Then, in <code>config/CommandMaker/permissions.json</code>:</p>
+            <pre><code>{
+  "permissions": {},
+  "alias_permissions": {
+    "stop": "ADMIN",
+    "ban": "MODERATOR",
+    "kick": "MODERATOR",
+    "broadcast": "COMMAND_USER",
+    "spawn": "ALIAS_USER",
+    "home": "ALIAS_USER"
+  }
+}</code></pre>
+
+            <p>With this setup:</p>
+            <ul>
+                <li><strong>Steve</strong> (admin) can use all aliases including <code>/stop</code></li>
+                <li><strong>Alex</strong> (staff) can use <code>/ban</code>, <code>/kick</code>, <code>/broadcast</code>, and all player commands, but not <code>/stop</code></li>
+                <li><strong>GuestPlayer</strong> (member) can only use <code>/spawn</code> and <code>/home</code></li>
+            </ul>
+
+            <div class="callout callout-info">
+                <h3>Related Guides</h3>
+                <p>For the built-in permission system without LuckPerms, see the <a href="permissions-setup.html">Permissions Setup</a> guide. For advanced permission configurations, see the <a href="advanced-permissions-guide.html">Advanced Permissions Guide</a>.</p>
+            </div>
+        </main>
+    </div>
+    <footer id="footer" class="footer" role="contentinfo"></footer>
+    <script src="js/components.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>

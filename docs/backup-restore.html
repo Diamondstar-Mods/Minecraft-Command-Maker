@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backup & Restore - Command Maker Wiki</title>
+    <meta name="description" content="Learn how to backup and restore Command Maker configurations, including aliases, syntax patterns, permissions, functions, and variables.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon.ico">
+</head>
+<body>
+    <nav id="navbar" class="navbar" role="navigation" aria-label="Main navigation"></nav>
+    <div class="layout">
+        <aside id="sidebar" class="sidebar" role="complementary" aria-label="Side navigation"></aside>
+        <main class="content" role="main">
+            <h1>Backup & Restore</h1>
+            <p>Protect your Command Maker configuration with proper backup practices. This guide covers what to back up, how to automate backups, and how to restore from them.</p>
+
+            <h2>Why Backups Matter</h2>
+            <p>Your Command Maker configuration represents time spent building aliases, crafting syntax patterns, and fine-tuning permissions. Without backups, a corrupted JSON file, accidentally deleted alias, or server crash can erase hours of work. A proper backup strategy ensures you can recover quickly.</p>
+
+            <div class="callout-warning">
+                <h3>Important</h3>
+                <p>Command Maker stores all configuration on the server side. If you are a player using a server, you cannot back up configurations -- only the server administrator can. If you run a single-player world, the configuration is in your <code>.minecraft</code> directory.</p>
+            </div>
+
+            <h2>What to Back Up</h2>
+
+            <h3>Essential Files</h3>
+            <p>The entire <code>config/CommandMaker/</code> directory contains all your configuration data. These are the specific files you need:</p>
+
+            <table class="variables-table">
+                <thead>
+                    <tr>
+                        <th>File/Folder</th>
+                        <th>Description</th>
+                        <th>Backup Frequency</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>config/CommandMaker/aliases.json</code></td>
+                        <td>All custom aliases</td>
+                        <td>After every alias change</td>
+                    </tr>
+                    <tr>
+                        <td><code>config/CommandMaker/syntax.json</code></td>
+                        <td>Custom syntax patterns</td>
+                        <td>After pattern changes</td>
+                    </tr>
+                    <tr>
+                        <td><code>config/CommandMaker/permissions.json</code></td>
+                        <td>Permission configuration</td>
+                        <td>After permission changes</td>
+                    </tr>
+                    <tr>
+                        <td><code>config/CommandMaker/variables.json</code></td>
+                        <td>Custom variables</td>
+                        <td>Periodically (changes less often)</td>
+                    </tr>
+                    <tr>
+                        <td><code>config/CommandMaker/Functions/</code></td>
+                        <td>Uploaded .mcfunction files</td>
+                        <td>After function changes</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Optional Files</h3>
+            <ul>
+                <li><strong>Server properties</strong> -- If your aliases reference server-specific settings</li>
+                <li><strong>Datapack files</strong> -- If you use custom datapacks alongside Command Maker</li>
+                <li><strong>Scoreboard data</strong> -- If your aliases depend on scoreboard values (back up via <code>/scoreboard</code> commands)</li>
+            </ul>
+
+            <h2>How to Back Up</h2>
+
+            <h3>Manual Backup</h3>
+            <p>The simplest method -- copy the entire configuration folder:</p>
+            <pre><code># Stop the server first (recommended)
+# Navigate to the server directory
+cd /path/to/server
+
+# Copy the configuration
+cp -r config/CommandMaker backups/CommandMaker_2026-05-26
+
+# Or on Windows:
+# xcopy /E /I config\CommandMaker backups\CommandMaker_2026-05-26</code></pre>
+
+            <div class="callout-tip">
+                <h3>Pro Tip</h3>
+                <p>Always use date-stamped backup folders. This lets you track changes over time and revert to specific versions if needed. Format: <code>CommandMaker_YYYY-MM-DD</code> or <code>CommandMaker_YYYY-MM-DD_HHMM</code> for multiple backups in one day.</p>
+            </div>
+
+            <h3>Automated Backup Scripts</h3>
+
+            <h4>Linux / macOS (Bash)</h4>
+            <pre><code>#!/bin/bash
+# Save as: backup-commandmaker.sh
+
+BACKUP_DIR="/path/to/backups/commandmaker"
+SOURCE_DIR="/path/to/server/config/CommandMaker"
+TIMESTAMP=$(date +%Y-%m-%d_%H%M)
+FILENAME="CommandMaker_${TIMESTAMP}.tar.gz"
+
+mkdir -p "$BACKUP_DIR"
+tar -czf "${BACKUP_DIR}/${FILENAME}" -C "$(dirname "$SOURCE_DIR")" CommandMaker/
+
+# Keep only the last 30 backups
+ls -t "$BACKUP_DIR"/CommandMaker_*.tar.gz | tail -n +31 | xargs -r rm
+
+echo "Backup saved: ${BACKUP_DIR}/${FILENAME}"</code></pre>
+
+            <h4>Windows (PowerShell)</h4>
+            <pre><code># Save as: backup-commandmaker.ps1
+
+$backupDir = "C:\backups\commandmaker"
+$sourceDir = "C:\server\config\CommandMaker"
+$timestamp = Get-Date -Format "yyyy-MM-dd_HHmm"
+$filename = "CommandMaker_$timestamp.zip"
+
+New-Item -ItemType Directory -Force -Path $backupDir
+Compress-Archive -Path "$sourceDir\*" -DestinationPath "$backupDir\$filename" -Force
+
+# Keep only the last 30 backups
+Get-ChildItem "$backupDir\CommandMaker_*.zip" |
+    Sort-Object Name -Descending |
+    Select-Object -Skip 30 |
+    ForEach-Object { Remove-Item $_.FullName }
+
+Write-Output "Backup saved: $backupDir\$filename"</code></pre>
+
+            <h4>Scheduling Automated Backups</h4>
+            <p><strong>Linux (cron):</strong> Run <code>crontab -e</code> and add:</p>
+            <pre><code># Daily backup at 3:00 AM
+0 3 * * * /path/to/backup-commandmaker.sh</code></pre>
+
+            <p><strong>Windows (Task Scheduler):</strong></p>
+            <ol>
+                <li>Open Task Scheduler</li>
+                <li>Create Basic Task</li>
+                <li>Trigger: Daily at 3:00 AM</li>
+                <li>Action: Start a program</li>
+                <li>Program: <code>powershell.exe</code></li>
+                <li>Arguments: <code>-File "C:\scripts\backup-commandmaker.ps1"</code></li>
+            </ol>
+
+            <h2>Version Control for Configurations</h2>
+
+            <h3>Using Git</h3>
+            <p>For advanced users, tracking configuration changes with Git provides the most flexibility:</p>
+            <pre><code># Initialize a repository in your backup location
+cd /path/to/backups/commandmaker-git
+git init
+
+# Copy the configuration
+cp -r /path/to/server/config/CommandMaker/* .
+
+# Stage and commit
+git add .
+git commit -m "Backup: Command Maker config 2026-05-26"
+
+# View changes over time
+git log --oneline
+git diff HEAD~1 -- aliases.json</code></pre>
+
+            <h3>.gitignore for Sensitive Data</h3>
+            <p>If your repository is public or shared, exclude sensitive information:</p>
+            <pre><code># .gitignore for Command Maker backups
+variables.json
+*.tmp
+*.log</code></pre>
+
+            <div class="callout-info">
+                <h3>Note</h3>
+                <p>Custom variables may contain server IP addresses, Discord invite links, or other semi-sensitive data. Use discretion when sharing backups publicly.</p>
+            </div>
+
+            <h2>Restoring from Backup</h2>
+
+            <h3>Standard Restore Procedure</h3>
+            <ol>
+                <li><strong>Stop the Minecraft server</strong> to prevent file conflicts</li>
+                <li><strong>Navigate to the backup</strong> location</li>
+                <li><strong>Restore the files</strong> to <code>config/CommandMaker/</code></li>
+                <li><strong>Start the server</strong></li>
+                <li><strong>Verify the configuration</strong> by running <code>/cmd reload</code></li>
+                <li><strong>Test critical aliases</strong> to confirm they work</li>
+            </ol>
+
+            <pre><code># Linux restore from tar.gz
+cd /path/to/server
+tar -xzf /path/to/backups/commandmaker/CommandMaker_2026-05-26.tar.gz
+# This extracts into config/CommandMaker/ automatically
+
+# Windows restore from zip
+# Extract the zip file directly into the server directory
+# ensuring the folder structure is preserved</code></pre>
+
+            <h3>Partial Restore</h3>
+            <p>If only one file is corrupted or lost, restore it individually:</p>
+            <pre><code># Restore only aliases.json
+cp /path/to/backup/aliases.json /path/to/server/config/CommandMaker/aliases.json
+
+# Restore only the Functions folder
+cp -r /path/to/backup/Functions /path/to/server/config/CommandMaker/Functions</code></pre>
+
+            <h2>Disaster Recovery</h2>
+
+            <h3>Complete Server Loss</h3>
+            <p>If the entire server is lost (hardware failure, corruption, accidental wipe):</p>
+            <ol>
+                <li><strong>Install Minecraft server</strong> with the same version</li>
+                <li><strong>Install Fabric Loader</strong> and Fabric API</li>
+                <li><strong>Install Command Maker</strong> mod</li>
+                <li><strong>Copy your latest backup</strong> to <code>config/CommandMaker/</code></li>
+                <li><strong>Start the server</strong> and run <code>/cmd reload</code></li>
+                <li><strong>Verify all aliases</strong> work correctly</li>
+            </ol>
+
+            <h3>Corrupted JSON File</h3>
+            <p>If a JSON file becomes corrupted (e.g., from an interrupted save):</p>
+            <ol>
+                <li><strong>Stop the server</strong> immediately</li>
+                <li><strong>Locate the corrupted file</strong> -- the console log will show which file failed to parse</li>
+                <li><strong>Replace it with the backup</strong> version</li>
+                <li><strong>Start the server</strong> and verify</li>
+            </ol>
+
+            <pre><code># Quick fix for corrupted aliases.json
+cp /path/to/backup/aliases.json config/CommandMaker/aliases.json
+/cmd reload  # After server start</code></pre>
+
+            <div class="callout-warning">
+                <h3>Warning</h3>
+                <p>If you don't have a backup of a corrupted JSON file, you will lose that configuration data. The mod will create a new empty file if the old one is unreadable, but it cannot recover your lost aliases.</p>
+            </div>
+
+            <h3>Accidental Alias Deletion</h3>
+            <p>If you delete an alias with <code>/cmd remove</code> and regret it:</p>
+            <ul>
+                <li><strong>Restore from backup</strong> -- copy the old <code>aliases.json</code> over the current one</li>
+                <li><strong>Manually re-add</strong> -- if you remember the command, use <code>/cmd add</code></li>
+                <li><strong>Check Git history</strong> -- if using version control, check the last commit</li>
+            </ul>
+
+            <h2>Backup Strategy Recommendations</h2>
+
+            <table class="mistakes-table">
+                <thead>
+                    <tr>
+                        <th>Server Type</th>
+                        <th>Recommended Strategy</th>
+                        <th>Retention</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Personal / Small</td>
+                        <td>Manual backup before major changes</td>
+                        <td>Keep last 3-5 backups</td>
+                    </tr>
+                    <tr>
+                        <td>Community Server</td>
+                        <td>Automated daily backup + manual before changes</td>
+                        <td>Keep last 30 daily backups</td>
+                    </tr>
+                    <tr>
+                        <td>Large Network</td>
+                        <td>Automated hourly + daily + Git version control</td>
+                        <td>Keep 7 days hourly, 90 days daily</td>
+                    </tr>
+                    <tr>
+                        <td>Development/Test</td>
+                        <td>Git version control with every change</td>
+                        <td>Keep full history</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>Backup Checklist</h2>
+
+            <div class="callout-tip">
+                <h3>Before Making Changes</h3>
+                <ul>
+                    <li>Back up the entire <code>config/CommandMaker/</code> folder</li>
+                    <li>Note the current date in the backup filename</li>
+                    <li>Document what changes you plan to make</li>
+                    <li>Test the backup is valid (can you open the files?)</li>
+                </ul>
+            </div>
+
+            <div class="callout-tip">
+                <h3>After Making Changes</h3>
+                <ul>
+                    <li>Test that all aliases work correctly</li>
+                    <li>Create a dated backup of the working configuration</li>
+                    <li>If using Git, commit the change with a descriptive message</li>
+                    <li>Notify other admins of the backup location</li>
+                </ul>
+            </div>
+        </main>
+    </div>
+    <footer id="footer" class="footer" role="contentinfo"></footer>
+    <script src="js/components.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>

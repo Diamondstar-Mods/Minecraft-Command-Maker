@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NBT Commands - Command Maker Wiki</title>
+    <meta name="description" content="Master NBT data in Command Maker aliases: custom items, mob attributes, data merge, and escaped JSON for powerful server commands.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon.ico">
+</head>
+<body>
+    <nav id="navbar" class="navbar" role="navigation" aria-label="Main navigation"></nav>
+    <div class="layout">
+        <aside id="sidebar" class="sidebar" role="complementary" aria-label="Side navigation"></aside>
+        <main class="content" role="main">
+            <h1>NBT Commands</h1>
+            <p>NBT (Named Binary Tag) is Minecraft's data format for storing information about items, entities, and blocks. By using NBT in your Command Maker aliases, you can create custom items with enchantments, lore, attributes, and summon mobs with complex configurations.</p>
+
+            <h2>What is NBT?</h2>
+            <p>NBT is a tree-like data structure similar to JSON. Every item, entity, and block in Minecraft has NBT data that defines its properties. When you use commands like <code>/give</code>, <code>/summon</code>, or <code>/data</code>, you can append NBT data in JSON-like syntax to customize the result.</p>
+
+            <pre><code># Simple item with NBT
+/give @p minecraft:diamond_sword{Enchantments:[{id:"minecraft:sharpness",lvl:5}]} 1
+
+# Simplified component-based format (1.20.5+)
+/give @p minecraft:diamond_sword[enchantments={levels:{"minecraft:sharpness":5}}] 1</code></pre>
+
+            <div class="callout callout-info">
+                <h3>NBT Format Versions</h3>
+                <p>Minecraft 1.20.5 introduced a new <strong>component-based</strong> item format that replaces the older NBT tag syntax. Both formats are shown throughout this guide. If you are running an older version, use the <code>{tag:{...}}</code> syntax. For 1.20.5+, prefer the newer <code>[component]</code> syntax.</p>
+            </div>
+
+            <h2>NBT Syntax Basics</h2>
+
+            <h3>NBT Data Types</h3>
+            <table>
+                <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                    <th>Example</th>
+                </tr>
+                <tr>
+                    <td>String</td>
+                    <td>Text value in double quotes</td>
+                    <td><code>id:"minecraft:diamond"</code></td>
+                </tr>
+                <tr>
+                    <td>Number</td>
+                    <td>Integer or decimal</td>
+                    <td><code>Count:1</code>, <code>lvl:5</code></td>
+                </tr>
+                <tr>
+                    <td>Boolean</td>
+                    <td>True or false</td>
+                    <td><code>invulnerable:true</code></td>
+                </tr>
+                <tr>
+                    <td>List</td>
+                    <td>Ordered collection in square brackets</td>
+                    <td><code>[{...}, {...}]</code></td>
+                </tr>
+                <tr>
+                    <td>Compound</td>
+                    <td>Key-value pairs in curly braces</td>
+                    <td><code>{id:"diamond",Count:1}</code></td>
+                </tr>
+                <tr>
+                    <td>Array</td>
+                    <td>Typed array in square brackets with prefix</td>
+                    <td><code>[I;1,2,3]</code></td>
+                </tr>
+            </table>
+
+            <h2>Common NBT Use Cases</h2>
+
+            <h3>Custom Named Items (Legacy Format)</h3>
+            <pre><code># Give a named diamond sword
+/alias add namedsword give @p minecraft:diamond_sword{display:{Name:'{"text":"&amp;6&amp;lBlade of Legends","italic":false}'}} 1
+
+# Give a named pickaxe with lore
+/alias add legendarypick give @p minecraft:diamond_pickaxe{display:{Name:'{"text":"&amp;b&amp;lBedrock Breaker","italic":false}',Lore:['{"text":"&amp;7A pickaxe of immense power","italic":false}','{"text":"&amp;eMines 3x3 area","italic":false}']}} 1
+
+# Give a named bow with enchantments
+/alias add powerbow give @p minecraft:bow{display:{Name:'{"text":"&amp;a&amp;lWind's Fury","italic":false}'},Enchantments:[{id:"minecraft:power",lvl:10},{id:"minecraft:flame",lvl:1},{id:"minecraft:infinity",lvl:1}]} 1</code></pre>
+
+            <h3>Custom Named Items (Component Format, 1.20.5+)</h3>
+            <pre><code># Give a named diamond sword (component format)
+/alias add namedsword give @p minecraft:diamond_sword[custom_name='"&amp;6&amp;lBlade of Legends"',lore=['"&amp;7A legendary blade"','"&amp;ePowerful beyond measure"'],enchantments={levels:{"minecraft:sharpness":5,"minecraft:fire_aspect":2}}] 1
+
+# Give a named pickaxe with lore
+/alias add legendarypick give @p minecraft:diamond_pickaxe[custom_name='"&amp;b&amp;lBedrock Breaker"',lore=['"&amp;7A pickaxe of immense power"','"&amp;eMines 3x3 area"']] 1</code></pre>
+
+            <h3>Colored Leather Armor</h3>
+            <pre><code># Red leather chestplate (legacy format)
+/alias add redchest give @p minecraft:leather_chestplate{display:{color:16711680}} 1
+
+# Blue leather boots (legacy format)
+/alias add blueboots give @p minecraft:leather_boots{display:{color:255}} 1
+
+# Purple leather helmet with name (legacy format)
+/alias add purplehelm give @p minecraft:leather_helmet{display:{Name:'{"text":"&amp;5&amp;lCrown of Ender","italic":false}',color:11141290}} 1
+
+# Green leather armor set (component format, 1.20.5+)
+/alias add greenarmor give @p minecraft:leather_chestplate[dyed_color={rgb:65280,show_in_tooltip:true},custom_name='"&amp;2Forest Guardian"'] 1</code></pre>
+
+            <div class="callout callout-tip">
+                <h3>Color Values for Leather Armor</h3>
+                <p>Leather armor colors use decimal RGB values. Use an online color converter to find the decimal value for any hex color:</p>
+                <ul>
+                    <li>Red (255,0,0) = 16711680</li>
+                    <li>Green (0,255,0) = 65280</li>
+                    <li>Blue (0,0,255) = 255</li>
+                    <li>Yellow (255,255,0) = 16776960</li>
+                    <li>Purple (255,0,255) = 16711935</li>
+                    <li>White (255,255,255) = 16777215</li>
+                </ul>
+            </div>
+
+            <h3>Mobs with Custom Attributes</h3>
+            <pre><code># Summon a named zombie with diamond armor (legacy format)
+/alias add bosszombie summon minecraft:zombie ~ ~ ~ {CustomName:'{"text":"&amp;c&amp;lZombie Lord","italic":false}',CustomNameVisible:true,Health:100f,ArmorItems:[{id:"minecraft:diamond_boots",Count:1},{id:"minecraft:diamond_leggings",Count:1},{id:"minecraft:diamond_chestplate",Count:1},{id:"minecraft:diamond_helmet",Count:1}],HandItems:[{id:"minecraft:diamond_sword",Count:1,tag:{Enchantments:[{id:"minecraft:sharpness",lvl:3}]}},{}],Attributes:[{Name:"generic.max_health",Base:100},{Name:"generic.movement_speed",Base:0.35f},{Name:"generic.attack_damage",Base:15}]}
+
+# Summon a giant spider with effects (legacy format)
+/alias add boss spider summon minecraft:spider ~ ~ ~ {CustomName:'{"text":"&amp;a&amp;lArachnor the Ancient","italic":false}',CustomNameVisible:true,Health:80f,ActiveEffects:[{Id:1,Amplifier:1,Duration:999999,ShowParticles:false},{Id:3,Amplifier:2,Duration:999999,ShowParticles:false}],Attributes:[{Name:"generic.max_health",Base:80},{Name:"generic.attack_damage",Base:10}]}
+
+# Summon a charged creeper (always powered)
+/alias add supercreeper summon minecraft:creeper ~ ~ ~ {powered:1b,CustomNameVisible:true,CustomName:'{"text":"&amp;e&amp;lBOOM","italic:false}',ExplosionRadius:10,Fuse:30}</code></pre>
+
+            <h3>Custom Items with Enchantments</h3>
+            <pre><code># God apple (legacy format)
+/alias add godapple give @p minecraft:golden_apple 1 0:{display:{Name:'{"text":"&amp;6&amp;lApple of Immortality","italic":false}'},Enchantment:[{id:"sharpness",lvl:10}]}
+
+# A trident with multiple enchantments (legacy format)
+/alias add godtrident give @p minecraft:trident{Enchantments:[{id:"minecraft:impaling",lvl:10},{id:"minecraft:loyalty",lvl:5},{id:"minecraft:riptide",lvl:3},{id:"minecraft:channeling",lvl:1}]} 1
+
+# Infinity bow with custom attributes (component format, 1.20.5+)
+/alias add godbow give @p minecraft:bow[enchantments={levels:{"minecraft:power":10,"minecraft:flame":1,"minecraft:infinity":1,"minecraft:punch":5}},attribute_modifiers=[{type:"minecraft:attack_damage",modifier:"00000000-0000-0000-0000-000000000001",amount:5.0,operation:"add_value",slot:"mainhand"},{type:"minecraft:movement_speed",modifier:"00000000-0000-0000-0000-000000000002",amount:0.1,operation:"multiply_base",slot:"mainhand"}],unbreakable:{},custom_name='"&amp;b&amp;lStormbringer"'] 1</code></pre>
+
+            <h2>Data Merge and Data Get</h2>
+
+            <h3>Using /data merge to Modify Entities</h3>
+            <pre><code># Make the nearest player invulnerable
+/alias add godmode data merge entity @p {Invulnerable:1b}
+
+# Make a villager follow you forever (give it a name and persistence)
+/alias add petvillager data merge entity @e[type=minecraft:villager,sort=nearest,limit=1] {CustomName:'{"text":"&amp;b&amp;l${player}'s Pet","italic":false}',CustomNameVisible:true,PersistenceRequired:1b,NoAI:0b}
+
+# Turn a mob into a silent baby
+/alias add silencemob data merge entity @e[type=!minecraft:player,distance=..5,sort=nearest,limit=1] {Silent:1b,Age:-999999}</code></pre>
+
+            <h3>Using /data get to Read NBT</h3>
+            <pre><code># Get the NBT of the block you're looking at
+/alias add getblock data get block ~ ~ ~
+
+# Get your own NBT data
+/alias add getplayerinfo data get entity @p
+
+# Get a specific path from an entity
+/alias add gethealth data get entity @p Health</code></pre>
+
+            <h2>Escaped JSON in Aliases</h2>
+            <p>When using NBT in Command Maker aliases, quote escaping is the most common source of errors. Here is how to handle it:</p>
+
+            <div class="callout callout-danger">
+                <h3>Common Pitfall: Quote Escaping</h3>
+                <p>If you create an alias containing quotes via the in-game <code>/cmd add</code> command, you must be careful with nesting quotes. Using single quotes inside double quotes often works. For complex NBT, it is <strong>strongly recommended</strong> to edit the <code>aliases.json</code> file directly, where you have full control over escaping.</p>
+            </div>
+
+            <h3>Direct File Editing (Recommended for Complex NBT)</h3>
+            <pre><code>// In config/CommandMaker/aliases.json
+{
+  "godsword": "give @p minecraft:diamond_sword{display:{Name:'{\"text\":\"&amp;6&amp;lExcalibur\",\"italic\":false}',Lore:['{\"text\":\"&amp;7The legendary sword of kings\",\"italic\":false}']},Enchantments:[{id:\"minecraft:sharpness\",lvl:100},{id:\"minecraft:fire_aspect\",lvl:10},{id:\"minecraft:knockback\",lvl:10},{id:\"minecraft:looting\",lvl:10}]} 1",
+
+  "boss_summon": "summon minecraft:warden ~ ~ ~ {CustomName:'{\"text\":\"&amp;4&amp;lAncient Warden\",\"italic\":false}',CustomNameVisible:true,Health:500f,Attributes:[{Name:\"generic.max_health\",Base:500},{Name:\"generic.attack_damage\",Base:30},{Name:\"generic.movement_speed\",Base:0.5}]}"
+}</code></pre>
+
+            <h3>Using /cmd add with Quotes</h3>
+            <pre><code># Simple NBT (no internal quotes - works directly)
+/alias add diamond give @p minecraft:diamond 1
+
+# NBT with quotes - wrap in single quotes
+/alias add namedpick give @p minecraft:diamond_pickaxe{display:{Name:'{"text":"&amp;b&amp;lPower Pick","italic":false}'}} 1
+
+# If single quotes don't work, use JSON escaping in aliases.json
+# Best approach: edit aliases.json directly for complex items</code></pre>
+
+            <h2>Advanced NBT Examples</h2>
+
+            <h3>Custom Firework Rockets</h3>
+            <pre><code># Red creeper-face firework (legacy format)
+/alias add creeperfirework give @p minecraft:firework_rocket{Fireworks:{Explosions:[{Type:3,Colors:[I;11743532],FadeColors:[I;15790320]},{Type:1,Colors:[I;16776960],FadeColors:[I;6719955]}]}} 3
+
+# Multi-explosion firework
+/alias add celebration give @p minecraft:firework_rocket{Fireworks:{Flight:2,Explosions:[{Type:0,Colors:[I;16711680],FadeColors:[I;16776960]},{Type:1,Colors:[I;255],FadeColors:[I;16777215]},{Type:2,Colors:[I;65280]}]}} 5</code></pre>
+
+            <h3>Custom Spawn Eggs with Mob Data</h3>
+            <pre><code># Spawn egg that summons a named sheep when used (legacy format)
+/alias add namedsheepegg give @p minecraft:sheep_spawner_egg{EntityTag:{id:"minecraft:sheep",CustomName:'{"text":"&amp;b&amp;lJeb sheep","italic":false}',Color:6,NoAI:1b}} 1</code></pre>
+
+            <h3>Custom Map</h3>
+            <pre><code># Give a custom map (legacy format)
+/alias add treasuremap give @p minecraft:filled_map{display:{Name:'{"text":"&amp;6&amp;lTreasure Map","italic":false}',MapColor:16766720}} 1
+
+# Note: Maps require server-side generation, this gives the map item frame</code></pre>
+
+            <h3>Custom Potions and Effects</h3>
+            <pre><code># Custom potion with multiple effects (legacy format)
+/alias add superpotion give @p minecraft:potion{CustomPotionEffects:[{Id:1,Amplifier:5,Duration:6000,ShowParticles:false},{Id:3,Amplifier:2,Duration:6000,ShowParticles:false},{Id:10,Amplifier:1,Duration:6000,ShowParticles:false}],display:{Name:'{"text":"&amp;5&amp;lPotion of Power","italic":false}',Lore:['{"text":"&amp;7Grants incredible abilities","italic":false}']},CustomPotionColor:16711935} 1
+
+# Lingering version
+/alias add superlingering give @p minecraft:lingering_potion{Potion:"minecraft:strong_healing",CustomPotionEffects:[{Id:1,Amplifier:5,Duration:3000}]} 1</code></pre>
+
+            <h2>NBT in Functions (.mcfunction)</h2>
+            <p>When using NBT in function files under <code>config/CommandMaker/Functions/</code>, you can write commands normally without worrying about in-game command length limits:</p>
+
+            <pre><code># config/CommandMaker/Functions/kit_diamond.mcfunction
+
+give @p minecraft:diamond_helmet{display:{Name:'{"text":"&amp;b&amp;lCrystal Helmet","italic":false}'},Enchantments:[{id:"minecraft:protection",lvl:4},{id:"minecraft:unbreaking",lvl:3}]} 1
+give @p minecraft:diamond_chestplate{display:{Name:'{"text":"&amp;b&amp;lCrystal Chestplate","italic":false}'},Enchantments:[{id:"minecraft:protection",lvl:4},{id:"minecraft:unbreaking",lvl:3}]} 1
+give @p minecraft:diamond_leggings{display:{Name:'{"text":"&amp;b&amp;lCrystal Leggings","italic":false}'},Enchantments:[{id:"minecraft:protection",lvl:4},{id:"minecraft:unbreaking",lvl:3}]} 1
+give @p minecraft:diamond_boots{display:{Name:'{"text":"&amp;b&amp;lCrystal Boots","italic":false}'},Enchantments:[{id:"minecraft:protection",lvl:4},{id:"minecraft:unbreaking",lvl:3},{id:"minecraft:feather_falling",lvl:4}]} 1
+give @p minecraft:diamond_sword{display:{Name:'{"text":"&amp;b&amp;lCrystal Blade","italic":false}'},Enchantments:[{id:"minecraft:sharpness",lvl:5},{id:"minecraft:fire_aspect",lvl:2}]} 1
+give @p minecraft:diamond_pickaxe{display:{Name:'{"text":"&amp;b&amp;lCrystal Pickaxe","italic":false}'},Enchantments:[{id:"minecraft:efficiency",lvl:5},{id:"minecraft:fortune",lvl:4}]} 1
+give @p minecraft:cooked_beef 64
+say &amp;b${player} &amp;7received the &amp;bCrystal Kit&amp;7!</code></pre>
+
+            <h2>Tips for Complex NBT in Aliases</h2>
+
+            <div class="callout callout-tip">
+                <h3>NBT Authoring Tips</h3>
+                <ul>
+                    <li><strong>Use a builder tool:</strong> Websites like <a href="https://mcstacker.net">MC Stacker</a> can generate complex NBT commands that you can paste into aliases.</li>
+                    <li><strong>Test in singleplayer first:</strong> Try your NBT command in creative mode before adding it as an alias.</li>
+                    <li><strong>Watch the command length:</strong> Minecraft has a command length limit. For very complex items, use functions instead of aliases.</li>
+                    <li><strong>Prefer functions for complex NBT:</strong> Function files (.mcfunction) have no command length limit and support multi-line editing.</li>
+                    <li><strong>Edit aliases.json directly:</strong> For NBT-heavy aliases, edit the JSON file rather than using <code>/cmd add</code> to avoid escaping issues.</li>
+                </ul>
+            </div>
+
+            <div class="callout callout-warning">
+                <h3>Component Format Conversion (1.20.5+)</h3>
+                <p>Minecraft 1.20.5+ changed item data from NBT tags to components. Many legacy <code>{tag:{...}}</code> patterns still work through automatic conversion, but for new projects on 1.20.5+, you should use the component syntax:</p>
+                <ul>
+                    <li>Old: <code>give @p diamond_sword{Enchantments:[{id:"sharpness",lvl:5}]}</code></li>
+                    <li>New: <code>give @p diamond_sword[enchantments={levels:{"minecraft:sharpness":5}}]</code></li>
+                </ul>
+            </div>
+
+            <h2>Related Pages</h2>
+            <ul>
+                <li><a href="aliases.html">Creating Aliases</a> - Building aliases with NBT</li>
+                <li><a href="target-selectors.html">Target Selectors</a> - Targeting entities with selectors</li>
+                <li><a href="chat-formatting.html">Chat Formatting</a> - Color codes for item names and lore</li>
+                <li><a href="examples.html">Examples</a> - Real-world alias examples</li>
+            </ul>
+        </main>
+    </div>
+    <footer id="footer" class="footer" role="contentinfo"></footer>
+    <script src="js/components.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>

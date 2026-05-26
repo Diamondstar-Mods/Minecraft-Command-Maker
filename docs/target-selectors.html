@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Target Selectors - Command Maker Wiki</title>
+    <meta name="description" content="Complete guide to Minecraft target selectors for Command Maker: @p, @a, @r, @s, @e and advanced selector arguments with practical alias examples.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon.ico">
+</head>
+<body>
+    <nav id="navbar" class="navbar" role="navigation" aria-label="Main navigation"></nav>
+    <div class="layout">
+        <aside id="sidebar" class="sidebar" role="complementary" aria-label="Side navigation"></aside>
+        <main class="content" role="main">
+            <h1>Target Selectors</h1>
+            <p>Target selectors are special placeholders in Minecraft commands that let you dynamically target players or entities without knowing their names. They are essential for building powerful Command Maker aliases that work for any player or situation.</p>
+
+            <div class="callout callout-info">
+                <h3>What is a Target Selector?</h3>
+                <p>A target selector is a shorthand that begins with <code>@</code> followed by a letter, which Minecraft replaces with one or more matching entities. For example, <code>@p</code> always refers to the nearest player, regardless of who types the command.</p>
+            </div>
+
+            <h2>Basic Target Selectors</h2>
+
+            <table>
+                <tr>
+                    <th>Selector</th>
+                    <th>Name</th>
+                    <th>Selects</th>
+                    <th>Common Use</th>
+                </tr>
+                <tr>
+                    <td><code>@p</code></td>
+                    <td>Nearest Player</td>
+                    <td>The closest player to the command execution position</td>
+                    <td>Teleporting, giving items, single-player targeting</td>
+                </tr>
+                <tr>
+                    <td><code>@a</code></td>
+                    <td>All Players</td>
+                    <td>Every player on the server</td>
+                    <td>Broadcasts, global effects, server-wide actions</td>
+                </tr>
+                <tr>
+                    <td><code>@r</code></td>
+                    <td>Random Player</td>
+                    <td>A random player (or entity with <code>type</code> argument)</td>
+                    <td>Giveaways, lotteries, random teleport targets</td>
+                </tr>
+                <tr>
+                    <td><code>@s</code></td>
+                    <td>Self</td>
+                    <td>The entity that executed the command</td>
+                    <td>Functions, command blocks triggered by entities</td>
+                </tr>
+                <tr>
+                    <td><code>@e</code></td>
+                    <td>All Entities</td>
+                    <td>Every entity in all loaded chunks</td>
+                    <td>Targeting mobs, items, vehicles, or specific entity types</td>
+                </tr>
+            </table>
+
+            <div class="callout callout-danger">
+                <h3>Safety Warning: @e Can Lag Your Server</h3>
+                <p>The <code>@e</code> selector targets <strong>every entity</strong> in all loaded chunks. On a busy server with hundreds of mobs, item drops, or players, using <code>@e</code> without filters can cause significant lag or crash the server. <strong>Always use selector arguments</strong> to narrow down the selection (e.g., <code>@e[type=minecraft:cow,limit=10]</code>). Never use bare <code>@e</code> in performance-sensitive commands.</p>
+            </div>
+
+            <h2>Selector Arguments</h2>
+            <p>All selectors support optional arguments in square brackets that filter which entities are selected. Arguments are comma-separated key=value pairs.</p>
+
+            <h3>Positional Arguments</h3>
+            <table>
+                <tr>
+                    <th>Argument</th>
+                    <th>Format</th>
+                    <th>Description</th>
+                    <th>Example</th>
+                </tr>
+                <tr>
+                    <td><code>x</code>, <code>y</code>, <code>z</code></td>
+                    <td><code>x=100</code></td>
+                    <td>Sets the origin position for distance calculations</td>
+                    <td><code>@p[x=0,y=64,z=0]</code></td>
+                </tr>
+                <tr>
+                    <td><code>dx</code>, <code>dy</code>, <code>dz</code></td>
+                    <td><code>dx=10</code></td>
+                    <td>Defines a rectangular volume from the x/y/z coordinates</td>
+                    <td><code>@a[x=100,y=64,z=100,dx=10,dy=5,dz=10]</code></td>
+                </tr>
+                <tr>
+                    <td><code>distance</code></td>
+                    <td><code>distance=..10</code></td>
+                    <td>Filters by distance from origin. Supports ranges (<code>..</code>)</td>
+                    <td><code>@p[distance=..5]</code></td>
+                </tr>
+            </table>
+
+            <h3>Entity Filter Arguments</h3>
+            <table>
+                <tr>
+                    <th>Argument</th>
+                    <th>Format</th>
+                    <th>Description</th>
+                    <th>Example</th>
+                </tr>
+                <tr>
+                    <td><code>type</code></td>
+                    <td><code>type=minecraft:cow</code></td>
+                    <td>Targets a specific entity type. Use <code>!</code> prefix to exclude</td>
+                    <td><code>@e[type=!minecraft:player]</code></td>
+                </tr>
+                <tr>
+                    <td><code>name</code></td>
+                    <td><code>name=Steve</code></td>
+                    <td>Targets entities with a specific name</td>
+                    <td><code>@e[name=Herobrine]</code></td>
+                </tr>
+                <tr>
+                    <td><code>tag</code></td>
+                    <td><code>tag=admin</code></td>
+                    <td>Targets entities with a specific scoreboard tag</td>
+                    <td><code>@a[tag=moderator]</code></td>
+                </tr>
+                <tr>
+                    <td><code>team</code></td>
+                    <td><code>team=red</code></td>
+                    <td>Targets entities on a specific scoreboard team</td>
+                    <td><code>@a[team=red]</code></td>
+                </tr>
+                <tr>
+                    <td><code>gamemode</code></td>
+                    <td><code>gamemode=creative</code></td>
+                    <td>Filters by gamemode. Values: <code>survival</code>, <code>creative</code>, <code>adventure</code>, <code>spectator</code></td>
+                    <td><code>@a[gamemode=creative]</code></td>
+                </tr>
+                <tr>
+                    <td><code>level</code></td>
+                    <td><code>level=10..20</code></td>
+                    <td>Filters by experience level range</td>
+                    <td><code>@a[level=30..]</code></td>
+                </tr>
+                <tr>
+                    <td><code>scores</code></td>
+                    <td><code>scores={kills=5..}</code></td>
+                    <td>Filters by scoreboard objective values</td>
+                    <td><code>@a[scores={wins=10..}]</code></td>
+                </tr>
+                <tr>
+                    <td><code>advancements</code></td>
+                    <td><code>advancements={story/mine_diamond=true}</code></td>
+                    <td>Filters by advancement completion status</td>
+                    <td><code>@a[advancements={story/mine_diamond=true}]</code></td>
+                </tr>
+                <tr>
+                    <td><code>nbt</code></td>
+                    <td><code>nbt={OnGround:true}</code></td>
+                    <td>Filters by NBT data (performance-intensive, use sparingly)</td>
+                    <td><code>@e[nbt={Item:{id:"minecraft:diamond"}}]</code></td>
+                </tr>
+                <tr>
+                    <td><code>predicate</code></td>
+                    <td><code>predicate=example:is_sneaking</code></td>
+                    <td>Filters using a custom predicate from a data pack</td>
+                    <td><code>@a[predicate=mypack:in_nether]</code></td>
+                </tr>
+            </table>
+
+            <h3>Result Control Arguments</h3>
+            <table>
+                <tr>
+                    <th>Argument</th>
+                    <th>Format</th>
+                    <th>Description</th>
+                    <th>Example</th>
+                </tr>
+                <tr>
+                    <td><code>limit</code></td>
+                    <td><code>limit=5</code></td>
+                    <td>Maximum number of entities to return</td>
+                    <td><code>@r[limit=1]</code></td>
+                </tr>
+                <tr>
+                    <td><code>sort</code></td>
+                    <td><code>sort=nearest</code></td>
+                    <td>Sorting method: <code>nearest</code>, <code>furthest</code>, <code>random</code>, <code>arbitrary</code></td>
+                    <td><code>@a[sort=furthest,limit=1]</code></td>
+                </tr>
+            </table>
+
+            <h2>Range Syntax</h2>
+            <p>Many arguments support range notation using two dots (<code>..</code>):</p>
+
+            <table>
+                <tr>
+                    <th>Notation</th>
+                    <th>Meaning</th>
+                    <th>Example</th>
+                </tr>
+                <tr>
+                    <td><code>5..10</code></td>
+                    <td>Between 5 and 10 (inclusive)</td>
+                    <td><code>@p[distance=5..10]</code></td>
+                </tr>
+                <tr>
+                    <td><code>..10</code></td>
+                    <td>10 or less</td>
+                    <td><code>@p[distance=..10]</code></td>
+                </tr>
+                <tr>
+                    <td><code>5..</code></td>
+                    <td>5 or more</td>
+                    <td><code>@p[level=5..]</code></td>
+                </tr>
+                <tr>
+                    <td><code>5</code></td>
+                    <td>Exactly 5</td>
+                    <td><code>@p[limit=5]</code></td>
+                </tr>
+            </table>
+
+            <h2>Practical Examples for Command Maker</h2>
+
+            <h3>Using @p (Nearest Player)</h3>
+            <pre><code># Give a diamond to the nearest player
+/alias add givediamond give @p minecraft:diamond 1
+
+# Teleport nearest player to you
+/alias add bring tp @p ${x} ${y} ${z}
+
+# Heal nearest player
+/alias add heal effect give @p minecraft:regeneration 5 4
+
+# Message the nearest player
+/alias add whispermsg tell @p &amp;7[Whisper] &amp;f${message}</code></pre>
+
+            <h3>Using @a (All Players)</h3>
+            <pre><code># Broadcast server-wide message
+/alias add broadcast say &amp;8[&amp;bBroadcast&amp;8] &amp;f${message}
+
+# Give everyone a reward
+/alias add dailyreward give @a minecraft:diamond 1
+/alias add dailyreward say &amp;aEveryone received a daily diamond!
+
+# Set all players to survival mode
+/alias add survival gamemode survival @a
+
+# Clear all players' inventories
+/alias add clearchat clear @a</code></pre>
+
+            <h3>Using @r (Random Player)</h3>
+            <pre><code># Give a random player a reward
+/alias add lottery give @r minecraft:diamond 5
+/alias add lottery say &amp;6&amp;l${player} won the lottery!
+
+# Random player teleport
+/alias add randomtp tp @r ${x} ${y} ${z}
+
+# Random entity of a specific type
+/alias add findcow tp @p @e[type=minecraft:cow,sort=random,limit=1]</code></pre>
+
+            <h3>Using @s (Self)</h3>
+            <pre><code># In functions, @s refers to the executing entity
+# Clean yourself (useful in command blocks or functions)
+/alias add clearinv clear @s
+
+# When used with /execute, targets the entity
+/execute as @e[type=minecraft:villager] run /alias_add_self
+# Then in the alias:
+/alias add alias_add_self say @s</code></pre>
+
+            <h3>Using @e (All Entities - With Filters)</h3>
+            <pre><code># Kill all zombies in a 50-block radius (safe, filtered)
+/alias add clearmobs kill @e[type=minecraft:zombie,distance=..50]
+
+# Kill all dropped items (reduce lag)
+/alias add itemclean kill @e[type=minecraft:item]
+
+# Teleport nearest cow to you
+/alias add fetchcow tp @e[type=minecraft:cow,sort=nearest,limit=1] ${x} ${y} ${z}
+
+# Count nearby mobs
+/alias add mobcount say &amp;eThere are &amp;c${mob_count} &amp;emobs nearby!
+# Combined with scoreboard (example):
+/alias add mobcount execute store result score count_mobs count run /execute if entity @e[distance=..50,type=!minecraft:player]</code></pre>
+
+            <h2>Advanced Selector Patterns</h2>
+
+            <h3>Combining Multiple Arguments</h3>
+            <pre><code># Nearby survival-mode players in a radius
+/alias add nearbysurvival say &amp;ePlayers nearby: &amp;f@p[distance=..20,gamemode=survival]
+
+# High-level players in creative mode
+/alias add elite list @a[level=30..,gamemode=creative]
+
+# Specific named entity with tag
+/alias add findpet tp @e[type=minecraft:wolf,name=Rex,tag=pet,limit=1]</code></pre>
+
+            <h3>Volume Selection (dx/dy/dz)</h3>
+            <p>Use dx, dy, and dz to select entities within a rectangular area starting from x/y/z:</p>
+            <pre><code># All players inside a 10x10x10 box at spawn
+/alias add spawnarea say &amp;ePlayers at spawn: @a[x=0,y=64,z=0,dx=10,dy=10,dz=10]
+
+# Check if any mobs are in a specific arena
+/alias add arenacheck execute if entity @e[x=100,y=64,z=100,dx=20,dy=10,dz=20] run say &amp;cMobs detected in the arena!</code></pre>
+
+            <h3>Using Scores in Selectors</h3>
+            <pre><code># First, create a scoreboard objective
+# /scoreboard objectives add kills deathCount
+
+# Reward players with 10+ kills
+/alias add killreward give @a[scores={kills=10..}] minecraft:diamond 1
+/alias add killreward say &amp;6Players with 10+ kills received a diamond!
+
+# Teleport to the player with the most kills
+/alias add findtopkill tp @a[sort=random,limit=1,scores={kills=..}]</code></pre>
+
+            <div class="callout callout-tip">
+                <h3>Pro Tip: Using Selectors with Variables</h3>
+                <p>Combine target selectors with Command Maker variables for dynamic behavior. For example, create an alias that gives a diamond to the nearest player and announces it with the ${player} variable:</p>
+                <pre><code>/alias add givediamond give @p minecraft:diamond 1
+/alias add givediamond say &amp;6${player} &amp;ereceived a diamond!</code></pre>
+            </div>
+
+            <h2>Using Selectors in Syntax Parameters</h2>
+            <pre><code>{
+  "punish": {
+    "pattern": "/punish &lt;player&gt; &lt;reason&gt;",
+    "description": "Punish a player with a reason"
+  }
+}
+
+# Alias with selectors
+/alias add punishcmd say &amp;4&amp;l${punish_player} &amp;r&amp;7was punished for: &amp;e${punish_reason}
+/alias add punishcmd effect give ${punish_player} minecraft:slowness 30 2
+/alias add punishcmd title ${punish_player} {"text":"&4You were punished!"}</code></pre>
+
+            <h2>Performance Guidelines</h2>
+            <table>
+                <tr>
+                    <th>Selector</th>
+                    <th>Performance Impact</th>
+                    <th>Recommendation</th>
+                </tr>
+                <tr>
+                    <td><code>@p</code></td>
+                    <td>Very Fast</td>
+                    <td>Safe to use anywhere</td>
+                </tr>
+                <tr>
+                    <td><code>@a</code></td>
+                    <td>Fast</td>
+                    <td>Safe for most uses</td>
+                </tr>
+                <tr>
+                    <td><code>@r</code></td>
+                    <td>Fast</td>
+                    <td>Safe for most uses</td>
+                </tr>
+                <tr>
+                    <td><code>@s</code></td>
+                    <td>Very Fast</td>
+                    <td>Safe to use anywhere</td>
+                </tr>
+                <tr>
+                    <td><code>@e</code> (filtered)</td>
+                    <td>Moderate</td>
+                    <td>Use with type and distance filters</td>
+                </tr>
+                <tr>
+                    <td><code>@e</code> (unfiltered)</td>
+                    <td>Very Slow</td>
+                    <td>Avoid whenever possible</td>
+                </tr>
+                <tr>
+                    <td><code>nbt=</code> filter</td>
+                    <td>Slow</td>
+                    <td>Use sparingly, cache results</td>
+                </tr>
+            </table>
+
+            <div class="callout callout-warning">
+                <h3>Command Block Safety</h3>
+                <p>When using Command Maker aliases in command blocks, remember that <code>@p</code> targets the nearest player to the <strong>command block</strong>, not the player who triggered it. Use <code>@a</code> with distance filters or the <code>/execute as</code> syntax for player-relative targeting.</p>
+            </div>
+
+            <h2>Related Pages</h2>
+            <ul>
+                <li><a href="aliases.html">Creating Aliases</a> - Building aliases with selectors</li>
+                <li><a href="syntax-system.html">Custom Syntax System</a> - Parameterized commands</li>
+                <li><a href="examples.html">Examples</a> - Real-world alias examples</li>
+                <li><a href="nbt-commands.html">NBT Commands</a> - Using NBT in aliases</li>
+            </ul>
+        </main>
+    </div>
+    <footer id="footer" class="footer" role="contentinfo"></footer>
+    <script src="js/components.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>

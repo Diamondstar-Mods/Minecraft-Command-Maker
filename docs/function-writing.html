@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Writing Functions - Command Maker Wiki</title>
+    <meta name="description" content="Learn how to write .mcfunction files for Command Maker: file format, best practices, using variables, chaining with execute, and common patterns with annotated examples.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon.ico">
+</head>
+<body>
+    <nav id="navbar" class="navbar" role="navigation" aria-label="Main navigation"></nav>
+    <div class="layout">
+        <aside id="sidebar" class="sidebar" role="complementary" aria-label="Side navigation"></aside>
+        <main class="content" role="main">
+            <h1>Writing Functions</h1>
+            <p>Functions are <code>.mcfunction</code> files that contain multiple commands executed in sequence. Command Maker automatically registers every function in its Functions folder as a usable command alias, making them a powerful way to create multi-step behavior.</p>
+
+            <p>If you just want an overview of the Functions system, read the <a href="functions.html">Functions System</a> page first.</p>
+
+            <h2>File Format</h2>
+            <p>A <code>.mcfunction</code> file is a plain text file with a simple format:</p>
+            <ul>
+                <li>Each line is one Minecraft command.</li>
+                <li>Lines starting with <code>#</code> are comments and are ignored.</li>
+                <li>Blank lines are ignored and can be used for readability.</li>
+                <li>Commands execute top to bottom, one at a time.</li>
+                <li>Variables like <code>${player}</code>, <code>${x}</code>, <code>${y}</code>, <code>${z}</code> work in functions just like in aliases.</li>
+            </ul>
+
+            <h3>Basic Example</h3>
+            <p>Save this as <code>config/CommandMaker/Functions/heal_and_feed.mcfunction</code>:</p>
+            <pre><code># Heals and feeds the player
+effect give @s instant_health 1
+effect give @s saturation 1
+say You have been healed and fed!</code></pre>
+            <p>Command Maker automatically creates the alias <code>/heal_and_feed</code> that runs all three commands in sequence.</p>
+
+            <h2>Best Practices</h2>
+
+            <h3>Group Related Commands</h3>
+            <p>A function should do one thing well. Do not combine unrelated commands into a single function. Instead, create separate functions for separate purposes:</p>
+            <pre><code># GOOD: Separate functions for separate purposes
+# Functions/heal.mcfunction
+effect give @s instant_health 1
+say You were healed!
+
+# Functions/feed.mcfunction
+effect give @s saturation 1
+say You were fed!
+
+# Functions/ready.mcfunction  (calls both via alias chaining)
+# (This can use && chaining instead)
+# /cmd add ready run heal_and_feed && run ready_effects</code></pre>
+
+            <h3>Add Comments</h3>
+            <p>Functions can grow long. Comments help you and other administrators understand what each section does:</p>
+            <pre><code># ============================================
+# Welcome Package - gives new players a kit
+# ============================================
+
+# Give starter tools
+give @s stone_sword 1
+give @s stone_pickaxe 1
+give @s stone_axe 1
+
+# Give basic food
+give @s bread 16
+give @s cooked_beef 8
+
+# Announce
+say Welcome to the server! Check /help for available commands.
+title @s title {"text":"Welcome!","color":"gold"}</code></pre>
+
+            <h3>Test Incrementally</h3>
+            <p>When writing a complex function, build and test it one step at a time:</p>
+            <ol>
+                <li>Write the first command and test it alone.</li>
+                <li>Add the second command and test the pair.</li>
+                <li>Continue adding commands one by one, testing after each addition.</li>
+                <li>If something breaks, you know exactly which command caused the problem.</li>
+            </ol>
+
+            <div class="callout callout-tip">
+                <h3>Quick Testing</h3>
+                <p>Run <code>/cmd reload</code> after editing a function file, then use <code>/cmd function &lt;name&gt;</code> to run it. This is faster than running the function directly when debugging.</p>
+            </div>
+
+            <h2>Using Variables in Functions</h2>
+            <p>Functions support the same variables as aliases. This lets you create functions that adapt to the player running them.</p>
+
+            <h3>Built-in Variables in Functions</h3>
+            <pre><code># Functions/whereami.mcfunction
+say Player: ${player}
+say Location: X=${x} Y=${y} Z=${z}
+say Dimension: ${world}</code></pre>
+            <p>When a player runs <code>/whereami</code>, they see their own name, coordinates, and dimension.</p>
+
+            <h3>Custom Variables in Functions</h3>
+            <pre><code># First, set up custom variables:
+# /setcmdvariable spawn_point "0 70 0"
+# /setcmdvariable spawn_region "spawn"
+
+# Functions/spawn_teleport.mcfunction
+tp ${player} ${spawn_point}
+say ${player} teleported to the ${spawn_region}!
+playsound minecraft:block.portal.travel master @s</code></pre>
+
+            <h3>Syntax Parameters in Functions</h3>
+            <p>Functions themselves cannot accept direct parameters, but you can create an alias with syntax that calls a function:</p>
+            <pre><code>{
+  "warp": {
+    "pattern": "/warp &lt;name&gt;",
+    "description": "Teleport to a warp"
+  }
+}
+
+/cmd add warp run warps_${warp_name}</code></pre>
+            <p>Then create individual function files for each warp:</p>
+            <pre><code># Functions/warps_spawn.mcfunction
+tp ${player} 0 70 0
+say Teleported to spawn warp!
+playsound minecraft:block.portal.travel master @s
+
+# Functions/warps_arena.mcfunction
+tp ${player} 1000 64 500
+say Teleported to arena warp!
+playsound minecraft:entity.wither.spawn master @s</code></pre>
+
+            <h2>Chaining with Execute</h2>
+            <p>The <code>/execute</code> command is your most powerful tool inside functions. It lets you run commands conditionally or from a different context.</p>
+
+            <h3>Conditional Execution</h3>
+            <pre><code># Functions/admin_tools.mcfunction
+# Check if the player is in creative mode (admin check)
+execute if entity @s[gamemode=creative] run give @s command_block 1
+execute if entity @s[gamemode=creative] run say Here is your command block, admin!
+execute unless entity @s[gamemode=creative] run say You must be in creative mode to use this.</code></pre>
+
+            <h3>Location-Based Commands</h3>
+            <pre><code># Functions/lightning_strike.mcfunction
+# Strike lightning at the player's location
+execute at @s run summon minecraft:lightning_bolt ~ ~ ~
+playsound minecraft:entity.lightning_bolt.thunder master @s
+say Lightning summoned!</code></pre>
+
+            <h3>Dimension-Aware Functions</h3>
+            <pre><code># Functions/safe_spawn.mcfunction
+# Teleport to spawn in the correct dimension
+execute if entity @s[player] in minecraft:overworld run tp @s 0 70 0
+execute if entity @s[player] in minecraft:the_nether run tp @s 0 70 0
+execute if entity @s[player] in minecraft:the_end run tp @s 0 70 0
+say Teleported to spawn!</code></pre>
+
+            <div class="callout callout-info">
+                <h3>Execute Chains</h3>
+                <p>You can nest <code>execute</code> conditions. For example, <code>execute if entity @s[gamemode=creative] at @s run setblock ~ ~-1 ~ minecraft:gold_block</code> places a gold block under the player only if they are in creative mode.</p>
+            </div>
+
+            <h2>Common Patterns</h2>
+
+            <h3>Server Announcement Sequence</h3>
+            <pre><code># Functions/restart_warning.mcfunction
+# Stage 1: 30-second warning
+say [SERVER] Server will restart in 30 seconds!
+title @a title {"text":"Restart Warning","color":"red"}
+title @a subtitle {"text":"30 seconds remaining","color":"gold"}
+playsound minecraft:block.note_block.pling master @a 1 1</code></pre>
+
+            <h3>Player Welcome Package</h3>
+            <pre><code># Functions/new_player_kit.mcfunction
+# Starter kit for new players
+give @s minecraft:stone_sword 1
+give @s minecraft:stone_pickaxe 1
+give @s minecraft:stone_axe 1
+give @s minecraft:bread 16
+give @s minecraft:cooked_beef 8
+give @s minecraft:torch 16
+give @s minecraft:oak_planks 32
+
+# Give a helpful book (requires a written book item)
+give @s minecraft:written_book{pages:['{"text":"Welcome to the server! Use /help to see all commands."}'],title:"Server Guide",author:"Server"} 1
+
+# Announce
+say Welcome package delivered, ${player}!
+title @s title {"text":"Welcome, ${player}!","color":"green"}</code></pre>
+
+            <h3>Event Zone Setup</h3>
+            <pre><code># Functions/setup_arena.mcfunction
+# Build a simple PvP arena
+fill 0 4 0 10 4 10 minecraft:stone
+fill 0 5 0 10 5 10 minecraft:air
+setblock 5 5 5 minecraft:beacon
+say Arena setup complete!</code></pre>
+
+            <h3>Night Skip (Without Sleeping)</h3>
+            <pre><code># Functions/night_skip.mcfunction
+# Fast-forward to day
+time set day
+weather clear
+say [SERVER] Night has been skipped!
+playsound minecraft:entity.experience_orb.pickup master @a</code></pre>
+
+            <h3>Combo: Heal, Buff, and Teleport to Spawn</h3>
+            <pre><code># Functions/ready.mcfunction
+# Full ready-up sequence
+
+# Step 1: Heal and feed
+effect give @s instant_health 1
+effect give @s saturation 1
+
+# Step 2: Clear negative effects
+effect clear @s minecraft:slowness
+effect clear @s minecraft:weakness
+effect clear @s minecraft:poison
+
+# Step 3: Apply buffs
+effect give @s speed 300 1
+effect give @s resistance 300 1
+
+# Step 4: Teleport to spawn
+tp ${player} ${spawn_coords}
+
+# Step 5: Confirm
+title @s title {"text":"Ready!","color":"green"}
+playsound minecraft:entity.player.levelup master @s</code></pre>
+
+            <h2>Annotated Example: Parkour Checkpoint System</h2>
+            <p>This complete example shows a parkour checkpoint function with detailed comments explaining each section:</p>
+            <pre><code># ============================================
+# Functions/parkour_checkpoint.mcfunction
+# Saves the player's current position as a
+# parkour checkpoint and teleports them back
+# to the start if they fall.
+# ============================================
+
+# --- Step 1: Store current position ---
+# Use scoreboard or a location marker
+setblock ${x} ${y} ${z} minecraft:lapis_block
+say Checkpoint saved at ${x}, ${y}, ${z}!
+
+# --- Step 2: Visual feedback ---
+# Particle burst at checkpoint location
+particle minecraft:dust 0 0 1 1 ${x} ${y} ${z} 0.5 0.5 0.5 0.1 10
+playsound minecraft:block.note_block.chime master @s 1 2
+
+# --- Step 3: Clear old checkpoint (if any) ---
+# (This would need specific coordinate knowledge)
+# setblock ${old_x} ${old_y} ${old_z} minecraft:air
+
+# --- Step 4: Give grace effect ---
+effect give @s slow_falling 3 0 true
+say You have 3 seconds of slow falling. Use it wisely!</code></pre>
+
+            <h2>Function File Organization Tips</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tip</th>
+                        <th>Explanation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Use a naming prefix</td>
+                        <td>Prefix related functions like <code>warps_spawn</code>, <code>warps_arena</code>, <code>warps_minigame</code> to group them logically.</td>
+                    </tr>
+                    <tr>
+                        <td>Keep functions short</td>
+                        <td>If a function exceeds 20 lines, consider splitting it into smaller functions that call each other.</td>
+                    </tr>
+                    <tr>
+                        <td>Use header comments</td>
+                        <td>Start each file with a comment block explaining what the function does.</td>
+                    </tr>
+                    <tr>
+                        <td>Back up regularly</td>
+                        <td>Copy the entire <code>Functions/</code> folder periodically. Functions can be complex and are hard to rewrite from memory.</td>
+                    </tr>
+                    <tr>
+                        <td>Test in singleplayer first</td>
+                        <td>Before deploying a function to a live server, test it in singleplayer or a test server to avoid unexpected behavior.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>Calling Functions from Functions</h2>
+            <p>You cannot directly call another <code>.mcfunction</code> file from within a function in Command Maker's system. However, you can achieve similar behavior using <code>/schedule function</code> or by creating a meta-alias that chains multiple function calls:</p>
+            <pre><code># Instead of calling a function from within a function,
+# create an alias that runs multiple functions:
+/cmd add full_setup run setup_arena && run spawn_mobs && run give_kits</code></pre>
+            <p>This runs three functions in sequence as if they were one larger function.</p>
+
+            <div class="callout callout-warning">
+                <h3>Command Limit</h3>
+                <p>Minecraft has a command length limit. For very large functions with many commands, make sure your total command string does not exceed the limit. If you hit the limit, split the function into smaller parts.</p>
+            </div>
+
+            <h2>Next Steps</h2>
+            <ul>
+                <li>Browse the <a href="function-catalog.html">Function Catalog</a> for pre-made functions you can download.</li>
+                <li>Learn about the <a href="gui-system.html">Function Manager GUI</a> for creating and editing functions visually.</li>
+                <li>Review <a href="best-practices.html">Best Practices</a> for more tips on organizing your server's commands.</li>
+            </ul>
+        </main>
+    </div>
+    <footer id="footer" class="footer" role="contentinfo"></footer>
+    <script src="js/components.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Variable Reference - Command Maker Wiki</title>
+    <meta name="description" content="Complete reference for all Command Maker variables: built-in variables, custom variables, and syntax parameters. Includes descriptions, examples, and output for each.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon.ico">
+</head>
+<body>
+    <nav id="navbar" class="navbar" role="navigation" aria-label="Main navigation"></nav>
+    <div class="layout">
+        <aside id="sidebar" class="sidebar" role="complementary" aria-label="Side navigation"></aside>
+        <main class="content" role="main">
+            <h1>Variable Reference</h1>
+            <p>Variables are placeholders that Command Maker replaces with real values when an alias runs. This page is the complete reference for every variable type available.</p>
+
+            <div class="callout callout-tip">
+                <h3>How to Use Variables</h3>
+                <p>Simply type <code>${variable_name}</code> anywhere in your alias target. When the alias executes, the placeholder is replaced with the actual value. Variables work in <code>/cmd add</code> commands, <code>aliases.json</code> entries, and <code>.mcfunction</code> files.</p>
+            </div>
+
+            <h2>Built-in Variables</h2>
+            <p>These variables are always available and do not require any setup. They are populated automatically when a player executes a command.</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Variable</th>
+                        <th>Description</th>
+                        <th>Example Value</th>
+                        <th>Use Case</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>${player}</code></td>
+                        <td>The username of the player who ran the command.</td>
+                        <td><code>Alex</code></td>
+                        <td>Personalized messages, targeting the command sender, logging who performed an action.</td>
+                    </tr>
+                    <tr>
+                        <td><code>${x}</code></td>
+                        <td>The player's current X coordinate (east-west position).</td>
+                        <td><code>123</code></td>
+                        <td>Teleportation, marking locations, building reports, saving positions.</td>
+                    </tr>
+                    <tr>
+                        <td><code>${y}</code></td>
+                        <td>The player's current Y coordinate (elevation).</td>
+                        <td><code>65</code></td>
+                        <td>Checking altitude, teleporting with height adjustment, cave detection.</td>
+                    </tr>
+                    <tr>
+                        <td><code>${z}</code></td>
+                        <td>The player's current Z coordinate (north-south position).</td>
+                        <td><code>-450</code></td>
+                        <td>Teleportation, marking locations, building reports.</td>
+                    </tr>
+                    <tr>
+                        <td><code>${world}</code></td>
+                        <td>The name of the world or dimension the player is in.</td>
+                        <td><code>minecraft:overworld</code></td>
+                        <td>Dimension-aware commands, world-specific logic, logging player locations.</td>
+                    </tr>
+                    <tr>
+                        <td><code>${dimension}</code></td>
+                        <td>An alias for <code>${world}</code>. Returns the dimension identifier.</td>
+                        <td><code>minecraft:the_nether</code></td>
+                        <td>Same as <code>${world}</code>, provided for readability and compatibility.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Built-in Variable Examples</h3>
+            <pre><code>/cmd add whereami say ${player}, you are at X:${x} Y:${y} Z:${z} in ${world}</code></pre>
+            <p><strong>Example output:</strong> <code>Alex, you are at X:123 Y:65 Z:-450 in minecraft:overworld</code></p>
+
+            <pre><code>/cmd add netherport tp ${player} ${x} 80 ${z} && say Teleported you above the nether ceiling!</code></pre>
+            <p>This preserves the player's X and Z coordinates but sets Y to 80, effectively teleporting them above the nether roof.</p>
+
+            <h2>Custom Variables</h2>
+            <p>Custom variables are defined by server administrators using the <code>/setcmdvariable</code> command. They are stored in <code>config/CommandMaker/variables.json</code> and persist across server restarts. Use them for values that do not change often.</p>
+
+            <h3>Managing Custom Variables</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Action</th>
+                        <th>Command</th>
+                        <th>Example</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Create or update</td>
+                        <td><code>/setcmdvariable &lt;name&gt; &lt;value&gt;</code></td>
+                        <td><code>/setcmdvariable server_name "My Server"</code></td>
+                    </tr>
+                    <tr>
+                        <td>View all variables</td>
+                        <td><code>/setcmdvariable list</code></td>
+                        <td><code>/setcmdvariable list</code></td>
+                    </tr>
+                    <tr>
+                        <td>Delete a variable</td>
+                        <td>Edit <code>variables.json</code> directly</td>
+                        <td>Remove the entry from the file and run <code>/cmd reload</code></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Common Custom Variable Examples</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Variable</th>
+                        <th>Set Command</th>
+                        <th>Usage in Alias</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>${server_name}</code></td>
+                        <td><code>/setcmdvariable server_name "AdventureCraft"</code></td>
+                        <td><code>say Welcome to ${server_name}!</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>${spawn_coords}</code></td>
+                        <td><code>/setcmdvariable spawn_coords "0 100 0"</code></td>
+                        <td><code>tp ${player} ${spawn_coords}</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>${discord_url}</code></td>
+                        <td><code>/setcmdvariable discord_url "discord.gg/myserver"</code></td>
+                        <td><code>say Join us: ${discord_url}</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>${rules_url}</code></td>
+                        <td><code>/setcmdvariable rules_url "example.com/rules"</code></td>
+                        <td><code>say Read the rules: ${rules_url}</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>${max_players}</code></td>
+                        <td><code>/setcmdvariable max_players "20"</code></td>
+                        <td><code>say Max players: ${max_players}</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>${motd}</code></td>
+                        <td><code>/setcmdvariable motd "Have a great day!"</code></td>
+                        <td><code>say ${motd}</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>${welcome_message}</code></td>
+                        <td><code>/setcmdvariable welcome_message "Welcome to the server!"</code></td>
+                        <td><code>say ${welcome_message}, ${player}!</code></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Full Custom Variable Example</h3>
+            <pre><code>/setcmdvariable server_name "SkyBlock Network"
+/setcmdvariable spawn_island "0 70 0"
+/setcmdvariable discord_url "discord.gg/skyblock"
+/setcmdvariable motd "Build high, dream big!"
+
+/cmd add spawn tp ${player} ${spawn_island} && say Welcome to ${server_name}!
+/cmd add motd say ${motd}
+/cmd add social say Discord: ${discord_url} | Server: ${server_name}</code></pre>
+
+            <div class="callout callout-warning">
+                <h3>Custom Variable Rules</h3>
+                <ul>
+                    <li>Variable names must not contain spaces. Use underscores: <code>${my_variable}</code>.</li>
+                    <li>Names can contain letters, numbers, and underscores.</li>
+                    <li>Variable names are case-sensitive: <code>${ServerName}</code> and <code>${server_name}</code> are different.</li>
+                    <li>Use lowercase for consistency and to avoid case-related bugs.</li>
+                    <li>Values containing spaces must be wrapped in quotes: <code>/setcmdvariable msg "Hello world"</code>.</li>
+                </ul>
+            </div>
+
+            <h2>Syntax Parameters (Pattern Variables)</h2>
+            <p>When you define a <a href="syntax-system.html">custom syntax pattern</a>, its parameters become available as variables. The variable name follows this format:</p>
+            <pre><code>${patternName_paramName}</code></pre>
+            <p>Where <code>patternName</code> is the key in <code>syntax.json</code> and <code>paramName</code> is the parameter name inside angle brackets.</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Pattern Definition</th>
+                        <th>User Input</th>
+                        <th>Variables Created</th>
+                        <th>Variable Values</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>"tpa": { "pattern": "/tpa &lt;player&gt;" }</code></td>
+                        <td><code>/tpa Steve</code></td>
+                        <td><code>${tpa_player}</code></td>
+                        <td><code>Steve</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>"ban": { "pattern": "/ban &lt;player&gt; &lt;reason&gt;" }</code></td>
+                        <td><code>/ban Steve griefing</code></td>
+                        <td><code>${ban_player}</code>, <code>${ban_reason}</code></td>
+                        <td><code>Steve</code>, <code>griefing</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>"shop": { "pattern": "/shop &lt;item&gt; &lt;quantity&gt;" }</code></td>
+                        <td><code>/shop diamond 64</code></td>
+                        <td><code>${shop_item}</code>, <code>${shop_quantity}</code></td>
+                        <td><code>diamond</code>, <code>64</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>"warp": { "pattern": "/warp &lt;name&gt;" }</code></td>
+                        <td><code>/warp spawn</code></td>
+                        <td><code>${warp_name}</code></td>
+                        <td><code>spawn</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>"msg": { "pattern": "/msg &lt;target&gt; &lt;message&gt;" }</code></td>
+                        <td><code>/msg Steve See you later!</code></td>
+                        <td><code>${msg_target}</code>, <code>${msg_message}</code></td>
+                        <td><code>Steve</code>, <code>See you later!</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>"pay": { "pattern": "/pay &lt;target&gt; &lt;amount&gt;" }</code></td>
+                        <td><code>/pay Alex 500</code></td>
+                        <td><code>${pay_target}</code>, <code>${pay_amount}</code></td>
+                        <td><code>Alex</code>, <code>500</code></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Syntax Variable in Aliases</h3>
+            <pre><code>{
+  "tpa": {
+    "pattern": "/tpa &lt;player&gt;",
+    "description": "Request teleport to a player"
+  }
+}
+
+// In aliases.json or /cmd add:
+/cmd add tpa_request say ${player} wants to teleport to ${tpa_player}!</code></pre>
+            <p>Typing <code>/tpa Notch</code> produces: <code>Alex wants to teleport to Notch!</code></p>
+
+            <div class="callout callout-info">
+                <h3>Greedy Parameters</h3>
+                <p>The last parameter in a pattern captures everything typed after the previous parameter, including spaces. This means <code>${ban_reason}</code> in the example above would capture <code>griefing the spawn area</code> as a complete string if the user types <code>/ban Steve griefing the spawn area</code>.</p>
+            </div>
+
+            <h2>Variable Type Comparison</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Built-in Variables</th>
+                        <th>Custom Variables</th>
+                        <th>Syntax Parameters</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Setup required</td>
+                        <td>None &mdash; always available</td>
+                        <td>Must be created with <code>/setcmdvariable</code></td>
+                        <td>Must define pattern in <code>syntax.json</code></td>
+                    </tr>
+                    <tr>
+                        <td>Value source</td>
+                        <td>Player's current game state</td>
+                        <td>Admin-defined, stored in <code>variables.json</code></td>
+                        <td>Player's typed input at runtime</td>
+                    </tr>
+                    <tr>
+                        <td>Changes per player</td>
+                        <td>Yes &mdash; each player sees own values</td>
+                        <td>No &mdash; same value for everyone</td>
+                        <td>Depends on input &mdash; each execution may differ</td>
+                    </tr>
+                    <tr>
+                        <td>Example</td>
+                        <td><code>${player}</code> &rarr; <code>Alex</code></td>
+                        <td><code>${server_name}</code> &rarr; <code>MyServer</code></td>
+                        <td><code>${tpa_player}</code> &rarr; <code>Steve</code></td>
+                    </tr>
+                    <tr>
+                        <td>Scope</td>
+                        <td>Global &mdash; works in any alias</td>
+                        <td>Global &mdash; works in any alias</td>
+                        <td>Only within aliases using that pattern</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>Combining Multiple Variable Types</h2>
+            <p>You can mix all three variable types freely in a single alias. Here is an example that uses built-in, custom, and syntax variables together:</p>
+
+            <pre><code>/setcmdvariable server_name "AdventureCraft"
+
+{
+  "tpa": {
+    "pattern": "/tpa &lt;player&gt;",
+    "description": "Request teleport to a player"
+  }
+}
+
+/cmd add tpa say [${server_name}] ${player} wants to teleport to ${tpa_player} at their location!</code></pre>
+            <p>When Alex runs <code>/tpa Steve</code>, the output is: <code>[AdventureCraft] Alex wants to teleport to Steve at their location!</code></p>
+
+            <h2>Variable Naming Rules (Summary)</h2>
+            <ul>
+                <li><strong>Format:</strong> <code>${name}</code> with curly braces required.</li>
+                <li><strong>Case sensitivity:</strong> <code>${Player}</code> and <code>${player}</code> are different. Always use lowercase.</li>
+                <li><strong>Allowed characters:</strong> Letters (a-z), numbers (0-9), and underscores (_).</li>
+                <li><strong>No spaces:</strong> Use underscores instead: <code>${my_variable}</code>.</li>
+                <li><strong>Syntax parameter format:</strong> <code>${patternName_paramName}</code> &mdash; pattern name, underscore, parameter name.</li>
+                <li><strong>Custom variable names:</strong> Cannot conflict with built-in variable names.</li>
+            </ul>
+
+            <div class="callout callout-danger">
+                <h3>Common Mistake</h3>
+                <p>Writing <code>$player</code> instead of <code>${player}</code> will not work. The curly braces are mandatory. Command Maker only recognizes <code>${variable}</code> syntax, not <code>$variable</code>.</p>
+            </div>
+
+            <h2>Troubleshooting Variables</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Symptom</th>
+                        <th>Likely Cause</th>
+                        <th>Fix</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>${player}</code> appears literally in output</td>
+                        <td>Variable is not being substituted</td>
+                        <td>Run <code>/cmd reload</code>. Check that the variable name is spelled correctly and uses curly braces.</td>
+                    </tr>
+                    <tr>
+                        <td>Custom variable shows nothing</td>
+                        <td>Variable was never set or name is wrong</td>
+                        <td>Run <code>/setcmdvariable</code> to verify it exists. Check for case mismatch.</td>
+                    </tr>
+                    <tr>
+                        <td>Syntax variable is empty</td>
+                        <td>Pattern does not match the input</td>
+                        <td>Verify the pattern in <code>syntax.json</code>. Check that variable name uses <code>${pattern_param}</code> format.</td>
+                    </tr>
+                    <tr>
+                        <td>Coordinates show as 0</td>
+                        <td>Player is in a different dimension or just joined</td>
+                        <td>Move the player or wait for position data to load.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>For more details on using variables in practice, see <a href="variables.html">Variables & Substitution</a> or the <a href="syntax-patterns.html">Advanced Syntax Patterns</a> guide.</p>
+        </main>
+    </div>
+    <footer id="footer" class="footer" role="contentinfo"></footer>
+    <script src="js/components.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minecraft Color Codes - Command Maker Wiki</title>
+    <meta name="description" content="Complete reference of all Minecraft color and formatting codes. Includes color tables, format codes, and practical examples for Command Maker aliases.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon.ico">
+</head>
+<body>
+    <nav id="navbar" class="navbar" role="navigation" aria-label="Main navigation"></nav>
+    <div class="layout">
+        <aside id="sidebar" class="sidebar" role="complementary" aria-label="Side navigation"></aside>
+        <main class="content" role="main">
+            <h1>Minecraft Color Codes</h1>
+            <p>This is the complete reference for all Minecraft color and formatting codes. Use these codes in Command Maker aliases to create colorful, well-formatted messages for your players.</p>
+
+            <div class="callout callout-info">
+                <h3>How Color Codes Work</h3>
+                <p>Color codes are written as <code>&amp;</code> followed by a character (<code>0-9</code>, <code>a-f</code>). The ampersand (<code>&amp;</code>) is used in configuration files and commands; Minecraft converts it to the section sign (&sect;) internally. All text after a color code appears in that color until another color or reset code is encountered.</p>
+            </div>
+
+            <h2>Standard Color Codes (&sect;0-&sect;f)</h2>
+            <p>Minecraft provides 16 standard colors. The codes <code>&amp;0</code> through <code>&amp;9</code> use numerical characters, while <code>&amp;a</code> through <code>&amp;f</code> use letters (case-insensitive).</p>
+
+            <table>
+                <tr>
+                    <th>Code</th>
+                    <th>Minecraft Hex</th>
+                    <th>Color Name</th>
+                    <th>Preview Description</th>
+                    <th>Best Use Case</th>
+                </tr>
+                <tr>
+                    <td><code>&amp;0</code></td>
+                    <td><code>#000000</code></td>
+                    <td>Black</td>
+                    <td>Pure black, no visible color</td>
+                    <td>Borders, separators, dark backgrounds</td>
+                </tr>
+                <tr>
+                    <td><code>&amp;1</code></td>
+                    <td><code>#0000AA</code></td>
+                    <td>Dark Blue</td>
+                    <td>Deep navy blue</td>
+                    <td>Water-related messages, formal announcements</td>
+                </tr>
+                <tr>
+                    <td><code>&amp;2</code></td>
+                    <td><code>#00AA00</code></td>
+                    <td>Dark Green</td>
+                    <td>Forest green</td>
+                    <td>Nature themes, success notifications</td>
+                </tr>
+                <tr>
+                    <td><code>&amp;3</code></td>
+                    <td><code>#00AAAA</code></td>
+                    <td>Dark Aqua</td>
+                    <td>Teal / dark cyan</td>
+                    <td>Information panels, tips, documentation</td>
+                </tr>
+                <tr>
+                    <td><code>&amp;4</code></td>
+                    <td><code>#AA0000</code></td>
+                    <td>Dark Red</td>
+                    <td>Maroon / dark crimson</td>
+                    <td>Error messages, death messages, warnings</td>
+                </tr>
+                <tr>
+                    <td><code>&amp;5</code></td>
+                    <td><code>#AA00AA</code></td>
+                    <td>Dark Purple</td>
+                    <td>Deep magenta</td>
+                    <td>Rare items, magic effects, special ranks</td>
+                </tr>
+                <tr>
+                    <td><code>&amp;6</code></td>
+                    <td><code>#FFAA00</code></td>
+                    <td>Gold</td>
+                    <td>Warm golden orange</td>
+                    <td>Premium content, ranks, currency, highlights</td>
+                </tr>
+                <tr>
+                    <td><code>&amp;7</code></td>
+                    <td><code>#AAAAAA</code></td>
+                    <td>Gray</td>
+                    <td>Medium gray</td>
+                    <td>Subtle text, hints, metadata, timestamps</td>
+                </tr>
+                <tr>
+                    <td><code>&amp;8</code></td>
+                    <td><code>#555555</code></td>
+                    <td>Dark Gray</td>
+                    <td>Charcoal gray</td>
+                    <td>Separators, less important information</td>
+                </tr>
+                <tr>
+                    <td><code>&amp;9</code></td>
+                    <td><code>#5555FF</code></td>
+                    <td>Blue</td>
+                    <td>Medium bright blue</td>
+                    <td>Links, clickable text, notifications</td>
+                </tr>
+                <tr>
+                    <td><code>&amp;a</code></td>
+                    <td><code>#55FF55</code></td>
+                    <td>Green</td>
+                    <td>Bright grass green</td>
+                    <td>Success confirmations, positive feedback</td>
+                </tr>
+                <tr>
+                    <td><code>&amp;b</code></td>
+                    <td><code>#55FFFF</code></td>
+                    <td>Aqua</td>
+                    <td>Cyan / light blue</td>
+                    <td>Command names, technical information</td>
+                </tr>
+                <tr>
+                    <td><code>&amp;c</code></td>
+                    <td><code>#FF5555</code></td>
+                    <td>Red</td>
+                    <td>Bright red</td>
+                    <td>Danger, health, errors, penalties</td>
+                </tr>
+                <tr>
+                    <td><code>&amp;d</code></td>
+                    <td><code>#FF55FF</code></td>
+                    <td>Light Purple</td>
+                    <td>Pink / bright magenta</td>
+                    <td>Special items, events, rewards</td>
+                </tr>
+                <tr>
+                    <td><code>&amp;e</code></td>
+                    <td><code>#FFFF55</code></td>
+                    <td>Yellow</td>
+                    <td>Bright yellow</td>
+                    <td>Warnings, currency, valuable items</td>
+                </tr>
+                <tr>
+                    <td><code>&amp;f</code></td>
+                    <td><code>#FFFFFF</code></td>
+                    <td>White</td>
+                    <td>Pure white</td>
+                    <td>Default text, standard messages, body text</td>
+                </tr>
+            </table>
+
+            <div class="callout callout-tip">
+                <h3>Hex Values for Resource Packs</h3>
+                <p>The Minecraft hex values listed above are the default colors. If your server uses a resource pack, these colors may be customized. The codes themselves (&amp;0-&amp;f) remain the same, but the visual appearance can change.</p>
+            </div>
+
+            <h2>Formatting Codes (&sect;l, &sect;o, &sect;n, &sect;m, &sect;k, &sect;r)</h2>
+            <p>Formatting codes change the style of your text rather than the color. They can be combined with any color code.</p>
+
+            <table>
+                <tr>
+                    <th>Code</th>
+                    <th>Format Name</th>
+                    <th>Visual Effect</th>
+                    <th>Usage Notes</th>
+                </tr>
+                <tr>
+                    <td><code>&amp;l</code></td>
+                    <td><strong>Bold</strong></td>
+                    <td>Thicker, heavier text</td>
+                    <td>Use for headings, important words, emphasis. Works on all colors.</td>
+                </tr>
+                <tr>
+                    <td><code>&amp;o</code></td>
+                    <td><em>Italic</em></td>
+                    <td>Slanted text</td>
+                    <td>Use for quotes, thoughts, book titles. Subtle effect.</td>
+                </tr>
+                <tr>
+                    <td><code>&amp;n</code></td>
+                    <td><u>Underline</u></td>
+                    <td>Line beneath text</td>
+                    <td>Use for links, headings, emphasis. Can combine with bold.</td>
+                </tr>
+                <tr>
+                    <td><code>&amp;m</code></td>
+                    <td><s>Strikethrough</s></td>
+                    <td>Line through text</td>
+                    <td>Use for removed items, outdated info, decorative lines.</td>
+                </tr>
+                <tr>
+                    <td><code>&amp;k</code></td>
+                    <td>Obfuscated</td>
+                    <td>Rapidly changing random characters</td>
+                    <td>Use sparingly for mystery, magic effects, or decoration. Hard to read.</td>
+                </tr>
+                <tr>
+                    <td><code>&amp;r</code></td>
+                    <td>Reset</td>
+                    <td>Returns to default (white, no formatting)</td>
+                    <td>Always use &amp;r to reset formatting before switching colors. Prevents carryover.</td>
+                </tr>
+            </table>
+
+            <div class="callout callout-warning">
+                <h3>Critical: Always Reset Before Changing Colors</h3>
+                <p>Formatting codes like &amp;l (bold) persist until you use &amp;r (reset). If you apply bold red text (<code>&amp;c&amp;l</code>) and then change to green (<code>&amp;a</code>) without resetting, the green text will still be bold. Always use <code>&amp;r</code> before changing to a different color when you want to clear formatting:</p>
+                <pre><code># Without reset - green text stays bold:
+say &amp;c&amp;lError &amp;adetails    # Details appears bold green!
+
+# With reset - green text is normal:
+say &amp;c&amp;lError &amp;r&amp;adetails  # Details appears normal green</code></pre>
+            </div>
+
+            <h2>Color Code Combinations</h2>
+            <p>You can combine formatting codes by stacking them. Order matters: always place the color first, then formatting codes:</p>
+
+            <pre><code># Bold gold text
+&amp;6&amp;lThis is bold gold
+
+# Bold italic underlined dark red
+&amp;4&amp;l&amp;o&amp;nComplex formatting
+
+# Obfuscated rare item
+&amp;5&amp;kMysterious Item
+
+# Clean paragraph (reset, gold, reset, white)
+&amp;6&amp;lWelcome! &amp;r&amp;fEnjoy your stay.</code></pre>
+
+            <h2>Using Color Codes in Command Maker</h2>
+
+            <h3>In Alias Commands</h3>
+            <p>Simply include the codes directly in your alias target:</p>
+            <pre><code>/cmd add coloredmsg say &amp;b[&amp;3Info&amp;b] &amp;fThis is a &amp;ecolored &amp;fmessage!</code></pre>
+
+            <h3>In Syntax Parameters</h3>
+            <p>Parameters from syntax patterns can include colors in the alias expansion:</p>
+            <pre><code>{
+  "color_test": {
+    "pattern": "/ct &lt;message&gt;",
+    "description": "Display a colored message"
+  }
+}
+/alias add colorcmd say &amp;b[&amp;3CMD&amp;b] &amp;f${color_test_message}</code></pre>
+
+            <h3>In tellraw Components</h3>
+            <p>You can also use color codes inside JSON text fields:</p>
+            <pre><code>/cmd add fancymsg tellraw @a [
+  {"text":"&amp;6&amp;lSERVER: &amp;r&amp;fWelcome &amp;e${player}&amp;f!"}
+]</code></pre>
+
+            <h3>In Function Files (.mcfunction)</h3>
+            <p>Functions support color codes the same way:</p>
+            <pre><code># In config/CommandMaker/Functions/announce.mcfunction
+say &amp;b========== &amp;6&amp;lANNOUNCEMENT &amp;b==========
+say &amp;f&amp;l${player} &amp;r&amp;7just &amp;acompleted &amp;r&amp;7the parkour!
+say &amp;b==================================</code></pre>
+
+            <h2>Color Code Patterns for Common Purposes</h2>
+
+            <table>
+                <tr>
+                    <th>Purpose</th>
+                    <th>Pattern</th>
+                    <th>Result Description</th>
+                </tr>
+                <tr>
+                    <td>Error</td>
+                    <td><code>&amp;4&amp;lERROR: &amp;r&amp;7message</code></td>
+                    <td>Dark red bold "ERROR:" followed by gray message</td>
+                </tr>
+                <tr>
+                    <td>Success</td>
+                    <td><code>&amp;2&amp;lSUCCESS: &amp;r&amp;7message</code></td>
+                    <td>Dark green bold "SUCCESS:" followed by gray message</td>
+                </tr>
+                <tr>
+                    <td>Warning</td>
+                    <td><code>&amp;6&amp;lWARNING: &amp;r&amp;7message</code></td>
+                    <td>Gold bold "WARNING:" followed by gray message</td>
+                </tr>
+                <tr>
+                    <td>Info</td>
+                    <td><code>&amp;9&amp;lINFO: &amp;r&amp;7message</code></td>
+                    <td>Blue bold "INFO:" followed by gray message</td>
+                </tr>
+                <tr>
+                    <td>Broadcast</td>
+                    <td><code>&amp;8[&amp;bBroadcast&amp;8] &amp;fmessage</code></td>
+                    <td>Gray brackets with aqua "Broadcast" label</td>
+                </tr>
+                <tr>
+                    <td>Chat Prefix</td>
+                    <td><code>&amp;8[&amp;6Server&amp;8] &amp;7player: &amp;fmessage</code></td>
+                    <td>Gray brackets with gold "Server" tag</td>
+                </tr>
+                <tr>
+                    <td>Header Line</td>
+                    <td><code>&amp;8&amp;m====================</code></td>
+                    <td>Gray strikethrough line for visual separation</td>
+                </tr>
+            </table>
+
+            <h2>Legacy Minecraft Color Differences</h2>
+            <p>In Minecraft 1.16 and earlier, there were only these 16 standard colors. Starting in 1.16+, Mojang introduced support for hexadecimal color codes in JSON text components, allowing over 16 million colors. However, the legacy &sect;-code system is still fully supported and remains the most practical choice for Command Maker aliases.</p>
+
+            <pre><code># Modern Minecraft supports hex colors in tellraw (1.16+)
+tellraw @a {"text":"Custom Color!","color":"#FF69B4"}
+
+# You can use hex in Command Maker aliases too
+/alias add hex say /tellraw @a {"text":"Hot Pink!","color":"#FF69B4"}</code></pre>
+
+            <div class="callout callout-info">
+                <h3>Format Codes Also Work in Signs and Books</h3>
+                <p>Color and formatting codes can be used in signs (use the &sect; character with a formatting code on the sign GUI) and written books. Use <code>&amp;</code> in Command Maker aliases that modify signs, and the game will render the colors correctly.</p>
+            </div>
+
+            <h2>Quick Reference Card</h2>
+            <pre><code>=== COLORS ===        === FORMATTING ===
+&amp;0 Black      &amp;8 Dark Gray   &amp;l Bold
+&amp;1 Dark Blue  &amp;9 Blue        &amp;o Italic
+&amp;2 Dark Green &amp;a Green       &amp;n Underline
+&amp;3 Dark Aqua  &amp;b Aqua        &amp;m Strikethrough
+&amp;4 Dark Red   &amp;c Red         &amp;k Obfuscated
+&amp;5 Dark Purple &amp;d Light Purple &amp;r Reset
+&amp;6 Gold       &amp;e Yellow
+&amp;7 Gray       &amp;f White</code></pre>
+
+            <h2>Related Pages</h2>
+            <ul>
+                <li><a href="chat-formatting.html">Chat Formatting</a> - Advanced formatting, JSON components, click/hover events</li>
+                <li><a href="aliases.html">Creating Aliases</a> - Building aliases with colors</li>
+                <li><a href="examples.html">Examples</a> - Real-world alias examples with colors</li>
+            </ul>
+        </main>
+    </div>
+    <footer id="footer" class="footer" role="contentinfo"></footer>
+    <script src="js/components.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>

@@ -1,84 +1,62 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Last Commit - Command Maker Wiki</title>
-    <meta name="description" content="Displays the last commit date and details for the current wiki page.">
-    <link rel="stylesheet" href="styles.css">
-    <link rel="icon" href="favicon.ico">
+    <title>Last Commit</title>
     <style>
-        .commit-date {
-            font-style: italic;
-            color: #8c8c8c;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            font-size: 13px;
+            color: #64748b;
+            padding: 4px 0;
+            line-height: 1.4;
+            background: transparent;
         }
+        a { color: #2563eb; }
+        .error { color: #dc2626; }
     </style>
 </head>
 <body>
-                Last Edited: <span id="commit-date">Loading...</span>
-            </p>
-        </main>
-    </div>
-    <footer id="footer" class="footer" role="contentinfo"></footer>
+    <span id="output">Loading...</span>
+
     <script>
-        // ====== CONFIGURATION ======
-        const owner = "Diamondstar-Mods"; // GitHub username/org
-        const repo = "Minecraft-Command-Maker"; // Repository name
-        const branch = "3.x-fabric-1.22"; // Branch name
+        (function () {
+            const owner = "Diamondstar-Mods";
+            const repo = "Minecraft-Command-Maker";
+            const branch = "3.x-fabric-1.22";
 
-        // Get path from URL parameter
-        const urlParams = new URLSearchParams(window.location.search);
-        const path = urlParams.get("path");
-        let filePath = "docs/";
-        if (path) {
-            filePath = "docs/" + path;
-        }
+            const params = new URLSearchParams(window.location.search);
+            const path = params.get("path");
+            const filePath = path ? "docs/" + path : "docs/index.html";
 
-        // GitHub API endpoint for commits affecting a specific file
-        const apiUrl = `https://api.github.com/repos/${owner}/${repo}/commits?path=${encodeURIComponent(filePath)}&sha=${branch}&per_page=1`;
+            const apiUrl = "https://api.github.com/repos/" + owner + "/" + repo
+                + "/commits?path=" + encodeURIComponent(filePath)
+                + "&sha=" + branch + "&per_page=1";
 
-        fetch(apiUrl)
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error(`GitHub API Error: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then((data) => {
-                if (data.length === 0) {
-                    document.getElementById("commit-date").textContent = "No commits found for this file.";
-                    return;
-                }
-                // Extract commit date
-                const commitInfo = data[0].commit;
-                const commitDate = new Date(commitInfo.committer.date);
-                // Format in UK style (day/month/year) including time
-                document.getElementById("commit-date").textContent = commitDate.toLocaleString("en-GB");
-                // Show author and message as well (prefer GitHub login)
-                const author = data[0].author?.login || commitInfo.committer.name || commitInfo.author?.name || "Unknown";
-                const msgEl = document.createElement("p");
-                msgEl.textContent = `Author: ${author}`;
-                document.body.appendChild(msgEl);
-                const messageEl = document.createElement("p");
-                messageEl.textContent = `  ${commitInfo.message}`;
-                document.body.appendChild(messageEl);
-            })
-            .catch((error) => {
-                console.error(error);
-                let errorMessage = "";
-
-                if (error.message.startsWith("GitHub API Error:")) {
-                    errorMessage = `${error.message} You may want to create an <a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker/issues">issue</a>.`;
-                } else {
-                    errorMessage = `Unidentified error. <a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker/issues">Report</a>`;
-                }
-
-                const errorEl = document.createElement("p");
-                errorEl.innerHTML = errorMessage;
-                errorEl.style.color = "#d32f2f";
-                document.getElementById("commit-date").textContent = "";
-                document.getElementById("commit-date").parentElement.appendChild(errorEl);
-            });
+            fetch(apiUrl)
+                .then(function (r) {
+                    if (!r.ok) throw new Error("GitHub API: " + r.status);
+                    return r.json();
+                })
+                .then(function (data) {
+                    if (!data.length) {
+                        document.getElementById("output").textContent = "No commits found.";
+                        return;
+                    }
+                    var c = data[0].commit;
+                    var d = new Date(c.committer.date);
+                    var author = (data[0].author && data[0].author.login) || c.committer.name || "Unknown";
+                    document.getElementById("output").innerHTML =
+                        "Last edited " + d.toLocaleString("en-GB") + " by <strong>" + author + "</strong>";
+                })
+                .catch(function (err) {
+                    console.error(err);
+                    document.getElementById("output").innerHTML =
+                        '<span class="error">Could not load commit info.</span>';
+                });
+        })();
     </script>
 </body>
 </html>

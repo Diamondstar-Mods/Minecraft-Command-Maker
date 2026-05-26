@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Command Safety - Command Maker Wiki</title>
+    <meta name="description" content="Essential safety guide for Command Maker - learn about dangerous command patterns, infinite recursion, target selector risks, permission best practices, and a safe alias checklist.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon.ico">
+</head>
+<body>
+    <nav id="navbar" class="navbar" role="navigation" aria-label="Main navigation"></nav>
+    <div class="layout">
+        <aside id="sidebar" class="sidebar" role="complementary" aria-label="Side navigation"></aside>
+        <main class="content" role="main">
+            <h1>Command Safety</h1>
+            <p>Command Maker gives you enormous power to create aliases and automate server actions. With great power comes great responsibility. This guide covers the dangers to watch out for and how to create safe, reliable aliases.</p>
+
+            <div class="callout callout-danger">
+                <h3>Read This First</h3>
+                <p>Creating unsafe aliases can crash your server, corrupt worlds, give unintended OP access, or ruin player experiences. Always test new aliases in a single-player world or a test server before deploying to a live server. The few minutes it takes to test can save hours of recovery work.</p>
+            </div>
+
+            <h2>Danger 1: OP and Gamemode Commands in Aliases</h2>
+            <p>Putting OP-level commands like <code>op</code>, <code>gamemode creative</code>, or <code>setblock</code> into an alias without permission restrictions is one of the most dangerous things you can do.</p>
+
+            <h3>Risky Examples</h3>
+            <pre><code>// DANGEROUS - Never create these without permission checks
+"make_admin": "op ${player}"
+"creative": "gamemode creative ${player}"
+"give_diamond": "give ${player} diamond_block 64"
+"summon_wither": "summon minecraft:wither ~ ~ ~"</code></pre>
+
+            <p>If any player can run <code>/make_admin</code>, they can OP themselves and take over your server. Even <code>/creative</code> without restrictions lets anyone switch to creative mode and bypass survival protections.</p>
+
+            <h3>Safe Approach</h3>
+            <pre><code>{
+  "permissions": {
+    "ServerOwner": "ADMIN"
+  },
+  "alias_permissions": {
+    "make_admin": "ADMIN",
+    "creative": "MODERATOR",
+    "give_diamond": "MODERATOR"
+  }
+}</code></pre>
+
+            <p>Always restrict dangerous aliases to the highest permission level needed. See the <a href="permissions-setup.html">Permissions Setup</a> guide for detailed instructions.</p>
+
+            <h2>Danger 2: Execute as @p Risks</h2>
+            <p>Using <code>@p</code> (nearest player) in aliases can have unintended consequences when multiple players are near each other:</p>
+
+            <pre><code>// RISKY: What if the wrong player is nearest?
+"kill_nearest": "execute as @p run kill @s"
+"tp_them": "tp @p 0 100 0"</code></pre>
+
+            <div class="callout callout-warning">
+                <h3>How @p Goes Wrong</h3>
+                <p>If you type <code>/kill_nearest</code> while standing next to another player, <code>@p</code> might target them instead of you. Always prefer <code>@s</code> (self) when you mean the command sender. Use <code>@p</code> only when you explicitly intend to target the nearest other entity and have considered the edge cases.</p>
+            </div>
+
+            <h3>Safer Alternatives</h3>
+            <pre><code>// SAFE: Uses the executing player
+"kill_self": "kill @s"
+"tp_self": "tp @s 0 100 0"
+
+// SAFER with @p: Clearer intent and feedback
+"tp_to_player": "execute at @p run tp @s @p && say Teleported to nearest player."</code></pre>
+
+            <h2>Danger 3: Infinite Recursion</h2>
+            <p>An alias that calls itself creates an infinite loop that can freeze or crash the server. This can happen directly or through a chain of aliases:</p>
+
+            <h3>Direct Recursion</h3>
+            <pre><code>// DANGEROUS: Calls itself infinitely
+"loop": "loop"
+
+// Also dangerous: calls itself through another command
+"say_hi": "say_hi ${player}"</code></pre>
+
+            <h3>Indirect Recursion (Chain)</h3>
+            <pre><code>// file: a.mcfunction
+b
+
+// file: b.mcfunction
+c
+
+// file: c.mcfunction
+a  ← loops back to a!</code></pre>
+
+            <p>Command Maker does not have built-in recursion protection. The server's command limit will eventually stop the execution, but by that point, the server may have processed thousands or millions of commands, causing severe lag or a crash.</p>
+
+            <div class="callout callout-danger">
+                <h3>Loop Detection Tips</h3>
+                <p>If your server suddenly lags after you run a new alias:</p>
+                <ul>
+                    <li><strong>Check server console</strong> for rapidly repeating command output</li>
+                    <li><strong>Check your most recently created aliases</strong> for self-references</li>
+                    <li><strong>Check function chains</strong> for circular references between .mcfunction files</li>
+                    <li><strong>Use <code>/kill @s</code></strong> if you can still type commands to end the loop for your player</li>
+                    <li>As a last resort, <strong>kill the server process</strong> from your host's control panel</li>
+                </ul>
+            </div>
+
+            <h2>Danger 4: Dangerous Target Selectors</h2>
+            <p>Using broad target selectors like <code>@a</code> (all players), <code>@e</code> (all entities), or <code>@r</code> (random player) with destructive commands can cause massive damage:</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Selector</th>
+                        <th>Targets</th>
+                        <th>Risk Level</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>@s</code></td>
+                        <td>Self only</td>
+                        <td>Safe</td>
+                    </tr>
+                    <tr>
+                        <td><code>@p</code></td>
+                        <td>Nearest player</td>
+                        <td>Low (but context-dependent)</td>
+                    </tr>
+                    <tr>
+                        <td><code>@r</code></td>
+                        <td>Random player</td>
+                        <td>Medium</td>
+                    </tr>
+                    <tr>
+                        <td><code>@a</code></td>
+                        <td>All players</td>
+                        <td>High with destructive commands</td>
+                    </tr>
+                    <tr>
+                        <td><code>@e</code></td>
+                        <td>All entities</td>
+                        <td>Very High</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Devastating Examples</h3>
+            <pre><code>// EXTREMELY DANGEROUS - Never create these
+"kill_all": "kill @e"                // Kills ALL entities including item frames, armor stands, paintings
+"ban_all": "ban @a"                  // Bans every player on the server
+"clear_inventory": "clear @a"        // Clears every player's inventory
+"random_kick": "kick @r"             // Kicks a random player (could be you!)
+"explode_all": "execute as @e at @s run summon minecraft:tnt ~ ~ ~"  // TNT at every entity</code></pre>
+
+            <div class="callout callout-warning">
+                <h3>The @e Trap</h3>
+                <p><code>@e</code> targets <strong>every entity</strong> in the world, not just players. This includes item frames, paintings, minecarts, boats, armor stands, dropped items, arrows, and experience orbs. A <code>kill @e</code> command can destroy all decorations, storage systems using item frames, and remove all dropped items from the ground. If you mean to target only players, use <code>@a</code>. If you mean to target only yourself, use <code>@s</code>.</p>
+            </div>
+
+            <h2>Protecting Sensitive Aliases with Permissions</h2>
+            <p>Every alias that performs a destructive or privileged operation must be protected by permissions. Here is a categorization of alias risk levels:</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Risk Level</th>
+                        <th>Command Types</th>
+                        <th>Required Permission</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Safe</td>
+                        <td><code>say</code>, <code>tellraw</code>, <code>title</code>, <code>playsound</code>, <code>weather</code>, <code>time set</code></td>
+                        <td><code>ALIAS_USER</code> (default)</td>
+                    </tr>
+                    <tr>
+                        <td>Low Risk</td>
+                        <td><code>tp @s</code>, <code>effect give @s</code>, <code>give @s</code>, <code>spawnpoint</code></td>
+                        <td><code>ALIAS_USER</code></td>
+                    </tr>
+                    <tr>
+                        <td>Medium Risk</td>
+                        <td><code>tp &lt;other&gt;</code>, <code>gamemode</code>, <code>effect give @a</code>, <code>difficulty</code></td>
+                        <td><code>COMMAND_USER</code></td>
+                    </tr>
+                    <tr>
+                        <td>High Risk</td>
+                        <td><code>ban</code>, <code>kick</code>, <code>kill @e</code>, <code>clear @a</code>, <code>setblock</code>, <code>fill</code></td>
+                        <td><code>MODERATOR</code></td>
+                    </tr>
+                    <tr>
+                        <td>Critical</td>
+                        <td><code>op</code>, <code>deop</code>, <code>stop</code>, <code>save-all</code>, <code>pardon</code>, <code>whitelist</code></td>
+                        <td><code>ADMIN</code></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="callout callout-tip">
+                <h3>Principle of Least Privilege</h3>
+                <p>Grant the minimum permission level needed for each alias. A command that displays server info needs <code>ALIAS_USER</code>, not <code>ADMIN</code>. This principle limits damage from mistakes and makes your server more secure. You can always raise a permission later, but you can't undo a server crash.</p>
+            </div>
+
+            <h2>The Safe Alias Checklist</h2>
+            <p>Before deploying any alias to a live server, go through this checklist:</p>
+
+            <ol>
+                <li><strong>Does the alias use <code>@e</code> or <code>@a</code>?</strong>
+                    <br>If yes, can you replace it with <code>@s</code> or a more specific selector?</li>
+                <li><strong>Does the alias modify world state?</strong>
+                    <br>Commands like <code>fill</code>, <code>setblock</code>, <code>clone</code> can damage builds.</li>
+                <li><strong>Does the alias affect other players?</strong>
+                    <br>Commands like <code>kick</code>, <code>ban</code>, <code>kill</code>, <code>tp</code> targeting others need permission restrictions.</li>
+                <li><strong>Could the alias loop infinitely?</strong>
+                    <br>Check for self-references and circular function chains.</li>
+                <li><strong>Is the permission level correct?</strong>
+                    <br>Set the minimum level in <code>alias_permissions</code> that can safely use this command.</li>
+                <li><strong>Does the alias use syntax parameters?</strong>
+                    <br>Verify that user-provided parameters are validated or used safely.</li>
+                <li><strong>Does the alias provide user feedback?</strong>
+                    <br>Good aliases tell the user what happened. Silent failures can hide problems.</li>
+                <li><strong>Have you tested the alias?</strong>
+                    <br>Test on a single-player world or test server first. Test with a non-OP account to verify permissions work.</li>
+            </ol>
+
+            <div class="callout callout-info">
+                <h3>Printable Checklist</h3>
+                <p>Copy these checklist items into a text file or document. Run through them for every new alias, especially ones that use <code>@e</code>, <code>@a</code>, destructive commands, or syntax parameters from user input.</p>
+            </div>
+
+            <h2>Testing in a Safe Environment</h2>
+            <p>Always follow this testing workflow before deploying a new alias to production:</p>
+
+            <h3>Stage 1: Single-Player World</h3>
+            <ol>
+                <li>Create a backup of your test world</li>
+                <li>Test the raw command directly in chat first (without Command Maker)</li>
+                <li>If the raw command works, create the alias</li>
+                <li>Test the alias as an OP player</li>
+                <li>Verify the output is what you expect</li>
+                <li>Check for side effects (did something unexpected happen?)</li>
+            </ol>
+
+            <h3>Stage 2: Test Server</h3>
+            <ol>
+                <li>Install the alias on a test server with the same configuration as production</li>
+                <li>Test with a non-OP account to verify permission restrictions</li>
+                <li>Have another player test the alias simultaneously to check for multiplayer issues</li>
+                <li>Monitor server console for errors</li>
+                <li>Test edge cases: empty parameters, very long inputs, special characters</li>
+            </ol>
+
+            <h3>Stage 3: Production</h3>
+            <ol>
+                <li>Announce the new alias to players</li>
+                <li>Monitor closely for the first hour after deployment</li>
+                <li>Have a rollback plan: know how to quickly disable or fix the alias</li>
+            </ol>
+
+            <div class="callout callout-danger">
+                <h3>Backup Before Testing</h3>
+                <p>Always back up your world before testing new aliases, especially ones that use <code>fill</code>, <code>clone</code>, <code>setblock</code>, <code>kill</code>, or <code>clear</code>. A single wrong coordinate can destroy hours of building. On a server, use <code>/save-off</code> and <code>/save-on</code> to control when changes are written to disk during testing.</p>
+            </div>
+
+            <h2>Quick Reference: Safe Patterns</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Pattern</th>
+                        <th>Safe?</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>say ${message}</code></td>
+                        <td>Safe</td>
+                        <td>Read-only, no world impact</td>
+                    </tr>
+                    <tr>
+                        <td><code>tp @s 0 100 0</code></td>
+                        <td>Safe</td>
+                        <td>Only affects the executor</td>
+                    </tr>
+                    <tr>
+                        <td><code>give @s diamond 1</code></td>
+                        <td>Safe with permission</td>
+                        <td>Restrict to avoid item farms</td>
+                    </tr>
+                    <tr>
+                        <td><code>kill @e[type=creeper]</code></td>
+                        <td>Conditional</td>
+                        <td>Safe if properly scoped; dangerous if too broad</td>
+                    </tr>
+                    <tr>
+                        <td><code>fill ~ ~ ~ ~10 ~10 ~10 air</code></td>
+                        <td>Risky</td>
+                        <td>Can destroy builds; use relative coords carefully</td>
+                    </tr>
+                    <tr>
+                        <td><code>ban ${player}</code></td>
+                        <td>Needs MODERATOR+</td>
+                        <td>Always require high permission level</td>
+                    </tr>
+                    <tr>
+                        <td><code>op ${player}</code></td>
+                        <td>Needs ADMIN only</td>
+                        <td>Never make this available to regular players</td>
+                    </tr>
+                    <tr>
+                        <td><code>stop</code></td>
+                        <td>Needs ADMIN only</td>
+                        <td>Shuts down the server immediately</td>
+                    </tr>
+                    <tr>
+                        <td><code>kill @e</code></td>
+                        <td>Extremely Dangerous</td>
+                        <td>Never use without specific type filter and MODERATOR+ permission</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="callout callout-info">
+                <h3>Related Guides</h3>
+                <p>For detailed permission configuration, see <a href="permissions-setup.html">Permissions Setup</a>. For debugging aliases that aren't working as expected, see the <a href="debugging.html">Debugging Aliases</a> guide. For best practices on naming and organizing your aliases, see <a href="best-practices.html">Best Practices</a>.</p>
+            </div>
+        </main>
+    </div>
+    <footer id="footer" class="footer" role="contentinfo"></footer>
+    <script src="js/components.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>

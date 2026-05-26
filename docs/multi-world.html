@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-World Setups - Command Maker Wiki</title>
+    <meta name="description" content="Configure Command Maker for multi-world servers: world-specific aliases, dimension detection, separate configs, multi-server setups, and syncing configurations.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon.ico">
+</head>
+<body>
+    <nav id="navbar" class="navbar" role="navigation" aria-label="Main navigation"></nav>
+    <div class="layout">
+        <aside id="sidebar" class="sidebar" role="complementary" aria-label="Side navigation"></aside>
+        <main class="content" role="main">
+            <h1>Multi-World Setups</h1>
+            <p>Running a server with multiple worlds or dimensions introduces unique challenges for command configuration. This guide covers strategies for making Command Maker work seamlessly across different worlds.</p>
+
+            <h2>Understanding Dimensions in Minecraft</h2>
+            <p>Minecraft has three primary dimensions: <strong>Overworld</strong>, <strong>Nether</strong>, and <strong>The End</strong>. Multi-world plugins (like Multiverse-Core or similar) can create additional worlds. Each world or dimension has a unique identifier that you can use in your aliases.</p>
+
+            <table class="variables-table">
+                <thead>
+                    <tr>
+                        <th>Dimension / World</th>
+                        <th>Internal Identifier</th>
+                        <th>Minecraft Command Prefix</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Overworld</td>
+                        <td><code>minecraft:overworld</code></td>
+                        <td><code>execute in minecraft:overworld</code></td>
+                    </tr>
+                    <tr>
+                        <td>Nether</td>
+                        <td><code>minecraft:the_nether</code></td>
+                        <td><code>execute in minecraft:the_nether</code></td>
+                    </tr>
+                    <tr>
+                        <td>The End</td>
+                        <td><code>minecraft:the_end</code></td>
+                        <td><code>execute in minecraft:the_end</code></td>
+                    </tr>
+                    <tr>
+                        <td>Custom world</td>
+                        <td><code>file:world_name</code></td>
+                        <td><code>execute in file:world_name</code></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>Dimension Detection with ${dimension}</h2>
+
+            <h3>Using the ${dimension} Variable</h3>
+            <p>Command Maker provides a built-in variable <code>${dimension}</code> that resolves to the identifier of the dimension the player is currently in. This is invaluable for creating dimension-aware aliases.</p>
+
+            <pre><code># Tell the player where they are
+/cmd add whereami say You are in: ${dimension}
+
+# Example outputs:
+# "You are in: minecraft:overworld"
+# "You are in: minecraft:the_nether"
+# "You are in: minecraft:the_end"</code></pre>
+
+            <h3>Dimension-Aware Teleportation</h3>
+            <p>Teleportation across dimensions requires the <code>execute in</code> command. Use <code>${dimension}</code> to create context-sensitive teleports:</p>
+
+            <pre><code># Safe spawn teleport that works in any dimension
+/cmd add spawn execute in minecraft:overworld run tp ${player} 0 65 0
+
+# Return to your previous dimension after visiting the End
+/cmd add back execute in ${dimension} run tp ${player} ${x} ${y} ${z}</code></pre>
+
+            <h3>Conditional Commands Based on Dimension</h3>
+            <p>Use <code>execute if</code> to create dimension-specific behavior:</p>
+
+            <pre><code>/cmd add heal execute if entity @s[nbt={Dimension:"minecraft:overworld"}] run effect give @s instant_health 1
+
+# Or more practically, use the dimension in /execute commands:
+/cmd add top execute if dimension minecraft:overworld run tp ${player} ~ 256 ~
+/cmd add top execute if dimension minecraft:the_nether run tp ${player} ~ 128 ~</code></pre>
+
+            <h2>World-Specific Aliases</h2>
+
+            <h3>Why World-Specific Aliases Matter</h3>
+            <p>A command that makes sense in the Overworld might be dangerous or useless in the Nether. For example, a <code>/spawn</code> command should always send players to the Overworld spawn point, and <code>/sethome</code> should store which dimension the home is in.</p>
+
+            <h3>Example: Dimension-Aware Home System</h3>
+            <pre><code>{
+  "sethome": "execute store result score ${player} homeDim run data get entity @s Dimension && say Home set for ${dimension}!",
+  "home": "execute if score ${player} homeDim matches 0 run tp @s 0 65 0 && execute if score ${player} homeDim matches -1 run tp @s 0 65 0"
+}</code></pre>
+
+            <div class="callout-tip">
+                <h3>Pro Tip</h3>
+                <p>Combine <code>${dimension}</code> with scoreboard tracking to build a complete cross-dimensional home or warp system. Store not just coordinates, but also the dimension ID for each home point.</p>
+            </div>
+
+            <h2>Separate Configs Per World</h2>
+
+            <h3>Current Limitations</h3>
+            <p>Command Maker uses a single set of configuration files (<code>aliases.json</code>, <code>syntax.json</code>, etc.) for all worlds. There is no built-in per-world configuration separation. However, you can achieve similar results through careful alias design.</p>
+
+            <h3>Approach 1: Prefix Aliases by World</h3>
+            <pre><code>// Overworld-specific commands
+/ow_spawn: execute in minecraft:overworld run tp ${player} 0 65 0
+/ow_time: execute in minecraft:overworld run time set day
+
+// Nether-specific commands
+/net_spawn: execute in minecraft:the_nether run tp ${player} 0 65 0
+/net_time: execute in minecraft:the_nether run time set day
+
+// End-specific commands
+/end_spawn: execute in minecraft:the_end run tp ${player} 0 65 0</code></pre>
+
+            <h3>Approach 2: Unified Aliases with Dimension Detection</h3>
+            <pre><code>/spawn: execute in minecraft:overworld run tp ${player} 0 65 0 && say Teleported to Overworld spawn!
+
+/setspawn: execute if dimension minecraft:overworld run setworldspawn ~ ~ ~
+/setspawn: execute if dimension minecraft:the_nether run say Cannot set world spawn in the Nether!</code></pre>
+
+            <h3>Approach 3: Warp Points with Dimension</h3>
+            <pre><code>// Store warp coordinates with dimension in a custom variable
+/setcmdvariable warp_lobby_coords "0 65 0"
+/setcmdvariable warp_lobby_dim "minecraft:overworld"
+/setcmdvariable warp_mining_coords "1000 50 -500"
+/setcmdvariable warp_mining_dim "minecraft:overworld"
+
+// Create warp aliases
+/cmd add warp_lobby execute in minecraft:overworld run tp ${player} ${warp_lobby_coords}
+/cmd add warp_mining execute in minecraft:overworld run tp ${player} ${warp_mining_coords}</code></pre>
+
+            <h2>Multi-Server Setups</h2>
+
+            <h3>Proxy Networks (BungeeCord / Velocity)</h3>
+            <p>If your server network uses a proxy (BungeeCord, Velocity, or similar) to link multiple servers, Command Maker runs independently on each server. This means aliases must be configured separately on each backend server.</p>
+
+            <pre><code># Example: Lobby server aliases
+/lobby_help: say Available: /survival, /creative, /minigames
+/survival: say Connecting to survival server...
+/creative: say Connecting to creative server...
+
+# Example: Survival server aliases
+/spawn: tp ${player} 0 65 0
+/home: tp ${player} ${home_coords}
+/tpa: tellraw ${tpa_player} {"text":"TPA request from ${player}"}</code></pre>
+
+            <h3>Synchronizing Configs Between Servers</h3>
+            <p>Keeping configurations consistent across multiple servers can be challenging. Here are several approaches:</p>
+
+            <table class="mistakes-table">
+                <thead>
+                    <tr>
+                        <th>Method</th>
+                        <th>Difficulty</th>
+                        <th>Reliability</th>
+                        <th>Best For</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Manual copy</td>
+                        <td>Easy</td>
+                        <td>Low (human error)</td>
+                        <td>2-3 servers, infrequent changes</td>
+                    </tr>
+                    <tr>
+                        <td>Shared network drive</td>
+                        <td>Medium</td>
+                        <td>High</td>
+                        <td>Servers on same machine or LAN</td>
+                    </tr>
+                    <tr>
+                        <td>Git-based sync</td>
+                        <td>Medium</td>
+                        <td>Very High</td>
+                        <td>Teams, versioned configs</td>
+                    </tr>
+                    <tr>
+                        <td>rsync / Sync scripts</td>
+                        <td>Medium</td>
+                        <td>High</td>
+                        <td>Linux servers, automation</td>
+                    </tr>
+                    <tr>
+                        <td>Configuration management (Ansible, Salt)</td>
+                        <td>Advanced</td>
+                        <td>Very High</td>
+                        <td>Large networks, DevOps approach</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Git-Based Sync Example</h3>
+            <pre><code># On the master configuration server
+cd /opt/commandmaker-config
+git init
+git add .
+git commit -m "Initial config"
+
+# On each game server (run as cron job every 5 minutes)
+#!/bin/bash
+cd /path/to/server/config/CommandMaker
+git pull origin main  # Pull latest configs
+/cmd reload            # Reload in-game (via server console command)</code></pre>
+
+            <h2>Syncing Configs Between Servers</h2>
+
+            <h3>Option 1: Shared Storage (NFS / SMB)</h3>
+            <pre><code># Mount a shared NFS drive on each game server
+mkdir -p /mnt/commandmaker-config
+mount -t nfs master-server:/export/commandmaker /mnt/commandmaker-config
+
+# Symlink the config directory
+ln -sf /mnt/commandmaker-config /path/to/server/config/CommandMaker
+# Then /cmd reload on each server after changes</code></pre>
+
+            <h3>Option 2: Automated Sync Script</h3>
+            <pre><code>#!/bin/bash
+# sync-commandmaker.sh - Run on each game server
+
+MASTER_SERVER="config-master.example.com"
+CONFIG_PATH="/path/to/server/config/CommandMaker"
+
+# Pull the latest config
+rsync -avz --delete "${MASTER_SERVER}::commandmaker/" "$CONFIG_PATH/"
+
+# Notify the server (requires server management tooling)
+echo "Configuration synced from ${MASTER_SERVER}"</code></pre>
+
+            <h3>Option 3: Plugin-Based Sync</h3>
+            <p>Some server management plugins support file synchronization. Check if your hosting panel or server management tool supports custom file sync rules for the <code>config/CommandMaker/</code> directory.</p>
+
+            <div class="callout-warning">
+                <h3>Important</h3>
+                <p>Always run <code>/cmd reload</code> after syncing configuration files. Command Maker will not automatically detect file changes -- it uses the cached configuration until explicitly reloaded.</p>
+            </div>
+
+            <h2>Best Practices for Multi-World Setups</h2>
+
+            <ul>
+                <li><strong>Use <code>execute in</code></strong> for cross-dimensional commands to ensure they run in the correct dimension</li>
+                <li><strong>Test aliases in each world</strong> before deploying to production</li>
+                <li><strong>Prefix world-specific aliases</strong> to avoid confusion (e.g., <code>/survival_spawn</code>, <code>/creative_spawn</code>)</li>
+                <li><strong>Document per-world behavior</strong> in your server's help system</li>
+                <li><strong>Keep a master copy</strong> of configuration files in a central location</li>
+                <li><strong>Use version control</strong> for configuration files when managing multiple servers</li>
+                <li><strong>Consider a unified <code>/help</code> alias</strong> that shows commands relevant to the current world</li>
+            </ul>
+
+            <h2>Example: Complete Multi-World Teleport Hub</h2>
+
+            <pre><code>// === TELEPORT HUB FOR MULTI-WORLD SERVER ===
+
+// Set warp points
+/setcmdvariable warp_spawn "0 65 0"
+/setcmdvariable warp_survival "1000 65 0"
+/setcmdvariable warp_mining "2000 50 -500"
+/setcmdvariable warp_creative "3000 65 0"
+/setcmdvariable warp_minigames "4000 65 0"
+
+// Create warp aliases
+/cmd add spawn execute in minecraft:overworld run tp ${player} ${warp_spawn}
+/cmd add survival execute in minecraft:overworld run tp ${player} ${warp_survival}
+/cmd add mining execute in minecraft:overworld run tp ${player} ${warp_mining}
+/cmd add creative execute in minecraft:overworld run tp ${player} ${warp_creative}
+/cmd add games execute in minecraft:overworld run tp ${player} ${warp_minigames}
+
+// Help command showing only relevant warps
+/cmd add help say === Teleport Hub ===
+/cmd add help say /spawn - Return to spawn
+/cmd add help say /survival - Survival world
+/cmd add help say /mining - Mining world
+/cmd add help say /creative - Creative world
+/cmd add help say /games - Minigames world
+
+// Dimension check aliases
+/cmd add whereami say You are currently in: ${dimension}
+
+// Cross-dimensional return
+/cmd add lobby execute in minecraft:overworld run tp ${player} ${warp_spawn}</code></pre>
+
+            <div class="callout-info">
+                <h3>Note</h3>
+                <p>Multi-world functionality depends heavily on your server setup. Vanilla Minecraft supports three dimensions. Third-party plugins add more worlds. Always verify dimension identifiers for your specific server configuration by running <code>/whereami</code> (using the alias above).</p>
+            </div>
+        </main>
+    </div>
+    <footer id="footer" class="footer" role="contentinfo"></footer>
+    <script src="js/components.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>

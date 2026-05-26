@@ -82,24 +82,82 @@ CM.nav = {
 CM.sidebar = {
   sections: [
     {
-      title: "Documentation", icon: "📚",
+      title: "Getting Started", icon: "📚",
       links: [
+        { label: "Quick Start", href: "quick-start.html" },
         { label: "Getting Started", href: "getting-started.html" },
         { label: "Installation", href: "installation.html" },
-        { label: "Configuration", href: "configuration.html" },
-        { label: "Creating Aliases", href: "aliases.html" }
+        { label: "Configuration", href: "configuration.html" }
       ]
     },
     {
-      title: "Features", icon: "⚡",
+      title: "Aliases & Syntax", icon: "⚡",
       links: [
+        { label: "Creating Aliases", href: "aliases.html" },
+        { label: "Alias Examples", href: "alias-examples.html" },
         { label: "Custom Syntax System", href: "syntax-system.html" },
+        { label: "Syntax Patterns", href: "syntax-patterns.html" }
+      ]
+    },
+    {
+      title: "Functions", icon: "📦",
+      links: [
         { label: "Functions System", href: "functions.html" },
         { label: "Function Catalog", href: "function-catalog.html" },
+        { label: "Writing Functions", href: "function-writing.html" },
+        { label: "Function Examples", href: "function-examples.html" }
+      ]
+    },
+    {
+      title: "Variables & Formatting", icon: "🔤",
+      links: [
         { label: "Variables & Substitution", href: "variables.html" },
+        { label: "Variable Reference", href: "variable-reference.html" },
+        { label: "Chat Formatting", href: "chat-formatting.html" },
+        { label: "Color Codes", href: "color-codes.html" }
+      ]
+    },
+    {
+      title: "Commands & Selectors", icon: "🎯",
+      links: [
+        { label: "Commands Reference", href: "commands.html" },
+        { label: "Target Selectors", href: "target-selectors.html" },
+        { label: "Timed Commands", href: "timed-commands.html" },
+        { label: "Team Commands", href: "team-commands.html" },
+        { label: "NBT Commands", href: "nbt-commands.html" }
+      ]
+    },
+    {
+      title: "Permissions", icon: "🔐",
+      links: [
+        { label: "Advanced Permissions", href: "advanced-permissions-guide.html" },
+        { label: "Permissions Setup", href: "permissions-setup.html" },
+        { label: "LuckPerms Integration", href: "luckperms-integration.html" }
+      ]
+    },
+    {
+      title: "Advanced", icon: "🛠️",
+      links: [
         { label: "GUI System", href: "gui-system.html" },
         { label: "Chat Messages", href: "chat-messages.html" },
-        { label: "Advanced Permissions", href: "advanced-permissions-guide.html" }
+        { label: "Multi-World Setups", href: "multi-world.html" },
+        { label: "Performance Tips", href: "performance.html" },
+        { label: "Command Safety", href: "command-safety.html" }
+      ]
+    },
+    {
+      title: "Server Systems", icon: "🏰",
+      links: [
+        { label: "Economy System", href: "economy-system.html" },
+        { label: "Kit System", href: "kit-system.html" },
+        { label: "Home System", href: "home-system.html" },
+        { label: "Shop System", href: "shop-system.html" },
+        { label: "Jail System", href: "jail-system.html" },
+        { label: "Mute System", href: "mute-system.html" },
+        { label: "Vote System", href: "vote-system.html" },
+        { label: "Rank System", href: "rank-system.html" },
+        { label: "Achievement System", href: "achievement-system.html" },
+        { label: "Event System", href: "event-system.html" }
       ]
     },
     {
@@ -112,11 +170,14 @@ CM.sidebar = {
       ]
     },
     {
-      title: "Help", icon: "❓",
+      title: "Help & Support", icon: "❓",
       links: [
         { label: "Troubleshooting", href: "troubleshooting.html" },
+        { label: "Debugging", href: "debugging.html" },
         { label: "FAQ", href: "faq.html" },
-        { label: "Best Practices", href: "best-practices.html" }
+        { label: "Best Practices", href: "best-practices.html" },
+        { label: "Backup & Restore", href: "backup-restore.html" },
+        { label: "Contributing Guide", href: "contributing-guide.html" }
       ]
     }
   ],
@@ -219,11 +280,11 @@ CM.buildSearchIndex = function () {
 
 CM.pages = CM.buildSearchIndex();
 
-// Edit button
-CM.renderEditButton = function () {
+// Edit button for navbar
+CM.renderEditLink = function () {
   const fn = CM.config.currentFile();
   const url = `${CM.config.repoUrl}/edit/${CM.config.editBranch}/docs/${fn}`;
-  return `<a class="edit-button" href="${url}" target="_blank" rel="noopener noreferrer" title="Edit this page on GitHub">✏️ Edit</a>`;
+  return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="nav-link edit-nav-link" title="Edit this page on GitHub">✏️ Edit</a>`;
 };
 
 // Last commit iframe
@@ -250,6 +311,7 @@ CM.init = function () {
         </button>
         <div class="nav-menu">${CM.nav.render()}</div>
         <div class="nav-actions">
+          ${CM.renderEditLink()}
           <div class="dropdown theme-dropdown">
             <button class="dropdown-toggle theme-toggle-btn" aria-label="Change theme">🌓 Theme ▼</button>
             <div class="dropdown-menu">
@@ -277,13 +339,22 @@ CM.init = function () {
   if (content) {
     const lastCommit = document.createElement("div");
     lastCommit.innerHTML = CM.renderLastCommit();
-    content.insertBefore(lastCommit.firstElementChild, content.firstChild);
+    const firstEl = content.firstElementChild;
+    if (firstEl) {
+      content.insertBefore(lastCommit.firstElementChild, firstEl);
+    } else {
+      content.appendChild(lastCommit.firstElementChild);
+    }
   }
 
-  // Inject edit button into body
-  const editBtn = document.createElement("div");
-  editBtn.innerHTML = CM.renderEditButton();
-  document.body.appendChild(editBtn.firstElementChild);
+  // Inject Vercel Analytics on every page
+  var vaScript = document.createElement("script");
+  vaScript.textContent = 'window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };';
+  document.body.appendChild(vaScript);
+  var vaDefer = document.createElement("script");
+  vaDefer.src = "/_vercel/insights/script.js";
+  vaDefer.defer = true;
+  document.body.appendChild(vaDefer);
 };
 
 // Auto-init when DOM is ready

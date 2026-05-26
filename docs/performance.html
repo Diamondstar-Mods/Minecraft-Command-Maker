@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Performance Tips - Command Maker Wiki</title>
+    <meta name="description" content="Optimize Command Maker performance: avoid excessive alias chains, limit function file size, manage JSON files, reduce server TPS impact, and cache effectively.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon.ico">
+</head>
+<body>
+    <nav id="navbar" class="navbar" role="navigation" aria-label="Main navigation"></nav>
+    <div class="layout">
+        <aside id="sidebar" class="sidebar" role="complementary" aria-label="Side navigation"></aside>
+        <main class="content" role="main">
+            <h1>Performance Tips</h1>
+            <p>Keep Command Maker running smoothly with these performance guidelines. While the mod is designed to be lightweight, certain patterns can impact server TPS and responsiveness.</p>
+
+            <h2>Understanding Command Maker's Performance Profile</h2>
+            <p>Command Maker adds negligible overhead during normal operation. Alias lookups use an in-memory hash map, variable substitution is O(n) relative to command length, and syntax matching runs once per invocation. The vast majority of performance impact comes from what your aliases <em>do</em> -- not from the mod itself.</p>
+
+            <table class="variables-table">
+                <thead>
+                    <tr>
+                        <th>Operation</th>
+                        <th>Performance Cost</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Alias lookup</td>
+                        <td>Negligible (O(1))</td>
+                        <td>Hash map in memory</td>
+                    </tr>
+                    <tr>
+                        <td>Variable substitution</td>
+                        <td>Negligible</td>
+                        <td>Scales with command length</td>
+                    </tr>
+                    <tr>
+                        <td>Syntax matching</td>
+                        <td>Minimal</td>
+                        <td>One regex pass per pattern</td>
+                    </tr>
+                    <tr>
+                        <td>File I/O (reload)</td>
+                        <td>Moderate spike</td>
+                        <td>Only during /cmd reload</td>
+                    </tr>
+                    <tr>
+                        <td>Heavy commands in alias</td>
+                        <td>Depends on command</td>
+                        <td>Not the mod's fault</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>Excessive Alias Chains</h2>
+
+            <h3>The Problem</h3>
+            <p>One alias calling another, which calls another, creates a chain. While Command Maker supports this, deep chains add latency because each alias must be resolved, substituted, and dispatched individually.</p>
+
+            <h3>Example of a Problematic Chain</h3>
+            <pre><code>// Alias 1: /welcome
+/welcome: give_player_kit
+
+// Alias 2: /give_player_kit
+/give_player_kit: give_player_items
+
+// Alias 3: /give_player_items
+/give_player_items: give ${player} diamond 1 && broadcast_welcome
+
+// Alias 4: /broadcast_welcome
+/broadcast_welcome: say Welcome ${player}!</code></pre>
+            <p>Each link in this chain requires a separate dispatch cycle. Running <code>/welcome</code> triggers four lookups and four command dispatches.</p>
+
+            <h3>Better Approach</h3>
+            <pre><code>// Consolidate into a single alias:
+/welcome: give ${player} diamond 1 && say Welcome ${player}!</code></pre>
+
+            <h3>Guidelines for Chains</h3>
+            <ul>
+                <li><strong>Limit chains to 2-3 aliases maximum</strong> for frequently-used commands</li>
+                <li><strong>Consolidate simple sequences</strong> into a single alias with <code>&&</code></li>
+                <li><strong>Use functions for complex sequences</strong> -- a single <code>/function</code> call is more efficient than chained aliases</li>
+                <li><strong>Profile before optimizing</strong> -- a chain used once per hour is not worth consolidating</li>
+            </ul>
+
+            <h2>Function File Size</h2>
+
+            <h3>How Functions Work</h3>
+            <p>Command Maker's function system (<code>function:name</code> aliases) reads <code>.mcfunction</code> files from the Functions directory. Each file can contain multiple lines, and each line is executed sequentially by the Minecraft command engine.</p>
+
+            <h3>Size Recommendations</h3>
+            <table class="variables-table">
+                <thead>
+                    <tr>
+                        <th>File Size</th>
+                        <th>Performance Impact</th>
+                        <th>Recommendation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Under 20 lines</td>
+                        <td>Minimal</td>
+                        <td>Ideal for most use cases</td>
+                    </tr>
+                    <tr>
+                        <td>20-100 lines</td>
+                        <td>Noticeable on slower hardware</td>
+                        <td>Fine for admin or infrequent use</td>
+                    </tr>
+                    <tr>
+                        <td>100-500 lines</td>
+                        <td>Can cause tick lag</td>
+                        <td>Split into smaller functions</td>
+                    </tr>
+                    <tr>
+                        <td>500+ lines</td>
+                        <td>Severe TPS drops</td>
+                        <td>Restructure or use scheduled execution</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Best Practices for Functions</h3>
+            <ul>
+                <li><strong>Break large functions</strong> into smaller, focused files</li>
+                <li><strong>Use <code>/schedule</code></strong> to spread heavy function execution across multiple ticks</li>
+                <li><strong>Avoid loops in functions</strong> that run more than a few iterations per tick</li>
+                <li><strong>Comment your functions</strong> to identify sections that could be optimized later</li>
+            </ul>
+
+            <h2>Reloading: /cmd reload Best Practices</h2>
+
+            <h3>What Happens During Reload</h3>
+            <p>When you run <code>/cmd reload</code>, Command Maker:</p>
+            <ol>
+                <li>Reads <code>aliases.json</code> from disk</li>
+                <li>Reads <code>syntax.json</code> from disk</li>
+                <li>Reads <code>permissions.json</code> from disk</li>
+                <li>Reads <code>variables.json</code> from disk</li>
+                <li>Parses all JSON files</li>
+                <li>Rebuilds the in-memory alias map</li>
+                <li>Re-registers all alias commands with Brigadier</li>
+                <li>Rebuilds the syntax pattern matcher</li>
+            </ol>
+            <p>This is a synchronous operation -- the server thread waits until it completes.</p>
+
+            <h3>Guidelines</h3>
+            <ul>
+                <li><strong>Avoid frequent reloads</strong> on production servers with many aliases (500+). Each reload can take several hundred milliseconds.</li>
+                <li><strong>Schedule reloads during low-traffic periods</strong> or announce them to players</li>
+                <li><strong>Test configuration changes</strong> on a local or test server before reloading on production</li>
+                <li><strong>Monitor chat for errors</strong> after reload -- JSON parsing errors are logged to console</li>
+                <li><strong>Consider a rolling reload approach</strong> for very large configurations: break aliases into multiple files if supported</li>
+            </ul>
+
+            <div class="callout-warning">
+                <h3>Warning</h3>
+                <p>Frequent <code>/cmd reload</code> on large configurations can cause noticeable lag spikes. Never use reload in a repeating command block or automated loop.</p>
+            </div>
+
+            <h2>Selector Performance: @e in Repeating Command Blocks</h2>
+
+            <h3>Why @e Is Expensive</h3>
+            <p>The <code>@e</code> selector targets <strong>every entity</strong> in the world -- mobs, players, items, minecarts, armor stands, area effect clouds, and more. On a typical server, this can be hundreds or thousands of entities. Using <code>@e</code> in an alias that runs every tick (via repeating command block or function) is one of the fastest ways to degrade server performance.</p>
+
+            <h3>Selector Performance Comparison</h3>
+            <table class="variables-table">
+                <thead>
+                    <tr>
+                        <th>Selector</th>
+                        <th>Typical Targets</th>
+                        <th>Relative Cost</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>@s</code></td>
+                        <td>1 (the executor)</td>
+                        <td>Free</td>
+                    </tr>
+                    <tr>
+                        <td><code>@p</code></td>
+                        <td>1 (nearest player)</td>
+                        <td>Very cheap</td>
+                    </tr>
+                    <tr>
+                        <td><code>@a</code></td>
+                        <td>Players only (usually 1-100)</td>
+                        <td>Cheap</td>
+                    </tr>
+                    <tr>
+                        <td><code>@e[type=minecraft:creeper]</code></td>
+                        <td>Filtered entities</td>
+                        <td>Moderate</td>
+                    </tr>
+                    <tr>
+                        <td><code>@e</code> (unfiltered)</td>
+                        <td>All entities (potentially thousands)</td>
+                        <td>Expensive</td>
+                    </tr>
+                    <tr>
+                        <td><code>@e[distance=..10]</code></td>
+                        <td>Nearby entities</td>
+                        <td>Less expensive than unfiltered</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Best Practices for Selectors</h3>
+            <ul>
+                <li><strong>Always filter @e</strong> with type, distance, or tag parameters: <code>@e[type=minecraft:zombie, distance=..50]</code></li>
+                <li><strong>Prefer @a over @e[type=player]</strong> -- it is optimized specifically for players</li>
+                <li><strong>Use @s when possible</strong> -- it requires no entity scanning at all</li>
+                <li><strong>Avoid @e in command blocks or functions</strong> that run more than once every few seconds</li>
+                <li><strong>Use scoreboard tags</strong> to track specific entities instead of scanning for types</li>
+            </ul>
+
+            <h2>JSON File Size Considerations</h2>
+
+            <h3>The Impact of Large JSON Files</h3>
+            <p>Command Maker reads JSON configuration files only on server startup and during <code>/cmd reload</code>. However, very large files can cause:</p>
+            <ul>
+                <li>Longer reload times (visible lag on the server)</li>
+                <li>Higher memory usage (the entire file is parsed into memory)</li>
+                <li>Increased risk of JSON syntax errors (harder to find in large files)</li>
+            </ul>
+
+            <h3>Recommended Limits</h3>
+            <table class="variables-table">
+                <thead>
+                    <tr>
+                        <th>File</th>
+                        <th>Recommended Max Size</th>
+                        <th>Max Aliases/Entries</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>aliases.json</code></td>
+                        <td>500 KB</td>
+                        <td>~2000 aliases</td>
+                    </tr>
+                    <tr>
+                        <td><code>syntax.json</code></td>
+                        <td>100 KB</td>
+                        <td>~500 patterns</td>
+                    </tr>
+                    <tr>
+                        <td><code>permissions.json</code></td>
+                        <td>100 KB</td>
+                        <td>~1000 permission entries</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Tips for Managing Large Configs</h3>
+            <ul>
+                <li><strong>Use comments sparingly</strong> -- JSON doesn't officially support comments, so they may increase file size without benefit</li>
+                <li><strong>Minify JSON</strong> for production use -- remove unnecessary whitespace from large files</li>
+                <li><strong>Split logically</strong> -- group related aliases together and use section comments</li>
+                <li><strong>Avoid duplicate entries</strong> -- they waste space and can cause confusing behavior</li>
+                <li><strong>Remove unused aliases</strong> periodically with <code>/cmd remove</code> or the GUI</li>
+            </ul>
+
+            <div class="callout-tip">
+                <h3>Pro Tip</h3>
+                <p>Use a JSON formatter with syntax highlighting (like VS Code) to manage large alias files. The built-in folding and search make navigation much easier.</p>
+            </div>
+
+            <h2>Caching Behavior</h2>
+
+            <h3>What Command Maker Caches</h3>
+            <ul>
+                <li><strong>Alias map:</strong> Loaded at startup and on reload. All aliases are held in memory as a hash map for O(1) lookup.</li>
+                <li><strong>Syntax patterns:</strong> Compiled regex patterns are cached. No recompilation happens between reloads.</li>
+                <li><strong>Permission data:</strong> Permission levels are cached per player until reload or permission change.</li>
+                <li><strong>Custom variables:</strong> Loaded into memory at startup. Variable substitution is instant.</li>
+            </ul>
+
+            <h3>What Is NOT Cached</h3>
+            <ul>
+                <li><strong>Function files:</strong> Each <code>function:name</code> alias reads the <code>.mcfunction</code> file from disk. For frequently-used function aliases, this means repeated disk I/O.</li>
+            </ul>
+
+            <h3>Optimizing Function Alias Performance</h3>
+            <p>If you use function-based aliases frequently, consider these strategies:</p>
+            <ul>
+                <li><strong>Convert frequently-used functions</strong> to regular aliases (inline the commands)</li>
+                <li><strong>Use Minecraft's built-in <code>/function</code> command</strong> in a datapack instead of Command Maker functions for core server mechanics</li>
+                <li><strong>Reserve function aliases</strong> for dynamic or user-uploaded content that changes often</li>
+            </ul>
+
+            <h2>Impact on Server TPS</h2>
+
+            <h3>Measuring TPS Impact</h3>
+            <p>Use the <code>/cmmakerperm</code> debug features or server profiling tools to measure Command Maker's actual TPS impact:</p>
+            <pre><code># Check current TPS
+/debug start
+/debug stop
+/debug report</code></pre>
+
+            <h3>Common TPS Impact Patterns</h3>
+            <table class="mistakes-table">
+                <thead>
+                    <tr>
+                        <th>Pattern</th>
+                        <th>TPS Impact</th>
+                        <th>Solution</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>@e in repeating alias</td>
+                        <td>High (5-10 TPS drop)</td>
+                        <td>Use filtered selectors</td>
+                    </tr>
+                    <tr>
+                        <td>1000+ aliases + frequent reloads</td>
+                        <td>Spike during reload</td>
+                        <td>Reload during off-peak</td>
+                    </tr>
+                    <tr>
+                        <td>Large function files run every tick</td>
+                        <td>High</td>
+                        <td>Spread execution with /schedule</td>
+                    </tr>
+                    <tr>
+                        <td>Alias chains (5+ deep)</td>
+                        <td>Low-moderate</td>
+                        <td>Consolidate into single alias</td>
+                    </tr>
+                    <tr>
+                        <td>Simple aliases with /say or /tp</td>
+                        <td>Negligible</td>
+                        <td>No action needed</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Performance Monitoring Tools</h3>
+            <ul>
+                <li><strong>Spark</strong> -- The most popular Minecraft server profiler. Use <code>/spark profiler start</code> to identify lag sources.</li>
+                <li><strong>Observable</strong> -- Built-in Minecraft performance monitoring with <code>/debug</code> commands.</li>
+                <li><strong>Timings</strong> -- Paper/Pufferfish timing reports show per-command execution time.</li>
+                <li><strong>Server log analysis</strong> -- Check for warnings about <code>Can't keep up!</code> messages.</li>
+            </ul>
+
+            <h2>Performance Checklist</h2>
+
+            <div class="callout-tip">
+                <h3>Quick Reference</h3>
+                <ul>
+                    <li>Keep alias chains short (2-3 max)</li>
+                    <li>Consolidate simple command sequences with &&</li>
+                    <li>Limit function files to under 100 lines</li>
+                    <li>Always filter @e with type/distance/tag</li>
+                    <li>Use @s instead of @p or @a when the executor is the target</li>
+                    <li>Reload during off-peak hours only</li>
+                    <li>Keep aliases.json under 500 KB</li>
+                    <li>Remove unused aliases regularly</li>
+                    <li>Profile before optimizing -- measure, don't guess</li>
+                    <li>Use Spark or similar tools to identify real bottlenecks</li>
+                </ul>
+            </div>
+        </main>
+    </div>
+    <footer id="footer" class="footer" role="contentinfo"></footer>
+    <script src="js/components.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>

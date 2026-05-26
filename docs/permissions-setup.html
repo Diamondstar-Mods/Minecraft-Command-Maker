@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Permissions Setup - Command Maker Wiki</title>
+    <meta name="description" content="Complete guide to setting up permissions in Command Maker, including permission levels, permissions.json, per-alias permissions, wildcards, and common server configurations.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon.ico">
+</head>
+<body>
+    <nav id="navbar" class="navbar" role="navigation" aria-label="Main navigation"></nav>
+    <div class="layout">
+        <aside id="sidebar" class="sidebar" role="complementary" aria-label="Side navigation"></aside>
+        <main class="content" role="main">
+            <h1>Permissions Setup</h1>
+            <p>Configure who can use which commands on your server. Command Maker provides a flexible permission system that works out of the box, with optional support for <a href="luckperms-integration.html">LuckPerms</a> integration.</p>
+
+            <h2>Understanding Permission Levels</h2>
+            <p>Command Maker uses a hierarchical permission system with five levels. Each level includes all permissions of the levels below it.</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Level</th>
+                        <th>Value</th>
+                        <th>Allowed Actions</th>
+                        <th>Typical Users</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>NONE</code></td>
+                        <td>0</td>
+                        <td>No Command Maker commands</td>
+                        <td>Default / unassigned players</td>
+                    </tr>
+                    <tr>
+                        <td><code>ALIAS_USER</code></td>
+                        <td>1</td>
+                        <td>Run aliases and functions</td>
+                        <td>Regular players</td>
+                    </tr>
+                    <tr>
+                        <td><code>COMMAND_USER</code></td>
+                        <td>2</td>
+                        <td>All alias/functions usage, use <code>/cmd</code> to view info</td>
+                        <td>Trusted players, helpers</td>
+                    </tr>
+                    <tr>
+                        <td><code>MODERATOR</code></td>
+                        <td>3</td>
+                        <td>Add and delete aliases, manage permissions, reload config</td>
+                        <td>Moderators, staff</td>
+                    </tr>
+                    <tr>
+                        <td><code>ADMIN</code></td>
+                        <td>4</td>
+                        <td>Full access to all Command Maker features</td>
+                        <td>Server admins, owners</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="callout callout-info">
+                <h3>How Permission Resolution Works</h3>
+                <p>Command Maker checks permissions in this order: (1) LuckPerms if installed and the player has a <code>cmmaker.*</code> permission node, (2) Opped players get <code>ADMIN</code> by default, (3) Falls back to <code>permissions.json</code> file, (4) If no permission is set, defaults to <code>ALIAS_USER</code>. This means you only need to configure permissions for players who should be restricted.</p>
+            </div>
+
+            <h2>Creating permissions.json</h2>
+            <p>The <code>permissions.json</code> file lives in <code>config/CommandMaker/</code> and defines player permissions and per-alias access restrictions.</p>
+
+            <h3>Basic Structure</h3>
+            <pre><code>{
+  "permissions": {
+    "Steve": "ADMIN",
+    "Alex": "MODERATOR",
+    "BuilderBob": "COMMAND_USER",
+    "GuestPlayer": "ALIAS_USER"
+  },
+  "alias_permissions": {}
+}</code></pre>
+
+            <p>This assigns permission levels to specific players by their Minecraft username. Player names are case-sensitive, so <code>"Steve"</code> and <code>"steve"</code> are treated as different players.</p>
+
+            <h3>Using UUIDs (Recommended)</h3>
+            <p>For servers where player names might change, use UUIDs instead of usernames. This ensures permissions persist through name changes:</p>
+            <pre><code>{
+  "permissions": {
+    "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx": "ADMIN",
+    "yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy": "MODERATOR"
+  },
+  "alias_permissions": {}
+}</code></pre>
+
+            <div class="callout callout-tip">
+                <h3>Finding Player UUIDs</h3>
+                <p>You can find a player's UUID by running <code>/data get entity &lt;player&gt; UUID</code> in-game, or by using an online tool like <a href="https://mcuuid.net/" target="_blank" rel="noopener">MCUUID</a>. You can mix UUIDs and usernames in the same file.</p>
+            </div>
+
+            <h2>Assigning Per-Alias Permissions</h2>
+            <p>The <code>alias_permissions</code> section lets you restrict specific aliases to certain permission levels. This is essential for protecting dangerous commands while letting regular players use harmless ones.</p>
+
+            <h3>Restrict by Minimum Level</h3>
+            <pre><code>{
+  "permissions": {
+    "Steve": "ADMIN",
+    "Alex": "MODERATOR"
+  },
+  "alias_permissions": {
+    "ban": "MODERATOR",
+    "kick": "MODERATOR",
+    "stop": "ADMIN",
+    "broadcast": "COMMAND_USER",
+    "spawn": "ALIAS_USER",
+    "home": "ALIAS_USER"
+  }
+}</code></pre>
+
+            <p>In this example:</p>
+            <ul>
+                <li><code>/ban</code> and <code>/kick</code> require at least <code>MODERATOR</code> level</li>
+                <li><code>/stop</code> requires <code>ADMIN</code> level</li>
+                <li><code>/broadcast</code> requires <code>COMMAND_USER</code> (trusted players)</li>
+                <li><code>/spawn</code> and <code>/home</code> are available to anyone with <code>ALIAS_USER</code> or higher</li>
+            </ul>
+
+            <div class="callout callout-danger">
+                <h3>Always Protect Destructive Commands</h3>
+                <p>Any alias that can <code>ban</code>, <code>kick</code>, <code>stop</code>, <code>kill</code>, <code>op</code>, <code>gamemode</code>, <code>setblock</code>, or <code>fill</code> should have a permission restriction. Never leave commands like <code>/stop</code> or <code>/ban</code> accessible to all players. See the <a href="command-safety.html">Command Safety</a> guide for more details.</p>
+            </div>
+
+            <h2>Using Wildcards</h2>
+            <p>Wildcards let you group permissions by prefix patterns, which is useful when you have many related aliases. Command Maker supports the asterisk (<code>*</code>) wildcard character.</p>
+
+            <h3>Prefix-Based Wildcards</h3>
+            <pre><code>{
+  "permissions": {},
+  "alias_permissions": {
+    "admin_*": "ADMIN",
+    "mod_*": "MODERATOR",
+    "staff_*": "COMMAND_USER",
+    "player_*": "ALIAS_USER"
+  }
+}</code></pre>
+
+            <p>With this setup, any alias starting with <code>admin_</code> (like <code>/admin_stop</code>, <code>/admin_restart</code>) requires ADMIN level. Aliases starting with <code>mod_</code> require MODERATOR level, and so on. Aliases that don't match any pattern default to the player's base permission level.</p>
+
+            <h3>Wildcard Overrides</h3>
+            <p>You can override a wildcard with a specific alias permission. More specific rules take precedence over wildcards:</p>
+            <pre><code>{
+  "permissions": {},
+  "alias_permissions": {
+    "admin_*": "ADMIN",
+    "admin_help": "ALIAS_USER"
+  }
+}</code></pre>
+
+            <p>Here, <code>/admin_help</code> is accessible to all ALIAS_USER players, even though other <code>admin_*</code> commands are restricted to ADMIN. The explicit entry overrides the wildcard.</p>
+
+            <h2>Testing Permissions</h2>
+            <p>After configuring permissions, follow these steps to verify everything works correctly:</p>
+
+            <ol>
+                <li><strong>Reload the configuration:</strong>
+                    <pre><code>/cmd reload</code></pre>
+                    Always reload after editing <code>permissions.json</code> for changes to take effect.
+                </li>
+                <li><strong>Test as a regular player:</strong> Log in with a non-oppped account or use <code>/deop &lt;player&gt;</code> to simulate a non-admin user. Try running restricted aliases and verify they are blocked.</li>
+                <li><strong>Check the permission error message:</strong> Players without sufficient permission will see a message like "You do not have permission to use this alias." If you see a different error, the alias itself may have a syntax issue.</li>
+                <li><strong>Verify inherited permissions:</strong> Make sure a MODERATOR can still use ALIAS_USER-level commands. The hierarchy should cascade downward.</li>
+                <li><strong>Test wildcard matching:</strong> Create test aliases with different prefixes and verify the correct permission level is enforced.</li>
+            </ol>
+
+            <div class="callout callout-warning">
+                <h3>Test Before Players Are Online</h3>
+                <p>Always test permission changes in a safe environment before applying them to a live server. A misconfigured permission file can accidentally expose dangerous commands or lock out legitimate staff members.</p>
+            </div>
+
+            <h2>Common Permission Setups</h2>
+
+            <h3>Small Server (5-10 Players)</h3>
+            <p>On small servers, a simple setup with admin and everyone-else works well:</p>
+            <pre><code>{
+  "permissions": {
+    "ServerOwner": "ADMIN",
+    "TrustedFriend": "MODERATOR"
+  },
+  "alias_permissions": {
+    "stop": "ADMIN",
+    "restart": "ADMIN",
+    "kick": "MODERATOR",
+    "mute": "MODERATOR"
+  }
+}</code></pre>
+            <p>Unlisted players default to <code>ALIAS_USER</code>, so they can use basic commands like <code>/spawn</code>, <code>/home</code>, and <code>/tpa</code> without any additional configuration.</p>
+
+            <h3>Large Server (50+ Players)</h3>
+            <p>Larger servers benefit from a structured permission ladder with clear role separation:</p>
+            <pre><code>{
+  "permissions": {
+    "Owner": "ADMIN",
+    "Admin1": "ADMIN",
+    "Admin2": "ADMIN",
+    "Moderator1": "MODERATOR",
+    "Moderator2": "MODERATOR",
+    "Helper1": "COMMAND_USER",
+    "Helper2": "COMMAND_USER",
+    "VIP_Player": "ALIAS_USER"
+  },
+  "alias_permissions": {
+    "stop": "ADMIN",
+    "restart": "ADMIN",
+    "saveall": "ADMIN",
+    "sudo": "ADMIN",
+    "ban": "MODERATOR",
+    "kick": "MODERATOR",
+    "mute": "MODERATOR",
+    "warn": "MODERATOR",
+    "tempban": "MODERATOR",
+    "broadcast": "COMMAND_USER",
+    "freeze": "MODERATOR",
+    "tp": "COMMAND_USER",
+    "tphere": "COMMAND_USER",
+    "vip_*": "ALIAS_USER"
+  }
+}</code></pre>
+
+            <h3>Server with LuckPerms</h3>
+            <p>If you use LuckPerms, you can manage all permissions through LuckPerms groups instead of <code>permissions.json</code>. The permissions.json file can remain empty or be omitted entirely:</p>
+            <pre><code>{
+  "permissions": {},
+  "alias_permissions": {
+    "stop": "ADMIN",
+    "ban": "MODERATOR"
+  }
+}</code></pre>
+            <p>Player permissions are then assigned via LuckPerms permission nodes. See the <a href="luckperms-integration.html">LuckPerms Integration</a> guide for detailed setup instructions.</p>
+
+            <h2>Permission Fallback Chain</h2>
+            <p>Understanding the fallback chain is important for troubleshooting permission issues:</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Priority</th>
+                        <th>Source</th>
+                        <th>Checked</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1 (Highest)</td>
+                        <td>LuckPerms <code>cmmaker.*</code> nodes</td>
+                        <td>If LuckPerms is installed and player has matching nodes</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Vanilla OP status</td>
+                        <td>Opped players automatically get ADMIN</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td><code>permissions.json</code> player entry</td>
+                        <td>If player is listed with a permission level</td>
+                    </tr>
+                    <tr>
+                        <td>4 (Lowest)</td>
+                        <td>Default permission</td>
+                        <td><code>ALIAS_USER</code> for all unlisted players</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="callout callout-tip">
+                <h3>Permission Check Short-Circuit</h3>
+                <p>Command Maker checks sources in order and stops at the first match. If LuckPerms is installed and returns a result for a player, OP status and permissions.json are not checked for that player. This means you can use permissions.json as a fallback for servers where LuckPerms is installed but not configured for every player.</p>
+            </div>
+
+            <h2>Removing Permissions</h2>
+            <p>To remove a player's special permissions and let them fall back to the default level:</p>
+            <ul>
+                <li>Delete their entry from the <code>permissions</code> section of <code>permissions.json</code></li>
+                <li>Or set their level to <code>ALIAS_USER</code> (the default)</li>
+                <li>Run <code>/cmd reload</code> to apply changes</li>
+            </ul>
+
+            <div class="callout callout-info">
+                <h3>Related Guides</h3>
+                <p>For more advanced permission scenarios, see the <a href="advanced-permissions-guide.html">Advanced Permissions Guide</a>. For integration with LuckPerms, see <a href="luckperms-integration.html">LuckPerms Integration</a>. For general safety considerations when configuring permissions, see <a href="command-safety.html">Command Safety</a>.</p>
+            </div>
+        </main>
+    </div>
+    <footer id="footer" class="footer" role="contentinfo"></footer>
+    <script src="js/components.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>

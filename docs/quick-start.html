@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Start - Command Maker Wiki</title>
+    <meta name="description" content="Get up and running with Command Maker in 5 minutes. Download the mod, install it, create your first alias, and start using it right away.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon.ico">
+</head>
+<body>
+    <nav id="navbar" class="navbar" role="navigation" aria-label="Main navigation"></nav>
+    <div class="layout">
+        <aside id="sidebar" class="sidebar" role="complementary" aria-label="Side navigation"></aside>
+        <main class="content" role="main">
+            <h1>Quick Start</h1>
+            <p>This guide will have you using Command Maker in about 5 minutes. By the end, you will have created your first alias and know where to go next.</p>
+
+            <div class="callout callout-info">
+                <h3>Prerequisites</h3>
+                <p>You need Minecraft Java Edition and the Fabric Loader installed. If you have not installed Fabric yet, visit the Fabric website and follow their installation guide for your Minecraft version.</p>
+            </div>
+
+            <h2>Step 1: Download the Mod</h2>
+            <p>Get the latest version of Command Maker from one of these sources:</p>
+            <ul>
+                <li><strong>Modrinth:</strong> Visit the <a href="https://modrinth.com/mod/command-maker" target="_blank" rel="noopener">Command Maker Modrinth page</a> and download the JAR for your Minecraft version.</li>
+                <li><strong>CurseForge:</strong> Find Command Maker on <a href="https://www.curseforge.com/minecraft/mc-mods/command-maker" target="_blank" rel="noopener">CurseForge</a> and download the matching version.</li>
+                <li><strong>GitHub Releases:</strong> Download directly from the <a href="https://github.com/your-repo/command-maker/releases" target="_blank" rel="noopener">GitHub releases page</a>.</li>
+            </ul>
+            <p>Make sure to download the version that matches your Minecraft version and mod loader (Fabric or Quilt). The filename will look something like <code>CommandMaker-3.1.0-1.21.jar</code>.</p>
+
+            <h2>Step 2: Install the Mod</h2>
+            <ol>
+                <li>Locate your Minecraft installation directory. On Windows this is typically <code>%appdata%/.minecraft</code>.</li>
+                <li>Open the <code>mods</code> folder inside your Minecraft directory. If the folder does not exist, create it.</li>
+                <li>Drop the downloaded <code>.jar</code> file into the <code>mods</code> folder.</li>
+                <li>If you use Fabric API, make sure it is also in the <code>mods</code> folder. Command Maker requires Fabric API on modern versions.</li>
+            </ol>
+
+            <div class="callout callout-tip">
+                <h3>Server Installation</h3>
+                <p>Running a dedicated server? Place the JAR in your server's <code>mods</code> folder the same way. Command Maker works on both client and server, but most features are server-side.</p>
+            </div>
+
+            <h2>Step 3: Launch Minecraft</h2>
+            <ol>
+                <li>Open the Minecraft Launcher.</li>
+                <li>Select the Fabric profile you created when installing Fabric Loader.</li>
+                <li>Launch the game and join a world or server.</li>
+            </ol>
+            <p>Command Maker loads automatically. Configuration files are created in <code>config/CommandMaker/</code> on first launch. You do not need to do anything special to enable the mod.</p>
+
+            <h2>Step 4: Create Your First Alias</h2>
+            <p>Now for the fun part. Open the chat and type the following command:</p>
+            <pre><code>/cmd add hello say Hello ${player}!</code></pre>
+            <p>Let us break this down:</p>
+            <ul>
+                <li><code>/cmd add</code> tells Command Maker to create a new alias.</li>
+                <li><code>hello</code> is the name of your alias. You will type <code>/hello</code> to use it.</li>
+                <li><code>say Hello ${player}!</code> is the command that runs when you use the alias. <code>${player}</code> is a variable that gets replaced with your username.</li>
+            </ul>
+            <p>If you prefer to add the alias by editing the file directly, open <code>config/CommandMaker/aliases.json</code> and add:</p>
+            <pre><code>{
+  "hello": "say Hello ${player}!"
+}</code></pre>
+            <p>Then reload with <code>/cmd reload</code>.</p>
+
+            <h2>Step 5: Run Your Alias</h2>
+            <p>Type this in chat:</p>
+            <pre><code>/hello</code></pre>
+            <p>If your username is Alex, you will see in chat:</p>
+            <pre><code>Hello Alex!</code></pre>
+            <p>Congratulations! You just created and used your first command alias. Every time you run <code>/hello</code>, it will greet you by name.</p>
+
+            <div class="callout callout-warning">
+                <h3>Troubleshooting</h3>
+                <p>If <code>/hello</code> does not work, try these fixes in order:</p>
+                <ul>
+                    <li>Make sure you typed <code>/cmd add hello say Hello ${player}!</code> exactly.</li>
+                    <li>Run <code>/cmd reload</code> to refresh the alias list.</li>
+                    <li>Check that you have operator permissions on the server.</li>
+                    <li>Verify the mod is loaded with <code>/cmmakerperm</code> or check the server log for the load message.</li>
+                </ul>
+            </div>
+
+            <h2>Next Steps</h2>
+            <p>Now that you have your first alias working, here is what to learn next:</p>
+            <ol>
+                <li><strong><a href="getting-started.html">Getting Started Guide</a></strong> &mdash; A deeper walkthrough covering all the basics, including editing aliases, using variables, and understanding configuration files.</li>
+                <li><strong><a href="aliases.html">Creating Aliases</a></strong> &mdash; Learn how to create more complex aliases with multiple commands, variables, and file-based aliases.</li>
+                <li><strong><a href="alias-examples.html">Alias Examples</a></strong> &mdash; Browse a gallery of ready-to-use aliases organized by category, from teleportation to fun effects.</li>
+                <li><strong><a href="syntax-system.html">Custom Syntax System</a></strong> &mdash; Create commands that accept parameters like player names and reasons.</li>
+                <li><strong><a href="commands.html">Command Reference</a></strong> &mdash; Complete list of all Command Maker commands and their usage.</li>
+            </ol>
+        </main>
+    </div>
+    <footer id="footer" class="footer" role="contentinfo"></footer>
+    <script src="js/components.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>

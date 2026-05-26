@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Formatting - Command Maker Wiki</title>
+    <meta name="description" content="Master Minecraft chat formatting in Command Maker: color codes, formatting codes, JSON text components, clickable text, and hover text for rich command output.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon.ico">
+</head>
+<body>
+    <nav id="navbar" class="navbar" role="navigation" aria-label="Main navigation"></nav>
+    <div class="layout">
+        <aside id="sidebar" class="sidebar" role="complementary" aria-label="Side navigation"></aside>
+        <main class="content" role="main">
+            <h1>Chat Formatting</h1>
+            <p>Minecraft's chat formatting system lets you add colors, styles, and interactive elements to your messages. When used with Command Maker aliases, you can create polished, professional-looking command feedback for your players.</p>
+
+            <h2>The Section Sign (&sect;)</h2>
+            <p>All Minecraft formatting begins with the <strong>section sign</strong> (&sect;), a special character that tells the game the next character is a color or format code. When typing in-game, you represent this with the ampersand symbol (<code>&amp;</code>), which Command Maker automatically converts to the proper section sign.</p>
+
+            <div class="callout callout-info">
+                <h3>Important Note</h3>
+                <p>In Command Maker aliases and JSON configuration files, always use <code>&amp;</code> (ampersand) instead of the actual &sect; character. Command Maker handles the conversion automatically. In JSON files, you must also escape backslashes: <code>§</code> is the Unicode escape for the section sign.</p>
+            </div>
+
+            <h2>Color Codes</h2>
+            <p>Minecraft provides 16 standard colors, ranging from basic black to bright white. Each color is represented by a hex digit or letter after the section sign.</p>
+
+            <p>See the full <a href="color-codes.html">Color Codes reference page</a> for a complete table. Here are the most commonly used colors:</p>
+
+            <table>
+                <tr>
+                    <th>Code</th>
+                    <th>Color</th>
+                    <th>Common Use</th>
+                </tr>
+                <tr>
+                    <td><code>&amp;0</code></td>
+                    <td>Black</td>
+                    <td>Separation lines, shadows</td>
+                </tr>
+                <tr>
+                    <td><code>&amp;1</code></td>
+                    <td>Dark Blue</td>
+                    <td>Water-related messages</td>
+                </tr>
+                <tr>
+                    <td><code>&amp;2</code></td>
+                    <td>Dark Green</td>
+                    <td>Nature, success messages</td>
+                </tr>
+                <tr>
+                    <td><code>&amp;3</code></td>
+                    <td>Dark Aqua</td>
+                    <td>Information, tips</td>
+                </tr>
+                <tr>
+                    <td><code>&amp;4</code></td>
+                    <td>Dark Red</td>
+                    <td>Errors, warnings, death</td>
+                </tr>
+                <tr>
+                    <td><code>&amp;5</code></td>
+                    <td>Dark Purple</td>
+                    <td>Special items, magic</td>
+                </tr>
+                <tr>
+                    <td><code>&amp;6</code></td>
+                    <td>Gold</td>
+                    <td>Ranks, premium features</td>
+                </tr>
+                <tr>
+                    <td><code>&amp;7</code></td>
+                    <td>Gray</td>
+                    <td>Subtle hints, metadata</td>
+                </tr>
+                <tr>
+                    <td><code>&amp;8</code></td>
+                    <td>Dark Gray</td>
+                    <td>Separators, timestamps</td>
+                </tr>
+                <tr>
+                    <td><code>&amp;9</code></td>
+                    <td>Blue</td>
+                    <td>Links, notifications</td>
+                </tr>
+                <tr>
+                    <td><code>&amp;a</code></td>
+                    <td>Green</td>
+                    <td>Success, confirmation</td>
+                </tr>
+                <tr>
+                    <td><code>&amp;b</code></td>
+                    <td>Aqua</td>
+                    <td>Commands, highlights</td>
+                </tr>
+                <tr>
+                    <td><code>&amp;c</code></td>
+                    <td>Red</td>
+                    <td>Danger, errors, penalties</td>
+                </tr>
+                <tr>
+                    <td><code>&amp;d</code></td>
+                    <td>Light Purple</td>
+                    <td>Rare items, special events</td>
+                </tr>
+                <tr>
+                    <td><code>&amp;e</code></td>
+                    <td>Yellow</td>
+                    <td>Warnings, currency</td>
+                </tr>
+                <tr>
+                    <td><code>&amp;f</code></td>
+                    <td>White</td>
+                    <td>Default text, standard messages</td>
+                </tr>
+            </table>
+
+            <h2>Formatting Codes</h2>
+            <p>Beyond colors, Minecraft supports special formatting codes that change text appearance:</p>
+
+            <table>
+                <tr>
+                    <th>Code</th>
+                    <th>Format</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>&amp;l</code></td>
+                    <td><strong>Bold</strong></td>
+                    <td>Makes text thicker and heavier</td>
+                </tr>
+                <tr>
+                    <td><code>&amp;o</code></td>
+                    <td><em>Italic</em></td>
+                    <td>Slants text to the right</td>
+                </tr>
+                <tr>
+                    <td><code>&amp;n</code></td>
+                    <td><span style="text-decoration: underline;">Underline</span></td>
+                    <td>Adds a line under the text</td>
+                </tr>
+                <tr>
+                    <td><code>&amp;m</code></td>
+                    <td><span style="text-decoration: line-through;">Strikethrough</span></td>
+                    <td>Adds a line through the text</td>
+                </tr>
+                <tr>
+                    <td><code>&amp;k</code></td>
+                    <td>Obfuscated</td>
+                    <td>Rapidly changing random characters</td>
+                </tr>
+                <tr>
+                    <td><code>&amp;r</code></td>
+                    <td>Reset</td>
+                    <td>Clears all formatting back to default white</td>
+                </tr>
+            </table>
+
+            <div class="callout callout-warning">
+                <h3>Formatting Order Matters</h3>
+                <p>Formatting codes must be applied <strong>after</strong> a color code. If you use <code>&amp;l</code> without specifying a color first, the bold formatting may not appear correctly. Always use the pattern: color first, then formatting: <code>&amp;c&amp;lRed Bold Text</code>. Use <code>&amp;r</code> to reset formatting before changing colors.</p>
+            </div>
+
+            <h2>Combining Colors and Formats</h2>
+            <p>You can stack color and formatting codes to create rich text. Each code applies to all text that follows it until another code overrides it:</p>
+
+            <pre><code># Simple colored message
+/alias add colored say &amp;aHello &amp;eworld!
+
+# Bold and colored
+/alias add alert say &amp;c&amp;lWARNING: &amp;r&amp;7This is important!
+
+# Multi-color formatted message
+/alias add info say &amp;9&amp;nInfo: &amp;r&amp;bServer &amp;ewill &amp;crestart &amp;rin &amp;d10 &amp;rminutes.
+
+# Using obfuscated text for effect
+/alias add secret say &amp;5&amp;k|||| &amp;r&amp;dSecret Message &amp;5&amp;k||||</code></pre>
+
+            <h2>JSON Text Components (tellraw)</h2>
+            <p>For advanced formatting, Minecraft's <code>/tellraw</code> command uses JSON to create rich text with hover events, click actions, and nested components. You can use these in your Command Maker aliases for professional-looking output.</p>
+
+            <h3>Basic tellraw Syntax</h3>
+            <pre><code>tellraw @a {"text":"Hello, world!","color":"gold","bold":true}</code></pre>
+
+            <h3>Multi-Component Messages</h3>
+            <p>Use an array of JSON objects to build complex messages:</p>
+            <pre><code>tellraw @a [
+  {"text":"[SERVER] ","color":"gray"},
+  {"text":"Welcome, ","color":"white"},
+  {"text":"PlayerName","color":"gold","bold":true},
+  {"text":"!","color":"white"}
+]</code></pre>
+
+            <h3>Using tellraw in Command Maker Aliases</h3>
+            <pre><code>/cmd add welcome tellraw @a [
+  {"text":"[SERVER] ","color":"gray"},
+  {"text":"Welcome, ","color":"white"},
+  {"text":"${player}","color":"gold","bold":true},
+  {"text":"!","color":"white"}
+]</code></pre>
+
+            <h2>Clickable Text</h2>
+            <p>Make text interactive with click events. Supported actions:</p>
+
+            <table>
+                <tr>
+                    <th>Action</th>
+                    <th>Description</th>
+                    <th>Example</th>
+                </tr>
+                <tr>
+                    <td><code>run_command</code></td>
+                    <td>Runs a command when clicked</td>
+                    <td><code>/spawn</code></td>
+                </tr>
+                <tr>
+                    <td><code>suggest_command</code></td>
+                    <td>Fills the chat box with a command</td>
+                    <td><code>/msg</code></td>
+                </tr>
+                <tr>
+                    <td><code>open_url</code></td>
+                    <td>Opens a URL in the browser</td>
+                    <td><code>https://example.com</code></td>
+                </tr>
+                <tr>
+                    <td><code>copy_to_clipboard</code></td>
+                    <td>Copies text to clipboard</td>
+                    <td>An IP address</td>
+                </tr>
+            </table>
+
+            <pre><code># Click to run a command
+/alias add spawnlink tellraw @a [
+  {"text":"[Click to Teleport to Spawn]","color":"green","bold":true,
+   "clickEvent":{"action":"run_command","value":"/spawn"}}
+]
+
+# Click to suggest a command (fills chat, doesn't execute)
+/alias add msg tellraw @a [
+  {"text":"${player}, click to message a moderator: ","color":"white"},
+  {"text":"[MESSAGE]","color":"yellow",
+   "clickEvent":{"action":"suggest_command","value":"/msg "}}
+]
+
+# Click to copy text to clipboard
+/alias add ip tellraw @a [
+  {"text":"Server IP: ","color":"white"},
+  {"text":"play.example.com","color":"gold","bold":true,
+   "clickEvent":{"action":"copy_to_clipboard","value":"play.example.com"}}
+]</code></pre>
+
+            <h2>Hover Text</h2>
+            <p>Add tooltips that appear when players hover over text:</p>
+
+            <pre><code># Simple hover with text
+/alias add hoverdemo tellraw @a [
+  {"text":"Hover over me!","color":"gold",
+   "hoverEvent":{"action":"show_text","value":"This is a tooltip!"}}
+]
+
+# Hover with an item tooltip
+/alias add iteminfo tellraw @a [
+  {"text":"[DIAMOND SWORD]","color":"aqua","bold":true,
+   "hoverEvent":{
+     "action":"show_item",
+     "value":"{id:\"minecraft:diamond_sword\",Count:1,tag:{Enchantments:[{id:\"minecraft:sharpness\",lvl:5}]}}"
+   }}
+]
+
+# Hover showing a player's info
+/alias add playerinfo tellraw @a [
+  {"text":"${player}","color":"gold",
+   "hoverEvent":{"action":"show_text","value":"&7Click to teleport to &e${player}"},
+   "clickEvent":{"action":"run_command","value":"/tp ${player}"}}
+]</code></pre>
+
+            <h2>Using Formatting in Command Maker Aliases</h2>
+
+            <h3>Basic Color in Alias Target</h3>
+            <pre><code>/cmd add hello say &amp;e[&amp;6Server&amp;e] &amp;fHello &amp;a${player}&amp;f!</code></pre>
+            <p>When a player runs <code>/hello</code>, they see: <code>[Server] Hello PlayerName!</code> in gold, white, and green.</p>
+
+            <h3>Colored Syntax Feedback</h3>
+            <p>Create a syntax pattern that gives colored feedback:</p>
+            <pre><code>{
+  "broadcast": {
+    "pattern": "/broadcast &lt;message&gt;",
+    "description": "Broadcast a colored announcement"
+  }
+}
+
+# Alias using the syntax:
+/alias add broadcast_cmd say &amp;b[&amp;3Announcement&amp;b] &amp;f${broadcast_message}</code></pre>
+
+            <h3>Rich Error Messages</h3>
+            <pre><code>/cmd add deny say &amp;c&amp;lDenied! &amp;r&amp;7You don't have permission to use this command.</code></pre>
+
+            <h3>Fancy Kill Feed</h3>
+            <pre><code>/alias add killmsg say &amp;c${player} &amp;7was slain by &amp;c${killer}</code></pre>
+
+            <h2>Title and Subtitle Formatting</h2>
+            <p>You can use color codes in <code>/title</code> and <code>/subtitle</code> commands too:</p>
+
+            <pre><code>/cmd add jointitle title ${player} {"text":"&a&amplWelcome!","bold":true,"color":"green"}
+
+# With subtitle
+/alias add joinsubtitle title ${player} {"text":"&a&amplWelcome!"}
+/alias add joinsubtitle subtitle ${player} {"text":"&eEnjoy your stay!","color":"gold"}
+
+# Complete join sequence (runs both)
+/alias add joinmsg title ${player} {"text":"&a&amplWelcome!"}
+/alias add joinmsg subtitle ${player} {"text":"&eEnjoy your stay!"}</code></pre>
+
+            <h2>JSON Components vs. Legacy Section-Sign Formatting</h2>
+            <table>
+                <tr>
+                    <th>Feature</th>
+                    <th>Legacy (&sect; codes)</th>
+                    <th>JSON Components</th>
+                </tr>
+                <tr>
+                    <td>Syntax</td>
+                    <td><code>&amp;cText</code></td>
+                    <td><code>{"text":"Text","color":"red"}</code></td>
+                </tr>
+                <tr>
+                    <td>Click Events</td>
+                    <td>Not supported</td>
+                    <td>Fully supported</td>
+                </tr>
+                <tr>
+                    <td>Hover Events</td>
+                    <td>Not supported</td>
+                    <td>Fully supported</td>
+                </tr>
+                <tr>
+                    <td>Simplicity</td>
+                    <td>Very simple</td>
+                    <td>More complex</td>
+                </tr>
+                <tr>
+                    <td>Best For</td>
+                    <td>Quick messages, /say</td>
+                    <td>Interactive menus, tellraw</td>
+                </tr>
+            </table>
+
+            <div class="callout callout-tip">
+                <h3>Pro Tip: Combine Both Approaches</h3>
+                <p>You can use &sect;-codes inside JSON text values! The game will render them as colors. This lets you write shorter JSON while keeping formatting: <code>{"text":"&amp;c&amp;lError: &amp;r&amp;7Something went wrong"}</code> is much shorter than building separate components.</p>
+            </div>
+
+            <h2>Common Formatting Patterns</h2>
+
+            <pre><code># Error message
+say &amp;c&amp;lERROR: &amp;r&amp;7${error_message}
+
+# Success message
+say &amp;a&amp;lSUCCESS: &amp;r&amp;7${result}
+
+# Information
+say &amp;9&amp;lINFO: &amp;r&amp;7${info_text}
+
+# Warning
+say &amp;e&amp;lWARNING: &amp;r&amp;7${warning_text}
+
+# Fancy header
+say &amp;8[&amp;m                &amp;8] &amp;6&amp;lSERVER NEWS &amp;8[&amp;m                &amp;8]
+
+# Prefix-based messages
+say &amp;8[&amp;bServer&amp;8] &amp;f${player} &amp7joined the game!
+
+# Colored coordinates announcement
+say &amp;e${player} &amp;7is at &amp;bX:${x} &amp;aY:${y} &amp;cZ:${z}</code></pre>
+
+            <div class="callout callout-warning">
+                <h3>JSON in Aliases: Escaping</h3>
+                <p>When using JSON text components in Command Maker aliases, be careful with quote escaping. If your JSON contains double quotes inside the alias command string, you may need to escape them. The safest approach is to define complex JSON in <code>aliases.json</code> directly, where you can use proper JSON escaping.</p>
+            </div>
+
+            <h2>Further Reading</h2>
+            <ul>
+                <li><a href="color-codes.html">Minecraft Color Codes</a> - Complete color reference</li>
+                <li><a href="aliases.html">Creating Aliases</a> - How to build aliases</li>
+                <li><a href="syntax-system.html">Custom Syntax System</a> - Parameterized commands</li>
+                <li><a href="examples.html">Examples</a> - Real-world alias examples</li>
+            </ul>
+        </main>
+    </div>
+    <footer id="footer" class="footer" role="contentinfo"></footer>
+    <script src="js/components.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>

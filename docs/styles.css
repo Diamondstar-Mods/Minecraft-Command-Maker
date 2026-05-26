@@ -369,15 +369,6 @@ tr:nth-child(even) td { background: var(--bg-secondary); }
 .article-card p { color: var(--text-secondary); font-size: .88rem; flex-grow: 1; margin-bottom: .75rem; }
 .article-meta { display: inline-block; background: var(--bg-tertiary); padding: 2px 8px; border-radius: var(--radius-sm); font-size: .75rem; color: var(--text-secondary); font-weight: 600; }
 
-/* ---- Edit button ---- */
-.edit-button {
-  position: fixed; top: 72px; right: 12px; z-index: 90;
-  background: var(--bg); color: var(--text-secondary);
-  border: 1px solid var(--border); padding: .4rem .75rem;
-  border-radius: var(--radius-sm); box-shadow: var(--shadow-sm);
-  font-size: .8rem; font-weight: 600; transition: transform .12s, box-shadow .12s;
-}
-.edit-button:hover { transform: translateY(-1px); box-shadow: var(--shadow); text-decoration: none; }
 
 /* ---- Footer ---- */
 .footer {

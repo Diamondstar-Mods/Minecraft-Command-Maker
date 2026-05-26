@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timed Commands - Command Maker Wiki</title>
+    <meta name="description" content="Create delayed and scheduled commands with Command Maker: countdown timers, recurring tasks, cooldown systems, scheduled broadcasts, and automated restarts.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon.ico">
+</head>
+<body>
+    <nav id="navbar" class="navbar" role="navigation" aria-label="Main navigation"></nav>
+    <div class="layout">
+        <aside id="sidebar" class="sidebar" role="complementary" aria-label="Side navigation"></aside>
+        <main class="content" role="main">
+            <h1>Timed Commands</h1>
+            <p>Learn how to create delayed commands, recurring schedules, countdown timers, and cooldown systems using Command Maker aliases combined with Minecraft's scheduling mechanisms.</p>
+
+            <h2>Overview of Timing Mechanisms</h2>
+            <p>Minecraft provides several ways to execute commands on a delay or schedule. Command Maker aliases can integrate with all of them. Here is a comparison of available methods:</p>
+
+            <table class="variables-table">
+                <thead>
+                    <tr>
+                        <th>Method</th>
+                        <th>Delay Type</th>
+                        <th>Accuracy</th>
+                        <th>Persistence</th>
+                        <th>Best For</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>/schedule function &lt;namespace:path&gt; &lt;time&gt;</code></td>
+                        <td>One-shot delayed function</td>
+                        <td>High (ticks)</td>
+                        <td>Survives server restart</td>
+                        <td>Delayed one-time events</td>
+                    </tr>
+                    <tr>
+                        <td>Repeating command block</td>
+                        <td>Recurring (every tick)</td>
+                        <td>Perfect (every tick)</td>
+                        <td>Runs while loaded</td>
+                        <td>Constant checks, loops</td>
+                    </tr>
+                    <tr>
+                        <td>Scoreboard timer</td>
+                        <td>Variable recurring</td>
+                        <td>Good (tick-based)</td>
+                        <td>Survives restart</td>
+                        <td>Cooldowns, countdowns</td>
+                    </tr>
+                    <tr>
+                        <td>Redstone clock</td>
+                        <td>Recurring</td>
+                        <td>Variable</td>
+                        <td>Runs while loaded</td>
+                        <td>Simple repeating triggers</td>
+                    </tr>
+                    <tr>
+                        <td>Command Maker function</td>
+                        <td>Via /schedule</td>
+                        <td>High (ticks)</td>
+                        <td>Survives restart</td>
+                        <td>Combined with any method</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>Using /schedule with Command Maker</h2>
+
+            <h3>Basic /schedule Usage</h3>
+            <p>Minecraft's <code>/schedule function</code> command lets you run a function after a specified delay. While this primarily works with datapack functions, you can use Command Maker aliases to set up schedules.</p>
+
+            <pre><code># Schedule an announcement in 10 seconds (200 ticks)
+/cmd add delayed_msg say This message is delayed! && schedule function my:clear_msg 100t
+
+# Note: /schedule requires a function in a datapack or a Command Maker function file
+# For full functionality, create a function in your datapack:
+# data/my/functions/delayed_tasks.mcfunction
+# Contents: say This runs on a schedule!</code></pre>
+
+            <h3>Creating a Delayed Alias with /schedule</h3>
+
+            <pre><code># In aliases.json:
+{
+  "delayed_broadcast": "say Starting 10 second countdown! && schedule function commandmaker:delayed_broadcast 200t",
+  "delayed_broadcast_action": "say Timer finished! This message was delayed by 10 seconds!"
+}
+
+# In Functions/delayed_broadcast.mcfunction:
+# say This function was called by /schedule from a Command Maker alias!
+# playsound entity.experience_orb.pickup master @a</code></pre>
+
+            <h2>Countdown Timers</h2>
+
+            <h3>Simple Countdown with Scoreboards</h3>
+            <p>Create a visible countdown using scoreboard tracking and a repeating function:</p>
+
+            <pre><code># Step 1: Create the scoreboard objective
+/scoreboard objectives add countdown dummy "Countdown"
+
+# Step 2: Set the countdown value (e.g., 10 seconds = 200 ticks)
+/scoreboard players set timer countdown 10
+
+# Step 3: Countdown alias (run once to start)
+/cmd add start_countdown
+  scoreboard players set timer countdown 10 &&
+  say Countdown started! &&
+  schedule function commandmaker:tick_countdown 1t
+
+# Step 4: Tick function (Functions/tick_countdown.mcfunction)
+# scoreboard players remove timer countdown 1
+# tellraw @a [{"text":"Countdown: ","color":"gold"},{"score":{"name":"timer","objective":"countdown"}}]
+# execute if score timer countdown matches 0 run say BOOM! Time's up!
+# execute if score timer countdown matches 0 run schedule clear commandmaker:tick_countdown
+# execute if score timer countdown matches ..0 run schedule clear commandmaker:tick_countdown
+# execute if score timer countdown matches 1.. run schedule function commandmaker:tick_countdown 20t</code></pre>
+
+            <h3>Countdown with Visual Feedback</h3>
+
+            <pre><code># Start a 30-second countdown with visual effects
+/cmd add start_event
+  scoreboard players set event_timer countdown 30 &&
+  say Event starting in 30 seconds! &&
+  schedule function commandmaker:event_tick 20t
+
+# Functions/event_tick.mcfunction:
+# scoreboard players remove event_timer countdown 1
+# execute if score event_timer countdown matches 10.. run schedule function commandmaker:event_tick 20t
+# execute if score event_timer countdown matches 5 run tellraw @a [{"text":"5...","color":"red","bold":true}]
+# execute if score event_timer countdown matches 4 run tellraw @a [{"text":"4...","color":"gold","bold":true}]
+# execute if score event_timer countdown matches 3 run tellraw @a [{"text":"3...","color":"yellow","bold":true}]
+# execute if score event_timer countdown matches 2 run tellraw @a [{"text":"2...","color":"green","bold":true}]
+# execute if score event_timer countdown matches 1 run tellraw @a [{"text":"1...","color":"green","bold":true}]
+# execute if score event_timer countdown matches 0 run function commandmaker:event_start
+# execute if score event_timer countdown matches ..0 run schedule clear commandmaker:event_tick
+
+# Functions/event_start.mcfunction:
+# say EVENT STARTED!
+# playsound entity.firework_rocket.blast master @a
+# give @a diamond 1</code></pre>
+
+            <div class="callout-tip">
+                <h3>Pro Tip</h3>
+                <p>Use <code>tellraw</code> with text components for countdown announcements instead of <code>/say</code>. This gives you control over colors and formatting, making the countdown more visually engaging for players.</p>
+            </div>
+
+            <h2>Recurring Tasks</h2>
+
+            <h3>Scheduled Broadcasts</h3>
+            <p>Create automatic announcements that repeat at set intervals:</p>
+
+            <pre><code># Functions/tip_broadcaster.mcfunction:
+# say === TIP: Use /help to see all available commands! ===
+# schedule function commandmaker:tip_broadcaster 6000t  # Repeat every 5 minutes
+
+# Start the broadcast loop
+/cmd add start_tips schedule function commandmaker:tip_broadcaster 6000t && say Tip broadcasts started!
+
+# Stop the broadcast loop
+/cmd add stop_tips schedule clear commandmaker:tip_broadcaster && say Tip broadcasts stopped!</code></pre>
+
+            <h3>Rotating Announcements</h3>
+            <pre><code># Functions/announcement_1.mcfunction:
+# say [ANNOUNCEMENT] Server rules: Be respectful to other players!
+# schedule function commandmaker:announcement_2 6000t
+
+# Functions/announcement_2.mcfunction:
+# say [ANNOUNCEMENT] Visit our website for updates and news!
+# schedule function commandmaker:announcement_3 6000t
+
+# Functions/announcement_3.mcfunction:
+# say [ANNOUNCEMENT] Use /help to view all available commands!
+# schedule function commandmaker:announcement_1 6000t
+
+# Start rotating announcements
+/cmd add start_announcements schedule function commandmaker:announcement_1 6000t && say Announcements started!</code></pre>
+
+            <h3>Hourly Events</h3>
+            <pre><code># Functions/hourly_event.mcfunction:
+# say === HOURLY EVENT ===
+# say Type /join_event to participate!
+# give @a diamond 1
+# schedule function commandmaker:hourly_event 72000t  # Repeat every hour</code></pre>
+
+            <h2>Cooldown Systems with Scoreboards</h2>
+
+            <h3>Per-Player Cooldown</h3>
+            <p>Prevent players from using commands too frequently with scoreboard-based cooldowns:</p>
+
+            <pre><code># Step 1: Create cooldown objective
+/scoreboard objectives add cooldown dummy "Command Cooldown"
+
+# Step 2: Create the cooldown alias
+# In aliases.json:
+{
+  "daily_reward": "execute if score ${player} cooldown matches 0 run function commandmaker:give_daily_reward && execute if score ${player} cooldown matches 1.. run say You must wait ${player_cooldown} seconds!"
+}
+
+# Step 3: Functions/give_daily_reward.mcfunction:
+# give ${player} diamond 1
+# scoreboard players set ${player} cooldown 86400  # 24 hours in seconds (approx)
+# say ${player} received their daily reward!
+# schedule function commandmaker:tick_cooldown 1t  # Start cooldown ticker</code></pre>
+
+            <h3>Simpler Cooldown: Fixed Time</h3>
+            <p>For a simpler approach, use a delayed reset:</p>
+
+            <pre><code># Alias that sets cooldown and auto-clears it
+/cmd add use_ability
+  execute if entity @s[scores={ability_cooldown=0}] run function commandmaker:activate_ability &&
+  execute if entity @s[scores={ability_cooldown=0}] run scoreboard players set @s ability_cooldown 1 &&
+  execute if entity @s[scores={ability_cooldown=0}] run schedule function commandmaker:clear_cooldown @s 200t &&
+  execute unless entity @s[scores={ability_cooldown=0}] run say Ability on cooldown! Wait 10 seconds.
+
+# Functions/clear_cooldown.mcfunction (uses @s from schedule):
+# scoreboard players set @s ability_cooldown 0
+# tellraw @s [{"text":"Ability ready!","color":"green"}]</code></pre>
+
+            <h3>Cooldown with Visual Timer</h3>
+            <pre><code># Display remaining cooldown time in the action bar
+# Functions/show_cooldowns.mcfunction:
+# execute as @a[scores={cooldown=1..}] run scoreboard players remove @s cooldown 1
+# execute as @a[scores={cooldown=1..}] run title @s actionbar [{"text":"Cooldown: ","color":"red"},{"score":{"name":"@s","objective":"cooldown"}}]
+# execute as @a[scores={cooldown=0}] run title @s actionbar [{"text":"Ready!","color":"green"}]
+# schedule function commandmaker:show_cooldowns 1t  # Runs every tick</code></pre>
+
+            <h2>Scheduled Broadcasts</h2>
+
+            <h3>Server-Wide Announcement System</h3>
+            <pre><code># Create multiple announcements in Functions/ folder:
+
+# Functions/announce_rules.mcfunction:
+# say [SERVER] Please follow server rules. Be respectful!
+# schedule function commandmaker:announce_vote 6000t
+
+# Functions/announce_vote.mcfunction:
+# say [SERVER] Vote for our server to earn rewards! Use /vote
+# schedule function commandmaker:announce_discord 6000t
+
+# Functions/announce_discord.mcfunction:
+# say [SERVER] Join our Discord community! Use /discord
+# schedule function commandmaker:announce_rules 6000t
+
+# Start the loop
+/cmd add start_broadcasts schedule function commandmaker:announce_rules 6000t && say Scheduled broadcasts started!</code></pre>
+
+            <h3>Time-of-Day Broadcasts</h3>
+            <pre><code># Functions/morning_announcement.mcfunction:
+# execute if time 0 run say Good morning! A new day begins on the server!
+# execute if time 0 run give @a bread 1
+
+# Functions/evening_announcement.mcfunction:
+# execute if time 13000 run say The sun is setting! Get back to safety!
+
+# Schedule these to check every minute
+# schedule function commandmaker:morning_announcement 1200t  # Every minute
+# schedule function commandmaker:evening_announcement 1200t</code></pre>
+
+            <h2>Automated Restarts</h2>
+
+            <h3>Scheduled Server Restart</h3>
+            <p>Create a countdown to an automatic server restart with warning messages:</p>
+
+            <pre><code># Functions/restart_warning_10m.mcfunction:
+# say [RESTART] Server restart in 10 minutes!
+# schedule function commandmaker:restart_warning_5m 3000t  # 2.5 min later
+
+# Functions/restart_warning_5m.mcfunction:
+# say [RESTART] Server restart in 5 minutes!
+# schedule function commandmaker:restart_warning_1m 2400t  # 2 min later
+
+# Functions/restart_warning_1m.mcfunction:
+# say [RESTART] Server restart in 1 minute!
+# schedule function commandmaker:restart_warning_30s 200t
+
+# Functions/restart_warning_30s.mcfunction:
+# say [RESTART] Server restart in 30 seconds!
+# schedule function commandmaker:restart_warning_10s 200t
+
+# Functions/restart_warning_10s.mcfunction:
+# say [RESTART] Server restart in 10 seconds!
+# schedule function commandmaker:restart_warning_5s 100t
+
+# Functions/restart_warning_5s.mcfunction:
+# say [RESTART] 5...
+# schedule function commandmaker:restart_warning_4s 20t
+
+# Functions/restart_warning_4s.mcfunction:
+# say [RESTART] 4...
+# schedule function commandmaker:restart_warning_3s 20t
+
+# Functions/restart_warning_3s.mcfunction:
+# say [RESTART] 3...
+# schedule function commandmaker:restart_warning_2s 20t
+
+# Functions/restart_warning_2s.mcfunction:
+# say [RESTART] 2...
+# schedule function commandmaker:restart_warning_1s 20t
+
+# Functions/restart_warning_1s.mcfunction:
+# say [RESTART] 1...
+# schedule function commandmaker:restart 20t
+
+# Functions/restart.mcfunction:
+# say [RESTART] Restarting now!
+# kick @a Server restarting...
+# stop  # Actually stops the server; use a restart script to bring it back
+
+# Start the restart countdown
+/cmd add restart schedule function commandmaker:restart_warning_10m 0t && say Restart sequence initiated!</code></pre>
+
+            <div class="callout-warning">
+                <h3>Warning</h3>
+                <p>The <code>/stop</code> command will shut down the server. You need a separate startup script (or a service like systemd) to automatically restart the server process. Without this, the server will stop and stay stopped.</p>
+            </div>
+
+            <h2>Example: Complete Auto-Event System</h2>
+
+            <pre><code># === AUTO EVENT SYSTEM ===
+
+# Functions/auto_event_start.mcfunction:
+# say === AUTO EVENT STARTING IN 30 SECONDS! ===
+# playsound entity.ender_dragon.growl master @a
+# schedule function commandmaker:auto_event_countdown 100t  # 5 seconds later
+
+# Functions/auto_event_countdown.mcfunction:
+# tellraw @a [{"text":"Event starting in:","color":"gold"}]
+# title @a title [{"text":"25","color":"red"}]
+# schedule function commandmaker:auto_event_20 100t
+
+# Functions/auto_event_20.mcfunction:
+# title @a title [{"text":"20","color":"gold"}]
+# schedule function commandmaker:auto_event_15 100t
+
+# Functions/auto_event_15.mcfunction:
+# title @a title [{"text":"15","color":"yellow"}]
+# schedule function commandmaker:auto_event_10 100t
+
+# Functions/auto_event_10.mcfunction:
+# title @a title [{"text":"10","color":"green"}]
+# schedule function commandmaker:auto_event_5 100t
+
+# Functions/auto_event_5.mcfunction:
+# title @a title [{"text":"5","color":"green"}]
+# schedule function commandmaker:auto_event_4 20t
+
+# Functions/auto_event_4.mcfunction:
+# title @a title [{"text":"4","color":"yellow"}]
+# schedule function commandmaker:auto_event_3 20t
+
+# Functions/auto_event_3.mcfunction:
+# title @a title [{"text":"3","color":"gold"}]
+# schedule function commandmaker:auto_event_2 20t
+
+# Functions/auto_event_2.mcfunction:
+# title @a title [{"text":"2","color":"red"}]
+# schedule function commandmaker:auto_event_1 20t
+
+# Functions/auto_event_1.mcfunction:
+# title @a title [{"text":"1","color":"dark_red"}]
+# schedule function commandmaker:auto_event_go 20t
+
+# Functions/auto_event_go.mcfunction:
+# title @a title [{"text":"GO!","color":"green","bold":true}]
+# playsound entity.firework_rocket.blast master @a
+# give @a diamond 1
+# say Event started! Type /event_help for instructions!
+# schedule function commandmaker:auto_event_end 6000t  # End after 5 minutes
+
+# Functions/auto_event_end.mcfunction:
+# say Event has ended! Thanks for participating!
+# playsound entity.firework_rocket.twinkle master @a
+
+# Start the event sequence
+/cmd add start_event schedule function commandmaker:auto_event_start 0t && say Auto-event system activated!</code></pre>
+
+            <h2>Best Practices for Timed Commands</h2>
+
+            <ul>
+                <li><strong>Use scoreboard timers for cooldowns</strong> instead of /schedule for per-player timing</li>
+                <li><strong>Always provide feedback</strong> when a timer starts, ticks, or ends</li>
+                <li><strong>Clean up schedules</strong> when a timer is cancelled to avoid orphaned events</li>
+                <li><strong>Store timer values in scoreboards</strong> so they survive server restarts</li>
+                <li><strong>Avoid running timers every tick</strong> if once-per-second (20 ticks) is sufficient</li>
+                <li><strong>Document your schedule flow</strong> -- chains of scheduled functions are hard to debug</li>
+                <li><strong>Test timing with small delays first</strong> before setting long timers</li>
+                <li><strong>Use <code>schedule clear</code></strong> to stop scheduled events when needed</li>
+            </ul>
+
+            <div class="callout-info">
+                <h3>Note on Tick Timing</h3>
+                <p>Minecraft runs at 20 ticks per second. One second = 20 ticks. One minute = 1200 ticks. One hour = 72000 ticks. Keep this in mind when setting timer values in commands and functions.</p>
+            </div>
+
+            <h2>Quick Reference: Tick Timing</h2>
+
+            <table class="mistakes-table">
+                <thead>
+                    <tr>
+                        <th>Duration</th>
+                        <th>Ticks</th>
+                        <th>Example Command</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>0.5 seconds</td>
+                        <td>10</td>
+                        <td><code>schedule function ... 10t</code></td>
+                    </tr>
+                    <tr>
+                        <td>1 second</td>
+                        <td>20</td>
+                        <td><code>schedule function ... 20t</code></td>
+                    </tr>
+                    <tr>
+                        <td>5 seconds</td>
+                        <td>100</td>
+                        <td><code>schedule function ... 100t</code></td>
+                    </tr>
+                    <tr>
+                        <td>10 seconds</td>
+                        <td>200</td>
+                        <td><code>schedule function ... 200t</code></td>
+                    </tr>
+                    <tr>
+                        <td>30 seconds</td>
+                        <td>600</td>
+                        <td><code>schedule function ... 600t</code></td>
+                    </tr>
+                    <tr>
+                        <td>1 minute</td>
+                        <td>1200</td>
+                        <td><code>schedule function ... 1200t</code></td>
+                    </tr>
+                    <tr>
+                        <td>5 minutes</td>
+                        <td>6000</td>
+                        <td><code>schedule function ... 6000t</code></td>
+                    </tr>
+                    <tr>
+                        <td>1 hour</td>
+                        <td>72000</td>
+                        <td><code>schedule function ... 72000t</code></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="callout-tip">
+                <h3>Summary</h3>
+                <p>Timed commands open up automation possibilities: scheduled broadcasts, cooldown systems, countdown timers, and automated events. The combination of Command Maker aliases, Minecraft's /schedule command, and scoreboard tracking gives you everything you need for sophisticated time-based mechanics.</p>
+            </div>
+        </main>
+    </div>
+    <footer id="footer" class="footer" role="contentinfo"></footer>
+    <script src="js/components.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>
