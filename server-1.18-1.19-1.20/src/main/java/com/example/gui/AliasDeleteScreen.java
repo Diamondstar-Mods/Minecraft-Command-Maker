@@ -34,7 +34,7 @@ public class AliasDeleteScreen extends Screen {
 
 	@Override
 	public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-		this.renderBackground(context, mouseX, mouseY, delta);
+		this.renderBackground(context);
 		context.fill(0, 0, this.width, this.height, 0xFF8B8B8B);
 
 		int titleY = PADDING;
@@ -91,11 +91,11 @@ public class AliasDeleteScreen extends Screen {
 	}
 
 	@Override
-	public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
+	public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
 		int totalSlots = aliasNames.size();
 		int maxScroll = Math.max(0, (totalSlots + COLUMNS - 1) / COLUMNS - visibleRows);
 
-		scrollOffset -= (int) verticalAmount;
+		scrollOffset -= (int) amount;
 		if (scrollOffset < 0) scrollOffset = 0;
 		if (scrollOffset > maxScroll) scrollOffset = maxScroll;
 
