@@ -1,7 +1,8 @@
 package com.example;
 
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.permissions.Permissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,7 +60,7 @@ public class PermissionManager {
     /**
      * Check if a player has permission to use a command
      */
-    public static boolean hasPermission(ServerCommandSource source, String permissionNode) {
+    public static boolean hasPermission(CommandSourceStack source, String permissionNode) {
         try {
             if (source == null) return false;
             
@@ -68,11 +69,11 @@ public class PermissionManager {
                 return true;
             }
             
-            ServerPlayerEntity player = source.getPlayer();
+            ServerPlayer player = source.getPlayer();
             if (player == null) return false;
             
             // Check vanilla op level first (level 2+)
-            if (source.hasPermissionLevel(2)) {
+            if (source.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER)) {
                 return true;
             }
             
@@ -84,7 +85,7 @@ public class PermissionManager {
             }
             
             // Check configuration-based permissions
-            return checkConfigPermission(player.getUuid(), permissionNode);
+            return checkConfigPermission(player.getUUID(), permissionNode);
             
         } catch (Exception e) {
             LOGGER.warn("Error checking permission: {}", permissionNode, e);
@@ -95,7 +96,7 @@ public class PermissionManager {
     /**
      * Check if a player can use a specific alias
      */
-    public static boolean canUseAlias(ServerCommandSource source, String aliasName) {
+    public static boolean canUseAlias(CommandSourceStack source, String aliasName) {
         try {
             if (source == null) return false;
             
@@ -104,11 +105,11 @@ public class PermissionManager {
                 return true;
             }
             
-            ServerPlayerEntity player = source.getPlayer();
+            ServerPlayer player = source.getPlayer();
             if (player == null) return false;
             
             // Ops always can use aliases
-            if (source.hasPermissionLevel(2)) {
+            if (source.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER)) {
                 return true;
             }
             
@@ -125,30 +126,30 @@ public class PermissionManager {
     /**
      * Check if a player can use /cmd command
      */
-    public static boolean canUseCmdCommand(ServerCommandSource source) {
+    public static boolean canUseCmdCommand(CommandSourceStack source) {
         if (source == null) return false;
         if (source.getEntity() == null) return true; // Console
-        if (source.hasPermissionLevel(2)) return true; // Ops
+        if (source.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER)) return true; // Ops
         return hasPermission(source, "cmdmaker.cmd");
     }
     
     /**
      * Check if a player can use /addcommand
      */
-    public static boolean canUseAddCommand(ServerCommandSource source) {
+    public static boolean canUseAddCommand(CommandSourceStack source) {
         if (source == null) return false;
         if (source.getEntity() == null) return true; // Console
-        if (source.hasPermissionLevel(2)) return true; // Ops
+        if (source.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER)) return true; // Ops
         return hasPermission(source, "cmdmaker.addcommand");
     }
     
     /**
      * Check if a player can manage aliases (add/delete)
      */
-    public static boolean canManageAliases(ServerCommandSource source) {
+    public static boolean canManageAliases(CommandSourceStack source) {
         if (source == null) return false;
         if (source.getEntity() == null) return true; // Console
-        if (source.hasPermissionLevel(2)) return true; // Ops
+        if (source.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER)) return true; // Ops
         return hasPermission(source, "cmdmaker.manage.alias");
     }
     
@@ -217,7 +218,7 @@ public class PermissionManager {
     /**
      * Check permission via LuckPerms
      */
-    private static boolean checkLuckPermsPermission(ServerPlayerEntity player, String permissionNode) {
+    private static boolean checkLuckPermsPermission(ServerPlayer player, String permissionNode) {
         try {
             if (!useLuckPerms) {
                 return false;
@@ -227,7 +228,7 @@ public class PermissionManager {
             // For now, we just return false to fall back to config permissions
             // A real implementation would use the LuckPerms API:
             // LuckPerms api = LuckPermsProvider.get();
-            // User user = api.getUserManager().getUser(player.getUuid());
+            // User user = api.getUserManager().getUser(player.getUUID());
             // return user.getCachedData().getPermissionData().checkPermission(permissionNode).asBoolean();
             
             return false;
@@ -416,17 +417,17 @@ public class PermissionManager {
     /**
      * Get player's permission level
      */
-    public static PermissionLevel getPermissionLevel(ServerCommandSource source) {
+    public static PermissionLevel getPermissionLevel(CommandSourceStack source) {
         try {
             if (source == null || source.getEntity() == null) {
                 return PermissionLevel.ADMIN; // Console
             }
             
-            if (source.hasPermissionLevel(2)) {
+            if (source.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER)) {
                 return PermissionLevel.ADMIN;
             }
             
-            ServerPlayerEntity player = source.getPlayer();
+            ServerPlayer player = source.getPlayer();
             if (player == null) return PermissionLevel.NONE;
             
             // Check for various permission levels

@@ -2,42 +2,42 @@ package com.example.gui;
 
 import com.example.FunctionManager;
 import com.example.AliasManager;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.ScreenHandlerType;
-import net.minecraft.screen.slot.Slot;
-import net.minecraft.screen.slot.SlotActionType;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.inventory.ContainerInput;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.chat.Component;
 
 import java.nio.file.*;
 import java.util.*;
 
-public class FunctionChestHandler extends ScreenHandler {
+public class FunctionChestHandler extends AbstractContainerMenu {
     public static final int ROWS = 6;
     public static final int COLS = 9;
     public static final int CONTAINER_SIZE = ROWS * COLS;
 
-    private final SimpleInventory inventory;
-    private final PlayerEntity player;
+    private final SimpleContainer inventory;
+    private final Player player;
     private int currentTab = 0;
     private int currentPage = 0;
     private Map<String, String> manifest = new LinkedHashMap<>();
     private List<String> localFunctions = new ArrayList<>();
 
-    public FunctionChestHandler(int syncId, PlayerInventory playerInventory) {
+    public FunctionChestHandler(int syncId, Inventory playerInventory) {
         this(syncId, playerInventory, null);
     }
 
-    public FunctionChestHandler(int syncId, PlayerInventory playerInventory, ScreenHandlerType<?> type) {
+    public FunctionChestHandler(int syncId, Inventory playerInventory, MenuType<?> type) {
         super(type != null ? type : ModScreens.FUNCTION_CHEST, syncId);
         this.player = playerInventory.player;
-        this.inventory = new SimpleInventory(CONTAINER_SIZE);
+        this.inventory = new SimpleContainer(CONTAINER_SIZE);
 
         for (int i = 0; i < CONTAINER_SIZE; i++) {
             int row = i / COLS;
@@ -65,20 +65,20 @@ public class FunctionChestHandler extends ScreenHandler {
     }
 
     private void refreshDisplay() {
-        inventory.clear();
+        inventory.clearContent();
         drawTabs();
         drawContent();
         drawNavigation();
     }
 
     private void drawTabs() {
-        inventory.setStack(0, makeItem(currentTab == 0 ? Items.LIME_STAINED_GLASS_PANE : Items.GREEN_STAINED_GLASS_PANE, "§a§lDownload"));
-        inventory.setStack(1, makeItem(currentTab == 1 ? Items.LIGHT_BLUE_STAINED_GLASS_PANE : Items.BLUE_STAINED_GLASS_PANE, "§b§lMy Functions"));
-        inventory.setStack(2, makeItem(currentTab == 2 ? Items.YELLOW_STAINED_GLASS_PANE : Items.ORANGE_STAINED_GLASS_PANE, "§e§lCreate New"));
+        inventory.setItem(0, makeItem(currentTab == 0 ? Items.LIME_STAINED_GLASS_PANE : Items.GREEN_STAINED_GLASS_PANE, "§a§lDownload"));
+        inventory.setItem(1, makeItem(currentTab == 1 ? Items.LIGHT_BLUE_STAINED_GLASS_PANE : Items.BLUE_STAINED_GLASS_PANE, "§b§lMy Functions"));
+        inventory.setItem(2, makeItem(currentTab == 2 ? Items.YELLOW_STAINED_GLASS_PANE : Items.ORANGE_STAINED_GLASS_PANE, "§e§lCreate New"));
         for (int i = 3; i < 8; i++) {
-            inventory.setStack(i, makeItem(Items.BLACK_STAINED_GLASS_PANE, " "));
+            inventory.setItem(i, makeItem(Items.BLACK_STAINED_GLASS_PANE, " "));
         }
-        inventory.setStack(8, makeItem(Items.CLOCK, "§6§lRefresh"));
+        inventory.setItem(8, makeItem(Items.CLOCK, "§6§lRefresh"));
     }
 
     private void drawContent() {
@@ -91,7 +91,7 @@ public class FunctionChestHandler extends ScreenHandler {
             int slotIdx = slotStart + i;
             int entryIdx = startIdx + i;
             if (entryIdx < entries.size()) {
-                inventory.setStack(slotIdx, entries.get(entryIdx).toItemStack());
+                inventory.setItem(slotIdx, entries.get(entryIdx).toItemStack());
             }
         }
     }
@@ -127,20 +127,20 @@ public class FunctionChestHandler extends ScreenHandler {
         int total = getCurrentEntries().size();
         int contentSlots = COLS * 4;
         int maxPage = Math.max(0, (total - 1) / contentSlots);
-        inventory.setStack(49, makeItem(Items.PAPER, "§6Page " + (currentPage + 1) + " / " + (maxPage + 1)));
-        if (currentPage > 0) inventory.setStack(45, makeItem(Items.ARROW, "§a§l← Previous"));
-        if (currentPage < maxPage) inventory.setStack(53, makeItem(Items.ARROW, "§a§lNext →"));
+        inventory.setItem(49, makeItem(Items.PAPER, "§6Page " + (currentPage + 1) + " / " + (maxPage + 1)));
+        if (currentPage > 0) inventory.setItem(45, makeItem(Items.ARROW, "§a§l← Previous"));
+        if (currentPage < maxPage) inventory.setItem(53, makeItem(Items.ARROW, "§a§lNext →"));
     }
 
-    private ItemStack makeItem(net.minecraft.item.Item item, String name) {
+    private ItemStack makeItem(net.minecraft.world.item.Item item, String name) {
         ItemStack stack = new ItemStack(item);
-        stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal(name));
+        stack.set(DataComponents.CUSTOM_NAME, Component.literal(name));
         return stack;
     }
 
     @Override
-    public void onSlotClick(int slotIndex, int button, SlotActionType actionType, PlayerEntity player) {
-        if (actionType != SlotActionType.PICKUP) return;
+    public void clicked(int slotIndex, int button, ContainerInput input, Player player) {
+        if (input != ContainerInput.PICKUP) return;
         if (slotIndex < 0 || slotIndex >= this.slots.size()) return;
         if (!(this.slots.get(slotIndex) instanceof LockedSlot)) return;
 
@@ -170,10 +170,10 @@ public class FunctionChestHandler extends ScreenHandler {
 
         FunctionEntry entry = entries.get(entryIdx);
 
-        if (player instanceof ServerPlayerEntity sp) {
+        if (player instanceof ServerPlayer sp) {
             switch (entry.type) {
                 case DOWNLOAD -> {
-                    FunctionManager.downloadFunction(entry.name, sp.getCommandSource());
+                    FunctionManager.downloadFunction(entry.name, sp.createCommandSourceStack());
                     scheduleRefresh();
                 }
                 case LOCAL -> {
@@ -183,8 +183,8 @@ public class FunctionChestHandler extends ScreenHandler {
                         } catch (Exception ignored) {}
                         scheduleRefresh();
                     } else {
-                        net.minecraft.server.command.ServerCommandSource source = sp.getCommandSource();
-                        source.getServer().getCommandManager().executeWithPrefix(
+                        net.minecraft.commands.CommandSourceStack source = sp.createCommandSourceStack();
+                        source.getServer().getCommands().performPrefixedCommand(
                             source, "/cmd function " + entry.name);
                     }
                 }
@@ -219,12 +219,12 @@ public class FunctionChestHandler extends ScreenHandler {
     }
 
     @Override
-    public ItemStack quickMove(PlayerEntity player, int slot) {
+    public ItemStack quickMoveStack(Player player, int slot) {
         return ItemStack.EMPTY;
     }
 
     @Override
-    public boolean canUse(PlayerEntity player) {
+    public boolean stillValid(Player player) {
         return true;
     }
 
@@ -242,7 +242,7 @@ public class FunctionChestHandler extends ScreenHandler {
         }
 
         ItemStack toItemStack() {
-            net.minecraft.item.Item item = switch (type) {
+            net.minecraft.world.item.Item item = switch (type) {
                 case DOWNLOAD -> Items.PAPER;
                 case LOCAL -> Items.BOOK;
                 default -> Items.WRITABLE_BOOK;
@@ -253,23 +253,23 @@ public class FunctionChestHandler extends ScreenHandler {
                 default -> "§e";
             };
             ItemStack stack = new ItemStack(item);
-            stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal(prefix + name));
+            stack.set(DataComponents.CUSTOM_NAME, Component.literal(prefix + name));
             return stack;
         }
     }
 
     private static class LockedSlot extends Slot {
-        LockedSlot(SimpleInventory inventory, int index, int x, int y) {
+        LockedSlot(SimpleContainer inventory, int index, int x, int y) {
             super(inventory, index, x, y);
         }
 
         @Override
-        public boolean canTakeItems(PlayerEntity playerEntity) {
+        public boolean mayPickup(Player playerEntity) {
             return false;
         }
 
         @Override
-        public boolean canInsert(ItemStack stack) {
+        public boolean mayPlace(ItemStack stack) {
             return false;
         }
     }

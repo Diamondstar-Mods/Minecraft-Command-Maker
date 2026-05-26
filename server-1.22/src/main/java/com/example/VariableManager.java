@@ -1,7 +1,7 @@
 package com.example;
 
 import com.mojang.brigadier.context.CommandContext;
-import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.commands.CommandSourceStack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,15 +12,15 @@ public class VariableManager {
 
     private static final Map<UUID, Map<String, String>> playerVariables = new HashMap<>();
 
-    public static String substituteVariables(String command, CommandContext<ServerCommandSource> ctx) {
-        ServerCommandSource source = ctx.getSource();
+    public static String substituteVariables(String command, CommandContext<CommandSourceStack> ctx) {
+        CommandSourceStack source = ctx.getSource();
         Map<String, String> vars = new HashMap<>();
         try {
-            vars.put("player", source.getName());
+            vars.put("player", source.getTextName());
             vars.put("x", String.valueOf(source.getPosition().x));
             vars.put("y", String.valueOf(source.getPosition().y));
             vars.put("z", String.valueOf(source.getPosition().z));
-            UUID uuid = source.getPlayer() != null ? source.getPlayer().getUuid() : null;
+            UUID uuid = source.getPlayer() != null ? source.getPlayer().getUUID() : null;
             if (uuid != null && playerVariables.containsKey(uuid)) {
                 vars.putAll(playerVariables.get(uuid));
             }
@@ -33,16 +33,16 @@ public class VariableManager {
         return command;
     }
 
-    public static int setVariable(ServerCommandSource source, String key, String value) {
+    public static int setVariable(CommandSourceStack source, String key, String value) {
         UUID uuid;
         try {
-            uuid = source.getPlayer().getUuid();
+            uuid = source.getPlayer().getUUID();
         } catch (Exception e) {
-            source.sendFeedback(() -> net.minecraft.text.Text.literal("Only players can set variables."), false);
+            source.sendSuccess(() -> net.minecraft.network.chat.Component.literal("Only players can set variables."), false);
             return 0;
         }
         playerVariables.computeIfAbsent(uuid, k -> new HashMap<>()).put(key, value);
-        source.sendFeedback(() -> net.minecraft.text.Text.literal("Set variable ${" + key + "} = " + value), false);
+        source.sendSuccess(() -> net.minecraft.network.chat.Component.literal("Set variable ${" + key + "} = " + value), false);
         return 1;
     }
 }

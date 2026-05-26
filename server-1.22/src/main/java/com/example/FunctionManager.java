@@ -2,8 +2,8 @@ package com.example;
 
 import com.google.gson.*;
 import com.mojang.brigadier.context.CommandContext;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.text.Text;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.network.chat.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,15 +22,15 @@ public class FunctionManager {
     private static long cacheTimestamp = 0;
     private static final long CACHE_TTL = 300000; // 5 minutes
 
-    public static int executeFunction(String functionName, CommandContext<ServerCommandSource> ctx) {
+    public static int executeFunction(String functionName, CommandContext<CommandSourceStack> ctx) {
         try {
             Path functionFile = AliasManager.getFunctionsPath().resolve(functionName + ".mcfunction");
             if (!Files.exists(functionFile)) {
-                ctx.getSource().sendFeedback(() -> Text.literal("§c✖ Function §f" + functionName + "§c not found"), false);
+                ctx.getSource().sendSuccess(() -> Component.literal("§c✖ Function §f" + functionName + "§c not found"), false);
                 return 0;
             }
             List<String> lines = Files.readAllLines(functionFile);
-            var cmdDispatcher = ctx.getSource().getServer().getCommandManager().getDispatcher();
+            var cmdDispatcher = ctx.getSource().getServer().getCommands().getDispatcher();
             int executed = 0;
             for (int idx = 0; idx < lines.size(); idx++) {
                 String rawLine = lines.get(idx);
@@ -45,19 +45,19 @@ public class FunctionManager {
                     int lineNum = idx + 1;
                     String errorMsg = ex.getMessage();
                     LOGGER.error("Failed to execute function '{}' at line {}: {}", functionName, lineNum, line, ex);
-                    ctx.getSource().sendFeedback(() -> Text.literal("§c✖ Error in §f" + functionName + "§c at line §f" + lineNum + "§c: §7" + errorMsg), false);
+                    ctx.getSource().sendSuccess(() -> Component.literal("§c✖ Error in §f" + functionName + "§c at line §f" + lineNum + "§c: §7" + errorMsg), false);
                     return executed;
                 }
             }
             return executed;
         } catch (Exception e) {
             LOGGER.error("Failed to execute function '{}'", functionName, e);
-            ctx.getSource().sendFeedback(() -> Text.literal("§c✖ Failed to run §f" + functionName + "§c: §7" + e.getMessage()), false);
+            ctx.getSource().sendSuccess(() -> Component.literal("§c✖ Failed to run §f" + functionName + "§c: §7" + e.getMessage()), false);
             return 0;
         }
     }
 
-    public static void downloadFunction(String functionName, ServerCommandSource source) {
+    public static void downloadFunction(String functionName, CommandSourceStack source) {
         new Thread(() -> {
             try {
                 HttpClient client = HttpClient.newHttpClient();
@@ -68,12 +68,12 @@ public class FunctionManager {
                 if (response.statusCode() == 200) {
                     Path filePath = AliasManager.getFunctionsPath().resolve(functionName + ".mcfunction");
                     Files.write(filePath, response.body().getBytes(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
-                    source.sendFeedback(() -> Text.literal("§a✔ Downloaded §f" + functionName + "§a successfully! §7Edit: config/CommandMaker/Functions/" + functionName + ".mcfunction"), false);
+                    source.sendSuccess(() -> Component.literal("§a✔ Downloaded §f" + functionName + "§a successfully! §7Edit: config/CommandMaker/Functions/" + functionName + ".mcfunction"), false);
                 } else {
-                    source.sendFeedback(() -> Text.literal("§c✖ Download failed for §f" + functionName + "§c: HTTP §7" + response.statusCode()), false);
+                    source.sendSuccess(() -> Component.literal("§c✖ Download failed for §f" + functionName + "§c: HTTP §7" + response.statusCode()), false);
                 }
             } catch (Exception e) {
-                source.sendFeedback(() -> Text.literal("§c✖ Download failed: §7" + e.getMessage()), false);
+                source.sendSuccess(() -> Component.literal("§c✖ Download failed: §7" + e.getMessage()), false);
             }
         }).start();
     }
@@ -144,31 +144,31 @@ public class FunctionManager {
         return names;
     }
 
-    public static void listDownloadableFunctions(ServerCommandSource source) {
-        source.sendFeedback(() -> Text.literal("§6⌛ Fetching function library..."), false);
+    public static void listDownloadableFunctions(CommandSourceStack source) {
+        source.sendSuccess(() -> Component.literal("§6⌛ Fetching function library..."), false);
         new Thread(() -> {
             try {
                 Map<String, String> manifest = fetchFunctionManifest();
                 if (manifest.isEmpty()) {
-                    source.sendFeedback(() -> Text.literal("§c✖ No downloadable functions available"), false);
+                    source.sendSuccess(() -> Component.literal("§c✖ No downloadable functions available"), false);
                 } else {
-                    source.sendFeedback(() -> Text.literal("§6§l▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"), false);
-                    source.sendFeedback(() -> Text.literal("§6§l📦 Downloadable Functions §7(§f" + manifest.size() + "§7 available)"), false);
-                    source.sendFeedback(() -> Text.literal("§7Use §e/cmd downloadfunction <name> §7or open the GUI with §e/cmd functions"), false);
-                    source.sendFeedback(() -> Text.literal("§6§l▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"), false);
+                    source.sendSuccess(() -> Component.literal("§6§l▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"), false);
+                    source.sendSuccess(() -> Component.literal("§6§l📦 Downloadable Functions §7(§f" + manifest.size() + "§7 available)"), false);
+                    source.sendSuccess(() -> Component.literal("§7Use §e/cmd downloadfunction <name> §7or open the GUI with §e/cmd functions"), false);
+                    source.sendSuccess(() -> Component.literal("§6§l▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"), false);
                     for (Map.Entry<String, String> entry : manifest.entrySet()) {
                         String name = entry.getKey();
                         String desc = entry.getValue();
                         if (desc != null && !desc.isEmpty()) {
-                            source.sendFeedback(() -> Text.literal("§a  ◆ §f" + name + " §8▶ §7" + desc), false);
+                            source.sendSuccess(() -> Component.literal("§a  ◆ §f" + name + " §8▶ §7" + desc), false);
                         } else {
-                            source.sendFeedback(() -> Text.literal("§a  ◆ §f" + name), false);
+                            source.sendSuccess(() -> Component.literal("§a  ◆ §f" + name), false);
                         }
                     }
-                    source.sendFeedback(() -> Text.literal("§7─────────────────────────────"), false);
+                    source.sendSuccess(() -> Component.literal("§7─────────────────────────────"), false);
                 }
             } catch (Exception e) {
-                source.sendFeedback(() -> Text.literal("§cFailed to fetch function list: " + e.getMessage()), false);
+                source.sendSuccess(() -> Component.literal("§cFailed to fetch function list: " + e.getMessage()), false);
             }
         }).start();
     }

@@ -1,8 +1,8 @@
 package com.example.gui;
 
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.text.Text;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
 import com.google.gson.*;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -28,12 +28,12 @@ public class FunctionManagerScreen extends Screen {
     private int guiLeft, guiTop;
 
     public FunctionManagerScreen(Screen previousScreen) {
-        super(Text.literal("Command Maker - Functions"));
+        super(Component.literal("Command Maker - Functions"));
         this.previousScreen = previousScreen;
     }
 
     @Override
-    protected void init() {
+    public void added() {
         super.init();
         this.guiLeft = (this.width - TEXTURE_W) / 2;
         this.guiTop = (this.height - TEXTURE_H) / 2;
@@ -81,9 +81,9 @@ public class FunctionManagerScreen extends Screen {
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        this.renderBackground(context, mouseX, mouseY, delta);
-        super.render(context, mouseX, mouseY, delta);
+    public void extractRenderState(GuiGraphicsExtractor context, int mouseX, int mouseY, float delta) {
+        this.extractBackground(context, mouseX, mouseY, delta);
+        super.extractRenderState(context, mouseX, mouseY, delta);
 
         // Draw chest-like background (dark border + light interior)
         context.fill(guiLeft - 2, guiTop - 2, guiLeft + TEXTURE_W + 2, guiTop + TEXTURE_H + 2, 0xFF000000);
@@ -91,10 +91,10 @@ public class FunctionManagerScreen extends Screen {
 
         // Title bar
         context.fill(guiLeft, guiTop, guiLeft + TEXTURE_W, guiTop + 16, 0xFF404040);
-        context.drawText(this.textRenderer, Text.literal("§6§lCommand Maker - Functions"), guiLeft + 8, guiTop + 4, 0xFFFFFF, false);
+        context.text(this.getFont(), Component.literal("§6§lCommand Maker - Functions"), guiLeft + 8, guiTop + 4, 0xFFFFFF, false);
 
         if (loading) {
-            context.drawText(this.textRenderer, Text.literal(statusMessage), guiLeft + 8, guiTop + 30, 0xFFFFFF, false);
+            context.text(this.getFont(), Component.literal(statusMessage), guiLeft + 8, guiTop + 30, 0xFFFFFF, false);
             return;
         }
 
@@ -103,7 +103,7 @@ public class FunctionManagerScreen extends Screen {
         drawNavigation(context, mouseX, mouseY);
     }
 
-    private void drawTabs(DrawContext context, int mouseX, int mouseY) {
+    private void drawTabs(GuiGraphicsExtractor context, int mouseX, int mouseY) {
         int tabY = guiTop + 18;
         String[] labels = {"Download", "My Functions", "Create"};
 
@@ -115,11 +115,11 @@ public class FunctionManagerScreen extends Screen {
 
             context.fill(x, tabY, x + 50, tabY + 14, tabColor);
             context.fill(x, tabY, x + 50, tabY + 1, active ? 0xFF55FF55 : 0xFF3D3D3D); // green underline for active
-            context.drawText(this.textRenderer, Text.literal(labels[i]), x + 4, tabY + 3, textColor, false);
+            context.text(this.getFont(), Component.literal(labels[i]), x + 4, tabY + 3, textColor, false);
         }
     }
 
-    private void drawFunctionSlots(DrawContext context, int mouseX, int mouseY) {
+    private void drawFunctionSlots(GuiGraphicsExtractor context, int mouseX, int mouseY) {
         int startX = guiLeft + 8;
         int startY = guiTop + 36;
         int slotAreaRows = ROWS - 2;
@@ -145,8 +145,8 @@ public class FunctionManagerScreen extends Screen {
         }
 
         int infoY = startY + slotAreaRows * SLOT_SIZE + 4;
-        context.drawText(this.textRenderer,
-            Text.literal("Page " + (currentPage + 1) + " - " + slots.size() + " items"),
+        context.text(this.getFont(),
+            Component.literal("Page " + (currentPage + 1) + " - " + slots.size() + " items"),
             guiLeft + 8, infoY, 0x808080, false);
     }
 
@@ -178,7 +178,7 @@ public class FunctionManagerScreen extends Screen {
         return slots;
     }
 
-    private void drawSlot(DrawContext context, int x, int y, SlotData slot, int mouseX, int mouseY) {
+    private void drawSlot(GuiGraphicsExtractor context, int x, int y, SlotData slot, int mouseX, int mouseY) {
         boolean hovered = mouseX >= x && mouseX < x + SLOT_SIZE && mouseY >= y && mouseY < y + SLOT_SIZE;
 
         // Slot background
@@ -197,12 +197,12 @@ public class FunctionManagerScreen extends Screen {
 
         // First letter of slot name as icon
         String letter = slot.name.substring(0, 1).toUpperCase();
-        context.drawText(this.textRenderer, Text.literal("§f" + letter), x + 6, y + 4, 0xFFFFFF, false);
+        context.text(this.getFont(), Component.literal("§f" + letter), x + 6, y + 4, 0xFFFFFF, false);
 
         if (hovered && slot.description != null && !slot.description.isEmpty()) {
-            List<Text> tooltip = new ArrayList<>();
-            tooltip.add(Text.literal("§e" + slot.name));
-            tooltip.add(Text.literal("§7" + slot.description));
+            List<Component> tooltip = new ArrayList<>();
+            tooltip.add(Component.literal("§e" + slot.name));
+            tooltip.add(Component.literal("§7" + slot.description));
             String actionHint = switch (slot.action) {
                 case DOWNLOAD -> "§aClick to download";
                 case RUN_DELETE -> "§aLeft-click to run  §cRight-click to delete";
@@ -210,13 +210,15 @@ public class FunctionManagerScreen extends Screen {
                 default -> "";
             };
             if (!actionHint.isEmpty()) {
-                tooltip.add(Text.literal(actionHint));
+                tooltip.add(Component.literal(actionHint));
             }
-            context.drawTooltip(this.textRenderer, tooltip, mouseX + 5, mouseY + 5);
+            // Tooltip system changed in MC 26.1
+
+            // context.drawTooltip(this.getFont(), tooltip, mouseX + 5, mouseY + 5);
         }
     }
 
-    private void drawNavigation(DrawContext context, int mouseX, int mouseY) {
+    private void drawNavigation(GuiGraphicsExtractor context, int mouseX, int mouseY) {
         int navY = guiTop + TEXTURE_H - 28;
         int totalSlots = getCurrentSlots().size();
         int slotRows = ROWS - 2;
@@ -224,15 +226,15 @@ public class FunctionManagerScreen extends Screen {
 
         // Page info
         String pageInfo = "Page " + (currentPage + 1) + " / " + (maxPage + 1);
-        int infoWidth = this.textRenderer.getWidth(pageInfo);
-        context.drawText(this.textRenderer, Text.literal(pageInfo), guiLeft + (TEXTURE_W - infoWidth) / 2, navY + 4, 0xFFFFFF, false);
+        int infoWidth = this.getFont().width(pageInfo);
+        context.text(this.getFont(), Component.literal(pageInfo), guiLeft + (TEXTURE_W - infoWidth) / 2, navY + 4, 0xFFFFFF, false);
 
         // Prev button
         if (currentPage > 0) {
             int px = guiLeft + 8;
             context.fill(px, navY, px + 20, navY + 16, 0xFF3D8B3D);
             context.fill(px + 1, navY + 1, px + 19, navY + 15, 0xFF55FF55);
-            context.drawText(this.textRenderer, Text.literal("§0<"), px + 7, navY + 3, 0xFFFFFF, false);
+            context.text(this.getFont(), Component.literal("§0<"), px + 7, navY + 3, 0xFFFFFF, false);
         }
 
         // Next button
@@ -240,7 +242,7 @@ public class FunctionManagerScreen extends Screen {
             int nx = guiLeft + TEXTURE_W - 28;
             context.fill(nx, navY, nx + 20, navY + 16, 0xFF3D8B3D);
             context.fill(nx + 1, navY + 1, nx + 19, navY + 15, 0xFF55FF55);
-            context.drawText(this.textRenderer, Text.literal("§0>"), nx + 7, navY + 3, 0xFFFFFF, false);
+            context.text(this.getFont(), Component.literal("§0>"), nx + 7, navY + 3, 0xFFFFFF, false);
         }
     }
 
@@ -304,11 +306,11 @@ public class FunctionManagerScreen extends Screen {
     }
 
     private void handleSlotClick(SlotData slot, int button) {
-        if (this.client == null || this.client.player == null) return;
+        if (this.minecraft == null || this.minecraft.player == null) return;
 
         switch (slot.action) {
             case DOWNLOAD -> {
-                this.client.player.networkHandler.sendChatMessage("/cmd downloadfunction " + slot.name);
+                this.minecraft.player.connection.sendCommand("/cmd downloadfunction " + slot.name);
                 statusMessage = "§aDownloading: " + slot.name;
                 new Thread(() -> {
                     try { Thread.sleep(2000); } catch (InterruptedException ignored) {}
@@ -317,31 +319,31 @@ public class FunctionManagerScreen extends Screen {
             }
             case RUN_DELETE -> {
                 if (button == 1) {
-                    this.client.player.networkHandler.sendChatMessage("/cmd function delete " + slot.name);
+                    this.minecraft.player.connection.sendCommand("/cmd function delete " + slot.name);
                     localFunctions.remove(slot.name);
                     statusMessage = "§cDeleted: " + slot.name;
                 } else {
-                    this.client.player.networkHandler.sendChatMessage("/cmd function " + slot.name);
+                    this.minecraft.player.connection.sendCommand("/cmd function " + slot.name);
                     statusMessage = "§6Running: " + slot.name;
                 }
             }
             case CREATE_EMPTY -> {
-                this.client.player.networkHandler.sendChatMessage("/cmd function create empty_" + System.currentTimeMillis() % 100000);
+                this.minecraft.player.connection.sendCommand("/cmd function create empty_" + System.currentTimeMillis() % 100000);
                 statusMessage = "§aCreating empty function...";
                 scheduleRefresh();
             }
             case CREATE_COMMAND -> {
-                this.client.player.networkHandler.sendChatMessage("/cmd function create cmd_" + System.currentTimeMillis() % 100000);
+                this.minecraft.player.connection.sendCommand("/cmd function create cmd_" + System.currentTimeMillis() % 100000);
                 statusMessage = "§aCreating command template...";
                 scheduleRefresh();
             }
             case CREATE_MOB -> {
-                this.client.player.networkHandler.sendChatMessage("/cmd function create mob_" + System.currentTimeMillis() % 100000);
+                this.minecraft.player.connection.sendCommand("/cmd function create mob_" + System.currentTimeMillis() % 100000);
                 statusMessage = "§aCreating mob template...";
                 scheduleRefresh();
             }
             case CREATE_BUILD -> {
-                this.client.player.networkHandler.sendChatMessage("/cmd function create build_" + System.currentTimeMillis() % 100000);
+                this.minecraft.player.connection.sendCommand("/cmd function create build_" + System.currentTimeMillis() % 100000);
                 statusMessage = "§aCreating building template...";
                 scheduleRefresh();
             }
@@ -370,9 +372,9 @@ public class FunctionManagerScreen extends Screen {
     }
 
     @Override
-    public void close() {
-        if (this.client != null) {
-            this.client.setScreen(previousScreen);
+    public void onClose() {
+        if (this.minecraft != null) {
+            this.minecraft.setScreen(previousScreen);
         }
     }
 

@@ -1,8 +1,8 @@
 package com.example.gui;
 
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.text.Text;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,24 +21,24 @@ public class AliasDeleteScreen extends Screen {
 	private final int visibleRows = 5;
 
 	public AliasDeleteScreen(Map<String, String> aliases, Screen previousScreen) {
-		super(Text.literal("Delete Aliases"));
+		super(Component.literal("Delete Aliases"));
 		this.aliases = new HashMap<>(aliases);
 		this.previousScreen = previousScreen;
 		this.aliasNames = new ArrayList<>(aliases.keySet());
 	}
 
 	@Override
-	protected void init() {
+    public void added() {
 		super.init();
 	}
 
 	@Override
-	public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-		this.renderBackground(context, mouseX, mouseY, delta);
+	public void extractRenderState(GuiGraphicsExtractor context, int mouseX, int mouseY, float delta) {
+		this.extractBackground(context, mouseX, mouseY, delta);
 		context.fill(0, 0, this.width, this.height, 0xFF8B8B8B);
 
 		int titleY = PADDING;
-		context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, titleY, 0xFFFFFF);
+		context.centeredText(this.getFont(), this.title, this.width / 2, titleY, 0xFFFFFF);
 
 		int startX = PADDING;
 		int startY = PADDING + 20;
@@ -66,11 +66,11 @@ public class AliasDeleteScreen extends Screen {
 		}
 
 		int instructY = endY + PADDING;
-		context.drawTextWithShadow(this.textRenderer, Text.literal("Click a block to delete the alias"), startX, instructY, 0xFFFFFF);
-		context.drawTextWithShadow(this.textRenderer, Text.literal("Press ESC to go back"), startX, instructY + 12, 0xFFAAAAAA);
+		context.text(this.getFont(), Component.literal("Click a block to delete the alias"), startX, instructY, 0xFFFFFF);
+		context.text(this.getFont(), Component.literal("Press ESC to go back"), startX, instructY + 12, 0xFFAAAAAA);
 	}
 
-	private void drawStoneBlock(DrawContext context, int x, int y, String alias, String command, int mouseX, int mouseY) {
+	private void drawStoneBlock(GuiGraphicsExtractor context, int x, int y, String alias, String command, int mouseX, int mouseY) {
 		boolean isHovered = mouseX >= x && mouseX < x + SLOT_SIZE && mouseY >= y && mouseY < y + SLOT_SIZE;
 
 		int bgColor = isHovered ? 0xFF5F5F5F : 0xFF4F4F4F;
@@ -83,10 +83,12 @@ public class AliasDeleteScreen extends Screen {
 		context.fill(x, y + SLOT_SIZE - 1, x + SLOT_SIZE, y + SLOT_SIZE, 0xFF333333);
 
 		if (isHovered) {
-			List<Text> tooltip = new ArrayList<>();
-			tooltip.add(Text.literal("§6/" + alias));
-			tooltip.add(Text.literal("§7Command: " + command));
-			context.drawTooltip(this.textRenderer, tooltip, mouseX + 5, mouseY + 5);
+			List<Component> tooltip = new ArrayList<>();
+			tooltip.add(Component.literal("§6/" + alias));
+			tooltip.add(Component.literal("§7Command: " + command));
+			// Tooltip system changed in MC 26.1
+
+			// context.drawTooltip(this.getFont(), tooltip, mouseX + 5, mouseY + 5);
 		}
 	}
 
@@ -129,8 +131,8 @@ public class AliasDeleteScreen extends Screen {
 	}
 
 	private void deleteAlias(String alias) {
-		if (this.client != null && this.client.player != null) {
-			this.client.player.networkHandler.sendChatMessage("/cmd del " + alias);
+		if (this.minecraft != null && this.minecraft.player != null) {
+			this.minecraft.player.connection.sendCommand("/cmd del " + alias);
 		}
 
 		aliases.remove(alias);
@@ -138,8 +140,8 @@ public class AliasDeleteScreen extends Screen {
 	}
 
 	@Override
-	public void close() {
-		this.client.setScreen(previousScreen);
+	public void onClose() {
+		this.minecraft.setScreen(previousScreen);
 	}
 
 	@Override
