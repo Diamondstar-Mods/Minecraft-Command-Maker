@@ -283,7 +283,7 @@ CM.pages = CM.buildSearchIndex();
 // Edit button for navbar
 CM.renderEditLink = function () {
   const fn = CM.config.currentFile();
-  const url = `${CM.config.repoUrl}/edit/${CM.config.editBranch}/docs/${fn}.html`;
+  const url = `${CM.config.repoUrl}/edit/${CM.config.editBranch}/docs/${fn}`;
   return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="nav-link edit-nav-link" title="Edit this page on GitHub">✏️ Edit</a>`;
 };
 
