@@ -103,7 +103,7 @@ public class FunctionManagerScreen extends Screen {
         drawNavigation(context, mouseX, mouseY);
     }
 
-    private void drawTabs(DrawContext context, int mouseX, int mouseY) {
+    private void drawTabs(MatrixStack context, int mouseX, int mouseY) {
         int tabY = guiTop + 18;
         String[] labels = {"Download", "My Functions", "Create"};
 
@@ -119,7 +119,7 @@ public class FunctionManagerScreen extends Screen {
         }
     }
 
-    private void drawFunctionSlots(DrawContext context, int mouseX, int mouseY) {
+    private void drawFunctionSlots(MatrixStack context, int mouseX, int mouseY) {
         int startX = guiLeft + 8;
         int startY = guiTop + 36;
         int slotAreaRows = ROWS - 2;
@@ -177,7 +177,7 @@ public class FunctionManagerScreen extends Screen {
         return slots;
     }
 
-    private void drawSlot(DrawContext context, int x, int y, SlotData slot, int mouseX, int mouseY) {
+    private void drawSlot(MatrixStack context, int x, int y, SlotData slot, int mouseX, int mouseY) {
         boolean hovered = mouseX >= x && mouseX < x + SLOT_SIZE && mouseY >= y && mouseY < y + SLOT_SIZE;
 
         // Slot background
@@ -215,7 +215,7 @@ public class FunctionManagerScreen extends Screen {
         }
     }
 
-    private void drawNavigation(DrawContext context, int mouseX, int mouseY) {
+    private void drawNavigation(MatrixStack context, int mouseX, int mouseY) {
         int navY = guiTop + TEXTURE_H - 28;
         int totalSlots = getCurrentSlots().size();
         int slotRows = ROWS - 2;

@@ -38,7 +38,7 @@ public class AliasDeleteScreen extends Screen {
 		fill(matrices, 0, 0, this.width, this.height, 0xFF8B8B8B);
 
 		int titleY = PADDING;
-		context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, titleY, 0xFFFFFF);
+		drawCenteredText(matrices, this.textRenderer, this.title, this.width / 2, titleY, 0xFFFFFF);
 
 		int startX = PADDING;
 		int startY = PADDING + 20;
@@ -66,11 +66,11 @@ public class AliasDeleteScreen extends Screen {
 		}
 
 		int instructY = endY + PADDING;
-		context.drawTextWithShadow(this.textRenderer, Text.literal("Click a block to delete the alias"), startX, instructY, 0xFFFFFF);
-		context.drawTextWithShadow(this.textRenderer, Text.literal("Press ESC to go back"), startX, instructY + 12, 0xFFAAAAAA);
+		drawTextWithShadow(matrices, this.textRenderer, Text.literal("Click a block to delete the alias"), startX, instructY, 0xFFFFFF);
+		drawTextWithShadow(matrices, this.textRenderer, Text.literal("Press ESC to go back"), startX, instructY + 12, 0xFFAAAAAA);
 	}
 
-	private void drawStoneBlock(DrawContext context, int x, int y, String alias, String command, int mouseX, int mouseY) {
+	private void drawStoneBlock(MatrixStack context, int x, int y, String alias, String command, int mouseX, int mouseY) {
 		boolean isHovered = mouseX >= x && mouseX < x + SLOT_SIZE && mouseY >= y && mouseY < y + SLOT_SIZE;
 
 		int bgColor = isHovered ? 0xFF5F5F5F : 0xFF4F4F4F;

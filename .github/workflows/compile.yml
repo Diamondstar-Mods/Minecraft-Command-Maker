@@ -33,7 +33,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up JDK 21
+      - name: Set up JDK 25
         uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -55,7 +55,7 @@ jobs:
           distribution: temurin
           java-version: 21
 
-      - name: Build :server-client
+      - name: Build :client
         run: ./gradlew :client:build
 
 
