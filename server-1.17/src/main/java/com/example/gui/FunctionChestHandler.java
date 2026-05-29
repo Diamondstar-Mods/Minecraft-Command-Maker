@@ -13,6 +13,7 @@ import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
+import net.minecraft.text.LiteralText;
 
 import java.nio.file.*;
 import java.util.*;
@@ -133,7 +134,7 @@ public class FunctionChestHandler extends ScreenHandler {
 
     private ItemStack makeItem(net.minecraft.item.Item item, String name) {
         ItemStack stack = new ItemStack(item);
-        stack.setCustomName(Text.literal(name));
+        stack.setCustomName(new LiteralText(name));
         return stack;
     }
 
@@ -183,7 +184,7 @@ public class FunctionChestHandler extends ScreenHandler {
                         scheduleRefresh();
                     } else {
                         net.minecraft.server.command.ServerCommandSource source = sp.getCommandSource();
-                        source.getServer().getCommandManager().executeWithPrefix(
+                        source.getServer().getCommandManager().execute(
                             source, "/cmd function " + entry.name);
                     }
                 }
@@ -252,7 +253,7 @@ public class FunctionChestHandler extends ScreenHandler {
                 default -> "§e";
             };
             ItemStack stack = new ItemStack(item);
-            stack.setCustomName(Text.literal(prefix + name));
+            stack.setCustomName(new LiteralText(prefix + name));
             return stack;
         }
     }

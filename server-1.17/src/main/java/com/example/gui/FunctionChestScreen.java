@@ -4,10 +4,10 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
 
 public class FunctionChestScreen extends HandledScreen<FunctionChestHandler> {
-    private static final Identifier TEXTURE = new Identifier("minecraft", "textures/gui/container/generic_54.png");
+    private static final int TEXTURE_W = 176;
+    private static final int TEXTURE_H = 222;
 
     public FunctionChestScreen(FunctionChestHandler handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title);
@@ -16,17 +16,15 @@ public class FunctionChestScreen extends HandledScreen<FunctionChestHandler> {
     }
 
     @Override
-    protected void drawBackground(MatrixStack context, float delta, int mouseX, int mouseY) {
+    protected void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY) {
         int x = (this.width - this.backgroundWidth) / 2;
         int y = (this.height - this.backgroundHeight) / 2;
 
-        // Draw chest background using fills (avoids API compatibility issues)
         int texW = this.backgroundWidth;
         int texH = this.backgroundHeight;
         fill(matrices, x - 3, y - 3, x + texW + 3, y + texH + 3, 0xFF000000);
         fill(matrices, x, y, x + texW, y + texH, 0xFFC6C6C6);
 
-        // Draw slot backgrounds
         int slotSize = 18;
         for (int i = 0; i < FunctionChestHandler.ROWS; i++) {
             for (int j = 0; j < FunctionChestHandler.COLS; j++) {
@@ -39,14 +37,14 @@ public class FunctionChestScreen extends HandledScreen<FunctionChestHandler> {
     }
 
     @Override
-    public void render(MatrixStack context, int mouseX, int mouseY, float delta) {
-        super.render(context, mouseX, mouseY, delta);
-        this.drawMouseoverTooltip(context, mouseX, mouseY);
+    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+        super.render(matrices, mouseX, mouseY, delta);
+        this.drawMouseoverTooltip(matrices, mouseX, mouseY);
     }
 
     @Override
-    protected void drawForeground(MatrixStack context, int mouseX, int mouseY) {
-        this.textRenderer.draw(matrices, Text.literal("§6§lCommand Maker - Functions"), 8, 6, 0x404040, false);
-        this.textRenderer.draw(matrices, this.playerInventoryTitle, 8, this.backgroundHeight - 94, 0x404040, false);
+    protected void drawForeground(MatrixStack matrices, int mouseX, int mouseY) {
+        this.textRenderer.draw(matrices, "§6§lCommand Maker - Functions", 8, 6, 0x404040);
+        this.textRenderer.draw(matrices, this.playerInventoryTitle.asOrderedText(), 8, this.backgroundHeight - 94, 0x404040);
     }
 }

@@ -3,6 +3,7 @@ package com.example.gui;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
+import net.minecraft.text.LiteralText;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,7 +22,7 @@ public class AliasDeleteScreen extends Screen {
 	private final int visibleRows = 5;
 
 	public AliasDeleteScreen(Map<String, String> aliases, Screen previousScreen) {
-		super(Text.literal("Delete Aliases"));
+		super(new LiteralText("Delete Aliases"));
 		this.aliases = new HashMap<>(aliases);
 		this.previousScreen = previousScreen;
 		this.aliasNames = new ArrayList<>(aliases.keySet());
@@ -33,7 +34,7 @@ public class AliasDeleteScreen extends Screen {
 	}
 
 	@Override
-	public void render(MatrixStack context, int mouseX, int mouseY, float delta) {
+	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
 		this.renderBackground(matrices);
 		fill(matrices, 0, 0, this.width, this.height, 0xFF8B8B8B);
 
@@ -66,11 +67,11 @@ public class AliasDeleteScreen extends Screen {
 		}
 
 		int instructY = endY + PADDING;
-		drawTextWithShadow(matrices, this.textRenderer, Text.literal("Click a block to delete the alias"), startX, instructY, 0xFFFFFF);
-		drawTextWithShadow(matrices, this.textRenderer, Text.literal("Press ESC to go back"), startX, instructY + 12, 0xFFAAAAAA);
+		this.textRenderer.drawWithShadow(matrices, new LiteralText("Click a block to delete the alias"), startX, instructY, 0xFFFFFF);
+		this.textRenderer.drawWithShadow(matrices, new LiteralText("Press ESC to go back"), startX, instructY + 12, 0xFFAAAAAA);
 	}
 
-	private void drawStoneBlock(MatrixStack context, int x, int y, String alias, String command, int mouseX, int mouseY) {
+	private void drawStoneBlock(MatrixStack matrices, int x, int y, String alias, String command, int mouseX, int mouseY) {
 		boolean isHovered = mouseX >= x && mouseX < x + SLOT_SIZE && mouseY >= y && mouseY < y + SLOT_SIZE;
 
 		int bgColor = isHovered ? 0xFF5F5F5F : 0xFF4F4F4F;
@@ -84,18 +85,18 @@ public class AliasDeleteScreen extends Screen {
 
 		if (isHovered) {
 			List<Text> tooltip = new ArrayList<>();
-			tooltip.add(Text.literal("§6/" + alias));
-			tooltip.add(Text.literal("§7Command: " + command));
-			renderTooltip(matrices, tooltip, mouseX + 5, mouseY + 5);
+			tooltip.add(new LiteralText("§6/" + alias));
+			tooltip.add(new LiteralText("§7Command: " + command));
+			this.renderTooltip(matrices, tooltip, mouseX + 5, mouseY + 5);
 		}
 	}
 
 	@Override
-	public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
+	public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
 		int totalSlots = aliasNames.size();
 		int maxScroll = Math.max(0, (totalSlots + COLUMNS - 1) / COLUMNS - visibleRows);
 
-		scrollOffset -= (int) verticalAmount;
+		scrollOffset -= (int) amount;
 		if (scrollOffset < 0) scrollOffset = 0;
 		if (scrollOffset > maxScroll) scrollOffset = maxScroll;
 
@@ -130,7 +131,7 @@ public class AliasDeleteScreen extends Screen {
 
 	private void deleteAlias(String alias) {
 		if (this.client != null && this.client.player != null) {
-			this.client.player.networkHandler.sendChatMessage("/cmd del " + alias);
+			this.client.player.sendChatMessage("/cmd del " + alias);
 		}
 
 		aliases.remove(alias);

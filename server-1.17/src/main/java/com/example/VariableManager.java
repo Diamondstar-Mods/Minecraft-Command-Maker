@@ -2,6 +2,7 @@ package com.example;
 
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.text.LiteralText;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,11 +39,11 @@ public class VariableManager {
         try {
             uuid = source.getPlayer().getUuid();
         } catch (Exception e) {
-            source.sendFeedback(() -> net.minecraft.text.Text.literal("Only players can set variables."), false);
+            source.sendFeedback(new LiteralText("Only players can set variables."), false);
             return 0;
         }
         playerVariables.computeIfAbsent(uuid, k -> new HashMap<>()).put(key, value);
-        source.sendFeedback(() -> net.minecraft.text.Text.literal("Set variable ${" + key + "} = " + value), false);
+        source.sendFeedback(new LiteralText("Set variable ${" + key + "} = " + value), false);
         return 1;
     }
 }

@@ -3,6 +3,7 @@ package com.example.gui;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
+import net.minecraft.text.LiteralText;
 import com.google.gson.*;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -28,7 +29,7 @@ public class FunctionManagerScreen extends Screen {
     private int guiLeft, guiTop;
 
     public FunctionManagerScreen(Screen previousScreen) {
-        super(Text.literal("Command Maker - Functions"));
+        super(new LiteralText("Command Maker - Functions"));
         this.previousScreen = previousScreen;
     }
 
@@ -81,7 +82,7 @@ public class FunctionManagerScreen extends Screen {
     }
 
     @Override
-    public void render(MatrixStack context, int mouseX, int mouseY, float delta) {
+    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         this.renderBackground(matrices);
         super.render(context, mouseX, mouseY, delta);
 
@@ -91,10 +92,10 @@ public class FunctionManagerScreen extends Screen {
 
         // Title bar
         fill(matrices, guiLeft, guiTop, guiLeft + TEXTURE_W, guiTop + 16, 0xFF404040);
-        this.textRenderer.draw(matrices, Text.literal("§6§lCommand Maker - Functions"), guiLeft + 8, guiTop + 4, 0xFFFFFF, false);
+        this.textRenderer.draw(matrices, new LiteralText("§6§lCommand Maker - Functions"), guiLeft + 8, guiTop + 4, 0xFFFFFF, false);
 
         if (loading) {
-            this.textRenderer.draw(matrices, Text.literal(statusMessage), guiLeft + 8, guiTop + 30, 0xFFFFFF, false);
+            this.textRenderer.draw(matrices, new LiteralText(statusMessage), guiLeft + 8, guiTop + 30, 0xFFFFFF, false);
             return;
         }
 
@@ -103,7 +104,7 @@ public class FunctionManagerScreen extends Screen {
         drawNavigation(context, mouseX, mouseY);
     }
 
-    private void drawTabs(MatrixStack context, int mouseX, int mouseY) {
+    private void drawTabs(MatrixStack matrices, int mouseX, int mouseY) {
         int tabY = guiTop + 18;
         String[] labels = {"Download", "My Functions", "Create"};
 
@@ -115,11 +116,11 @@ public class FunctionManagerScreen extends Screen {
 
             fill(matrices, x, tabY, x + 50, tabY + 14, tabColor);
             fill(matrices, x, tabY, x + 50, tabY + 1, active ? 0xFF55FF55 : 0xFF3D3D3D); // green underline for active
-            this.textRenderer.draw(matrices, Text.literal(labels[i]), x + 4, tabY + 3, textColor, false);
+            this.textRenderer.draw(matrices, new LiteralText(labels[i]), x + 4, tabY + 3, textColor, false);
         }
     }
 
-    private void drawFunctionSlots(MatrixStack context, int mouseX, int mouseY) {
+    private void drawFunctionSlots(MatrixStack matrices, int mouseX, int mouseY) {
         int startX = guiLeft + 8;
         int startY = guiTop + 36;
         int slotAreaRows = ROWS - 2;
@@ -145,7 +146,8 @@ public class FunctionManagerScreen extends Screen {
         }
 
         int infoY = startY + slotAreaRows * SLOT_SIZE + 4;
-        this.textRenderer.draw(matrices, Text.literal("Page " + (currentPage + 1) + " - " + slots.size() + " items"),
+        context.drawText(this.textRenderer,
+            new LiteralText("Page " + (currentPage + 1) + " - " + slots.size() + " items"),
             guiLeft + 8, infoY, 0x808080, false);
     }
 
@@ -177,7 +179,7 @@ public class FunctionManagerScreen extends Screen {
         return slots;
     }
 
-    private void drawSlot(MatrixStack context, int x, int y, SlotData slot, int mouseX, int mouseY) {
+    private void drawSlot(MatrixStack matrices, int x, int y, SlotData slot, int mouseX, int mouseY) {
         boolean hovered = mouseX >= x && mouseX < x + SLOT_SIZE && mouseY >= y && mouseY < y + SLOT_SIZE;
 
         // Slot background
@@ -196,12 +198,12 @@ public class FunctionManagerScreen extends Screen {
 
         // First letter of slot name as icon
         String letter = slot.name.substring(0, 1).toUpperCase();
-        this.textRenderer.draw(matrices, Text.literal("§f" + letter), x + 6, y + 4, 0xFFFFFF, false);
+        this.textRenderer.draw(matrices, new LiteralText("§f" + letter), x + 6, y + 4, 0xFFFFFF, false);
 
         if (hovered && slot.description != null && !slot.description.isEmpty()) {
             List<Text> tooltip = new ArrayList<>();
-            tooltip.add(Text.literal("§e" + slot.name));
-            tooltip.add(Text.literal("§7" + slot.description));
+            tooltip.add(new LiteralText("§e" + slot.name));
+            tooltip.add(new LiteralText("§7" + slot.description));
             String actionHint = switch (slot.action) {
                 case DOWNLOAD -> "§aClick to download";
                 case RUN_DELETE -> "§aLeft-click to run  §cRight-click to delete";
@@ -209,13 +211,13 @@ public class FunctionManagerScreen extends Screen {
                 default -> "";
             };
             if (!actionHint.isEmpty()) {
-                tooltip.add(Text.literal(actionHint));
+                tooltip.add(new LiteralText(actionHint));
             }
-            renderTooltip(matrices, tooltip, mouseX + 5, mouseY + 5);
+            this.renderTooltip(matrices, tooltip, mouseX + 5, mouseY + 5);
         }
     }
 
-    private void drawNavigation(MatrixStack context, int mouseX, int mouseY) {
+    private void drawNavigation(MatrixStack matrices, int mouseX, int mouseY) {
         int navY = guiTop + TEXTURE_H - 28;
         int totalSlots = getCurrentSlots().size();
         int slotRows = ROWS - 2;
@@ -224,14 +226,14 @@ public class FunctionManagerScreen extends Screen {
         // Page info
         String pageInfo = "Page " + (currentPage + 1) + " / " + (maxPage + 1);
         int infoWidth = this.textRenderer.getWidth(pageInfo);
-        this.textRenderer.draw(matrices, Text.literal(pageInfo), guiLeft + (TEXTURE_W - infoWidth) / 2, navY + 4, 0xFFFFFF, false);
+        this.textRenderer.draw(matrices, new LiteralText(pageInfo), guiLeft + (TEXTURE_W - infoWidth) / 2, navY + 4, 0xFFFFFF, false);
 
         // Prev button
         if (currentPage > 0) {
             int px = guiLeft + 8;
             fill(matrices, px, navY, px + 20, navY + 16, 0xFF3D8B3D);
             fill(matrices, px + 1, navY + 1, px + 19, navY + 15, 0xFF55FF55);
-            this.textRenderer.draw(matrices, Text.literal("§0<"), px + 7, navY + 3, 0xFFFFFF, false);
+            this.textRenderer.draw(matrices, new LiteralText("§0<"), px + 7, navY + 3, 0xFFFFFF, false);
         }
 
         // Next button
@@ -239,7 +241,7 @@ public class FunctionManagerScreen extends Screen {
             int nx = guiLeft + TEXTURE_W - 28;
             fill(matrices, nx, navY, nx + 20, navY + 16, 0xFF3D8B3D);
             fill(matrices, nx + 1, navY + 1, nx + 19, navY + 15, 0xFF55FF55);
-            this.textRenderer.draw(matrices, Text.literal("§0>"), nx + 7, navY + 3, 0xFFFFFF, false);
+            this.textRenderer.draw(matrices, new LiteralText("§0>"), nx + 7, navY + 3, 0xFFFFFF, false);
         }
     }
 
@@ -307,7 +309,7 @@ public class FunctionManagerScreen extends Screen {
 
         switch (slot.action) {
             case DOWNLOAD -> {
-                this.client.player.networkHandler.sendChatMessage("/cmd downloadfunction " + slot.name);
+                this.client.player.sendChatMessage("/cmd downloadfunction " + slot.name);
                 statusMessage = "§aDownloading: " + slot.name;
                 new Thread(() -> {
                     try { Thread.sleep(2000); } catch (InterruptedException ignored) {}
@@ -316,31 +318,31 @@ public class FunctionManagerScreen extends Screen {
             }
             case RUN_DELETE -> {
                 if (button == 1) {
-                    this.client.player.networkHandler.sendChatMessage("/cmd function delete " + slot.name);
+                    this.client.player.sendChatMessage("/cmd function delete " + slot.name);
                     localFunctions.remove(slot.name);
                     statusMessage = "§cDeleted: " + slot.name;
                 } else {
-                    this.client.player.networkHandler.sendChatMessage("/cmd function " + slot.name);
+                    this.client.player.sendChatMessage("/cmd function " + slot.name);
                     statusMessage = "§6Running: " + slot.name;
                 }
             }
             case CREATE_EMPTY -> {
-                this.client.player.networkHandler.sendChatMessage("/cmd function create empty_" + System.currentTimeMillis() % 100000);
+                this.client.player.sendChatMessage("/cmd function create empty_" + System.currentTimeMillis() % 100000);
                 statusMessage = "§aCreating empty function...";
                 scheduleRefresh();
             }
             case CREATE_COMMAND -> {
-                this.client.player.networkHandler.sendChatMessage("/cmd function create cmd_" + System.currentTimeMillis() % 100000);
+                this.client.player.sendChatMessage("/cmd function create cmd_" + System.currentTimeMillis() % 100000);
                 statusMessage = "§aCreating command template...";
                 scheduleRefresh();
             }
             case CREATE_MOB -> {
-                this.client.player.networkHandler.sendChatMessage("/cmd function create mob_" + System.currentTimeMillis() % 100000);
+                this.client.player.sendChatMessage("/cmd function create mob_" + System.currentTimeMillis() % 100000);
                 statusMessage = "§aCreating mob template...";
                 scheduleRefresh();
             }
             case CREATE_BUILD -> {
-                this.client.player.networkHandler.sendChatMessage("/cmd function create build_" + System.currentTimeMillis() % 100000);
+                this.client.player.sendChatMessage("/cmd function create build_" + System.currentTimeMillis() % 100000);
                 statusMessage = "§aCreating building template...";
                 scheduleRefresh();
             }
@@ -356,10 +358,10 @@ public class FunctionManagerScreen extends Screen {
         }).start();
     }
 
-    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
-        if (verticalAmount < 0 && currentPage > 0) {
+    public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
+        if (amount < 0 && currentPage > 0) {
             currentPage--;
-        } else if (verticalAmount > 0) {
+        } else if (amount > 0) {
             int totalSlots = getCurrentSlots().size();
             int slotRows = ROWS - 2;
             int maxPage = Math.max(0, (totalSlots - 1) / (slotRows * COLUMNS));
