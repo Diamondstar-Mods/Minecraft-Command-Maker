@@ -61,7 +61,7 @@ public class AliasDeleteScreen extends Screen {
 				String aliasName = aliasNames.get(slotIndex);
 				String command = aliases.get(aliasName);
 
-				drawStoneBlock(context, x, y, aliasName, command, mouseX, mouseY);
+				drawStoneBlock(matrices, x, y, aliasName, command, mouseX, mouseY);
 				slotIndex++;
 			}
 		}
@@ -139,12 +139,9 @@ public class AliasDeleteScreen extends Screen {
 	}
 
 	@Override
-	public void close() {
-		this.client.setScreen(previousScreen);
-	}
-
-	@Override
-	public boolean shouldCloseOnEsc() {
-		return true;
+	public void onClose() {
+		if (this.client != null) {
+			this.client.setScreen(previousScreen);
+		}
 	}
 }

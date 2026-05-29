@@ -84,7 +84,7 @@ public class FunctionManagerScreen extends Screen {
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         this.renderBackground(matrices);
-        super.render(context, mouseX, mouseY, delta);
+        super.render(matrices, mouseX, mouseY, delta);
 
         // Draw chest-like background (dark border + light interior)
         fill(matrices, guiLeft - 2, guiTop - 2, guiLeft + TEXTURE_W + 2, guiTop + TEXTURE_H + 2, 0xFF000000);
@@ -92,16 +92,16 @@ public class FunctionManagerScreen extends Screen {
 
         // Title bar
         fill(matrices, guiLeft, guiTop, guiLeft + TEXTURE_W, guiTop + 16, 0xFF404040);
-        this.textRenderer.draw(matrices, new LiteralText("§6§lCommand Maker - Functions"), guiLeft + 8, guiTop + 4, 0xFFFFFF, false);
+        this.textRenderer.draw(matrices, new LiteralText("§6§lCommand Maker - Functions"), guiLeft + 8, guiTop + 4, 0xFFFFFF);
 
         if (loading) {
-            this.textRenderer.draw(matrices, new LiteralText(statusMessage), guiLeft + 8, guiTop + 30, 0xFFFFFF, false);
+            this.textRenderer.draw(matrices, statusMessage, guiLeft + 8, guiTop + 30, 0xFFFFFF);
             return;
         }
 
-        drawTabs(context, mouseX, mouseY);
-        drawFunctionSlots(context, mouseX, mouseY);
-        drawNavigation(context, mouseX, mouseY);
+        drawTabs(matrices, mouseX, mouseY);
+        drawFunctionSlots(matrices, mouseX, mouseY);
+        drawNavigation(matrices, mouseX, mouseY);
     }
 
     private void drawTabs(MatrixStack matrices, int mouseX, int mouseY) {
@@ -116,7 +116,7 @@ public class FunctionManagerScreen extends Screen {
 
             fill(matrices, x, tabY, x + 50, tabY + 14, tabColor);
             fill(matrices, x, tabY, x + 50, tabY + 1, active ? 0xFF55FF55 : 0xFF3D3D3D); // green underline for active
-            this.textRenderer.draw(matrices, new LiteralText(labels[i]), x + 4, tabY + 3, textColor, false);
+            this.textRenderer.draw(matrices, labels[i], x + 4, tabY + 3, textColor);
         }
     }
 
@@ -136,7 +136,7 @@ public class FunctionManagerScreen extends Screen {
 
                 if (idx < slots.size()) {
                     SlotData slot = slots.get(idx);
-                    drawSlot(context, x, y, slot, mouseX, mouseY);
+                    drawSlot(matrices, x, y, slot, mouseX, mouseY);
                 } else {
                     // Empty slot
                     fill(matrices, x, y, x + SLOT_SIZE, y + SLOT_SIZE, 0xFF8B8B8B);
@@ -146,9 +146,9 @@ public class FunctionManagerScreen extends Screen {
         }
 
         int infoY = startY + slotAreaRows * SLOT_SIZE + 4;
-        context.drawText(this.textRenderer,
+        this.textRenderer.draw(matrices,
             new LiteralText("Page " + (currentPage + 1) + " - " + slots.size() + " items"),
-            guiLeft + 8, infoY, 0x808080, false);
+            guiLeft + 8, infoY, 0x808080);
     }
 
     private List<SlotData> getCurrentSlots() {
@@ -198,7 +198,7 @@ public class FunctionManagerScreen extends Screen {
 
         // First letter of slot name as icon
         String letter = slot.name.substring(0, 1).toUpperCase();
-        this.textRenderer.draw(matrices, new LiteralText("§f" + letter), x + 6, y + 4, 0xFFFFFF, false);
+        this.textRenderer.draw(matrices, new LiteralText("§f" + letter), x + 6, y + 4, 0xFFFFFF);
 
         if (hovered && slot.description != null && !slot.description.isEmpty()) {
             List<Text> tooltip = new ArrayList<>();
@@ -226,14 +226,14 @@ public class FunctionManagerScreen extends Screen {
         // Page info
         String pageInfo = "Page " + (currentPage + 1) + " / " + (maxPage + 1);
         int infoWidth = this.textRenderer.getWidth(pageInfo);
-        this.textRenderer.draw(matrices, new LiteralText(pageInfo), guiLeft + (TEXTURE_W - infoWidth) / 2, navY + 4, 0xFFFFFF, false);
+        this.textRenderer.draw(matrices, pageInfo, guiLeft + (TEXTURE_W - infoWidth) / 2, navY + 4, 0xFFFFFF);
 
         // Prev button
         if (currentPage > 0) {
             int px = guiLeft + 8;
             fill(matrices, px, navY, px + 20, navY + 16, 0xFF3D8B3D);
             fill(matrices, px + 1, navY + 1, px + 19, navY + 15, 0xFF55FF55);
-            this.textRenderer.draw(matrices, new LiteralText("§0<"), px + 7, navY + 3, 0xFFFFFF, false);
+            this.textRenderer.draw(matrices, new LiteralText("§0<"), px + 7, navY + 3, 0xFFFFFF);
         }
 
         // Next button
@@ -241,7 +241,7 @@ public class FunctionManagerScreen extends Screen {
             int nx = guiLeft + TEXTURE_W - 28;
             fill(matrices, nx, navY, nx + 20, navY + 16, 0xFF3D8B3D);
             fill(matrices, nx + 1, navY + 1, nx + 19, navY + 15, 0xFF55FF55);
-            this.textRenderer.draw(matrices, new LiteralText("§0>"), nx + 7, navY + 3, 0xFFFFFF, false);
+            this.textRenderer.draw(matrices, new LiteralText("§0>"), nx + 7, navY + 3, 0xFFFFFF);
         }
     }
 
@@ -371,16 +371,13 @@ public class FunctionManagerScreen extends Screen {
     }
 
     @Override
-    public void close() {
+    public void onClose() {
         if (this.client != null) {
             this.client.setScreen(previousScreen);
         }
     }
 
-    @Override
-    public boolean shouldCloseOnEsc() {
-        return true;
-    }
+    
 
     private enum SlotAction {
         NONE, DOWNLOAD, RUN_DELETE, CREATE_EMPTY, CREATE_COMMAND, CREATE_MOB, CREATE_BUILD
