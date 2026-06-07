@@ -12,10 +12,9 @@
   },
   "license": "CC-BY-SA-4.0",
   "icon": "assets/modid/icon.png",
-  "environment": "*",
+  "environment": "server",
   "entrypoints": {
-    "main": ["com.example.CommandMaker"],
-    "client": ["com.example.CommandMakerClient"]
+    "main": ["com.example.CommandMaker"]
   },
   "mixins": ["modid.mixins.json"],
   "depends": {

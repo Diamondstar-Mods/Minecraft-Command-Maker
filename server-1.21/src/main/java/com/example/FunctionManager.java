@@ -18,7 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class FunctionManager {
     private static final Logger LOGGER = LoggerFactory.getLogger("cmdmaker");
     private static final String MANIFEST_URL = "https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/functions/functions.json";
-    private static Map<String, String> cachedManifest = null;
+    private static Map<String, ManifestEntry> cachedManifest = null;
     private static long cacheTimestamp = 0;
     private static final long CACHE_TTL = 300000; // 5 minutes
 
@@ -78,12 +78,12 @@ public class FunctionManager {
         }).start();
     }
 
-    public static Map<String, String> fetchFunctionManifest() {
+    public static Map<String, ManifestEntry> fetchFunctionManifest() {
         long now = System.currentTimeMillis();
         if (cachedManifest != null && (now - cacheTimestamp) < CACHE_TTL) {
             return cachedManifest;
         }
-        Map<String, String> manifest = new LinkedHashMap<>();
+        Map<String, ManifestEntry> manifest = new LinkedHashMap<>();
         try {
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
@@ -96,7 +96,16 @@ public class FunctionManager {
                     JsonObject obj = je.getAsJsonObject();
                     for (Map.Entry<String, JsonElement> entry : obj.entrySet()) {
                         try {
-                            manifest.put(entry.getKey(), entry.getValue().getAsString());
+                            JsonElement val = entry.getValue();
+                            if (val.isJsonObject()) {
+                                JsonObject valObj = val.getAsJsonObject();
+                                String desc = valObj.has("desc") ? valObj.get("desc").getAsString() : "";
+                                String icon = valObj.has("icon") ? valObj.get("icon").getAsString() : null;
+                                manifest.put(entry.getKey(), new ManifestEntry(desc, icon));
+                            } else if (val.isJsonPrimitive()) {
+                                // Old format: "name": "description"
+                                manifest.put(entry.getKey(), new ManifestEntry(val.getAsString(), null));
+                            }
                         } catch (Exception ignore) {}
                     }
                 }
@@ -105,10 +114,9 @@ public class FunctionManager {
             LOGGER.warn("Failed to fetch function manifest, falling back to file list", e);
         }
         if (manifest.isEmpty()) {
-            // Fallback: fetch from GitHub API without descriptions
             List<String> names = fetchDownloadableFunctionNames();
             for (String name : names) {
-                manifest.put(name, "");
+                manifest.put(name, new ManifestEntry("", null));
             }
         }
         cachedManifest = manifest;
@@ -148,7 +156,7 @@ public class FunctionManager {
         source.sendFeedback(() -> Text.literal("§6⌛ Fetching function library..."), false);
         new Thread(() -> {
             try {
-                Map<String, String> manifest = fetchFunctionManifest();
+                Map<String, ManifestEntry> manifest = fetchFunctionManifest();
                 if (manifest.isEmpty()) {
                     source.sendFeedback(() -> Text.literal("§c✖ No downloadable functions available"), false);
                 } else {
@@ -156,9 +164,9 @@ public class FunctionManager {
                     source.sendFeedback(() -> Text.literal("§6§l📦 Downloadable Functions §7(§f" + manifest.size() + "§7 available)"), false);
                     source.sendFeedback(() -> Text.literal("§7Use §e/cmd downloadfunction <name> §7or open the GUI with §e/cmd functions"), false);
                     source.sendFeedback(() -> Text.literal("§6§l▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"), false);
-                    for (Map.Entry<String, String> entry : manifest.entrySet()) {
+                    for (Map.Entry<String, ManifestEntry> entry : manifest.entrySet()) {
                         String name = entry.getKey();
-                        String desc = entry.getValue();
+                        String desc = entry.getValue().description;
                         if (desc != null && !desc.isEmpty()) {
                             source.sendFeedback(() -> Text.literal("§a  ◆ §f" + name + " §8▶ §7" + desc), false);
                         } else {

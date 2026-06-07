@@ -268,14 +268,38 @@ public class CommandMaker implements ModInitializer {
                         return 1;
                     })
                 )
+                // help
+                .then(CommandManager.literal("help")
+                    .executes(ctx -> {
+                        UpdateChecker.sendUpdateMessage(ctx.getSource());
+                        ServerCommandSource source = ctx.getSource();
+                        source.sendFeedback(() -> Text.literal("§6§l⚡ Command Maker Help ⚡"), false);
+                        source.sendFeedback(() -> Text.literal("§e/cmd add <alias> <command> §7— Create a new command alias"), false);
+                        source.sendFeedback(() -> Text.literal("§e/cmd del <alias> §7— Delete an alias"), false);
+                        source.sendFeedback(() -> Text.literal("§e/cmd reload §7— Reload aliases and syntax definitions from config files"), false);
+                        source.sendFeedback(() -> Text.literal("§e/cmd list §7— List all aliases and functions"), false);
+                        source.sendFeedback(() -> Text.literal("§e/cmd function <name> §7— Run a .mcfunction file"), false);
+                        source.sendFeedback(() -> Text.literal("§e/cmd function create <name> §7— Create a new .mcfunction file"), false);
+                        source.sendFeedback(() -> Text.literal("§e/cmd function delete <name> §7— Delete a .mcfunction file"), false);
+                        source.sendFeedback(() -> Text.literal("§e/cmd gui §7— Open the Function Manager GUI"), false);
+                        source.sendFeedback(() -> Text.literal("§e/cmd setvar <name> <value> §7— Set a custom variable"), false);
+                        source.sendFeedback(() -> Text.literal("§e/cmd downloadfunction <name> §7— Download a function from the online library"), false);
+                        source.sendFeedback(() -> Text.literal("§e/cmd listdownloadablefunctions §7— List all downloadable functions"), false);
+                        source.sendFeedback(() -> Text.literal("§e/cmd syntax §7— List custom syntax patterns"), false);
+                        source.sendFeedback(() -> Text.literal("§e/cmd wiki §7— Open the wiki in your browser"), false);
+                        source.sendFeedback(() -> Text.literal("§e/cmd help §7— Show this help message"), false);
+                        source.sendFeedback(() -> Text.literal("§7Use §e/cmd help §7anytime to see this list!"), false);
+                        return 1;
+                    })
+                )
                 // downloadfunction
                 .then(CommandManager.literal("downloadfunction")
                     .then(CommandManager.argument("function", StringArgumentType.word())
                         .suggests((ctx, builder) -> CompletableFuture.supplyAsync(() -> {
-                            Map<String, String> manifest = FunctionManager.fetchFunctionManifest();
-                            for (Map.Entry<String, String> entry : manifest.entrySet()) {
+                            Map<String, ManifestEntry> manifest = FunctionManager.fetchFunctionManifest();
+                            for (Map.Entry<String, ManifestEntry> entry : manifest.entrySet()) {
                                 String name = entry.getKey();
-                                String desc = entry.getValue();
+                                String desc = entry.getValue().description;
                                 if (desc != null && !desc.isEmpty()) {
                                     builder.suggest(name, Text.literal("§7" + desc));
                                 } else {

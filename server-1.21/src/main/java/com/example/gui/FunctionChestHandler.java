@@ -2,6 +2,7 @@ package com.example.gui;
 
 import com.example.FunctionManager;
 import com.example.AliasManager;
+import com.example.ManifestEntry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.SimpleInventory;
@@ -28,7 +29,7 @@ public class FunctionChestHandler extends ScreenHandler {
     private final PlayerEntity player;
     private int currentTab = 0;
     private int currentPage = 0;
-    private Map<String, String> manifest = new LinkedHashMap<>();
+    private Map<String, ManifestEntry> manifest = new LinkedHashMap<>();
     private List<String> localFunctions = new ArrayList<>();
     private String pendingDeleteAlias = null;
 
@@ -75,7 +76,7 @@ public class FunctionChestHandler extends ScreenHandler {
 
     private void drawTabs() {
         inventory.setStack(0, makeItem(currentTab == 0 ? Items.LIME_STAINED_GLASS_PANE : Items.GREEN_STAINED_GLASS_PANE, "§a§lDownload", "Browse and install from the online library"));
-        inventory.setStack(1, makeItem(currentTab == 1 ? Items.LIGHT_BLUE_STAINED_GLASS_PANE : Items.BLUE_STAINED_GLASS_PANE, "§b§lMy Functions", "Your installed functions — left-click to run, right-click to delete"));
+        inventory.setStack(1, makeItem(currentTab == 1 ? Items.LIGHT_BLUE_STAINED_GLASS_PANE : Items.BLUE_STAINED_GLASS_PANE, "§b§lMy Functions", "Your installed functions — left-click to run"));
         inventory.setStack(2, makeItem(currentTab == 2 ? Items.YELLOW_STAINED_GLASS_PANE : Items.ORANGE_STAINED_GLASS_PANE, "§e§lCreate New", "Create a new function from a template"));
         inventory.setStack(3, makeItem(currentTab == 3 ? Items.RED_STAINED_GLASS_PANE : Items.PINK_STAINED_GLASS_PANE, "§c§lDelete Aliases", "Remove command aliases — requires confirmation"));
         for (int i = 4; i < 7; i++) {
@@ -127,9 +128,10 @@ public class FunctionChestHandler extends ScreenHandler {
         List<FunctionEntry> entries = new ArrayList<>();
         switch (currentTab) {
             case 0 -> {
-                for (Map.Entry<String, String> e : manifest.entrySet()) {
+                for (Map.Entry<String, ManifestEntry> e : manifest.entrySet()) {
                     if (!localFunctions.contains(e.getKey())) {
-                        entries.add(new FunctionEntry(e.getKey(), EntryType.DOWNLOAD, e.getValue()));
+                        ManifestEntry me = e.getValue();
+                        entries.add(new FunctionEntry(e.getKey(), EntryType.DOWNLOAD, me.description, me.icon));
                     }
                 }
             }
@@ -137,22 +139,23 @@ public class FunctionChestHandler extends ScreenHandler {
                 List<String> sorted = new ArrayList<>(localFunctions);
                 Collections.sort(sorted);
                 for (String name : sorted) {
-                    String desc = manifest.getOrDefault(name, "Local function — left-click to run, right-click to delete");
-                    entries.add(new FunctionEntry(name, EntryType.LOCAL, desc));
+                    ManifestEntry me = manifest.get(name);
+                    String desc = me != null ? me.description : "Local function — left-click to run";
+                    entries.add(new FunctionEntry(name, EntryType.LOCAL, desc, null));
                 }
             }
             case 2 -> {
-                entries.add(new FunctionEntry("Empty Function", EntryType.CREATE_EMPTY, "Create a blank .mcfunction file to write yourself"));
-                entries.add(new FunctionEntry("Command Template", EntryType.CREATE_CMD, "Pre-filled with common command examples to customize"));
-                entries.add(new FunctionEntry("Mob Spawner", EntryType.CREATE_MOB, "Template with mob summoning and effect commands"));
-                entries.add(new FunctionEntry("Building", EntryType.CREATE_BUILD, "Template with fill/setblock building commands"));
+                entries.add(new FunctionEntry("Empty Function", EntryType.CREATE_EMPTY, "Create a blank .mcfunction file to write yourself", null));
+                entries.add(new FunctionEntry("Command Template", EntryType.CREATE_CMD, "Pre-filled with common command examples to customize", null));
+                entries.add(new FunctionEntry("Mob Spawner", EntryType.CREATE_MOB, "Template with mob summoning and effect commands", null));
+                entries.add(new FunctionEntry("Building", EntryType.CREATE_BUILD, "Template with fill/setblock building commands", null));
             }
             case 3 -> {
                 Map<String, String> aliases = AliasManager.getAliases();
                 List<String> sorted = new ArrayList<>(aliases.keySet());
                 Collections.sort(sorted);
                 for (String name : sorted) {
-                    entries.add(new FunctionEntry(name, EntryType.DELETE_ALIAS, aliases.get(name)));
+                    entries.add(new FunctionEntry(name, EntryType.DELETE_ALIAS, aliases.get(name), null));
                 }
             }
         }
@@ -241,17 +244,10 @@ public class FunctionChestHandler extends ScreenHandler {
                     scheduleRefresh();
                 }
                 case LOCAL -> {
-                    if (button == 1) {
-                        try {
-                            Files.deleteIfExists(AliasManager.getFunctionsPath().resolve(entry.name + ".mcfunction"));
-                        } catch (Exception ignored) {}
-                        scheduleRefresh();
-                    } else {
                         net.minecraft.server.command.ServerCommandSource source = sp.getCommandSource();
                         source.getServer().getCommandManager().executeWithPrefix(
                             source, "/cmd function " + entry.name);
                     }
-                }
                 case CREATE_EMPTY, CREATE_CMD, CREATE_MOB, CREATE_BUILD -> {
                     String prefix = switch (entry.type) {
                         case CREATE_CMD -> "cmd_";
@@ -310,20 +306,38 @@ public class FunctionChestHandler extends ScreenHandler {
         final String name;
         final EntryType type;
         final String description;
+        final String iconId; // e.g. "minecraft:diamond_shovel", may be null
 
         FunctionEntry(String name, EntryType type, String description) {
+            this(name, type, description, null);
+        }
+
+        FunctionEntry(String name, EntryType type, String description, String iconId) {
             this.name = name;
             this.type = type;
             this.description = description;
+            this.iconId = iconId;
         }
 
-        ItemStack toItemStack() {
-            net.minecraft.item.Item item = switch (type) {
+        private net.minecraft.item.Item resolveIcon() {
+            if (iconId != null && !iconId.isEmpty()) {
+                // Parse "minecraft:diamond_shovel"
+                String id = iconId.contains(":") ? iconId.substring(iconId.indexOf(':') + 1) : iconId;
+                net.minecraft.item.Item resolved = net.minecraft.registry.Registries.ITEM.get(
+                    net.minecraft.util.Identifier.of("minecraft", id));
+                if (resolved != Items.AIR) return resolved;
+            }
+            // Fallback to type-based defaults
+            return switch (type) {
                 case DOWNLOAD -> Items.PAPER;
                 case LOCAL -> Items.BOOK;
                 case DELETE_ALIAS -> Items.NAME_TAG;
                 default -> Items.WRITABLE_BOOK;
             };
+        }
+
+        ItemStack toItemStack() {
+            net.minecraft.item.Item item = resolveIcon();
             String prefix = switch (type) {
                 case DOWNLOAD -> "§a";
                 case LOCAL -> "§b";
@@ -351,7 +365,6 @@ public class FunctionChestHandler extends ScreenHandler {
                     } else if (type == EntryType.LOCAL) {
                         lore.add(Text.literal(""));
                         lore.add(Text.literal("§eLeft-click: Run function"));
-                        lore.add(Text.literal("§cRight-click: Delete file"));
                     }
                 }
                 stack.set(DataComponentTypes.LORE, new LoreComponent(lore));

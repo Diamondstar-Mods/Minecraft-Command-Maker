@@ -28,7 +28,7 @@ public class FunctionChestHandler extends AbstractContainerMenu {
     private final Player player;
     private int currentTab = 0;
     private int currentPage = 0;
-    private Map<String, String> manifest = new LinkedHashMap<>();
+    private Map<String, com.example.ManifestEntry> manifest = new LinkedHashMap<>();
     private List<String> localFunctions = new ArrayList<>();
     private String pendingDeleteAlias = null;
 
@@ -75,7 +75,7 @@ public class FunctionChestHandler extends AbstractContainerMenu {
 
     private void drawTabs() {
         inventory.setItem(0, makeItem(currentTab == 0 ? Items.LIME_STAINED_GLASS_PANE : Items.GREEN_STAINED_GLASS_PANE, "§a§lDownload", "Browse and install from the online library"));
-        inventory.setItem(1, makeItem(currentTab == 1 ? Items.LIGHT_BLUE_STAINED_GLASS_PANE : Items.BLUE_STAINED_GLASS_PANE, "§b§lMy Functions", "Your installed functions — left-click to run, right-click to delete"));
+        inventory.setItem(1, makeItem(currentTab == 1 ? Items.LIGHT_BLUE_STAINED_GLASS_PANE : Items.BLUE_STAINED_GLASS_PANE, "§b§lMy Functions", "Your installed functions — left-click to run"));
         inventory.setItem(2, makeItem(currentTab == 2 ? Items.YELLOW_STAINED_GLASS_PANE : Items.ORANGE_STAINED_GLASS_PANE, "§e§lCreate New", "Create a new function from a template"));
         inventory.setItem(3, makeItem(currentTab == 3 ? Items.RED_STAINED_GLASS_PANE : Items.PINK_STAINED_GLASS_PANE, "§c§lDelete Aliases", "Remove command aliases — requires confirmation"));
         for (int i = 4; i < 7; i++) {
@@ -125,9 +125,9 @@ public class FunctionChestHandler extends AbstractContainerMenu {
         List<FunctionEntry> entries = new ArrayList<>();
         switch (currentTab) {
             case 0 -> {
-                for (Map.Entry<String, String> e : manifest.entrySet()) {
+                for (Map.Entry<String, com.example.ManifestEntry> e : manifest.entrySet()) {
                     if (!localFunctions.contains(e.getKey())) {
-                        entries.add(new FunctionEntry(e.getKey(), EntryType.DOWNLOAD, e.getValue()));
+                        entries.add(new FunctionEntry(e.getKey(), EntryType.DOWNLOAD, e.getValue().description));
                     }
                 }
             }
@@ -135,7 +135,8 @@ public class FunctionChestHandler extends AbstractContainerMenu {
                 List<String> sorted = new ArrayList<>(localFunctions);
                 Collections.sort(sorted);
                 for (String name : sorted) {
-                    String desc = manifest.getOrDefault(name, "Local function — left-click to run, right-click to delete");
+                    com.example.ManifestEntry me = manifest.get(name);
+                    String desc = me != null ? me.description : "Local function — left-click to run";
                     entries.add(new FunctionEntry(name, EntryType.LOCAL, desc));
                 }
             }
@@ -241,17 +242,10 @@ public class FunctionChestHandler extends AbstractContainerMenu {
                     scheduleRefresh();
                 }
                 case LOCAL -> {
-                    if (button == 1) {
-                        try {
-                            Files.deleteIfExists(AliasManager.getFunctionsPath().resolve(entry.name + ".mcfunction"));
-                        } catch (Exception ignored) {}
-                        scheduleRefresh();
-                    } else {
                         net.minecraft.commands.CommandSourceStack source = sp.createCommandSourceStack();
                         source.getServer().getCommands().performPrefixedCommand(
                             source, "/cmd function " + entry.name);
                     }
-                }
                 case CREATE_EMPTY, CREATE_CMD, CREATE_MOB, CREATE_BUILD -> {
                     String prefix = switch (entry.type) {
                         case CREATE_CMD -> "cmd_";
@@ -346,7 +340,6 @@ public class FunctionChestHandler extends AbstractContainerMenu {
                     } else if (type == EntryType.LOCAL) {
                         lore.add(Component.literal(""));
                         lore.add(Component.literal("§eLeft-click: Run function"));
-                        lore.add(Component.literal("§cRight-click: Delete file"));
                     }
                 }
                 stack.set(DataComponents.LORE, new ItemLore(lore));
