@@ -275,6 +275,30 @@ CM.buildSearchIndex = function () {
   add("Download (Local)", "download-local.html");
   add("Examples", "examples.html");
 
+  // Function catalog entries — searchable by function name
+  var functions = [
+    "spleef_arena", "parkour_course", "hide_and_seek", "pvp_arena",
+    "zombie_siege", "mob_army", "boss_arena",
+    "bridge_builder", "underground_base", "lighthouse", "treehouse", "campsite", "rainbow_road", "spawn_setup",
+    "light_show", "bubble_party", "fireworkshow", "new_year_countdown", "dance_party", "better_dance_party", "danceparty", "halloween_spook",
+    "tntrain", "extratntrain", "meteor_shower", "scorched_earth", "gravity_flip", "craycray", "copilot", "funnybutton",
+    "lag_cleaner", "time_locker", "mobsoff", "base_protection", "starter_kit",
+    "helloworld", "example", "sound",
+    "maze_runner", "ice_race", "archery_range", "fishing_derby", "king_of_the_hill", "death_run", "death_swap", "trivia_challenge",
+    "skeleton_siege", "dragon_fight", "arena_of_champions", "wave_defense", "survival_island",
+    "castle_gate", "windmill", "suspension_bridge", "nether_portal_room", "enchanting_tower", "market_stalls",
+    "aurora_borealis", "confetti_storm", "rainbow_trail", "thunder_concert", "fire_tornado",
+    "anvil_rain", "potion_storm", "chicken_plague", "ender_invasion", "void_pull",
+    "backup_reminder", "night_vision", "clearing", "heal_all", "feed_all", "repair_all",
+    "scoreboard_demo", "command_chain",
+    "automatic_door", "piston_elevator", "item_sorter", "secret_passage", "tnt_cannon",
+    "quest_board", "dungeon_entrance", "treasure_hunt", "boss_drop", "rpg_shop",
+    "crop_farm", "animal_pen", "flower_garden"
+  ];
+  for (var i = 0; i < functions.length; i++) {
+    add("Function: " + functions[i], "function-catalog.html");
+  }
+
   return pages;
 };
 
@@ -295,6 +319,12 @@ CM.renderLastCommit = function () {
 
 // Init — inject all chrome into the page
 CM.init = function () {
+  // Load web fonts (Inter + JetBrains Mono)
+  var fontLink = document.createElement("link");
+  fontLink.rel = "stylesheet";
+  fontLink.href = "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap";
+  document.head.appendChild(fontLink);
+
   const navbar = document.getElementById("navbar");
   const sidebar = document.getElementById("sidebar");
   const footer = document.getElementById("footer");

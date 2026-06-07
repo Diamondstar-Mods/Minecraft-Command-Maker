@@ -18,9 +18,13 @@
             <p>Create a complete economy system with virtual currency, shops, and player balances using Command Maker's custom syntax and variables.</p>
 
             <h2>Basic Setup</h2>
-            <p>First, set up your economy variables:</p>
+            <p>First, set up your economy variables. Each player will need their own <code>${balance}</code> variable initialized:</p>
             <pre><code>/setcmdvariable currency_name "Coins"
-/setcmdvariable starting_balance 100</code></pre>
+/setcmdvariable balance 0</code></pre>
+            <div class="callout callout-info">
+                <h3>Per-Player Balances</h3>
+                <p>Variables like <code>${balance}</code> are per-player — each player has their own value. When you run <code>/setcmdvariable balance 0</code>, it only sets the balance for the player running the command. Use command blocks or a setup command to initialize balances for new players automatically.</p>
+            </div>
 
             <h2>Balance Commands</h2>
             <p>Create commands to check and manage player balances:</p>

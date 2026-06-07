@@ -27,10 +27,10 @@
 
             <h2>Requirements</h2>
             <ul>
-                <li>Minecraft 1.20+ (for modern Fabric/Quilt) or 1.8-1.13.2 (for Legacy Fabric)</li>
-                <li>Fabric Loader 0.16.14+ (modern) or 0.18.4 (legacy)</li>
-                <li>Fabric API 0.134.0+ (modern) or not required (legacy)</li>
-                <li>Java 8+ (for legacy versions) or Java 18-25 (modern)</li>
+                <li>Minecraft 1.17–26.1+ (modern Fabric) or 1.8–1.13.2 (Legacy Fabric)</li>
+                <li>Fabric Loader (version depends on MC version — bundled with each mod download)</li>
+                <li>Fabric API (bundled with each mod download)</li>
+                <li>Java 17 (MC 1.17–1.20.4), Java 21 (MC 1.20.5–1.21.11), or Java 25 (MC 26.1+) — Gradle auto-downloads the correct JDK</li>
             </ul>
 
             <h2>Legacy Fabric Support (Minecraft 1.8-1.13.2)</h2>
@@ -76,7 +76,8 @@
 
             <p>Command Maker uses JSON configuration files located in <code>config/CommandMaker/</code>:</p>
 
-            <h3>aliases.json(note: before 1.0.3 the file is called modid_aliases.json)</h3>
+            <h3>aliases.json</h3>
+            <p class="callout callout-info">Note: Before version 1.0.3, this file was called <code>modid_aliases.json</code>.</p>
             <p>Stores all your command aliases:</p>
             <pre><code>{
   "hello": "say Hello ${player}!",

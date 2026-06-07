@@ -24,9 +24,9 @@
             <ul>
                 <li>✓ Fabric Loader installed correctly</li>
                 <li>✓ Fabric API present in mods folder</li>
-                <li>✓ Java 21+ installed</li>
-                <li>✓ Minecraft version 1.21.9+</li>
-                <li>✓ Minecraft version is not a snapshot (e.g. 26.1-snapshot1)</li>
+                <li>✓ Java installed (JDK 17/21/25 depending on your MC version — see <a href="download.html">Downloads</a>)</li>
+                <li>✓ Correct mod download for your Minecraft version (1.17 through 26.1+)</li>
+                <li>✓ Each mod download is built for a specific MC version range — using the wrong one will cause errors</li>
                 <li>✓ CMDMaker JAR in correct mods folder</li>
             </ul>
             <p><strong>Quick Fix:</strong></p>
@@ -115,12 +115,12 @@ say \'Use single quotes inside\'</code></pre>
 
             <h2>GUI Issues</h2>
 
-            <h3>❌ "/deletealiases-gui shows empty / No aliases listed"</h3>
-            <p><strong>Cause:</strong> Aliases map not synced from server</p>
+            <h3>❌ "/cmd gui shows empty / No functions listed"</h3>
+            <p><strong>Cause:</strong> Functions list not synced from server</p>
             <p><strong>Solution:</strong></p>
             <ul>
-                <li>Run: <code>/deletealias</code> (without parameters) to sync</li>
-                <li>Then run: <code>/deletealiases-gui</code></li>
+                <li>Run: <code>/deletealias</code> (without parameters) to sync aliases</li>
+                <li>Then run: <code>/cmd gui</code> to open the Function Manager</li>
                 <li>This synchronizes the client with server aliases</li>
             </ul>
 
