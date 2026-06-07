@@ -31,6 +31,7 @@ public class CommandMaker implements ModInitializer {
         SyntaxManager.loadSyntaxDefinitions();
         PermissionManager.initialize();
         ModScreens.register();
+        UpdateChecker.check();
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
             registerCmdCommand(dispatcher);
             registerAddCommand(dispatcher);
@@ -89,6 +90,7 @@ public class CommandMaker implements ModInitializer {
                 .then(CommandManager.literal("reload")
                     .requires(source -> PermissionManager.canManageAliases(source))
                     .executes(ctx -> {
+                        UpdateChecker.sendUpdateMessage(ctx.getSource());
                         AliasManager.loadAliases();
                         SyntaxManager.loadSyntaxDefinitions();
                         for (String alias : AliasManager.getAliases().keySet()) {
@@ -111,6 +113,7 @@ public class CommandMaker implements ModInitializer {
                 // list
                 .then(CommandManager.literal("list")
                     .executes(ctx -> {
+                        UpdateChecker.sendUpdateMessage(ctx.getSource());
                         ServerCommandSource source = ctx.getSource();
                         source.sendFeedback(() -> Text.literal("Aliases:"), false);
                         for (Map.Entry<String, String> entry : AliasManager.getAliases().entrySet()) {
@@ -126,6 +129,7 @@ public class CommandMaker implements ModInitializer {
                 // gui
                 .then(CommandManager.literal("gui")
                     .executes(ctx -> {
+                        UpdateChecker.sendUpdateMessage(ctx.getSource());
                         PlayerEntity player = ctx.getSource().getPlayer();
                         if (player != null) {
                             player.openHandledScreen(new SimpleNamedScreenHandlerFactory(
@@ -431,6 +435,7 @@ public class CommandMaker implements ModInitializer {
         dispatcher.register(
             CommandManager.literal("deletealias")
                 .executes(ctx -> {
+                    UpdateChecker.sendUpdateMessage(ctx.getSource());
                     ServerCommandSource source = ctx.getSource();
                     Map<String, String> snapshot = AliasManager.getAliases();
                     if (snapshot.isEmpty()) {
@@ -470,6 +475,7 @@ public class CommandMaker implements ModInitializer {
         dispatcher.register(
             CommandManager.literal("syntax")
                 .executes(ctx -> {
+                    UpdateChecker.sendUpdateMessage(ctx.getSource());
                     ServerCommandSource source = ctx.getSource();
                     Map<String, CommandSyntax> syntaxes = SyntaxManager.getAllSyntaxes();
                     if (syntaxes.isEmpty()) {
