@@ -218,7 +218,8 @@ pre:hover .copy-btn, .copy-btn:focus-visible { opacity: 1; }
    ================================================================ */
 table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   margin: 1rem 0;
   font-size: .93em;
   border-radius: var(--radius);
@@ -239,6 +240,7 @@ th {
   border-bottom: 2px solid var(--border);
   position: sticky;
   top: var(--nav-height);
+  z-index: 1;
 }
 td { border-bottom: 1px solid var(--border); }
 tr:last-child td { border-bottom: none; }

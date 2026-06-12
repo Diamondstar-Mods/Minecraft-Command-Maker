@@ -1,5 +1,3 @@
-/cmd donate
-/cmd listdownloadablefunctions
 /zombie_siege
 /gamemode survival
 /cmd gui
@@ -47,4 +45,6 @@
 /cmd help
 /cmd gui
 /cmd
+/cmd gui
+/cmd reload
 /cmd gui

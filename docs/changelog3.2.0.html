@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Changelog v3.2.0 - Command Maker Wiki</title>
+    <meta name="description" content="Release notes for Command Maker v3.2.0. Function Manager GUI overhaul, 88 downloadable functions, update checker, vanilla-client GUI support, and more.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon.ico">
+</head>
+<body>
+    <nav id="navbar" class="navbar" role="navigation" aria-label="Main navigation"></nav>
+    <div class="layout">
+        <aside id="sidebar" class="sidebar" role="complementary" aria-label="Side navigation"></aside>
+        <main class="content" role="main">
+            <section class="hero">
+                <div class="hero-content">
+                    <h1 class="hero-title">Command Maker v3.2.0 Changelog</h1>
+                    <p class="hero-subtitle">Function Manager GUI overhaul, 88 downloadable functions, update checker, fully server-side, and more.</p>
+                </div>
+            </section>
+
+            <section class="content-block">
+                <h2>Release Summary</h2>
+                <p>Version <strong>3.2.0</strong> brings a major GUI overhaul, expands the function library from 37 to 88 downloadable functions, adds an update checker, and makes the mod fully server-side — clients no longer need the mod installed. The GUI now uses a vanilla chest container so <strong>any client</strong> can use it.</p>
+            </section>
+
+            <section class="content-block">
+                <h2>New Features</h2>
+                <ul>
+                    <li><strong>Function Manager GUI overhaul:</strong> Items now show descriptions on hover via lore tooltips. Each downloadable function has a custom icon matching its category.</li>
+                    <li><strong>Delete Aliases tab:</strong> New 4th tab in the GUI for managing aliases. Select an alias and confirm deletion with the redstone block button — no more accidental deletions.</li>
+                    <li><strong>Confirm button:</strong> Destructive actions (deleting aliases) now require a two-step confirmation. Select the alias, then click the redstone block to confirm.</li>
+                    <li><strong>Update checker:</strong> The mod now automatically checks <code>currentversion.txt</code> on startup. If a newer version is available, a green message appears at the top of command output telling you to update.</li>
+                    <li><strong>/cmd help command:</strong> New command listing all 14 <code>/cmd</code> subcommands with descriptions of what each one does.</li>
+                    <li><strong>88 downloadable functions:</strong> Expanded from 37 to 88 functions. New categories: Adventure & RPG, Redstone & Machinery, Farming & Nature, plus many new Mini-Games, Combat, Building, Visual, Chaos, and Utility functions.</li>
+                    <li><strong>Function icons:</strong> Each function in the catalog now has a custom Minecraft item as its icon, chosen to match its theme.</li>
+                    <li><strong>Minecraft 26.1 support:</strong> Full server-1.22 module supporting the latest Minecraft version.</li>
+                </ul>
+            </section>
+
+            <section class="content-block">
+                <h2>Improvements</h2>
+                <ul>
+                    <li><strong>Fully server-side:</strong> The mod now only needs to be installed on the server. The GUI uses vanilla Minecraft chest rendering so <strong>any client</strong> (vanilla, Fabric without the mod) can open and use the Function Manager GUI.</li>
+                    <li><strong>GUI tooltips:</strong> Every item in the chest GUI now shows its description on hover via the item lore component — no custom rendering needed.</li>
+                    <li><strong>Right-click delete removed:</strong> Function deletion from the My Functions tab has been removed. Use the dedicated Delete Aliases tab with confirmation instead.</li>
+                    <li><strong>JDK auto-download:</strong> Gradle toolchains automatically download the correct JDK for each module (JDK 17, 21, or 25). No PrismLauncher or manual Java setup needed.</li>
+                    <li><strong>Search index expanded:</strong> All 88 function names are now searchable on the wiki.</li>
+                    <li><strong>Wiki UI overhaul:</strong> Premium 2026-era design with indigo color palette, glass-morphism navbar, collapsible sidebar, breadcrumbs, back-to-top button, code language labels, print styles, and full dark mode support.</li>
+                    <li><strong>Wiki comments:</strong> Discussion sections added to key pages via Giscus.</li>
+                </ul>
+            </section>
+
+            <section class="content-block">
+                <h2>Bug Fixes</h2>
+                <ul>
+                    <li>Fixed outdated GUI command references — <code>/cmd gui</code> replaces <code>/deletealiases-gui</code> everywhere.</li>
+                    <li>Fixed Minecraft version compatibility ranges in all module <code>fabric.mod.json</code> files.</li>
+                    <li>Fixed economy system documentation to properly explain <code>${balance}</code> variable setup.</li>
+                    <li>Fixed outdated Java and Minecraft version requirements across documentation pages.</li>
+                    <li>Fixed broken wiki links and URL typo in README.</li>
+                </ul>
+            </section>
+
+            <section class="content-block">
+                <h2>Deprecations</h2>
+                <ul>
+                    <li><strong>Minecraft 1.17</strong> and <strong>Minecraft 1.18–1.20.4</strong> mod versions are now deprecated. They will not receive new features. Upgrade to 1.21+ or 26.1+.</li>
+                </ul>
+            </section>
+
+            <section class="content-block">
+                <h2>How to Use</h2>
+                <p>Install the mod on your server only — clients do not need it. Open the GUI with <code>/cmd gui</code>. Browse functions, download them, and manage aliases from the chest interface. Run <code>/cmd help</code> to see all available commands. Check the <a href="functions.html">Functions System</a> and <a href="gui-system.html">GUI System</a> pages for full documentation.</p>
+            </section>
+
+            <section class="content-block">
+                <h2>Notes</h2>
+                <p>This changelog page is intentionally unlinked from other pages. The function catalog JSON now supports optional <code>icon</code> fields — old format entries without icons will fall back to category defaults.</p>
+            </section>
+        </main>
+    </div>
+
+    <footer id="footer" class="footer" role="contentinfo"></footer>
+    <script src="js/components.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>
