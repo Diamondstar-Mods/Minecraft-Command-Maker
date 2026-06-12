@@ -34,11 +34,7 @@ public class FunctionChestHandler extends ScreenHandler {
     private String pendingDeleteAlias = null;
 
     public FunctionChestHandler(int syncId, PlayerInventory playerInventory) {
-        this(syncId, playerInventory, null);
-    }
-
-    public FunctionChestHandler(int syncId, PlayerInventory playerInventory, ScreenHandlerType<?> type) {
-        super(type != null ? type : ModScreens.FUNCTION_CHEST, syncId);
+        super(ScreenHandlerType.GENERIC_9X6, syncId);
         this.player = playerInventory.player;
         this.inventory = new SimpleInventory(CONTAINER_SIZE);
 

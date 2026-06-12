@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Permissions Quick Reference - Command Maker Wiki</title>
+    <meta name="description" content="Quick reference cheat sheet for Command Maker permissions. Covers ops, LuckPerms integration, permissions.json, common setups, and troubleshooting.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon.ico">
+</head>
+<body>
+    <nav id="navbar" class="navbar" role="navigation" aria-label="Main navigation"></nav>
+    <div class="layout">
+        <aside id="sidebar" class="sidebar" role="complementary" aria-label="Side navigation"></aside>
+        <main class="content" role="main">
+            <h1>Permissions Quick Reference</h1>
+            <p>A cheat sheet for setting up Command Maker permissions. For in-depth explanations, see the <a href="advanced-permissions-guide.html">Advanced Permissions Guide</a>.</p>
+
+            <h2>Basic Concepts</h2>
+            <table>
+                <tr><th>Term</th><th>Meaning</th></tr>
+                <tr><td><strong>Ops</strong></td><td>Players with permission level 2+, always bypass all checks</td></tr>
+                <tr><td><strong>Permission Node</strong></td><td>A string like <code>cmdmaker.cmd</code> that grants a specific ability</td></tr>
+                <tr><td><strong>Wildcard</strong></td><td><code>*</code> matches everything (e.g., <code>cmdmaker.*</code> = all cmdmaker permissions)</td></tr>
+                <tr><td><strong>LuckPerms</strong></td><td>Optional plugin for advanced group-based permissions</td></tr>
+                <tr><td><strong>permissions.json</strong></td><td>Built-in config file (used when LuckPerms not installed)</td></tr>
+            </table>
+
+            <h2>Quick Setup Scenarios</h2>
+
+            <h3>Scenario 1: Everyone Can Use Everything</h3>
+            <p><strong>With LuckPerms:</strong></p>
+            <pre><code>/lp group default permission set cmdmaker.*</code></pre>
+            <p><strong>With Config Only:</strong> Leave <code>permissions.json</code> as default (no restrictions).</p>
+
+            <h3>Scenario 2: Only Ops Can Use Commands</h3>
+            <p><strong>With LuckPerms:</strong> Do nothing — already ops-only by default.</p>
+            <p><strong>With Config Only:</strong> Don't add any permissions to <code>permissions.json</code>.</p>
+
+            <h3>Scenario 3: Players Can Use Specific Aliases</h3>
+            <p><strong>With LuckPerms:</strong></p>
+            <pre><code>/lp group member permission set cmdmaker.alias.home
+/lp group member permission set cmdmaker.alias.spawn
+/lp user PlayerName parent set member</code></pre>
+            <p><strong>With Config Only:</strong> Edit <code>permissions.json</code>:</p>
+            <pre><code>{
+  "players": {
+    "permissions": {
+      "uuid-of-player": [
+        "cmdmaker.alias.home",
+        "cmdmaker.alias.spawn"
+      ]
+    }
+  }
+}</code></pre>
+
+            <h3>Scenario 4: Moderators Can Manage Aliases</h3>
+            <p><strong>With LuckPerms:</strong></p>
+            <pre><code>/lp group moderator permission set cmdmaker.cmd
+/lp group moderator permission set cmdmaker.manage.alias
+/lp user ModeratorName parent set moderator</code></pre>
+
+            <h3>Scenario 5: Staff Can Use Everything</h3>
+            <p><strong>With LuckPerms:</strong></p>
+            <pre><code>/lp group staff permission set cmdmaker.*
+/lp user StaffMemberName parent set staff</code></pre>
+
+            <h2>Permission Reference</h2>
+
+            <h3>Command Permissions</h3>
+            <table>
+                <tr><th>Permission</th><th>Effect</th></tr>
+                <tr><td><code>cmdmaker.cmd</code></td><td>Allow <code>/cmd</code> command</td></tr>
+                <tr><td><code>cmdmaker.addcommand</code></td><td>Allow <code>/addcommand</code> command</td></tr>
+                <tr><td><code>cmdmaker.manage.alias</code></td><td>Allow adding/deleting aliases</td></tr>
+                <tr><td><code>cmdmaker.manage.permissions</code></td><td>Allow <code>/cmmakerperm</code> command</td></tr>
+            </table>
+
+            <h3>Alias Permissions</h3>
+            <table>
+                <tr><th>Permission</th><th>Effect</th></tr>
+                <tr><td><code>cmdmaker.alias.*</code></td><td>Allow all aliases</td></tr>
+                <tr><td><code>cmdmaker.alias.home</code></td><td>Allow <code>/home</code> alias</td></tr>
+                <tr><td><code>cmdmaker.alias.spawn</code></td><td>Allow <code>/spawn</code> alias</td></tr>
+                <tr><td><code>cmdmaker.alias.{name}</code></td><td>Allow specific alias by name</td></tr>
+            </table>
+
+            <h3>Wildcards</h3>
+            <table>
+                <tr><th>Permission</th><th>Grants</th></tr>
+                <tr><td><code>cmdmaker.*</code></td><td>All CMDMaker permissions</td></tr>
+                <tr><td><code>cmdmaker.alias.*</code></td><td>All aliases</td></tr>
+            </table>
+
+            <h2>Common LuckPerms Commands</h2>
+            <pre><code># View player permissions
+/lp user PlayerName info
+
+# Add permission to player
+/lp user PlayerName permission set cmdmaker.alias.home
+
+# Add permission to group
+/lp group admin permission set cmdmaker.*
+
+# Remove permission
+/lp user PlayerName permission unset cmdmaker.alias.home
+
+# List permissions containing "cmdmaker"
+/lp search cmdmaker
+
+# Add player to group
+/lp user PlayerName parent set admin
+
+# Create permission group
+/lp creategroup groupname
+
+# Promote/demote with track
+/lp user PlayerName track set promotiontrack member</code></pre>
+
+            <h2>Config File Locations</h2>
+            <table>
+                <tr><th>Loader</th><th>Path</th></tr>
+                <tr><td>Fabric</td><td><code>config/CommandMaker/permissions.json</code></td></tr>
+                <tr><td>Quilt</td><td><code>config/CommandMaker/permissions.json</code></td></tr>
+            </table>
+
+            <h2>Default Behavior</h2>
+            <table>
+                <tr><th>Scenario</th><th>Result</th></tr>
+                <tr><td>Operator player</td><td>Full access (bypasses all checks)</td></tr>
+                <tr><td>Non-Op + LuckPerms</td><td>Checked via LuckPerms</td></tr>
+                <tr><td>Non-Op + No LuckPerms</td><td>No access (unless in permissions.json)</td></tr>
+                <tr><td>Console</td><td>Full access always</td></tr>
+            </table>
+
+            <h2>Troubleshooting Checklist</h2>
+            <ul>
+                <li>Is player an operator? (<code>/op PlayerName</code>)</li>
+                <li>Is LuckPerms installed? (<code>/lp info</code> to check)</li>
+                <li>Does player have permission? (<code>/lp user PlayerName info</code>)</li>
+                <li>Is <code>permissions.json</code> valid JSON?</li>
+                <li>Did you reload permissions? (<code>/cmmakerperm reload</code>)</li>
+                <li>Did you restart the server after changing config?</li>
+            </ul>
+
+            <div class="callout callout-tip">
+                <h3>Need More Help?</h3>
+                <p>For detailed setup instructions, see the <a href="permissions-setup.html">Permissions Setup</a> guide. For LuckPerms-specific details, check <a href="luckperms-integration.html">LuckPerms Integration</a>. Run <code>/lp</code> in-game for LuckPerms help, or <code>/cmmakerperm reload</code> to reload permissions.</p>
+            </div>
+        </main>
+    </div>
+    <footer id="footer" class="footer" role="contentinfo"></footer>
+    <script src="js/components.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>

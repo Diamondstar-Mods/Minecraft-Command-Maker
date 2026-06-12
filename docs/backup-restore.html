@@ -19,7 +19,7 @@
             <h2>Why Backups Matter</h2>
             <p>Your Command Maker configuration represents time spent building aliases, crafting syntax patterns, and fine-tuning permissions. Without backups, a corrupted JSON file, accidentally deleted alias, or server crash can erase hours of work. A proper backup strategy ensures you can recover quickly.</p>
 
-            <div class="callout-warning">
+            <div class="callout callout-warning">
                 <h3>Important</h3>
                 <p>Command Maker stores all configuration on the server side. If you are a player using a server, you cannot back up configurations -- only the server administrator can. If you run a single-player world, the configuration is in your <code>.minecraft</code> directory.</p>
             </div>
@@ -87,7 +87,7 @@ cp -r config/CommandMaker backups/CommandMaker_2026-05-26
 # Or on Windows:
 # xcopy /E /I config\CommandMaker backups\CommandMaker_2026-05-26</code></pre>
 
-            <div class="callout-tip">
+            <div class="callout callout-tip">
                 <h3>Pro Tip</h3>
                 <p>Always use date-stamped backup folders. This lets you track changes over time and revert to specific versions if needed. Format: <code>CommandMaker_YYYY-MM-DD</code> or <code>CommandMaker_YYYY-MM-DD_HHMM</code> for multiple backups in one day.</p>
             </div>
@@ -171,7 +171,7 @@ variables.json
 *.tmp
 *.log</code></pre>
 
-            <div class="callout-info">
+            <div class="callout callout-info">
                 <h3>Note</h3>
                 <p>Custom variables may contain server IP addresses, Discord invite links, or other semi-sensitive data. Use discretion when sharing backups publicly.</p>
             </div>
@@ -231,7 +231,7 @@ cp -r /path/to/backup/Functions /path/to/server/config/CommandMaker/Functions</c
 cp /path/to/backup/aliases.json config/CommandMaker/aliases.json
 /cmd reload  # After server start</code></pre>
 
-            <div class="callout-warning">
+            <div class="callout callout-warning">
                 <h3>Warning</h3>
                 <p>If you don't have a backup of a corrupted JSON file, you will lose that configuration data. The mod will create a new empty file if the old one is unreadable, but it cannot recover your lost aliases.</p>
             </div>
@@ -280,7 +280,7 @@ cp /path/to/backup/aliases.json config/CommandMaker/aliases.json
 
             <h2>Backup Checklist</h2>
 
-            <div class="callout-tip">
+            <div class="callout callout-tip">
                 <h3>Before Making Changes</h3>
                 <ul>
                     <li>Back up the entire <code>config/CommandMaker/</code> folder</li>
@@ -290,7 +290,7 @@ cp /path/to/backup/aliases.json config/CommandMaker/aliases.json
                 </ul>
             </div>
 
-            <div class="callout-tip">
+            <div class="callout callout-tip">
                 <h3>After Making Changes</h3>
                 <ul>
                     <li>Test that all aliases work correctly</li>

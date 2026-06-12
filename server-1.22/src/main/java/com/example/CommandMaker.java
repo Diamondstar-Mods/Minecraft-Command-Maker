@@ -134,7 +134,7 @@ public class CommandMaker implements ModInitializer {
                         Player player = ctx.getSource().getPlayer();
                         if (player != null) {
                             player.openMenu(new SimpleMenuProvider(
-                                (syncId, inv, p) -> new FunctionChestHandler(syncId, inv, ModScreens.FUNCTION_CHEST),
+                                (syncId, inv, p) -> new FunctionChestHandler(syncId, inv),
                                 Component.literal("Command Maker - Functions")
                             ));
                         } else {
@@ -149,7 +149,7 @@ public class CommandMaker implements ModInitializer {
                         Player player = ctx.getSource().getPlayer();
                         if (player != null) {
                             player.openMenu(new SimpleMenuProvider(
-                                (syncId, inv, p) -> new FunctionChestHandler(syncId, inv, ModScreens.FUNCTION_CHEST),
+                                (syncId, inv, p) -> new FunctionChestHandler(syncId, inv),
                                 Component.literal("Command Maker - Functions")
                             ));
                         } else {

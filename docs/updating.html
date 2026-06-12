@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Updating Command Maker - Command Maker Wiki</title>
+    <meta name="description" content="Learn how to safely update Command Maker between versions, migrate configuration files, and handle breaking changes.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon.ico">
+</head>
+<body>
+    <nav id="navbar" class="navbar" role="navigation" aria-label="Main navigation"></nav>
+    <div class="layout">
+        <aside id="sidebar" class="sidebar" role="complementary" aria-label="Side navigation"></aside>
+        <main class="content" role="main">
+            <h1>Updating Command Maker</h1>
+            <p>How to safely update Command Maker to a new version without losing your aliases, syntax patterns, or configuration.</p>
+
+            <h2>Before You Update</h2>
+            <ol>
+                <li><strong>Back up your config:</strong> Copy the entire <code>config/CommandMaker/</code> folder to a safe location.</li>
+                <li><strong>Check the changelog:</strong> Review what changed between your current version and the new one.</li>
+                <li><strong>Note your MC version:</strong> Make sure the new mod JAR matches your Minecraft version and Java version.</li>
+            </ol>
+
+            <div class="callout callout-warning">
+                <h3>Always Back Up First</h3>
+                <p>While Command Maker tries to preserve your config between updates, a backup ensures you never lose your work. Copy <code>config/CommandMaker/</code> to a safe location before any update.</p>
+            </div>
+
+            <h2>Standard Update (Same MC Version)</h2>
+            <p>For minor/patch updates within the same Minecraft version (e.g., 3.1.0 to 3.2.0 on MC 1.21):</p>
+            <ol>
+                <li>Stop your Minecraft server or close the game.</li>
+                <li>Remove the old Command Maker JAR from your <code>mods/</code> folder.</li>
+                <li>Download the new JAR and place it in <code>mods/</code>.</li>
+                <li>Start the server/game. Command Maker will automatically detect existing config and preserve it.</li>
+                <li>Run <code>/cmd reload</code> to refresh aliases and syntax in memory.</li>
+            </ol>
+
+            <h2>Major Version Updates (Different MC Version)</h2>
+            <p>When upgrading to a new Minecraft version (e.g., MC 1.20 to 1.21):</p>
+            <ol>
+                <li>Back up <code>config/CommandMaker/</code>.</li>
+                <li>Update Fabric Loader and Fabric API to match the new MC version.</li>
+                <li>Download the Command Maker JAR for the new MC version.</li>
+                <li>Copy your backed-up <code>config/CommandMaker/</code> folder into the new server's config directory.</li>
+                <li>Start the server and run <code>/cmd reload</code>.</li>
+            </ol>
+
+            <div class="callout callout-info">
+                <h3>Config Compatibility</h3>
+                <p><code>aliases.json</code>, <code>syntax.json</code>, and <code>permissions.json</code> are forward-compatible across MC versions. You can copy them directly. Function files (<code>.mcfunction</code>) in <code>config/CommandMaker/Functions/</code> are also fully portable.</p>
+            </div>
+
+            <h2>Updating from Deprecated Versions</h2>
+
+            <h3>From MC 1.17 or 1.18–1.20.4 to MC 1.21+</h3>
+            <p>These older versions are deprecated. To migrate:</p>
+            <ol>
+                <li>Back up your <code>config/CommandMaker/</code> folder from the old server.</li>
+                <li>Set up a new Fabric server on MC 1.21+ with Fabric API.</li>
+                <li>Copy your backed-up config folder into the new server.</li>
+                <li>Install the MC 1.21 version of Command Maker.</li>
+                <li>Your aliases, syntax, and permissions will carry over. The new version adds the Function Manager GUI, update checker, and download system.</li>
+            </ol>
+
+            <h3>From Legacy Fabric (MC 1.8–1.13.2) to Modern Fabric</h3>
+            <p>Config files are compatible. Copy <code>config/CommandMaker/</code> to the new server. Note that the legacy version lacks the GUI system, function downloads, and some advanced features — these become available after upgrading.</p>
+
+            <h2>Java Version Requirements</h2>
+            <table>
+                <tr><th>Minecraft Version</th><th>Java Version</th></tr>
+                <tr><td>1.8–1.16.5</td><td>Java 8</td></tr>
+                <tr><td>1.17–1.20.4</td><td>Java 17</td></tr>
+                <tr><td>1.20.5–1.21.x</td><td>Java 21</td></tr>
+                <tr><td>26.1+</td><td>Java 25</td></tr>
+            </table>
+            <p>Using the wrong Java version will cause startup errors. The Gradle build system auto-downloads the correct JDK when compiling, but at runtime you must have the right Java installed.</p>
+
+            <h2>Troubleshooting Update Issues</h2>
+
+            <h3>Mod doesn't load after update</h3>
+            <ul>
+                <li>Check that Fabric API is the correct version for your new MC version.</li>
+                <li>Verify your Java version matches the table above.</li>
+                <li>Check the server log for specific error messages.</li>
+                <li>Try removing the config temporarily — if the mod loads, there's a config issue.</li>
+            </ul>
+
+            <h3>Aliases missing after update</h3>
+            <ul>
+                <li>Run <code>/cmd reload</code> to refresh from config files.</li>
+                <li>Check that <code>config/CommandMaker/aliases.json</code> exists and is valid JSON.</li>
+                <li>If you renamed the server directory, make sure the config folder was copied.</li>
+            </ul>
+
+            <h3>JSON parse errors after update</h3>
+            <ul>
+                <li>Validate your JSON files with a tool like <a href="https://jsonlint.com" target="_blank" rel="noopener">JSONLint</a>.</li>
+                <li>Check for trailing commas — they're the most common JSON syntax error.</li>
+                <li>Restore from your backup if the files are corrupted.</li>
+            </ul>
+
+            <div class="callout callout-tip">
+                <h3>Rolling Back</h3>
+                <p>If an update causes problems, you can always roll back: remove the new JAR, restore your config backup, and reinstall the previous version. Command Maker config files are backward-compatible.</p>
+            </div>
+        </main>
+    </div>
+    <footer id="footer" class="footer" role="contentinfo"></footer>
+    <script src="js/components.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>

@@ -1,8 +1,3 @@
-/cmd gui
-/cmd functions
-/cmd function
-/cmd functions
-/cmd function create
 /cmd donate
 /cmd listdownloadablefunctions
 /zombie_siege
@@ -47,4 +42,9 @@
 /cmd list
 /cmd gui
 /cmd list
+/cmd gui
+/cmd
+/cmd help
+/cmd gui
+/cmd
 /cmd gui

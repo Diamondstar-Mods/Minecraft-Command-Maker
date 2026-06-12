@@ -27,7 +27,7 @@ sourceSets {
 
 loom {
     mods {
-        "modid" {
+        "nekkycommandmaker" {
             sourceSet sourceSets.main
         }
     }

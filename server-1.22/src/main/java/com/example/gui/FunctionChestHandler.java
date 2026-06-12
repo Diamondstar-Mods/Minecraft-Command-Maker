@@ -33,11 +33,7 @@ public class FunctionChestHandler extends AbstractContainerMenu {
     private String pendingDeleteAlias = null;
 
     public FunctionChestHandler(int syncId, Inventory playerInventory) {
-        this(syncId, playerInventory, null);
-    }
-
-    public FunctionChestHandler(int syncId, Inventory playerInventory, MenuType<?> type) {
-        super(type != null ? type : ModScreens.FUNCTION_CHEST, syncId);
+        super(MenuType.GENERIC_9x6, syncId);
         this.player = playerInventory.player;
         this.inventory = new SimpleContainer(CONTAINER_SIZE);
 

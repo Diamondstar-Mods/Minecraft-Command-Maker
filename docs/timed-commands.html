@@ -142,7 +142,7 @@
 # playsound entity.firework_rocket.blast master @a
 # give @a diamond 1</code></pre>
 
-            <div class="callout-tip">
+            <div class="callout callout-tip">
                 <h3>Pro Tip</h3>
                 <p>Use <code>tellraw</code> with text components for countdown announcements instead of <code>/say</code>. This gives you control over colors and formatting, making the countdown more visually engaging for players.</p>
             </div>
@@ -312,7 +312,7 @@
 # Start the restart countdown
 /cmd add restart schedule function commandmaker:restart_warning_10m 0t && say Restart sequence initiated!</code></pre>
 
-            <div class="callout-warning">
+            <div class="callout callout-warning">
                 <h3>Warning</h3>
                 <p>The <code>/stop</code> command will shut down the server. You need a separate startup script (or a service like systemd) to automatically restart the server process. Without this, the server will stop and stay stopped.</p>
             </div>
@@ -390,7 +390,7 @@
                 <li><strong>Use <code>schedule clear</code></strong> to stop scheduled events when needed</li>
             </ul>
 
-            <div class="callout-info">
+            <div class="callout callout-info">
                 <h3>Note on Tick Timing</h3>
                 <p>Minecraft runs at 20 ticks per second. One second = 20 ticks. One minute = 1200 ticks. One hour = 72000 ticks. Keep this in mind when setting timer values in commands and functions.</p>
             </div>
@@ -449,7 +449,7 @@
                 </tbody>
             </table>
 
-            <div class="callout-tip">
+            <div class="callout callout-tip">
                 <h3>Summary</h3>
                 <p>Timed commands open up automation possibilities: scheduled broadcasts, cooldown systems, countdown timers, and automated events. The combination of Command Maker aliases, Minecraft's /schedule command, and scoreboard tracking gives you everything you need for sophisticated time-based mechanics.</p>
             </div>

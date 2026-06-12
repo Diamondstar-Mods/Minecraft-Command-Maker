@@ -82,7 +82,7 @@
             <h3>Automated Team Setup Alias</h3>
             <pre><code>/cmd add setup_teams team add red && team modify red color red && team modify red prefix "[Red] " && team modify red friendlyfire false && team add blue && team modify blue color blue && team modify blue prefix "[Blue] " && team modify blue friendlyfire false && say Teams created!</code></pre>
 
-            <div class="callout-tip">
+            <div class="callout callout-tip">
                 <h3>Pro Tip</h3>
                 <p>Create a single <code>/setup_teams</code> alias that runs all the team creation commands. Use this whenever you reset your minigame or server. This avoids manual re-creation of teams after resets.</p>
             </div>
@@ -134,7 +134,7 @@
             <pre><code>/cmd add t tell @a[team=red] ${player}: ${message}
 # Or use: /cmd add t teammsg ${message}</code></pre>
 
-            <div class="callout-info">
+            <div class="callout callout-info">
                 <h3>Note</h3>
                 <p>Minecraft's built-in <code>/teammsg</code> command already sends messages to the sender's team. However, Command Maker aliases let you customize the format, add prefixes, or trigger additional effects when team chat is used.</p>
             </div>
@@ -304,7 +304,7 @@
 # Leave the arena
 /cmd add leave_pvp team leave ${player} && tp ${player} 0 65 0 && say ${player} left the PvP arena!</code></pre>
 
-            <div class="callout-warning">
+            <div class="callout callout-warning">
                 <h3>Warning</h3>
                 <p>When <code>friendlyfire</code> is set to <code>true</code> on a team, players on the same team can hurt each other. Only enable this for deliberate PvP arenas, never for cooperative games.</p>
             </div>
@@ -342,7 +342,7 @@
                 <li><strong>Document your team system</strong> for other server administrators</li>
             </ul>
 
-            <div class="callout-tip">
+            <div class="callout callout-tip">
                 <h3>Summary</h3>
                 <p>Teams + Command Maker = powerful multiplayer mechanics. Use teams for minigames, organized chat, team-specific abilities, and automated score tracking. The combination of Minecraft's built-in team system and Command Maker's alias flexibility enables complex game systems without any plugins.</p>
             </div>

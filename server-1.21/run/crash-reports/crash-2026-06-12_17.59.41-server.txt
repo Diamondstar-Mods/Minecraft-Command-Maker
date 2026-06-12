@@ -1,0 +1,130 @@
+---- Minecraft Crash Report ----
+// Don't be sad, have a hug! <3
+
+Time: 2026-06-12 17:59:41
+Description: Exception in server tick loop
+
+java.lang.IllegalStateException: Failed to initialize server
+	at knot//net.minecraft.server.MinecraftServer.runServer(MinecraftServer.java:794)
+	at knot//net.minecraft.server.MinecraftServer.method_29739(MinecraftServer.java:297)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+
+
+A detailed walkthrough of the error, its code path and all known details is as follows:
+---------------------------------------------------------------------------------------
+
+-- System Details --
+Details:
+	Minecraft Version: 1.21.9
+	Minecraft Version ID: 1.21.9
+	Operating System: Windows 11 (amd64) version 10.0
+	Java Version: 21.0.2, Microsoft
+	Java VM Version: OpenJDK 64-Bit Server VM (mixed mode, sharing), Microsoft
+	Memory: 1241024448 bytes (1183 MiB) / 2810183680 bytes (2680 MiB) up to 8568963072 bytes (8172 MiB)
+	CPUs: 8
+	Processor Vendor: GenuineIntel
+	Processor Name: Intel(R) Core(TM) i7-6700K CPU @ 4.00GHz
+	Identifier: Intel64 Family 6 Model 94 Stepping 3
+	Microarchitecture: Skylake (Client)
+	Frequency (GHz): 4.01
+	Number of physical packages: 1
+	Number of physical CPUs: 4
+	Number of logical CPUs: 8
+	Graphics card #0 name: NVIDIA TITAN RTX
+	Graphics card #0 vendor: NVIDIA
+	Graphics card #0 VRAM (MiB): 24576.00
+	Graphics card #0 deviceId: VideoController1
+	Graphics card #0 versionInfo: 32.0.15.7283
+	Graphics card #1 name: NVIDIA TITAN RTX
+	Graphics card #1 vendor: NVIDIA
+	Graphics card #1 VRAM (MiB): 24576.00
+	Graphics card #1 deviceId: VideoController2
+	Graphics card #1 versionInfo: 32.0.15.7283
+	Graphics card #2 name: Intel(R) HD Graphics 530
+	Graphics card #2 vendor: Intel Corporation
+	Graphics card #2 VRAM (MiB): 1024.00
+	Graphics card #2 deviceId: VideoController3
+	Graphics card #2 versionInfo: 31.0.101.2111
+	Graphics card #3 name: NVIDIA GeForce RTX 3070
+	Graphics card #3 vendor: NVIDIA
+	Graphics card #3 VRAM (MiB): 8192.00
+	Graphics card #3 deviceId: VideoController4
+	Graphics card #3 versionInfo: 32.0.15.6094
+	Memory slot #0 capacity (MiB): 8192.00
+	Memory slot #0 clockSpeed (GHz): 2.20
+	Memory slot #0 type: DDR4
+	Memory slot #1 capacity (MiB): 8192.00
+	Memory slot #1 clockSpeed (GHz): 2.20
+	Memory slot #1 type: DDR4
+	Memory slot #2 capacity (MiB): 8192.00
+	Memory slot #2 clockSpeed (GHz): 2.20
+	Memory slot #2 type: DDR4
+	Memory slot #3 capacity (MiB): 8192.00
+	Memory slot #3 clockSpeed (GHz): 2.20
+	Memory slot #3 type: DDR4
+	Virtual memory max (MiB): 40111.55
+	Virtual memory used (MiB): 36819.47
+	Swap memory total (MiB): 7424.00
+	Swap memory used (MiB): 173.43
+	Space in storage for jna.tmpdir (MiB): <path not set>
+	Space in storage for org.lwjgl.system.SharedLibraryExtractPath (MiB): <path not set>
+	Space in storage for io.netty.native.workdir (MiB): <path not set>
+	Space in storage for java.io.tmpdir (MiB): available: 2254.62, total: 475956.25
+	Space in storage for workdir (MiB): available: 663179.25, total: 976745.25
+	JVM Flags: 0 total; 
+	Debug Flags: 0 total; 
+	Fabric Mods: 
+		fabric-api: Fabric API 0.134.1+1.21.9
+		fabric-api-base: Fabric API Base 1.0.0+14b92d897d
+		fabric-api-lookup-api-v1: Fabric API Lookup API (v1) 1.6.106+d17682157d
+		fabric-biome-api-v1: Fabric Biome API (v1) 16.1.0+c2417d4f7d
+		fabric-block-api-v1: Fabric Block API (v1) 1.1.5+d17682157d
+		fabric-block-view-api-v2: Fabric BlockView API (v2) 1.0.34+e4fd1b927d
+		fabric-command-api-v2: Fabric Command API (v2) 2.3.7+328a75ba7d
+		fabric-content-registries-v0: Fabric Content Registries (v0) 10.2.3+b6a242647d
+		fabric-convention-tags-v1: Fabric Convention Tags 2.1.47+7f945d5b7d
+		fabric-convention-tags-v2: Fabric Convention Tags (v2) 2.15.12+3154c1c87d
+		fabric-crash-report-info-v1: Fabric Crash Report Info (v1) 0.3.18+33df5e6e7d
+		fabric-data-attachment-api-v1: Fabric Data Attachment API (v1) 1.8.28+9bce411b7d
+		fabric-data-generation-api-v1: Fabric Data Generation API (v1) 23.2.22+d8b85ef17d
+		fabric-dimensions-v1: Fabric Dimensions API (v1) 4.0.22+38b9cc197d
+		fabric-entity-events-v1: Fabric Entity Events (v1) 2.1.12+14b92d897d
+		fabric-events-interaction-v0: Fabric Events Interaction (v0) 4.0.35+5ba217127d
+		fabric-game-rule-api-v1: Fabric Game Rule API (v1) 1.1.1+e47eaae57d
+		fabric-gametest-api-v1: Fabric Game Test API (v1) 3.1.18+33df5e6e7d
+		fabric-item-api-v1: Fabric Item API (v1) 11.5.8+9bce411b7d
+		fabric-item-group-api-v1: Fabric Item Group API (v1) 4.2.24+86b3ae577d
+		fabric-lifecycle-events-v1: Fabric Lifecycle Events (v1) 2.6.9+33df5e6e7d
+		fabric-loot-api-v2: Fabric Loot API (v2) 3.0.64+3f89f5a57d
+		fabric-loot-api-v3: Fabric Loot API (v3) 2.0.11+d17682157d
+		fabric-message-api-v1: Fabric Message API (v1) 6.1.7+3154c1c87d
+		fabric-networking-api-v1: Fabric Networking API (v1) 5.0.13+d269470c7d
+		fabric-object-builder-api-v1: Fabric Object Builder API (v1) 21.1.24+9bce411b7d
+		fabric-particles-v1: Fabric Particles (v1) 4.2.2+a0ee59a47d
+		fabric-permissions-api-v0: fabric-permissions-api 0.5.0
+		fabric-recipe-api-v1: Fabric Recipe API (v1) 8.1.26+d17682157d
+		fabric-registry-sync-v0: Fabric Registry Sync (v0) 6.1.41+679c8c5c7d
+		fabric-rendering-fluids-v1: Fabric Rendering Fluids (v1) 3.1.38+86b3ae577d
+		fabric-resource-conditions-api-v1: Fabric Resource Conditions API (v1) 5.0.28+33df5e6e7d
+		fabric-resource-loader-v0: Fabric Resource Loader (v0) 3.2.2+3388a3b27d
+		fabric-resource-loader-v1: Fabric Resource Loader (v1) 1.0.2+225bca407d
+		fabric-screen-handler-api-v1: Fabric Screen Handler API (v1) 1.3.150+d17682157d
+		fabric-serialization-api-v1: Fabric Serialization API (v1) 1.0.0+d857c9767d
+		fabric-tag-api-v1: Fabric Tag API (v1) 1.2.10+2fa446b27d
+		fabric-transfer-api-v1: Fabric Transfer API (v1) 6.0.15+79ec2c127d
+		fabric-transitive-access-wideners-v1: Fabric Transitive Access Wideners (v1) 6.5.3+41eb43437d
+		fabricloader: Fabric Loader 0.18.4
+		java: OpenJDK 64-Bit Server VM 21
+		luckperms: LuckPerms 5.5.17
+		minecraft: Minecraft 1.21.9
+		mixinextras: MixinExtras 0.5.0
+		nekkycommandmaker: Nek's Command Maker! 3.1.1
+	Server Running: true
+	Active Data Packs: vanilla, fabric, fabric-convention-tags-v2, fabric-gametest-api-v1
+	Available Data Packs: fabric, fabric-convention-tags-v2, fabric-gametest-api-v1, minecart_improvements, redstone_experiments, trade_rebalance, vanilla
+	Enabled Feature Flags: minecraft:vanilla
+	World Generation: Stable
+	World Seed: -7100178658922339291
+	Suppressed Exceptions: ~~NONE~~
+	Is Modded: Definitely; Server brand changed to 'fabric'
+	Type: Dedicated Server (map_server.txt)

@@ -93,7 +93,7 @@
   "home": "execute if score ${player} homeDim matches 0 run tp @s 0 65 0 && execute if score ${player} homeDim matches -1 run tp @s 0 65 0"
 }</code></pre>
 
-            <div class="callout-tip">
+            <div class="callout callout-tip">
                 <h3>Pro Tip</h3>
                 <p>Combine <code>${dimension}</code> with scoreboard tracking to build a complete cross-dimensional home or warp system. Store not just coordinates, but also the dimension ID for each home point.</p>
             </div>
@@ -233,7 +233,7 @@ echo "Configuration synced from ${MASTER_SERVER}"</code></pre>
             <h3>Option 3: Plugin-Based Sync</h3>
             <p>Some server management plugins support file synchronization. Check if your hosting panel or server management tool supports custom file sync rules for the <code>config/CommandMaker/</code> directory.</p>
 
-            <div class="callout-warning">
+            <div class="callout callout-warning">
                 <h3>Important</h3>
                 <p>Always run <code>/cmd reload</code> after syncing configuration files. Command Maker will not automatically detect file changes -- it uses the cached configuration until explicitly reloaded.</p>
             </div>
@@ -282,7 +282,7 @@ echo "Configuration synced from ${MASTER_SERVER}"</code></pre>
 // Cross-dimensional return
 /cmd add lobby execute in minecraft:overworld run tp ${player} ${warp_spawn}</code></pre>
 
-            <div class="callout-info">
+            <div class="callout callout-info">
                 <h3>Note</h3>
                 <p>Multi-world functionality depends heavily on your server setup. Vanilla Minecraft supports three dimensions. Third-party plugins add more worlds. Always verify dimension identifiers for your specific server configuration by running <code>/whereami</code> (using the alias above).</p>
             </div>

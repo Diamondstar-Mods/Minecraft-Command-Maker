@@ -87,6 +87,7 @@ CM.sidebar = {
         { label: "Quick Start", href: "quick-start.html" },
         { label: "Getting Started", href: "getting-started.html" },
         { label: "Installation", href: "installation.html" },
+        { label: "Updating Guide", href: "updating.html" },
         { label: "Configuration", href: "configuration.html" }
       ]
     },
@@ -131,6 +132,7 @@ CM.sidebar = {
       title: "Permissions", icon: "🔐",
       links: [
         { label: "Advanced Permissions", href: "advanced-permissions-guide.html" },
+        { label: "Permissions Quick Reference", href: "permissions-quick-reference.html" },
         { label: "Permissions Setup", href: "permissions-setup.html" },
         { label: "LuckPerms Integration", href: "luckperms-integration.html" }
       ]
@@ -274,6 +276,8 @@ CM.buildSearchIndex = function () {
   add("Download (Client)", "downloadClient.html");
   add("Download (Local)", "download-local.html");
   add("Examples", "examples.html");
+  add("Permissions Quick Reference", "permissions-quick-reference.html");
+  add("Updating Guide", "updating.html");
 
   // Function catalog entries — searchable by function name
   var functions = [

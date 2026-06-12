@@ -21,7 +21,7 @@ rootProject.name = 'Minecraft-Command-Maker'
 
 // Multi-version server builds
 include 'server-1.17'              // MC 1.17.x
-include 'server-1.18-1.19-1.20'   // MC 1.18-1.20.x
+//include 'server-1.18-1.19-1.20'   // MC 1.18-1.20.x
 include 'server-1.21'              // MC 1.21.x
 include 'server-1.22'              // MC 26.1
-include 'client'
+//include 'client'
