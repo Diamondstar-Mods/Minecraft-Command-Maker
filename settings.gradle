@@ -8,6 +8,10 @@ pluginManagement {
             name = 'LegacyFabric'
             url = 'https://repo.legacyfabric.net/maven/'
         }
+        maven {
+            name = 'NeoForge'
+            url = 'https://maven.neoforged.net/releases'
+        }
         mavenCentral()
         gradlePluginPortal()
     }
@@ -24,4 +28,5 @@ rootProject.name = 'Minecraft-Command-Maker'
 //include 'server-1.18-1.19-1.20'   // MC 1.18-1.20.x
 include 'server-1.21'              // MC 1.21.x
 include 'server-1.22'              // MC 26.1
+
 //include 'client'
