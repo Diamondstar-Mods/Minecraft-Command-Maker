@@ -1,0 +1,49 @@
+name: CommandMaker
+version: "${version}"
+main: com.example.CommandMakerPlugin
+api-version: "1.21"
+description: Create aliases, custom syntax, variables, and downloadable functions.
+
+commands:
+  cmd:
+    description: Main Command Maker command
+    usage: /cmd <add|del|reload|list|gui|help|function|downloadfunction|listdownloadablefunctions|setvar|syntax>
+  addcommand:
+    description: Add a command alias (legacy, op-only)
+    usage: /addcommand <alias> <command>
+    permission: cmdmaker.addcommand
+  setcmdvariable:
+    description: Set a personal command variable
+    usage: /setcmdvariable <key> <value>
+  syntax:
+    description: List custom syntax patterns
+    usage: /syntax
+  deletealias:
+    description: List and manage aliases for deletion
+    usage: /deletealias
+  cmmakerperm:
+    description: Manage Command Maker permissions
+    usage: /cmmakerperm reload
+    permission: cmdmaker.admin
+
+permissions:
+  cmdmaker.*:
+    description: All Command Maker permissions
+    default: op
+    children:
+      cmdmaker.cmd: true
+      cmdmaker.addcommand: true
+      cmdmaker.manage.alias: true
+      cmdmaker.admin: true
+  cmdmaker.cmd:
+    description: Use /cmd command
+    default: true
+  cmdmaker.addcommand:
+    description: Use /addcommand
+    default: op
+  cmdmaker.manage.alias:
+    description: Manage aliases (add/delete)
+    default: op
+  cmdmaker.admin:
+    description: Full admin access
+    default: op
