@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Installation - Command Maker Wiki</title>
-    <meta name="description" content="Step-by-step installation guide for Command Maker mod on Fabric servers, including legacy support for Minecraft 1.8-1.13.2.">
+    <meta name="description" content="Step-by-step installation guide for Command Maker mod on Fabric, Forge, and NeoForge servers, including legacy support for Minecraft 1.8-1.13.2.">
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="favicon.ico">
 </head>
@@ -20,8 +20,13 @@
                 <h2>Prerequisites</h2>
                 <ul>
                     <li><strong>Minecraft 1.6+</strong> (tested 1.17+)</li>
-                    <li><strong>Fabric Loader</strong> (download from <a href="https://fabricmc.net/" target="_blank">fabricmc.net</a>)</li>
-                    <li><strong>Fabric API</strong> (required for Fabric compatibility)</li>
+                    <li>A supported mod loader:
+                        <ul>
+                            <li><strong>Fabric Loader</strong> (download from <a href="https://fabricmc.net/" target="_blank">fabricmc.net</a>) + <strong>Fabric API</strong></li>
+                            <li><strong>NeoForge</strong> (download from <a href="https://neoforged.net/" target="_blank">neoforged.net</a>)</li>
+                            <li><strong>Forge</strong> (download from <a href="https://files.minecraftforge.net/" target="_blank">minecraftforge.net</a>)</li>
+                        </ul>
+                    </li>
                 </ul>
             </section>
 
@@ -48,13 +53,18 @@
                 <ol>
                     <li>Copy the downloaded <code>command-maker-*.jar</code> file</li>
                     <li>Paste it into your mods folder</li>
-                    <li>Make sure <strong>Fabric API</strong> is also in the mods folder</li>
+                    <li>Make sure the required loader mod is also installed:
+                        <ul>
+                            <li><strong>Fabric:</strong> <a href="https://modrinth.com/mod/fabric-api" target="_blank">Fabric API</a></li>
+                            <li><strong>NeoForge/Forge:</strong> No extra mods required</li>
+                        </ul>
+                    </li>
                 </ol>
 
                 <h3>Step 4: Launch Minecraft</h3>
                 <ol>
                     <li>Open your launcher</li>
-                    <li>Select a profile with Fabric Loader</li>
+                    <li>Select a profile with your mod loader (Fabric, Forge, or NeoForge)</li>
                     <li>Click Play</li>
                     <li>Wait for Minecraft to fully load</li>
                 </ol>
@@ -108,11 +118,38 @@
             </section>
 
             <section>
+                <h2>Forge & NeoForge Installation (Minecraft 1.21.1+)</h2>
+                <p>Command Maker supports both <strong>MinecraftForge</strong> and <strong>NeoForge</strong> for Minecraft 1.21.1 and newer!</p>
+
+                <h3>Prerequisites for Forge/NeoForge</h3>
+                <ul>
+                    <li><strong>Minecraft 1.21.1+</strong></li>
+                    <li><strong>Java 21+</strong></li>
+                    <li><strong>NeoForge</strong> or <strong>MinecraftForge</strong> loader installed</li>
+                </ul>
+
+                <h3>Installation Steps</h3>
+                <ol>
+                    <li>Download the <strong>Forge/NeoForge Edition</strong> of Command Maker from the <a href="download.html">Downloads page</a></li>
+                    <li>Install your chosen loader (NeoForge or Forge) for Minecraft 1.21.1</li>
+                    <li>Copy the <code>CMDMaker-Forge-NeoForge-*.jar</code> file into your mods folder</li>
+                    <li>Launch your Forge or NeoForge profile</li>
+                    <li>Verify with <code>/cmd reload</code> in chat</li>
+                </ol>
+
+                <h3>Forge vs NeoForge</h3>
+                <p><strong>NeoForge</strong> is the default and recommended loader for Command Maker on 1.21.1+. To build for <strong>Forge</strong>, use the Gradle property <code>-Pforge</code> when building:</p>
+                <pre><code>./gradlew :server-1.21-forge-neoforge:build -Pforge</code></pre>
+                <p>Both loaders share the same mod features — the only difference is the loader-specific metadata.</p>
+            </section>
+
+            <section>
                 <h2>Troubleshooting Installation</h2>
                 <p><strong>Mod doesn't appear in-game?</strong></p>
                 <ul>
-                    <li>Verify Fabric Loader is installed correctly</li>
-                    <li>Ensure Fabric API mod is also in the mods folder</li>
+                    <li>Verify the correct mod loader (Fabric/Forge/NeoForge) is installed for your Minecraft version</li>
+                    <li><strong>Fabric:</strong> Ensure Fabric API is also in the mods folder</li>
+                    <li><strong>Forge/NeoForge:</strong> No extra mods required; verify you downloaded the correct JAR variant</li>
                     <li>Check that the JAR filename is correct</li>
                     <li>Try deleting the mod, restarting the launcher, and re-adding it</li>
                 </ul>

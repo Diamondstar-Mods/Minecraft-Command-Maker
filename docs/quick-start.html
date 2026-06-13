@@ -18,7 +18,7 @@
 
             <div class="callout callout-info">
                 <h3>Prerequisites</h3>
-                <p>You need Minecraft Java Edition and the Fabric Loader installed. If you have not installed Fabric yet, visit the Fabric website and follow their installation guide for your Minecraft version.</p>
+                <p>You need Minecraft Java Edition and a supported mod loader (Fabric, Forge, or NeoForge) installed. Visit the <a href="installation.html">Installation page</a> for detailed loader-specific setup instructions.</p>
             </div>
 
             <h2>Step 1: Download the Mod</h2>
@@ -28,14 +28,14 @@
                 <li><strong>CurseForge:</strong> Find Command Maker on <a href="https://www.curseforge.com/minecraft/mc-mods/neks-command-maker-server-side-edition" target="_blank" rel="noopener">CurseForge</a> and download the matching version.</li>
                 <li><strong>GitHub Releases:</strong> Download directly from the <a href="https://github.com/Diamondstar-Mods/Minecraft-Command-Maker/releases" target="_blank" rel="noopener">GitHub releases page</a>.</li>
             </ul>
-            <p>Make sure to download the version that matches your Minecraft version and mod loader (Fabric or Quilt). The filename will look something like <code>CommandMaker-3.1.0-1.21.jar</code>.</p>
+            <p>Make sure to download the version that matches your Minecraft version and mod loader (Fabric, Quilt, Forge, or NeoForge). The filename will look something like <code>CMDMaker-Forge-NeoForge-3.2.0-1.21.jar</code>.</p>
 
             <h2>Step 2: Install the Mod</h2>
             <ol>
                 <li>Locate your Minecraft installation directory. On Windows this is typically <code>%appdata%/.minecraft</code>.</li>
                 <li>Open the <code>mods</code> folder inside your Minecraft directory. If the folder does not exist, create it.</li>
                 <li>Drop the downloaded <code>.jar</code> file into the <code>mods</code> folder.</li>
-                <li>If you use Fabric API, make sure it is also in the <code>mods</code> folder. Command Maker requires Fabric API on modern versions.</li>
+                <li>If you use <strong>Fabric</strong>, make sure Fabric API is also in the <code>mods</code> folder. Forge and NeoForge users do not need extra mods.</li>
             </ol>
 
             <div class="callout callout-tip">
@@ -46,7 +46,7 @@
             <h2>Step 3: Launch Minecraft</h2>
             <ol>
                 <li>Open the Minecraft Launcher.</li>
-                <li>Select the Fabric profile you created when installing Fabric Loader.</li>
+                <li>Select the profile matching your mod loader (Fabric, Forge, or NeoForge).</li>
                 <li>Launch the game and join a world or server.</li>
             </ol>
             <p>Command Maker loads automatically. Configuration files are created in <code>config/CommandMaker/</code> on first launch. You do not need to do anything special to enable the mod.</p>

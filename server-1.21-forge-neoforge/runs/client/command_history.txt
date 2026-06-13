@@ -1,0 +1,3 @@
+/cmd help
+/cmd listdownloadablefunctions
+/cmd gui

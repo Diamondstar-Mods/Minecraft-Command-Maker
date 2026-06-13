@@ -1,0 +1,25 @@
+modLoader = "javafml"
+loaderVersion = "[49,)"
+license = "CC-BY-SA-4.0"
+
+[[mods]]
+modId = "nekkycommandmaker"
+version = "${version}"
+displayName = "Nek's Command Maker!"
+description = "NEKKY COMMAND MAKER — Create aliases, custom syntax, variables, and downloadable functions."
+authors = ["NekSheep9180 aka lucgei231"]
+logoFile = "assets/modid/icon.png"
+
+[[dependencies.nekkycommandmaker]]
+    modId = "forge"
+    type = "required"
+    versionRange = "[49,)"
+    ordering = "NONE"
+    side = "SERVER"
+
+[[dependencies.nekkycommandmaker]]
+    modId = "minecraft"
+    type = "required"
+    versionRange = "[1.21,1.22)"
+    ordering = "NONE"
+    side = "SERVER"
