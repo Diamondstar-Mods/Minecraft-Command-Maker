@@ -3,7 +3,7 @@
   "id": "nekkycommandmaker-legacy-server",
   "version": "${version}",
   "name": "Nek's Command Maker Legacy Server",
-  "description": "Legacy Fabric server support for Minecraft 1.8-1.13.2.",
+  "description": "[DEPRECATED] Legacy Fabric server support for Minecraft 1.8-1.13.2. No longer maintained. Use server-1.21+ or server-1.22 instead.",
   "authors": ["NekSheep9180 aka lucgei231"],
   "contact": {
     "homepage": "https://github.com/Diamondstar-Mods/",

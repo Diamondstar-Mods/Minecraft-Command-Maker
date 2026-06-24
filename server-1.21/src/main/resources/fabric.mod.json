@@ -6,9 +6,10 @@
   "description": "NEKKY COMMAND MAKER",
   "authors": ["NekSheep9180 aka lucgei231"],
   "contact": {
-    "homepage": "https://github.com/Diamondstar-Mods/",
+    "orgpage": "https://github.com/Diamondstar-Mods/",
     "sources": "https://github.com/Diamondstar-Mods/Minecraft-Command-Maker",
-    "issues": "https://github.com/Diamondstar-Mods/Minecraft-Command-Maker/issues"
+    "issues": "https://github.com/Diamondstar-Mods/Minecraft-Command-Maker/issues",
+    "wiki": "commandmakerwiki.lucasgeitgey.com"
   },
   "license": "CC-BY-SA-4.0",
   "icon": "assets/modid/icon.png",
@@ -24,6 +25,6 @@
     "fabric-api": "*"
   },
   "suggests": {
-    "another-mod": "*"
+    "luckperms": "*"
   }
 }

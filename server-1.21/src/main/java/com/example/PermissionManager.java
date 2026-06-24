@@ -379,8 +379,7 @@ public class PermissionManager {
             }
             
             JsonArray playerPerms = perms.getAsJsonArray(uuidStr);
-            playerPerms.remove(playerPerms.size() - 1); // Remove last element
-            
+
             // Rebuild array without the permission
             JsonArray newPerms = new JsonArray();
             for (JsonElement elem : playerPerms) {

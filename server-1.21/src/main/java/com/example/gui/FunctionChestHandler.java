@@ -199,12 +199,13 @@ public class FunctionChestHandler extends ScreenHandler {
         if (slotIndex == 7 && currentTab == 3) {
             // Confirm delete button
             if (pendingDeleteAlias != null) {
-                AliasManager.removeAlias(pendingDeleteAlias);
+                String deleted = pendingDeleteAlias;
+                AliasManager.removeAlias(deleted);
                 pendingDeleteAlias = null;
                 refreshDisplay();
                 // Send feedback to the player
                 if (player instanceof ServerPlayerEntity sp) {
-                    sp.sendMessage(Text.literal("§c✖ Deleted alias §f/" + pendingDeleteAlias + "§c. Run §f/cmd reload§c to update commands."), false);
+                    sp.sendMessage(Text.literal("§c✖ Deleted alias §f/" + deleted + "§c. Run §f/cmd reload§c to update commands."), false);
                 }
             }
             return;

@@ -3,6 +3,7 @@ package com.example.gui;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
+import com.example.*;
 import com.google.gson.*;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -18,12 +19,13 @@ public class FunctionManagerScreen extends Screen {
     private static final int TEXTURE_H = 222;
 
     private final Screen previousScreen;
-    private int currentTab = 0; // 0=Download, 1=My Functions, 2=Create
+    private int currentTab = 0; // 0=Download, 1=My Functions, 2=Create, 3=Delete Aliases
     private int currentPage = 0;
-    private Map<String, String> manifest = new LinkedHashMap<>();
+    private Map<String, ManifestEntry> manifest = new LinkedHashMap<>();
     private List<String> localFunctions = new ArrayList<>();
     private boolean loading = true;
     private String statusMessage = "";
+    private String pendingDeleteAlias = null;
 
     private int guiLeft, guiTop;
 
@@ -45,37 +47,13 @@ public class FunctionManagerScreen extends Screen {
         statusMessage = "§7Loading...";
         new Thread(() -> {
             try {
-                HttpClient client = HttpClient.newHttpClient();
-                HttpRequest request = HttpRequest.newBuilder()
-                    .uri(java.net.URI.create("https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/functions/functions.json"))
-                    .build();
-                HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-                if (response.statusCode() == 200) {
-                    JsonElement je = JsonParser.parseString(response.body());
-                    if (je.isJsonObject()) {
-                        manifest.clear();
-                        for (Map.Entry<String, JsonElement> entry : je.getAsJsonObject().entrySet()) {
-                            manifest.put(entry.getKey(), entry.getValue().getAsString());
-                        }
-                    }
-                }
+                manifest = FunctionManager.fetchFunctionManifest();
+                statusMessage = "§aLoaded " + manifest.size() + " functions";
             } catch (Exception e) {
                 statusMessage = "§cFailed to load online functions";
             }
 
-            localFunctions.clear();
-            try {
-                Path functionsPath = Paths.get("config", "CommandMaker", "Functions");
-                if (Files.exists(functionsPath)) {
-                    Files.list(functionsPath)
-                        .filter(p -> p.toString().endsWith(".mcfunction"))
-                        .forEach(p -> {
-                            String name = p.getFileName().toString().replace(".mcfunction", "");
-                            localFunctions.add(name);
-                        });
-                }
-            } catch (Exception e) {}
-
+            localFunctions = FunctionManager.listLocalFunctions();
             loading = false;
         }).start();
     }
@@ -85,7 +63,7 @@ public class FunctionManagerScreen extends Screen {
         this.renderBackground(context, mouseX, mouseY, delta);
         super.render(context, mouseX, mouseY, delta);
 
-        // Draw chest-like background (dark border + light interior)
+        // Draw chest-like background
         context.fill(guiLeft - 2, guiTop - 2, guiLeft + TEXTURE_W + 2, guiTop + TEXTURE_H + 2, 0xFF000000);
         context.fill(guiLeft, guiTop, guiLeft + TEXTURE_W, guiTop + TEXTURE_H, 0xFFC6C6C6);
 
@@ -105,17 +83,30 @@ public class FunctionManagerScreen extends Screen {
 
     private void drawTabs(DrawContext context, int mouseX, int mouseY) {
         int tabY = guiTop + 18;
-        String[] labels = {"Download", "My Functions", "Create"};
+        String[] labels = {"Download", "My Functions", "Create", "Del Aliases"};
+        int[] colors = {0xFF3D8B3D, 0xFF3D3D8B, 0xFF8B8B3D, 0xFF8B3D3D};
 
-        for (int i = 0; i < 3; i++) {
-            int x = guiLeft + 8 + i * 55;
+        for (int i = 0; i < 4; i++) {
+            int x = guiLeft + 4 + i * 43;
             boolean active = currentTab == i;
             int tabColor = active ? 0xFF3D3D3D : 0xFF5A5A5A;
-            int textColor = active ? 0xFFFF55 : 0xAAAAAA;
+            int textColor = active ? colors[i] : 0xAAAAAA;
 
-            context.fill(x, tabY, x + 50, tabY + 14, tabColor);
-            context.fill(x, tabY, x + 50, tabY + 1, active ? 0xFF55FF55 : 0xFF3D3D3D); // green underline for active
-            context.drawText(this.textRenderer, Text.literal(labels[i]), x + 4, tabY + 3, textColor, false);
+            context.fill(x, tabY, x + 40, tabY + 14, tabColor);
+            context.fill(x, tabY, x + 40, tabY + 1, active ? colors[i] : 0xFF3D3D3D);
+            context.drawText(this.textRenderer, Text.literal(labels[i]), x + 2, tabY + 3, textColor, false);
+        }
+
+        // Confirm delete button (visible in delete aliases tab)
+        if (currentTab == 3 && pendingDeleteAlias != null) {
+            int btnX = guiLeft + TEXTURE_W - 40;
+            context.fill(btnX, tabY, btnX + 36, tabY + 14, 0xFF8B0000);
+            context.fill(btnX + 1, tabY + 1, btnX + 35, tabY + 13, 0xFFFF4444);
+            context.drawText(this.textRenderer, Text.literal("§f✖ DEL"), btnX + 3, tabY + 3, 0xFFFFFF, false);
+        } else if (currentTab == 3) {
+            int btnX = guiLeft + TEXTURE_W - 40;
+            context.fill(btnX, tabY, btnX + 36, tabY + 14, 0xFF555555);
+            context.drawText(this.textRenderer, Text.literal("§7Confirm"), btnX + 1, tabY + 3, 0xAAAAAA, false);
         }
     }
 
@@ -135,9 +126,10 @@ public class FunctionManagerScreen extends Screen {
 
                 if (idx < slots.size()) {
                     SlotData slot = slots.get(idx);
-                    drawSlot(context, x, y, slot, mouseX, mouseY);
+                    // Highlight pending delete
+                    boolean highlighted = currentTab == 3 && pendingDeleteAlias != null && slot.name.equals(pendingDeleteAlias);
+                    drawSlot(context, x, y, slot, mouseX, mouseY, highlighted);
                 } else {
-                    // Empty slot
                     context.fill(x, y, x + SLOT_SIZE, y + SLOT_SIZE, 0xFF8B8B8B);
                     context.fill(x + 1, y + 1, x + SLOT_SIZE - 1, y + SLOT_SIZE - 1, 0xFF666666);
                 }
@@ -154,9 +146,10 @@ public class FunctionManagerScreen extends Screen {
         List<SlotData> slots = new ArrayList<>();
         switch (currentTab) {
             case 0 -> {
-                for (Map.Entry<String, String> e : manifest.entrySet()) {
+                for (Map.Entry<String, ManifestEntry> e : manifest.entrySet()) {
                     if (!localFunctions.contains(e.getKey())) {
-                        slots.add(new SlotData(e.getKey(), e.getValue(), SlotAction.DOWNLOAD));
+                        ManifestEntry me = e.getValue();
+                        slots.add(new SlotData(e.getKey(), me.description, SlotAction.DOWNLOAD, me.icon));
                     }
                 }
             }
@@ -164,49 +157,82 @@ public class FunctionManagerScreen extends Screen {
                 List<String> sorted = new ArrayList<>(localFunctions);
                 Collections.sort(sorted);
                 for (String name : sorted) {
-                    String desc = manifest.getOrDefault(name, "Local function");
-                    slots.add(new SlotData(name, desc, SlotAction.RUN_DELETE));
+                    ManifestEntry me = manifest.get(name);
+                    String desc = me != null ? me.description : "Local function — left-click to run";
+                    slots.add(new SlotData(name, desc, SlotAction.RUN_DELETE, null));
                 }
             }
             case 2 -> {
-                slots.add(new SlotData("Empty Function", "Create a blank function file", SlotAction.CREATE_EMPTY));
-                slots.add(new SlotData("Command Template", "Pre-filled with command examples", SlotAction.CREATE_COMMAND));
-                slots.add(new SlotData("Mob Spawner Template", "Mob summoning and effect commands", SlotAction.CREATE_MOB));
-                slots.add(new SlotData("Building Template", "fill/setblock building commands", SlotAction.CREATE_BUILD));
+                slots.add(new SlotData("Empty Function", "Create a blank .mcfunction file to write yourself", SlotAction.CREATE_EMPTY, null));
+                slots.add(new SlotData("Command Template", "Pre-filled with common command examples to customize", SlotAction.CREATE_COMMAND, null));
+                slots.add(new SlotData("Mob Spawner", "Template with mob summoning and effect commands", SlotAction.CREATE_MOB, null));
+                slots.add(new SlotData("Building", "Template with fill/setblock building commands", SlotAction.CREATE_BUILD, null));
+            }
+            case 3 -> {
+                Map<String, String> aliases = AliasManager.getAliases();
+                List<String> sorted = new ArrayList<>(aliases.keySet());
+                Collections.sort(sorted);
+                for (String name : sorted) {
+                    slots.add(new SlotData(name, aliases.get(name), SlotAction.DELETE_ALIAS, null));
+                }
             }
         }
         return slots;
     }
 
-    private void drawSlot(DrawContext context, int x, int y, SlotData slot, int mouseX, int mouseY) {
+    private void drawSlot(DrawContext context, int x, int y, SlotData slot, int mouseX, int mouseY, boolean highlighted) {
         boolean hovered = mouseX >= x && mouseX < x + SLOT_SIZE && mouseY >= y && mouseY < y + SLOT_SIZE;
 
-        // Slot background
-        int bgColor = hovered ? 0xFFFFFFFF : 0xFF8B8B8B;
-        context.fill(x, y, x + SLOT_SIZE, y + SLOT_SIZE, 0xFF373737);
+        int bgColor;
+        if (highlighted) {
+            bgColor = 0xFFFF4444;
+        } else if (hovered) {
+            bgColor = 0xFFFFFFFF;
+        } else {
+            bgColor = 0xFF8B8B8B;
+        }
+
+        context.fill(x, y, x + SLOT_SIZE, y + SLOT_SIZE, highlighted ? 0xFF8B0000 : 0xFF373737);
         context.fill(x + 1, y + 1, x + SLOT_SIZE - 1, y + SLOT_SIZE - 1, bgColor);
 
-        // Item color indicator
+        // Item color indicator based on action
         int iconColor = switch (slot.action) {
             case DOWNLOAD -> 0xFF3D8B3D;
             case RUN_DELETE -> 0xFF3D3D8B;
             case CREATE_EMPTY, CREATE_COMMAND, CREATE_MOB, CREATE_BUILD -> 0xFF8B8B3D;
+            case DELETE_ALIAS -> highlighted ? 0xFFFF0000 : 0xFF8B3D3D;
             default -> 0xFF666666;
         };
-        context.fill(x + 3, y + 3, x + SLOT_SIZE - 3, y + SLOT_SIZE - 3, iconColor);
+
+        if (!highlighted) {
+            context.fill(x + 3, y + 3, x + SLOT_SIZE - 3, y + SLOT_SIZE - 3, iconColor);
+        }
 
         // First letter of slot name as icon
         String letter = slot.name.substring(0, 1).toUpperCase();
         context.drawText(this.textRenderer, Text.literal("§f" + letter), x + 6, y + 4, 0xFFFFFF, false);
 
+        // Tooltip on hover
         if (hovered && slot.description != null && !slot.description.isEmpty()) {
             List<Text> tooltip = new ArrayList<>();
             tooltip.add(Text.literal("§e" + slot.name));
-            tooltip.add(Text.literal("§7" + slot.description));
+            if (slot.action == SlotAction.DELETE_ALIAS) {
+                tooltip.add(Text.literal("§7Command: " + slot.description));
+                tooltip.add(Text.literal(""));
+                if (highlighted) {
+                    tooltip.add(Text.literal("§c§l⚠ Click CONFIRM to delete!"));
+                } else {
+                    tooltip.add(Text.literal("§cClick to select for deletion"));
+                    tooltip.add(Text.literal("§7Then click the §c✖ DEL §7button to confirm"));
+                }
+            } else {
+                tooltip.add(Text.literal("§7" + slot.description));
+            }
             String actionHint = switch (slot.action) {
                 case DOWNLOAD -> "§aClick to download";
                 case RUN_DELETE -> "§aLeft-click to run  §cRight-click to delete";
                 case CREATE_EMPTY, CREATE_COMMAND, CREATE_MOB, CREATE_BUILD -> "§eClick to create";
+                case DELETE_ALIAS -> highlighted ? "§c§lClick CONFIRM button to delete!" : "§cClick to select for deletion";
                 default -> "";
             };
             if (!actionHint.isEmpty()) {
@@ -222,12 +248,10 @@ public class FunctionManagerScreen extends Screen {
         int slotRows = ROWS - 2;
         int maxPage = Math.max(0, (totalSlots - 1) / (slotRows * COLUMNS));
 
-        // Page info
         String pageInfo = "Page " + (currentPage + 1) + " / " + (maxPage + 1);
         int infoWidth = this.textRenderer.getWidth(pageInfo);
         context.drawText(this.textRenderer, Text.literal(pageInfo), guiLeft + (TEXTURE_W - infoWidth) / 2, navY + 4, 0xFFFFFF, false);
 
-        // Prev button
         if (currentPage > 0) {
             int px = guiLeft + 8;
             context.fill(px, navY, px + 20, navY + 16, 0xFF3D8B3D);
@@ -235,7 +259,6 @@ public class FunctionManagerScreen extends Screen {
             context.drawText(this.textRenderer, Text.literal("§0<"), px + 7, navY + 3, 0xFFFFFF, false);
         }
 
-        // Next button
         if (currentPage < maxPage) {
             int nx = guiLeft + TEXTURE_W - 28;
             context.fill(nx, navY, nx + 20, navY + 16, 0xFF3D8B3D);
@@ -244,15 +267,29 @@ public class FunctionManagerScreen extends Screen {
         }
     }
 
+    @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (loading) return false;
 
         // Tab clicks
         int tabY = guiTop + 18;
-        for (int i = 0; i < 3; i++) {
-            int tx = guiLeft + 8 + i * 55;
-            if (mouseX >= tx && mouseX < tx + 50 && mouseY >= tabY && mouseY < tabY + 14) {
+        for (int i = 0; i < 4; i++) {
+            int tx = guiLeft + 4 + i * 43;
+            if (mouseX >= tx && mouseX < tx + 40 && mouseY >= tabY && mouseY < tabY + 14) {
                 currentTab = i;
+                currentPage = 0;
+                pendingDeleteAlias = null;
+                return true;
+            }
+        }
+
+        // Confirm delete button
+        if (currentTab == 3 && pendingDeleteAlias != null) {
+            int btnX = guiLeft + TEXTURE_W - 40;
+            if (mouseX >= btnX && mouseX < btnX + 36 && mouseY >= tabY && mouseY < tabY + 14) {
+                AliasManager.removeAlias(pendingDeleteAlias);
+                pendingDeleteAlias = null;
+                loadData();
                 currentPage = 0;
                 return true;
             }
@@ -345,6 +382,13 @@ public class FunctionManagerScreen extends Screen {
                 statusMessage = "§aCreating building template...";
                 scheduleRefresh();
             }
+            case DELETE_ALIAS -> {
+                if (slot.name.equals(pendingDeleteAlias)) {
+                    pendingDeleteAlias = null;
+                } else {
+                    pendingDeleteAlias = slot.name;
+                }
+            }
         }
     }
 
@@ -357,6 +401,7 @@ public class FunctionManagerScreen extends Screen {
         }).start();
     }
 
+    @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
         if (verticalAmount < 0 && currentPage > 0) {
             currentPage--;
@@ -382,18 +427,20 @@ public class FunctionManagerScreen extends Screen {
     }
 
     private enum SlotAction {
-        NONE, DOWNLOAD, RUN_DELETE, CREATE_EMPTY, CREATE_COMMAND, CREATE_MOB, CREATE_BUILD
+        NONE, DOWNLOAD, RUN_DELETE, CREATE_EMPTY, CREATE_COMMAND, CREATE_MOB, CREATE_BUILD, DELETE_ALIAS
     }
 
     private static class SlotData {
         final String name;
         final String description;
         final SlotAction action;
+        final String iconId;
 
-        SlotData(String name, String description, SlotAction action) {
+        SlotData(String name, String description, SlotAction action, String iconId) {
             this.name = name;
             this.description = description;
             this.action = action;
+            this.iconId = iconId;
         }
     }
 }
