@@ -123,7 +123,8 @@ public class FunctionChestHandler extends AbstractContainerMenu {
             case 0 -> {
                 for (Map.Entry<String, com.example.ManifestEntry> e : manifest.entrySet()) {
                     if (!localFunctions.contains(e.getKey())) {
-                        entries.add(new FunctionEntry(e.getKey(), EntryType.DOWNLOAD, e.getValue().description));
+                        com.example.ManifestEntry me = e.getValue();
+                        entries.add(new FunctionEntry(e.getKey(), EntryType.DOWNLOAD, me.description, me.icon));
                     }
                 }
             }
@@ -133,7 +134,8 @@ public class FunctionChestHandler extends AbstractContainerMenu {
                 for (String name : sorted) {
                     com.example.ManifestEntry me = manifest.get(name);
                     String desc = me != null ? me.description : "Local function — left-click to run";
-                    entries.add(new FunctionEntry(name, EntryType.LOCAL, desc));
+                    String icon = me != null ? me.icon : null;
+                    entries.add(new FunctionEntry(name, EntryType.LOCAL, desc, icon));
                 }
             }
             case 2 -> {
@@ -298,20 +300,43 @@ public class FunctionChestHandler extends AbstractContainerMenu {
         final String name;
         final EntryType type;
         final String description;
+        final String iconId; // e.g. "minecraft:diamond_shovel", may be null
 
         FunctionEntry(String name, EntryType type, String description) {
+            this(name, type, description, null);
+        }
+
+        FunctionEntry(String name, EntryType type, String description, String iconId) {
             this.name = name;
             this.type = type;
             this.description = description;
+            this.iconId = iconId;
         }
 
-        ItemStack toItemStack() {
-            net.minecraft.world.item.Item item = switch (type) {
+        private net.minecraft.world.item.Item resolveIcon() {
+            if (iconId != null && !iconId.isEmpty()) {
+                String id = iconId.contains(":") ? iconId.substring(iconId.indexOf(':') + 1) : iconId;
+                net.minecraft.world.item.Item resolved = net.minecraft.core.registries.BuiltInRegistries.ITEM.get(
+                    net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("minecraft", id));
+                if (resolved != Items.AIR) {
+                    // Verify icon file exists in CDN icons folder
+                    Path iconFile = Paths.get("docs", "cdn", "icons", id + ".png");
+                    if (Files.exists(iconFile)) {
+                        return resolved;
+                    }
+                }
+            }
+            // Fallback to type-based defaults
+            return switch (type) {
                 case DOWNLOAD -> Items.PAPER;
                 case LOCAL -> Items.BOOK;
                 case DELETE_ALIAS -> Items.NAME_TAG;
                 default -> Items.WRITABLE_BOOK;
             };
+        }
+
+        ItemStack toItemStack() {
+            net.minecraft.world.item.Item item = resolveIcon();
             String prefix = switch (type) {
                 case DOWNLOAD -> "§a";
                 case LOCAL -> "§b";

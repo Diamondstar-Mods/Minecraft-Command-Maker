@@ -159,7 +159,8 @@ public class FunctionManagerScreen extends Screen {
                 for (String name : sorted) {
                     ManifestEntry me = manifest.get(name);
                     String desc = me != null ? me.description : "Local function — left-click to run";
-                    slots.add(new SlotData(name, desc, SlotAction.RUN_DELETE, null));
+                    String icon = me != null ? me.icon : null;
+                    slots.add(new SlotData(name, desc, SlotAction.RUN_DELETE, icon));
                 }
             }
             case 2 -> {

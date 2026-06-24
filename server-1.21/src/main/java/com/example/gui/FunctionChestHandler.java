@@ -137,7 +137,8 @@ public class FunctionChestHandler extends ScreenHandler {
                 for (String name : sorted) {
                     ManifestEntry me = manifest.get(name);
                     String desc = me != null ? me.description : "Local function — left-click to run";
-                    entries.add(new FunctionEntry(name, EntryType.LOCAL, desc, null));
+                    String icon = me != null ? me.icon : null;
+                    entries.add(new FunctionEntry(name, EntryType.LOCAL, desc, icon));
                 }
             }
             case 2 -> {
@@ -322,7 +323,14 @@ public class FunctionChestHandler extends ScreenHandler {
                 String id = iconId.contains(":") ? iconId.substring(iconId.indexOf(':') + 1) : iconId;
                 net.minecraft.item.Item resolved = net.minecraft.registry.Registries.ITEM.get(
                     net.minecraft.util.Identifier.of("minecraft", id));
-                if (resolved != Items.AIR) return resolved;
+                if (resolved != Items.AIR) {
+                    // Verify icon file exists in CDN icons folder
+                    Path iconFile = Paths.get("docs", "cdn", "icons", id + ".png");
+                    if (Files.exists(iconFile)) {
+                        return resolved;
+                    }
+                    // Icon file missing from CDN — skip this icon, fall back to default
+                }
             }
             // Fallback to type-based defaults
             return switch (type) {
