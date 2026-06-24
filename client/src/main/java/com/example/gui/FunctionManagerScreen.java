@@ -267,7 +267,6 @@ public class FunctionManagerScreen extends Screen {
         }
     }
 
-    @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (loading) return false;
 
@@ -401,7 +400,6 @@ public class FunctionManagerScreen extends Screen {
         }).start();
     }
 
-    @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
         if (verticalAmount < 0 && currentPage > 0) {
             currentPage--;
