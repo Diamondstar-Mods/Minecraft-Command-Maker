@@ -317,7 +317,8 @@ public class FunctionChestHandler extends AbstractContainerMenu {
             if (iconId != null && !iconId.isEmpty()) {
                 String id = iconId.contains(":") ? iconId.substring(iconId.indexOf(':') + 1) : iconId;
                 net.minecraft.world.item.Item resolved = net.minecraft.core.registries.BuiltInRegistries.ITEM.get(
-                    net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("minecraft", id));
+                    net.minecraft.resources.Identifier.fromNamespaceAndPath("minecraft", id))
+                    .map(net.minecraft.core.Holder.Reference::value).orElse(Items.AIR);
                 if (resolved != Items.AIR) {
                     // Verify icon file exists in CDN icons folder
                     Path iconFile = Paths.get("docs", "cdn", "icons", id + ".png");
