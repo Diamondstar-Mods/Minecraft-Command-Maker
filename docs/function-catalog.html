@@ -7,6 +7,14 @@
     <meta name="description" content="Complete catalog of all 88 downloadable functions available in the Command Maker online library.">
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="favicon.ico">
+    <style>
+        .fn-icon { width: 32px; height: 32px; image-rendering: pixelated; vertical-align: middle; }
+        .fn-icon-th { width: 40px; }
+        @media (max-width: 600px) {
+            .fn-icon { width: 24px; height: 24px; }
+            .fn-icon-th { width: 28px; }
+        }
+    </style>
 </head>
 <body>
     <nav id="navbar" class="navbar" role="navigation" aria-label="Main navigation"></nav>
@@ -23,140 +31,140 @@
 
             <h2>Mini-Games</h2>
             <table>
-                <tr><th>Function</th><th>Description</th><th>Type</th></tr>
-                <tr><td><code>spleef_arena</code></td><td>Builds a floating snow arena in the sky for spleef matches with diamond shovels</td><td>Mini-Game</td></tr>
-                <tr><td><code>parkour_course</code></td><td>Generates a parkour course with colored checkpoints and a diamond tower finish line</td><td>Mini-Game</td></tr>
-                <tr><td><code>hide_and_seek</code></td><td>Classic hide and seek: invisibility for hiders, compass tracker for the seeker</td><td>Mini-Game</td></tr>
-                <tr><td><code>pvp_arena</code></td><td>Creates a balanced 31x31 PvP arena with red/blue team spawns and central loot</td><td>Mini-Game</td></tr>
-                <tr><td><code>maze_runner</code></td><td>Builds a hedge maze with a hidden diamond block treasure at the center</td><td>Mini-Game</td></tr>
-                <tr><td><code>ice_race</code></td><td>Creates an ice racing track with speed boosts and sea lantern checkpoints</td><td>Mini-Game</td></tr>
-                <tr><td><code>archery_range</code></td><td>Creates a target range with bullseyes, bows, and arrows provided</td><td>Mini-Game</td></tr>
-                <tr><td><code>fishing_derby</code></td><td>Creates a fishing lake with enchanted rods and lantern-lit docks</td><td>Mini-Game</td></tr>
-                <tr><td><code>king_of_the_hill</code></td><td>Builds a hill arena with a gold block control point on top</td><td>Mini-Game</td></tr>
-                <tr><td><code>death_run</code></td><td>Creates a trapped obstacle course with lava, TNT, and soul sand dangers</td><td>Mini-Game</td></tr>
-                <tr><td><code>death_swap</code></td><td>Two players swap positions and must trap each other with lava buckets and cobwebs</td><td>Mini-Game</td></tr>
-                <tr><td><code>trivia_challenge</code></td><td>Sets up a trivia booth with question signs, lectern, and writable books</td><td>Mini-Game</td></tr>
+                <tr><th class="fn-icon-th">Icon</th><th>Function</th><th>Description</th><th>Type</th></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/diamond_shovel.png" alt="" loading="lazy"></td><td><code>spleef_arena</code></td><td>Builds a floating snow arena in the sky for spleef matches with diamond shovels</td><td>Mini-Game</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/leather_boots.png" alt="" loading="lazy"></td><td><code>parkour_course</code></td><td>Generates a parkour course with colored checkpoints and a diamond tower finish line</td><td>Mini-Game</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/compass.png" alt="" loading="lazy"></td><td><code>hide_and_seek</code></td><td>Classic hide and seek: invisibility for hiders, compass tracker for the seeker</td><td>Mini-Game</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/diamond_sword.png" alt="" loading="lazy"></td><td><code>pvp_arena</code></td><td>Creates a balanced 31x31 PvP arena with red/blue team spawns and central loot</td><td>Mini-Game</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/oak_leaves.png" alt="" loading="lazy"></td><td><code>maze_runner</code></td><td>Builds a hedge maze with a hidden diamond block treasure at the center</td><td>Mini-Game</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/blue_ice.png" alt="" loading="lazy"></td><td><code>ice_race</code></td><td>Creates an ice racing track with speed boosts and sea lantern checkpoints</td><td>Mini-Game</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/bow.png" alt="" loading="lazy"></td><td><code>archery_range</code></td><td>Creates a target range with bullseyes, bows, and arrows provided</td><td>Mini-Game</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/fishing_rod.png" alt="" loading="lazy"></td><td><code>fishing_derby</code></td><td>Creates a fishing lake with enchanted rods and lantern-lit docks</td><td>Mini-Game</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/gold_block.png" alt="" loading="lazy"></td><td><code>king_of_the_hill</code></td><td>Builds a hill arena with a gold block control point on top</td><td>Mini-Game</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/soul_sand.png" alt="" loading="lazy"></td><td><code>death_run</code></td><td>Creates a trapped obstacle course with lava, TNT, and soul sand dangers</td><td>Mini-Game</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/ender_pearl.png" alt="" loading="lazy"></td><td><code>death_swap</code></td><td>Two players swap positions and must trap each other with lava buckets and cobwebs</td><td>Mini-Game</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/bookshelf.png" alt="" loading="lazy"></td><td><code>trivia_challenge</code></td><td>Sets up a trivia booth with question signs, lectern, and writable books</td><td>Mini-Game</td></tr>
             </table>
 
             <h2>Combat & Survival</h2>
             <table>
-                <tr><th>Function</th><th>Description</th><th>Type</th></tr>
-                <tr><td><code>zombie_siege</code></td><td>Builds a wooden fort and sends 5 escalating waves of zombies ending with boss "General Zombo"</td><td>Combat</td></tr>
-                <tr><td><code>mob_army</code></td><td>Summons 50+ mobs in 4 escalating waves: chickens, armored zombies, skeletons, and creepers</td><td>Combat</td></tr>
-                <tr><td><code>boss_arena</code></td><td>Builds an obsidian arena, buffs players, and summons a Wither boss for an epic fight</td><td>Combat</td></tr>
-                <tr><td><code>skeleton_siege</code></td><td>Defend a cobblestone fort against waves of skeletons with bows and chain armor</td><td>Combat</td></tr>
-                <tr><td><code>dragon_fight</code></td><td>Summons the Ender Dragon in an overworld end-stone arena with crystals and buffs</td><td>Combat</td></tr>
-                <tr><td><code>arena_of_champions</code></td><td>Epic stone-brick arena with 3 unique champion mobs: Knight, Mage, and Brute</td><td>Combat</td></tr>
-                <tr><td><code>wave_defense</code></td><td>Defend a central beacon against 8 progressive waves of mobs with increasing difficulty</td><td>Combat</td></tr>
-                <tr><td><code>survival_island</code></td><td>Strands players on a small desert island with limited resources in a chest</td><td>Survival</td></tr>
+                <tr><th class="fn-icon-th">Icon</th><th>Function</th><th>Description</th><th>Type</th></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/iron_sword.png" alt="" loading="lazy"></td><td><code>zombie_siege</code></td><td>Builds a wooden fort and sends 5 escalating waves of zombies ending with boss "General Zombo"</td><td>Combat</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/zombie_head.png" alt="" loading="lazy"></td><td><code>mob_army</code></td><td>Summons 50+ mobs in 4 escalating waves: chickens, armored zombies, skeletons, and creepers</td><td>Combat</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/wither_skeleton_skull.png" alt="" loading="lazy"></td><td><code>boss_arena</code></td><td>Builds an obsidian arena, buffs players, and summons a Wither boss for an epic fight</td><td>Combat</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/bone.png" alt="" loading="lazy"></td><td><code>skeleton_siege</code></td><td>Defend a cobblestone fort against waves of skeletons with bows and chain armor</td><td>Combat</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/dragon_head.png" alt="" loading="lazy"></td><td><code>dragon_fight</code></td><td>Summons the Ender Dragon in an overworld end-stone arena with crystals and buffs</td><td>Combat</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/netherite_sword.png" alt="" loading="lazy"></td><td><code>arena_of_champions</code></td><td>Epic stone-brick arena with 3 unique champion mobs: Knight, Mage, and Brute</td><td>Combat</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/shield.png" alt="" loading="lazy"></td><td><code>wave_defense</code></td><td>Defend a central beacon against 8 progressive waves of mobs with increasing difficulty</td><td>Combat</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/oak_boat.png" alt="" loading="lazy"></td><td><code>survival_island</code></td><td>Strands players on a small desert island with limited resources in a chest</td><td>Survival</td></tr>
             </table>
 
             <h2>Building & Structures</h2>
             <table>
-                <tr><th>Function</th><th>Description</th><th>Type</th></tr>
-                <tr><td><code>bridge_builder</code></td><td>Builds a 3-wide stone bridge with railings, torches, and support pillars</td><td>Building</td></tr>
-                <tr><td><code>underground_base</code></td><td>Excavates a furnished underground bunker with crafting room, storage, and beds</td><td>Building</td></tr>
-                <tr><td><code>lighthouse</code></td><td>Constructs a 16-block red-and-white striped lighthouse with glass deck and beacon</td><td>Building</td></tr>
-                <tr><td><code>treehouse</code></td><td>Instantly grows a large tree and builds a furnished treehouse with ladder access</td><td>Building</td></tr>
-                <tr><td><code>campsite</code></td><td>Instantly sets up a cozy campsite with tent, campfire, crafting tables, and supplies</td><td>Building</td></tr>
-                <tr><td><code>rainbow_road</code></td><td>Builds a 35-block rainbow glass bridge with speed boost, slow falling, and sparkles</td><td>Building</td></tr>
-                <tr><td><code>spawn_setup</code></td><td>Builds a beautiful server spawn with central fountain, lamp posts, welcome signs, and paths</td><td>Building</td></tr>
-                <tr><td><code>castle_gate</code></td><td>Constructs a grand medieval castle entrance with towers, portcullis, and lanterns</td><td>Building</td></tr>
-                <tr><td><code>windmill</code></td><td>Builds a charming decorative windmill with rotating blade arms</td><td>Building</td></tr>
-                <tr><td><code>suspension_bridge</code></td><td>Builds a 50-block dramatic suspension bridge with cable rails and stone towers</td><td>Building</td></tr>
-                <tr><td><code>nether_portal_room</code></td><td>Creates an elaborate nether portal room with obsidian, nether bricks, and glowstone</td><td>Building</td></tr>
-                <tr><td><code>enchanting_tower</code></td><td>Multi-level enchanting tower with full level-30 bookshelf setup, anvil, and grindstone</td><td>Building</td></tr>
-                <tr><td><code>market_stalls</code></td><td>Creates a colorful row of red, blue, and yellow market stalls with banners and barrels</td><td>Building</td></tr>
+                <tr><th class="fn-icon-th">Icon</th><th>Function</th><th>Description</th><th>Type</th></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/stone_bricks.png" alt="" loading="lazy"></td><td><code>bridge_builder</code></td><td>Builds a 3-wide stone bridge with railings, torches, and support pillars</td><td>Building</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/iron_pickaxe.png" alt="" loading="lazy"></td><td><code>underground_base</code></td><td>Excavates a furnished underground bunker with crafting room, storage, and beds</td><td>Building</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/beacon.png" alt="" loading="lazy"></td><td><code>lighthouse</code></td><td>Constructs a 16-block red-and-white striped lighthouse with glass deck and beacon</td><td>Building</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/oak_sapling.png" alt="" loading="lazy"></td><td><code>treehouse</code></td><td>Instantly grows a large tree and builds a furnished treehouse with ladder access</td><td>Building</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/campfire.png" alt="" loading="lazy"></td><td><code>campsite</code></td><td>Instantly sets up a cozy campsite with tent, campfire, crafting tables, and supplies</td><td>Building</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/light_blue_stained_glass.png" alt="" loading="lazy"></td><td><code>rainbow_road</code></td><td>Builds a 35-block rainbow glass bridge with speed boost, slow falling, and sparkles</td><td>Building</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/oak_sign.png" alt="" loading="lazy"></td><td><code>spawn_setup</code></td><td>Builds a beautiful server spawn with central fountain, lamp posts, welcome signs, and paths</td><td>Building</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/stone_brick_wall.png" alt="" loading="lazy"></td><td><code>castle_gate</code></td><td>Constructs a grand medieval castle entrance with towers, portcullis, and lanterns</td><td>Building</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/white_wool.png" alt="" loading="lazy"></td><td><code>windmill</code></td><td>Builds a charming decorative windmill with rotating blade arms</td><td>Building</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/oak_fence.png" alt="" loading="lazy"></td><td><code>suspension_bridge</code></td><td>Builds a 50-block dramatic suspension bridge with cable rails and stone towers</td><td>Building</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/obsidian.png" alt="" loading="lazy"></td><td><code>nether_portal_room</code></td><td>Creates an elaborate nether portal room with obsidian, nether bricks, and glowstone</td><td>Building</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/enchanting_table.png" alt="" loading="lazy"></td><td><code>enchanting_tower</code></td><td>Multi-level enchanting tower with full level-30 bookshelf setup, anvil, and grindstone</td><td>Building</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/barrel.png" alt="" loading="lazy"></td><td><code>market_stalls</code></td><td>Creates a colorful row of red, blue, and yellow market stalls with banners and barrels</td><td>Building</td></tr>
             </table>
 
             <h2>Visual Spectacle & Party</h2>
             <table>
-                <tr><th>Function</th><th>Description</th><th>Type</th></tr>
-                <tr><td><code>light_show</code></td><td>8-act synchronized beacon and note block light performance with colored particles</td><td>Visual</td></tr>
-                <tr><td><code>bubble_party</code></td><td>Fills the area with bubbles, dolphin's grace, underwater sparkles, and upbeat music</td><td>Party</td></tr>
-                <tr><td><code>fireworkshow</code></td><td>Launches a spectacular firework display with party effects and music</td><td>Party</td></tr>
-                <tr><td><code>new_year_countdown</code></td><td>10-second chat countdown followed by 14 firework rockets, confetti, and party favors</td><td>Party</td></tr>
-                <tr><td><code>dance_party</code></td><td>Server-wide dance party with music, effects, and colorful animations</td><td>Party</td></tr>
-                <tr><td><code>better_dance_party</code></td><td>Enhanced dance party with full music, effects, and extended animation sequence</td><td>Party</td></tr>
-                <tr><td><code>danceparty</code></td><td>Scoreboard-driven persistent dance party loop for the whole server</td><td>Party</td></tr>
-                <tr><td><code>halloween_spook</code></td><td>Spooky Halloween effects: pumpkins, bats, cobwebs, darkness, lightning, and candy treats</td><td>Seasonal</td></tr>
-                <tr><td><code>aurora_borealis</code></td><td>Stunning northern lights particle display with green, blue, and purple ribbons in the night sky</td><td>Visual</td></tr>
-                <tr><td><code>confetti_storm</code></td><td>Massive confetti celebration with colorful firework particles and celebratory sounds</td><td>Party</td></tr>
-                <tr><td><code>rainbow_trail</code></td><td>Leaves a rainbow-colored dust particle trail behind you as you move with speed boost</td><td>Visual</td></tr>
-                <tr><td><code>thunder_concert</code></td><td>Lightning storm synchronized with dramatic bass sounds like nature's orchestra</td><td>Visual</td></tr>
-                <tr><td><code>fire_tornado</code></td><td>Creates a dramatic fire tornado with flame, soul fire, smoke, and lava particles</td><td>Visual</td></tr>
+                <tr><th class="fn-icon-th">Icon</th><th>Function</th><th>Description</th><th>Type</th></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/beacon.png" alt="" loading="lazy"></td><td><code>light_show</code></td><td>8-act synchronized beacon and note block light performance with colored particles</td><td>Visual</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/heart_of_the_sea.png" alt="" loading="lazy"></td><td><code>bubble_party</code></td><td>Fills the area with bubbles, dolphin's grace, underwater sparkles, and upbeat music</td><td>Party</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/firework_rocket.png" alt="" loading="lazy"></td><td><code>fireworkshow</code></td><td>Launches a spectacular firework display with party effects and music</td><td>Party</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/clock.png" alt="" loading="lazy"></td><td><code>new_year_countdown</code></td><td>10-second chat countdown followed by 14 firework rockets, confetti, and party favors</td><td>Party</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/note_block.png" alt="" loading="lazy"></td><td><code>dance_party</code></td><td>Server-wide dance party with music, effects, and colorful animations</td><td>Party</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/jukebox.png" alt="" loading="lazy"></td><td><code>better_dance_party</code></td><td>Enhanced dance party with full music, effects, and extended animation sequence</td><td>Party</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/note_block.png" alt="" loading="lazy"></td><td><code>danceparty</code></td><td>Scoreboard-driven persistent dance party loop for the whole server</td><td>Party</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/carved_pumpkin.png" alt="" loading="lazy"></td><td><code>halloween_spook</code></td><td>Spooky Halloween effects: pumpkins, bats, cobwebs, darkness, lightning, and candy treats</td><td>Seasonal</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/purple_dye.png" alt="" loading="lazy"></td><td><code>aurora_borealis</code></td><td>Stunning northern lights particle display with green, blue, and purple ribbons in the night sky</td><td>Visual</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/red_dye.png" alt="" loading="lazy"></td><td><code>confetti_storm</code></td><td>Massive confetti celebration with colorful firework particles and celebratory sounds</td><td>Party</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/leather_boots.png" alt="" loading="lazy"></td><td><code>rainbow_trail</code></td><td>Leaves a rainbow-colored dust particle trail behind you as you move with speed boost</td><td>Visual</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/lightning_rod.png" alt="" loading="lazy"></td><td><code>thunder_concert</code></td><td>Lightning storm synchronized with dramatic bass sounds like nature's orchestra</td><td>Visual</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/blaze_rod.png" alt="" loading="lazy"></td><td><code>fire_tornado</code></td><td>Creates a dramatic fire tornado with flame, soul fire, smoke, and lava particles</td><td>Visual</td></tr>
             </table>
 
             <h2>Chaos & Mayhem</h2>
             <table>
-                <tr><th>Function</th><th>Description</th><th>Type</th></tr>
-                <tr><td><code>tntrain</code></td><td>Rains TNT from the sky around the player with timed fuses</td><td>Chaos</td></tr>
-                <tr><td><code>extratntrain</code></td><td>Even more intense TNT rain — chains multiple TNT storms together for maximum destruction</td><td>Chaos</td></tr>
-                <tr><td><code>meteor_shower</code></td><td>Rains flaming meteors from the sky with dramatic particle trails — dramatic but mostly safe</td><td>Chaos</td></tr>
-                <tr><td><code>scorched_earth</code></td><td>Devastates the landscape with fire, lava, and destruction — scorched earth style</td><td>Chaos</td></tr>
-                <tr><td><code>gravity_flip</code></td><td>Flips gravity up and down with levitation and slow falling for a wild ride</td><td>Chaos</td></tr>
-                <tr><td><code>craycray</code></td><td>Unleashes wild chaos: random creepers, mob spawns, and unpredictable crazy effects</td><td>Chaos</td></tr>
-                <tr><td><code>copilot</code></td><td>Random chaos function with unpredictable events and effects — just pure random fun</td><td>Chaos</td></tr>
-                <tr><td><code>funnybutton</code></td><td>A mysterious button with unpredictable and hilarious effects when pressed</td><td>Chaos</td></tr>
-                <tr><td><code>anvil_rain</code></td><td>Rains anvils, chipped anvils, and damaged anvils from the sky — take cover!</td><td>Chaos</td></tr>
-                <tr><td><code>potion_storm</code></td><td>Random lingering potion bottles fall from above with various effects</td><td>Chaos</td></tr>
-                <tr><td><code>chicken_plague</code></td><td>Floods the area with chickens and egg particles for hilarious feathered chaos</td><td>Chaos</td></tr>
-                <tr><td><code>ender_invasion</code></td><td>Endermen teleport everywhere carrying blocks, with portal particles and night vision</td><td>Chaos</td></tr>
-                <tr><td><code>void_pull</code></td><td>Creates a void vortex that pulls nearby players toward an end portal with blindness</td><td>Chaos</td></tr>
+                <tr><th class="fn-icon-th">Icon</th><th>Function</th><th>Description</th><th>Type</th></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/tnt.png" alt="" loading="lazy"></td><td><code>tntrain</code></td><td>Rains TNT from the sky around the player with timed fuses</td><td>Chaos</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/tnt_minecart.png" alt="" loading="lazy"></td><td><code>extratntrain</code></td><td>Even more intense TNT rain — chains multiple TNT storms together for maximum destruction</td><td>Chaos</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/magma_block.png" alt="" loading="lazy"></td><td><code>meteor_shower</code></td><td>Rains flaming meteors from the sky with dramatic particle trails — dramatic but mostly safe</td><td>Chaos</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/lava_bucket.png" alt="" loading="lazy"></td><td><code>scorched_earth</code></td><td>Devastates the landscape with fire, lava, and destruction — scorched earth style</td><td>Chaos</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/feather.png" alt="" loading="lazy"></td><td><code>gravity_flip</code></td><td>Flips gravity up and down with levitation and slow falling for a wild ride</td><td>Chaos</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/creeper_head.png" alt="" loading="lazy"></td><td><code>craycray</code></td><td>Unleashes wild chaos: random creepers, mob spawns, and unpredictable crazy effects</td><td>Chaos</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/dispenser.png" alt="" loading="lazy"></td><td><code>copilot</code></td><td>Random chaos function with unpredictable events and effects — just pure random fun</td><td>Chaos</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/stone_button.png" alt="" loading="lazy"></td><td><code>funnybutton</code></td><td>A mysterious button with unpredictable and hilarious effects when pressed</td><td>Chaos</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/anvil.png" alt="" loading="lazy"></td><td><code>anvil_rain</code></td><td>Rains anvils, chipped anvils, and damaged anvils from the sky — take cover!</td><td>Chaos</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/splash_potion.png" alt="" loading="lazy"></td><td><code>potion_storm</code></td><td>Random lingering potion bottles fall from above with various effects</td><td>Chaos</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/egg.png" alt="" loading="lazy"></td><td><code>chicken_plague</code></td><td>Floods the area with chickens and egg particles for hilarious feathered chaos</td><td>Chaos</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/ender_eye.png" alt="" loading="lazy"></td><td><code>ender_invasion</code></td><td>Endermen teleport everywhere carrying blocks, with portal particles and night vision</td><td>Chaos</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/end_portal_frame.png" alt="" loading="lazy"></td><td><code>void_pull</code></td><td>Creates a void vortex that pulls nearby players toward an end portal with blindness</td><td>Chaos</td></tr>
             </table>
 
             <h2>Server Utility</h2>
             <table>
-                <tr><th>Function</th><th>Description</th><th>Type</th></tr>
-                <tr><td><code>lag_cleaner</code></td><td>Clears all ground items, excess mobs, projectiles, and resets weather and time</td><td>Utility</td></tr>
-                <tr><td><code>time_locker</code></td><td>Locks the world at eternal noon with clear weather for building</td><td>Utility</td></tr>
-                <tr><td><code>mobsoff</code></td><td>Disables all monster spawns for peaceful building sessions</td><td>Utility</td></tr>
-                <tr><td><code>base_protection</code></td><td>Lights up a radius around you and spawns iron golem guards to protect your base</td><td>Utility</td></tr>
-                <tr><td><code>starter_kit</code></td><td>Gives new players full iron armor, tools, 32 cooked beef, torches, bed, and supplies</td><td>Utility</td></tr>
-                <tr><td><code>backup_reminder</code></td><td>Announces a server backup reminder with step-by-step instructions and ender chest</td><td>Utility</td></tr>
-                <tr><td><code>night_vision</code></td><td>Gives all players permanent night vision and water breathing for dark building sessions</td><td>Utility</td></tr>
-                <tr><td><code>clearing</code></td><td>Clears weather, sets daytime, and removes all hostile mobs within 50 blocks</td><td>Utility</td></tr>
-                <tr><td><code>heal_all</code></td><td>Fully heals all players and clears all negative status effects</td><td>Utility</td></tr>
-                <tr><td><code>feed_all</code></td><td>Gives all players max hunger, saturation, and golden carrots</td><td>Utility</td></tr>
-                <tr><td><code>repair_all</code></td><td>Repairs all damaged items in every player's inventory to full durability</td><td>Utility</td></tr>
+                <tr><th class="fn-icon-th">Icon</th><th>Function</th><th>Description</th><th>Type</th></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/brush.png" alt="" loading="lazy"></td><td><code>lag_cleaner</code></td><td>Clears all ground items, excess mobs, projectiles, and resets weather and time</td><td>Utility</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/sunflower.png" alt="" loading="lazy"></td><td><code>time_locker</code></td><td>Locks the world at eternal noon with clear weather for building</td><td>Utility</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/torch.png" alt="" loading="lazy"></td><td><code>mobsoff</code></td><td>Disables all monster spawns for peaceful building sessions</td><td>Utility</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/iron_block.png" alt="" loading="lazy"></td><td><code>base_protection</code></td><td>Lights up a radius around you and spawns iron golem guards to protect your base</td><td>Utility</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/iron_chestplate.png" alt="" loading="lazy"></td><td><code>starter_kit</code></td><td>Gives new players full iron armor, tools, 32 cooked beef, torches, bed, and supplies</td><td>Utility</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/ender_chest.png" alt="" loading="lazy"></td><td><code>backup_reminder</code></td><td>Announces a server backup reminder with step-by-step instructions and ender chest</td><td>Utility</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/golden_carrot.png" alt="" loading="lazy"></td><td><code>night_vision</code></td><td>Gives all players permanent night vision and water breathing for dark building sessions</td><td>Utility</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/nether_star.png" alt="" loading="lazy"></td><td><code>clearing</code></td><td>Clears weather, sets daytime, and removes all hostile mobs within 50 blocks</td><td>Utility</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/glistering_melon_slice.png" alt="" loading="lazy"></td><td><code>heal_all</code></td><td>Fully heals all players and clears all negative status effects</td><td>Utility</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/golden_apple.png" alt="" loading="lazy"></td><td><code>feed_all</code></td><td>Gives all players max hunger, saturation, and golden carrots</td><td>Utility</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/anvil.png" alt="" loading="lazy"></td><td><code>repair_all</code></td><td>Repairs all damaged items in every player's inventory to full durability</td><td>Utility</td></tr>
             </table>
 
             <h2>Redstone & Machinery</h2>
             <table>
-                <tr><th>Function</th><th>Description</th><th>Type</th></tr>
-                <tr><td><code>automatic_door</code></td><td>Creates a pressure-plate activated sticky piston door with iron block doors</td><td>Redstone</td></tr>
-                <tr><td><code>piston_elevator</code></td><td>Builds a 10-block piston elevator shaft with button-activated floor controls</td><td>Redstone</td></tr>
-                <tr><td><code>item_sorter</code></td><td>Creates a hopper-based item sorting system with comparators and chests</td><td>Redstone</td></tr>
-                <tr><td><code>secret_passage</code></td><td>Creates a hidden bookshelf door with lever activation and trapdoor entrance</td><td>Redstone</td></tr>
-                <tr><td><code>tnt_cannon</code></td><td>Builds a directional TNT cannon with obsidian base, dispenser, and water channel</td><td>Redstone</td></tr>
+                <tr><th class="fn-icon-th">Icon</th><th>Function</th><th>Description</th><th>Type</th></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/sticky_piston.png" alt="" loading="lazy"></td><td><code>automatic_door</code></td><td>Creates a pressure-plate activated sticky piston door with iron block doors</td><td>Redstone</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/piston.png" alt="" loading="lazy"></td><td><code>piston_elevator</code></td><td>Builds a 10-block piston elevator shaft with button-activated floor controls</td><td>Redstone</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/hopper.png" alt="" loading="lazy"></td><td><code>item_sorter</code></td><td>Creates a hopper-based item sorting system with comparators and chests</td><td>Redstone</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/lever.png" alt="" loading="lazy"></td><td><code>secret_passage</code></td><td>Creates a hidden bookshelf door with lever activation and trapdoor entrance</td><td>Redstone</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/dispenser.png" alt="" loading="lazy"></td><td><code>tnt_cannon</code></td><td>Builds a directional TNT cannon with obsidian base, dispenser, and water channel</td><td>Redstone</td></tr>
             </table>
 
             <h2>Adventure & RPG</h2>
             <table>
-                <tr><th>Function</th><th>Description</th><th>Type</th></tr>
-                <tr><td><code>quest_board</code></td><td>Creates a quest hub with notice board signs, quest master villager, and reward barrel</td><td>RPG</td></tr>
-                <tr><td><code>dungeon_entrance</code></td><td>Creates an ominous dungeon entrance with mossy bricks, iron bars, and skull torches</td><td>RPG</td></tr>
-                <tr><td><code>treasure_hunt</code></td><td>Buries 3 treasure chests with diamonds, emeralds, gold, and elytra at marked locations</td><td>RPG</td></tr>
-                <tr><td><code>boss_drop</code></td><td>Summons a custom "Loot Guardian" boss with 100 HP that drops netherite scrap and totems</td><td>RPG</td></tr>
-                <tr><td><code>rpg_shop</code></td><td>Creates an adventurer's shop with weaponsmith, armorer, and cleric trading NPCs</td><td>RPG</td></tr>
+                <tr><th class="fn-icon-th">Icon</th><th>Function</th><th>Description</th><th>Type</th></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/oak_sign.png" alt="" loading="lazy"></td><td><code>quest_board</code></td><td>Creates a quest hub with notice board signs, quest master villager, and reward barrel</td><td>RPG</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/mossy_cobblestone.png" alt="" loading="lazy"></td><td><code>dungeon_entrance</code></td><td>Creates an ominous dungeon entrance with mossy bricks, iron bars, and skull torches</td><td>RPG</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/chest.png" alt="" loading="lazy"></td><td><code>treasure_hunt</code></td><td>Buries 3 treasure chests with diamonds, emeralds, gold, and elytra at marked locations</td><td>RPG</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/totem_of_undying.png" alt="" loading="lazy"></td><td><code>boss_drop</code></td><td>Summons a custom "Loot Guardian" boss with 100 HP that drops netherite scrap and totems</td><td>RPG</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/emerald.png" alt="" loading="lazy"></td><td><code>rpg_shop</code></td><td>Creates an adventurer's shop with weaponsmith, armorer, and cleric trading NPCs</td><td>RPG</td></tr>
             </table>
 
             <h2>Farming & Nature</h2>
             <table>
-                <tr><th>Function</th><th>Description</th><th>Type</th></tr>
-                <tr><td><code>crop_farm</code></td><td>Plants a fully grown crop farm with wheat, carrots, potatoes, beetroots, scarecrow, and composter</td><td>Farming</td></tr>
-                <tr><td><code>animal_pen</code></td><td>Creates a fenced animal enclosure with cows, sheep, chickens, hay bales, and water trough</td><td>Farming</td></tr>
-                <tr><td><code>flower_garden</code></td><td>Plants a beautiful flower garden with roses, peonies, lilacs, sunflowers, bench, and lamppost</td><td>Nature</td></tr>
+                <tr><th class="fn-icon-th">Icon</th><th>Function</th><th>Description</th><th>Type</th></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/wheat.png" alt="" loading="lazy"></td><td><code>crop_farm</code></td><td>Plants a fully grown crop farm with wheat, carrots, potatoes, beetroots, scarecrow, and composter</td><td>Farming</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/hay_block.png" alt="" loading="lazy"></td><td><code>animal_pen</code></td><td>Creates a fenced animal enclosure with cows, sheep, chickens, hay bales, and water trough</td><td>Farming</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/rose_bush.png" alt="" loading="lazy"></td><td><code>flower_garden</code></td><td>Plants a beautiful flower garden with roses, peonies, lilacs, sunflowers, bench, and lamppost</td><td>Nature</td></tr>
             </table>
 
             <h2>Templates & Examples</h2>
             <table>
-                <tr><th>Function</th><th>Description</th><th>Type</th></tr>
-                <tr><td><code>helloworld</code></td><td>Simple hello world example for testing function downloads</td><td>Template</td></tr>
-                <tr><td><code>example</code></td><td>A template function showing best practices for creating your own functions</td><td>Template</td></tr>
-                <tr><td><code>sound</code></td><td>Plays various sound effects for testing and fun</td><td>Template</td></tr>
-                <tr><td><code>scoreboard_demo</code></td><td>Demonstrates scoreboard objectives (kills, deaths, score) with sidebar and list display</td><td>Template</td></tr>
-                <tr><td><code>command_chain</code></td><td>Demonstrates chaining teleport, heal, feed, give, time, and announce commands together</td><td>Template</td></tr>
+                <tr><th class="fn-icon-th">Icon</th><th>Function</th><th>Description</th><th>Type</th></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/paper.png" alt="" loading="lazy"></td><td><code>helloworld</code></td><td>Simple hello world example for testing function downloads</td><td>Template</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/paper.png" alt="" loading="lazy"></td><td><code>example</code></td><td>A template function showing best practices for creating your own functions</td><td>Template</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/note_block.png" alt="" loading="lazy"></td><td><code>sound</code></td><td>Plays various sound effects for testing and fun</td><td>Template</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/writable_book.png" alt="" loading="lazy"></td><td><code>scoreboard_demo</code></td><td>Demonstrates scoreboard objectives (kills, deaths, score) with sidebar and list display</td><td>Template</td></tr>
+                <tr><td><img class="fn-icon" src="https://diamondstar-mods.github.io/Minecraft-Command-Maker/cdn/icons/writable_book.png" alt="" loading="lazy"></td><td><code>command_chain</code></td><td>Demonstrates chaining teleport, heal, feed, give, time, and announce commands together</td><td>Template</td></tr>
             </table>
 
             <div class="callout callout-info">
