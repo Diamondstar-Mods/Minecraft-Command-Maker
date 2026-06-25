@@ -1,0 +1,10 @@
+{
+  "cooldowns": {
+    "example_cooldown": {
+      "type": "player",
+      "seconds": 30,
+      "message": "\u0026cWait {remaining}s before using this again!"
+    }
+  },
+  "_comment": "Set \"type\" to \"player\" or \"global\". Use {remaining} in messages to show seconds left."
+}

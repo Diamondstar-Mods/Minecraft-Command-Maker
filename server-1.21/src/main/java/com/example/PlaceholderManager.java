@@ -50,7 +50,7 @@ public class PlaceholderManager {
 
         public PlaceholderContext(ServerPlayerEntity player) {
             this.player = player;
-            this.server = player != null ? player.getServer() : null;
+            this.server = player != null ? player.getCommandSource().getServer() : null;
         }
 
         public PlaceholderContext(ServerPlayerEntity player, MinecraftServer server) {
@@ -143,9 +143,9 @@ public class PlaceholderManager {
                 case "player_food":
                     return String.valueOf(ctx.player.getHungerManager().getFoodLevel());
                 case "player_world":
-                    return ctx.player.getWorld().getRegistryKey().getValue().toString();
+                    return ctx.player.getCommandSource().getWorld().getRegistryKey().getValue().toString();
                 case "player_gamemode":
-                    return ctx.player.interactionManager.getGameMode().getName();
+                    return ctx.player.interactionManager.getGameMode().name();
                 case "player_ping":
                     return String.valueOf(ctx.player.networkHandler.getLatency());
             }

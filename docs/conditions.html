@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Condition Blocks - Command Maker Wiki</title>
+    <meta name="description" content="Command Maker v4.0 condition blocks — if/else logic in alias commands. Check XP, health, permissions, items, dimensions, and more.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon.ico">
+</head>
+<body>
+    <nav id="navbar" class="navbar" role="navigation" aria-label="Main navigation"></nav>
+    <div class="layout">
+        <aside id="sidebar" class="sidebar" role="complementary" aria-label="Side navigation"></aside>
+        <main class="content" role="main">
+            <h1>Condition Blocks (If / Else)</h1>
+            <p class="subtitle">Add logic to your aliases. Check conditions and run different commands based on the result — directly in your alias target string.</p>
+
+            <div class="callout callout-info">
+                <strong>New in v4.0</strong> &mdash; Works in any alias target string. No separate config file needed.
+            </div>
+
+            <h2>Syntax</h2>
+            <pre><code>if:&lt;condition&gt;(&lt;args&gt;) &lt;true_command&gt; else &lt;false_command&gt;</code></pre>
+            <p>The <code>else</code> clause is optional. If the condition fails and there's no else, nothing executes.</p>
+
+            <h2>Condition Reference</h2>
+            <table>
+                <tr><th>Condition</th><th>Args</th><th>Example</th><th>Notes</th></tr>
+                <tr>
+                    <td><code>xp</code></td>
+                    <td>XP levels (integer)</td>
+                    <td><code>if:xp(30) give @s diamond</code></td>
+                    <td>True if player has at least this many XP levels</td>
+                </tr>
+                <tr>
+                    <td><code>health</code></td>
+                    <td>Health percentage (float)</td>
+                    <td><code>if:health(50) say I need healing!</code></td>
+                    <td>True if player health is at or above this %</td>
+                </tr>
+                <tr>
+                    <td><code>perm</code></td>
+                    <td>Permission node</td>
+                    <td><code>if:perm(cmdmaker.admin) say Admin here</code></td>
+                    <td>True if player has the given permission</td>
+                </tr>
+                <tr>
+                    <td><code>hasitem</code></td>
+                    <td>Item ID (e.g., <code>minecraft:diamond</code>)</td>
+                    <td><code>if:hasitem(minecraft:diamond) say Rich!</code></td>
+                    <td>True if item is in player's inventory. Default namespace is <code>minecraft:</code></td>
+                </tr>
+                <tr>
+                    <td><code>var</code></td>
+                    <td>Variable name and value</td>
+                    <td><code>if:var(team blue) tp @s blue_spawn</code></td>
+                    <td>True if custom variable matches the given value</td>
+                </tr>
+                <tr>
+                    <td><code>cooldown</code></td>
+                    <td>Alias name</td>
+                    <td><code>if:cooldown(home) say Waiting else home</code></td>
+                    <td>True if cooldown has <strong>expired</strong> (player CAN use it)</td>
+                </tr>
+                <tr>
+                    <td><code>player</code></td>
+                    <td>Player name</td>
+                    <td><code>if:player(Steve) say Hello Steve!</code></td>
+                    <td>Case-insensitive name match</td>
+                </tr>
+                <tr>
+                    <td><code>dimension</code></td>
+                    <td>Dimension ID or shorthand</td>
+                    <td><code>if:dimension(nether) say Hot in here!</code></td>
+                    <td>Shorthands: <code>overworld</code>, <code>nether</code>, <code>end</code></td>
+                </tr>
+                <tr>
+                    <td><code>op</code></td>
+                    <td>(none)</td>
+                    <td><code>if:op() say You're an operator</code></td>
+                    <td>True if player has permission level 2+</td>
+                </tr>
+            </table>
+
+            <h2>Examples in Aliases</h2>
+            <pre><code>// Simple condition: only give diamonds to high-level players
+"diamond_reward": "if:xp(30) give @s minecraft:diamond 5 else say You need 30 levels!"
+
+// Permission gate: different message per rank
+"vip_greet": "if:perm(cmdmaker.vip) say Welcome VIP! else say Welcome guest!"
+
+// Health check: prevent suicide command if low health
+"berserk": "if:health(60) effect give @s minecraft:strength 10 2 else say Too weak for berserk mode!"
+
+// Dimension gate: different teleport per dimension
+"spawn": "if:dimension(nether) say Use /overworld first! else tp @s 0 100 0"
+
+// Item check: require diamond to craft
+"craft_gear": "if:hasitem(minecraft:diamond) give @s minecraft:diamond_sword 1 else say You need a diamond!"</code></pre>
+
+            <h2>How It Works</h2>
+            <ol>
+                <li>Variables (<code>${...}</code>) are substituted first.</li>
+                <li>The command string is checked for an <code>if:</code> prefix.</li>
+                <li>If found, the condition is evaluated against the player and source.</li>
+                <li>If true, the true branch is returned and executed. If false and an else branch exists, it's returned instead.</li>
+                <li>If false with no else, an empty string is returned (nothing executes).</li>
+            </ol>
+
+            <div class="callout callout-warning">
+                <strong>Limitations:</strong> Conditions do not support nesting (one <code>if:</code> per alias). The condition is evaluated <strong>after</strong> variable substitution — use <code>${variables}</code> inside condition branches.
+            </div>
+
+            <div class="callout callout-tip">
+                <strong>Tip:</strong> Combine conditions with cooldowns for powerful flows: <code>if:cooldown(heal) say Wait 30s else heal_all</code>
+            </div>
+        </main>
+    </div>
+    <footer id="footer" class="footer" role="contentinfo"></footer>
+    <script src="js/components.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>

@@ -88,10 +88,9 @@ public class EventManager {
         EventConfig cfg = events.get(eventType);
         if (cfg == null || cfg.commands.isEmpty()) return;
 
-        MinecraftServer server = player.getServer();
-        if (server == null) return;
-
         ServerCommandSource source = player.getCommandSource().withSilent();
+        MinecraftServer server = source.getServer();
+        if (server == null) return;
 
         for (String rawCommand : cfg.commands) {
             try {
@@ -113,7 +112,7 @@ public class EventManager {
         result = result.replace("${y}", String.valueOf((int) player.getY()));
         result = result.replace("${z}", String.valueOf((int) player.getZ()));
         result = result.replace("${uuid}", player.getUuid().toString());
-        result = result.replace("${world}", player.getWorld().getRegistryKey().getValue().toString());
+        result = result.replace("${world}", player.getCommandSource().getWorld().getRegistryKey().getValue().toString());
 
         // Context variables from event
         if (context != null) {

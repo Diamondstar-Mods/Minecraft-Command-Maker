@@ -1,0 +1,45 @@
+{
+  "events": {
+    "player_join": {
+      "commands": [
+        "say Welcome ${player} to the server!"
+      ],
+      "cooldown": 0
+    },
+    "player_leave": {
+      "commands": [],
+      "cooldown": 0
+    },
+    "player_death": {
+      "commands": [],
+      "cooldown": 0
+    },
+    "player_chat": {
+      "commands": [],
+      "cooldown": 0
+    },
+    "block_break": {
+      "commands": [],
+      "cooldown": 0,
+      "blocks": []
+    },
+    "block_place": {
+      "commands": [],
+      "cooldown": 0,
+      "blocks": []
+    },
+    "player_first_join": {
+      "commands": [],
+      "cooldown": 0
+    },
+    "player_kill": {
+      "commands": [],
+      "cooldown": 0
+    },
+    "player_respawn": {
+      "commands": [],
+      "cooldown": 0
+    }
+  },
+  "_comment": "Available events: player_join, player_leave, player_death, player_chat, block_break, player_first_join, player_kill. Use ${player}, ${x}, ${y}, ${z}, ${world}, ${uuid}, ${block}, ${message}, ${death_cause}, ${killer} as variables."
+}

@@ -213,7 +213,7 @@ public class ConditionManager {
     private static boolean checkDimension(ServerPlayerEntity player, String args) {
         if (player == null || args.isEmpty()) return false;
         String dimId = args.trim();
-        String currentDim = player.getWorld().getRegistryKey().getValue().toString();
+        String currentDim = player.getCommandSource().getWorld().getRegistryKey().getValue().toString();
         // Allow shorthand: "nether" -> "minecraft:the_nether"
         if (!dimId.contains(":")) {
             dimId = switch (dimId.toLowerCase()) {

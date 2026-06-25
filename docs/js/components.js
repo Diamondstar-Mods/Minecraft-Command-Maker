@@ -47,6 +47,16 @@ CM.nav = {
       { label: "Achievement System", href: "achievement-system.html" },
       { label: "Event System", href: "event-system.html" }
     ]},
+    { label: "🏆 v4.0", href: "#", dropdown: [
+      { label: "v4.0 Changelog", href: "v4.0-changelog.html" },
+      { label: "v4.0 Overview", href: "v4.0-upcoming.html" },
+      { label: "Cooldown System", href: "cooldowns.html" },
+      { label: "Condition Blocks", href: "conditions.html" },
+      { label: "Event Triggers", href: "events.html" },
+      { label: "Custom Scoreboards", href: "scoreboards.html" },
+      { label: "Placeholder System", href: "placeholders.html" },
+      { label: "Modules (.cmk)", href: "modules.html" }
+    ]},
     { label: "Help", href: "#", dropdown: [
       { label: "Commands Reference", href: "commands.html" },
       { label: "FAQ", href: "faq.html" },
@@ -89,7 +99,7 @@ CM.sidebar = {
         { label: "Installation", href: "installation.html" },
         { label: "Updating Guide", href: "updating.html" },
         { label: "Configuration", href: "configuration.html" },
-        { label: "🚀 v4.0 — Coming Soon", href: "v4.0-upcoming.html" }
+        { label: "🚀 v4.0 — What's New", href: "v4.0-changelog.html" }
       ]
     },
     {
@@ -170,6 +180,18 @@ CM.sidebar = {
         { label: "Ban System", href: "ban-system.html" },
         { label: "Warp System", href: "warp-system.html" },
         { label: "Custom Commands", href: "custom-commands.html" }
+      ]
+    },
+    {
+      title: "🏆 v4.0 New Features", icon: "",
+      links: [
+        { label: "v4.0 Changelog", href: "v4.0-changelog.html" },
+        { label: "Cooldown System", href: "cooldowns.html" },
+        { label: "Condition Blocks", href: "conditions.html" },
+        { label: "Event Triggers", href: "events.html" },
+        { label: "Custom Scoreboards", href: "scoreboards.html" },
+        { label: "Placeholder System", href: "placeholders.html" },
+        { label: "Modules (.cmk)", href: "modules.html" }
       ]
     },
     {

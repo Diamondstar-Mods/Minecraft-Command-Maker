@@ -1,0 +1,20 @@
+{
+  "scoreboards": {
+    "server_info": {
+      "displayName": "\u00266\u0026lServer Info",
+      "slot": "sidebar",
+      "updateInterval": 20,
+      "enabled": false,
+      "lines": [
+        "\u00266\u0026lMy Server",
+        "\u0026f",
+        "\u00267Players: \u0026a${player_count}/${server_max}",
+        "\u00267TPS: \u0026a${tps}",
+        "\u0026f",
+        "\u00267Powered by",
+        "\u0026eCommand Maker"
+      ]
+    }
+  },
+  "_comment": "Available placeholders: ${player_count}, ${server_max}, ${tps}. Max 15 lines per sidebar. Use \u0026 for color codes."
+}

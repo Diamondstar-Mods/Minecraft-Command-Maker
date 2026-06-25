@@ -2,8 +2,8 @@ package com.example;
 
 import com.google.gson.*;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.minecraft.scoreboard.*;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +14,8 @@ import java.util.*;
 /**
  * Custom Scoreboard system for Command Maker.
  * Allows creators to define scoreboards in config with placeholders,
- * update intervals, and dynamic lines.
+ * update intervals, and dynamic lines. Uses vanilla /scoreboard commands
+ * for reliable team-based line rendering.
  *
  * Config: config/CommandMaker/scoreboards.json
  */
@@ -26,61 +27,41 @@ public class ScoreboardManager {
     private static int tickCounter = 0;
     private static boolean initialized = false;
 
-    /**
-     * A scoreboard configuration.
-     */
     public static class ScoreboardConfig {
         public String name;
-        public String displayName;   // supports & color codes
-        public String slot;          // "sidebar", "list", "belowName"
-        public int updateInterval;   // ticks between updates (20 = 1 second)
-        public List<String> lines;   // lines 0-14
+        public String displayName;
+        public String slot;
+        public int updateInterval;
+        public boolean enabled;
+        public List<String> lines;
 
         public ScoreboardConfig(String name) {
             this.name = name;
             this.displayName = "Scoreboard";
             this.slot = "sidebar";
             this.updateInterval = 20;
+            this.enabled = false;
             this.lines = new ArrayList<>();
-        }
-
-        /** Returns the int display slot constant: 0=list, 1=sidebar, 2=belowName */
-        public int getDisplaySlot() {
-            return switch (slot.toLowerCase()) {
-                case "list" -> 0;
-                case "belowname" -> 2;
-                default -> 1; // sidebar
-            };
         }
     }
 
-    /**
-     * Initialize the scoreboard system. Must be called after server starts.
-     */
     public static void initialize(MinecraftServer server) {
         if (initialized) return;
         initialized = true;
-
         loadConfig();
-        createAllScoreboards(server);
+        createEnabledScoreboards(server);
         registerTickHandler();
         LOGGER.info("ScoreboardManager initialized with {} configured scoreboards", config.size());
     }
 
-    /**
-     * Reload scoreboards from config.
-     */
     public static void reload(MinecraftServer server) {
         removeAllScoreboards(server);
         config.clear();
         loadConfig();
-        createAllScoreboards(server);
+        createEnabledScoreboards(server);
         LOGGER.info("ScoreboardManager reloaded");
     }
 
-    /**
-     * Get all configured scoreboards.
-     */
     public static Map<String, ScoreboardConfig> getConfiguredScoreboards() {
         return Collections.unmodifiableMap(config);
     }
@@ -90,48 +71,37 @@ public class ScoreboardManager {
     private static void registerTickHandler() {
         ServerTickEvents.END_SERVER_TICK.register(server -> {
             tickCounter++;
-            updateScoreboards(server);
+            if (tickCounter % 20 == 0) { // check every second
+                updateAllScoreboards(server);
+            }
         });
     }
 
-    private static void updateScoreboards(MinecraftServer server) {
-        ServerScoreboard scoreboard = server.getScoreboard();
-        if (scoreboard == null) return;
-
+    private static void updateAllScoreboards(MinecraftServer server) {
         for (ScoreboardConfig cfg : config.values()) {
+            if (!cfg.enabled) continue;
             if (cfg.updateInterval <= 0) continue;
             if (tickCounter % cfg.updateInterval != 0) continue;
-
-            ScoreboardObjective objective = scoreboard.getObjective(cfg.name);
-            if (objective == null) continue;
-
-            // Update display name by recreating the objective
-            String resolvedName = resolvePlaceholders(cfg.displayName, server);
-            Text displayName = Text.literal(resolvedName.replace("&", "§"));
-            // Re-create with same slot to update display name
-            scoreboard.removeObjective(objective);
-            ScoreboardObjective newObj = scoreboard.addObjective(
-                cfg.name, ScoreboardCriterion.DUMMY,
-                displayName, ScoreboardCriterion.RenderType.INTEGER
-            );
-            scoreboard.setObjectiveSlot(cfg.getDisplaySlot(), newObj);
-
-            // Update dynamic lines
-            updateDynamicLines(scoreboard, newObj, cfg, server);
+            updateScoreboardLines(server, cfg);
         }
     }
 
-    private static void updateDynamicLines(ServerScoreboard scoreboard, ScoreboardObjective objective,
-                                            ScoreboardConfig cfg, MinecraftServer server) {
-        // Remove old scores for this objective (clear previous lines)
-        // We use unique fake player names per scoreboard
+    private static void updateScoreboardLines(MinecraftServer server, ScoreboardConfig cfg) {
+        var dispatcher = server.getCommandManager().getDispatcher();
+        ServerCommandSource source = server.getCommandSource();
+
+        // Reset old fake player scores
         for (int i = 0; i < 15; i++) {
-            String fakePlayer = "§" + (char)('0' + (i % 10)) + "§r" + cfg.name + "_" + String.format("%02d", i);
-            scoreboard.resetPlayerScore(fakePlayer, objective);
+            String fp = "cm" + hash(cfg.name) + "l" + i;
+            try {
+                String cmd = "scoreboard players reset " + fp + " " + cfg.name;
+                dispatcher.execute(dispatcher.parse(cmd, source));
+            } catch (Exception ignored) {}
         }
 
-        int score = cfg.lines.size() - 1;
-        for (int lineIdx = 0; lineIdx < cfg.lines.size(); lineIdx++) {
+        // Set new scores with teams for display text
+        int scoreValue = cfg.lines.size() - 1;
+        for (int lineIdx = 0; lineIdx < cfg.lines.size() && lineIdx < 15; lineIdx++) {
             String line = cfg.lines.get(lineIdx);
             String resolvedLine = resolvePlaceholders(line, server);
             resolvedLine = resolvedLine.replace("&", "§");
@@ -139,75 +109,88 @@ public class ScoreboardManager {
                 resolvedLine = resolvedLine.substring(0, 40);
             }
 
-            String fakePlayer = "§" + (char)('0' + (lineIdx % 10)) + "§r" + cfg.name + "_" + String.format("%02d", score);
-
-            // Create/update team for this fake player to set display text
-            String teamName = "cm_sb_" + cfg.name.hashCode() + "_" + lineIdx;
-            Team team = scoreboard.getTeam(teamName);
-            if (team == null) {
-                team = scoreboard.addTeam(teamName);
+            String fp = "cm" + hash(cfg.name) + "l" + lineIdx;
+            String tn = "cm" + hash(cfg.name) + "t" + lineIdx;
+            try {
+                // Create team if needed, set prefix text
+                String addTeamCmd = "team add " + tn;
+                try { dispatcher.execute(dispatcher.parse(addTeamCmd, source)); } catch (Exception ignored) {}
+                String prefixCmd = "team modify " + tn + " prefix \"" +
+                    resolvedLine.replace("\\", "\\\\").replace("\"", "\\\"") + "\"";
+                dispatcher.execute(dispatcher.parse(prefixCmd, source));
+                // Join fake player to team
+                String joinCmd = "team join " + tn + " " + fp;
+                try { dispatcher.execute(dispatcher.parse(joinCmd, source)); } catch (Exception ignored) {}
+                // Set score
+                String setCmd = "scoreboard players set " + fp + " " + cfg.name + " " + scoreValue;
+                dispatcher.execute(dispatcher.parse(setCmd, source));
+            } catch (Exception e) {
+                LOGGER.debug("Scoreboard line update failed for '{}' line {}: {}", cfg.name, lineIdx, e.getMessage());
             }
-            team.setPrefix(Text.literal(resolvedLine));
-            team.setSuffix(Text.literal(""));
-
-            // Add fake player to team
-            if (scoreboard.getTeam(fakePlayer) == null || !teamName.equals(scoreboard.getTeam(fakePlayer).getName())) {
-                scoreboard.clearPlayerTeam(fakePlayer);
-                scoreboard.addPlayerToTeam(fakePlayer, team);
-            }
-
-            // Set score value
-            ScoreboardScore scoreAccess = scoreboard.getPlayerScore(fakePlayer, objective);
-            scoreAccess.setScore(score);
-            score--;
+            scoreValue--;
         }
     }
 
-    private static void createAllScoreboards(MinecraftServer server) {
-        ServerScoreboard scoreboard = server.getScoreboard();
-        if (scoreboard == null) return;
+    private static void createEnabledScoreboards(MinecraftServer server) {
+        var dispatcher = server.getCommandManager().getDispatcher();
+        ServerCommandSource source = server.getCommandSource();
 
         for (ScoreboardConfig cfg : config.values()) {
-            createScoreboard(scoreboard, cfg);
+            if (!cfg.enabled) {
+                LOGGER.info("Scoreboard '{}' is disabled — skipping", cfg.name);
+                continue;
+            }
+            String displayName = resolvePlaceholders(cfg.displayName, null).replace("&", "§");
+            try {
+                // Remove existing
+                String removeCmd = "scoreboard objectives remove " + cfg.name;
+                try { dispatcher.execute(dispatcher.parse(removeCmd, source)); } catch (Exception ignored) {}
+
+                // Create
+                String createCmd = "scoreboard objectives add " + cfg.name + " dummy \"" +
+                    displayName.replace("\\", "\\\\").replace("\"", "\\\"") + "\"";
+                dispatcher.execute(dispatcher.parse(createCmd, source));
+
+                // Set display slot
+                String slotName = switch (cfg.slot.toLowerCase()) {
+                    case "list" -> "list";
+                    case "belowname" -> "belowname";
+                    default -> "sidebar";
+                };
+                String displayCmd = "scoreboard objectives setdisplay " + slotName + " " + cfg.name;
+                dispatcher.execute(dispatcher.parse(displayCmd, source));
+
+                LOGGER.info("Created scoreboard '{}' in slot '{}' (enabled)", cfg.name, cfg.slot);
+            } catch (Exception e) {
+                LOGGER.error("Failed to create scoreboard '{}': {}", cfg.name, e.getMessage());
+            }
         }
-    }
-
-    private static void createScoreboard(ServerScoreboard scoreboard, ScoreboardConfig cfg) {
-        // Remove existing if present
-        ScoreboardObjective existing = scoreboard.getObjective(cfg.name);
-        if (existing != null) {
-            scoreboard.removeObjective(existing);
-        }
-
-        String displayName = resolvePlaceholders(cfg.displayName, null);
-        ScoreboardObjective objective = scoreboard.addObjective(
-            cfg.name,
-            ScoreboardCriterion.DUMMY,
-            Text.literal(displayName.replace("&", "§")),
-            ScoreboardCriterion.RenderType.INTEGER
-        );
-
-        scoreboard.setObjectiveSlot(cfg.getDisplaySlot(), objective);
-        LOGGER.info("Created scoreboard '{}' in slot '{}'", cfg.name, cfg.slot);
     }
 
     private static void removeAllScoreboards(MinecraftServer server) {
-        ServerScoreboard scoreboard = server.getScoreboard();
-        if (scoreboard == null) return;
-
+        var dispatcher = server.getCommandManager().getDispatcher();
+        ServerCommandSource source = server.getCommandSource();
         for (ScoreboardConfig cfg : config.values()) {
-            ScoreboardObjective obj = scoreboard.getObjective(cfg.name);
-            if (obj != null) {
-                scoreboard.removeObjective(obj);
-            }
+            try {
+                String cmd = "scoreboard objectives remove " + cfg.name;
+                dispatcher.execute(dispatcher.parse(cmd, source));
+            } catch (Exception ignored) {}
         }
     }
 
-    // ---- Placeholder resolution for scoreboard lines ----
+    // Simple hash for compact fake player / team names
+    private static int hash(String s) {
+        int h = 0;
+        for (int i = 0; i < s.length(); i++) {
+            h = h * 31 + s.charAt(i);
+        }
+        return Math.abs(h) % 100000;
+    }
+
+    // ---- Placeholder resolution ----
 
     private static String resolvePlaceholders(String text, MinecraftServer server) {
         if (text == null) return "";
-
         if (server != null) {
             int online = server.getPlayerManager().getPlayerList().size();
             int max = server.getPlayerManager().getMaxPlayerCount();
@@ -216,7 +199,6 @@ public class ScoreboardManager {
             text = text.replace("${server_max}", String.valueOf(max));
             text = text.replace("${tps}", String.format("%.1f", getAverageTPS(server)));
         }
-
         return text;
     }
 
@@ -224,11 +206,9 @@ public class ScoreboardManager {
         try {
             long[] tickTimes = server.getTickTimes();
             if (tickTimes != null && tickTimes.length > 0) {
-                long sum = 0;
-                int count = 0;
+                long sum = 0; int count = 0;
                 for (int i = tickTimes.length - 1; i >= 0 && count < 100; i--) {
-                    sum += tickTimes[i];
-                    count++;
+                    sum += tickTimes[i]; count++;
                 }
                 if (count > 0) {
                     float avg = sum / (float) count / 1000000f;
@@ -244,9 +224,7 @@ public class ScoreboardManager {
     private static void loadConfig() {
         config.clear();
         try {
-            if (!Files.exists(CONFIG_PATH)) {
-                createDefaultConfig();
-            }
+            if (!Files.exists(CONFIG_PATH)) createDefaultConfig();
             String json = new String(Files.readAllBytes(CONFIG_PATH));
             JsonElement element = JsonParser.parseString(json);
             if (element.isJsonObject()) {
@@ -260,6 +238,7 @@ public class ScoreboardManager {
                             cfg.displayName = obj.has("displayName") ? obj.get("displayName").getAsString() : entry.getKey();
                             cfg.slot = obj.has("slot") ? obj.get("slot").getAsString() : "sidebar";
                             cfg.updateInterval = obj.has("updateInterval") ? obj.get("updateInterval").getAsInt() : 20;
+                            cfg.enabled = obj.has("enabled") ? obj.get("enabled").getAsBoolean() : false;
                             if (obj.has("lines") && obj.get("lines").isJsonArray()) {
                                 for (JsonElement line : obj.getAsJsonArray("lines")) {
                                     cfg.lines.add(line.getAsString());
@@ -280,17 +259,15 @@ public class ScoreboardManager {
     public static void saveConfig() {
         try {
             Files.createDirectories(CONFIG_PATH.getParent());
-            JsonObject root = new JsonObject();
-            JsonObject sbs = new JsonObject();
+            JsonObject root = new JsonObject(); JsonObject sbs = new JsonObject();
             for (ScoreboardConfig cfg : config.values()) {
                 JsonObject obj = new JsonObject();
                 obj.addProperty("displayName", cfg.displayName);
                 obj.addProperty("slot", cfg.slot);
                 obj.addProperty("updateInterval", cfg.updateInterval);
+                obj.addProperty("enabled", cfg.enabled);
                 JsonArray linesArray = new JsonArray();
-                for (String line : cfg.lines) {
-                    linesArray.add(line);
-                }
+                for (String line : cfg.lines) linesArray.add(line);
                 obj.add("lines", linesArray);
                 sbs.add(cfg.name, obj);
             }
@@ -305,13 +282,12 @@ public class ScoreboardManager {
     private static void createDefaultConfig() {
         try {
             Files.createDirectories(CONFIG_PATH.getParent());
-            JsonObject root = new JsonObject();
-            JsonObject sbs = new JsonObject();
-
+            JsonObject root = new JsonObject(); JsonObject sbs = new JsonObject();
             JsonObject example = new JsonObject();
             example.addProperty("displayName", "&6&lServer Info");
             example.addProperty("slot", "sidebar");
             example.addProperty("updateInterval", 20);
+            example.addProperty("enabled", false);
             JsonArray lines = new JsonArray();
             lines.add("&6&lMy Server");
             lines.add("&f");
@@ -322,12 +298,11 @@ public class ScoreboardManager {
             lines.add("&eCommand Maker");
             example.add("lines", lines);
             sbs.add("server_info", example);
-
             root.add("scoreboards", sbs);
-            root.addProperty("_comment", "Available placeholders: ${player_count}, ${server_max}, ${tps}. Max 15 lines per sidebar. Use & for color codes.");
+            root.addProperty("_comment", "Set \"enabled\": true to show a scoreboard. Available placeholders: ${player_count}, ${server_max}, ${tps}. Max 15 lines per sidebar. Use & for color codes.");
             String json = new GsonBuilder().setPrettyPrinting().create().toJson(root);
-            Files.write(CONFIG_PATH, json.getBytes(), StandardOpenOption.CREATE_NEW);
-            LOGGER.info("Created default scoreboards config");
+            Files.write(CONFIG_PATH, json.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+            LOGGER.info("Created default scoreboards config (example is disabled)");
         } catch (Exception e) {
             LOGGER.error("Failed to create default scoreboards config", e);
         }

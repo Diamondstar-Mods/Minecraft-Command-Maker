@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Placeholder System - Command Maker Wiki</title>
+    <meta name="description" content="Command Maker v4.0 placeholder system — PAPI-compatible %placeholder% syntax with 15 built-in placeholders for player data, server stats, and custom variables.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon.ico">
+</head>
+<body>
+    <nav id="navbar" class="navbar" role="navigation" aria-label="Main navigation"></nav>
+    <div class="layout">
+        <aside id="sidebar" class="sidebar" role="complementary" aria-label="Side navigation"></aside>
+        <main class="content" role="main">
+            <h1>Placeholder System</h1>
+            <p class="subtitle">A Fabric-native placeholder engine using PlaceholderAPI-compatible <code>%placeholder%</code> syntax. Works in aliases, events, scoreboards, and cooldown messages.</p>
+
+            <div class="callout callout-info">
+                <strong>New in v4.0</strong> &mdash; Integrated into all command execution. No separate config file.
+            </div>
+
+            <h2>Syntax</h2>
+            <pre><code>%placeholder_name%</code></pre>
+            <p>Placeholders are resolved <strong>after</strong> <code>${variable}</code> substitution and <strong>before</strong> command execution.</p>
+
+            <h2>Built-in Placeholders</h2>
+            <table>
+                <tr><th>Placeholder</th><th>Resolves To</th></tr>
+                <tr><td><code>%player%</code></td><td>Player name</td></tr>
+                <tr><td><code>%player_uuid%</code></td><td>Player UUID</td></tr>
+                <tr><td><code>%player_health%</code></td><td>Current health (e.g., <code>18.5</code>)</td></tr>
+                <tr><td><code>%player_max_health%</code></td><td>Maximum health (e.g., <code>20.0</code>)</td></tr>
+                <tr><td><code>%player_xp%</code></td><td>Total XP points</td></tr>
+                <tr><td><code>%player_xp_level%</code></td><td>XP level</td></tr>
+                <tr><td><code>%player_food%</code></td><td>Food level (0-20)</td></tr>
+                <tr><td><code>%player_world%</code></td><td>Dimension ID (e.g., <code>minecraft:overworld</code>)</td></tr>
+                <tr><td><code>%player_gamemode%</code></td><td>Game mode name</td></tr>
+                <tr><td><code>%player_ping%</code></td><td>Network latency in ms</td></tr>
+                <tr><td><code>%server_online%</code></td><td>Players currently online</td></tr>
+                <tr><td><code>%server_max%</code></td><td>Maximum player slots</td></tr>
+                <tr><td><code>%server_tps%</code></td><td>Server TPS (20.0 max)</td></tr>
+                <tr><td><code>%var_&lt;name&gt;%</code></td><td>Value of custom variable <code>&lt;name&gt;</code></td></tr>
+                <tr><td><code>%cooldown_&lt;alias&gt;%</code></td><td>Seconds remaining on cooldown for <code>&lt;alias&gt;</code></td></tr>
+            </table>
+
+            <h2>Usage Examples</h2>
+            <pre><code>// In an alias target
+"status": "say %player% has %player_health% HP, level %player_xp_level%, in %player_world%"
+
+// In a scoreboard line
+"&7Health: &a%player_health%/%player_max_health%"
+
+// In an event command
+"title %player% title {\"text\":\"Welcome!\",\"color\":\"gold\"}"</code></pre>
+
+            <h2>Where Placeholders Work</h2>
+            <ul>
+                <li>Alias command targets</li>
+                <li>Event trigger commands</li>
+                <li>Scoreboard lines</li>
+                <li>Cooldown messages</li>
+            </ul>
+
+            <h2>Cross-Platform Compatibility</h2>
+            <p>The placeholder system uses the same <code>%name%</code> format as PlaceholderAPI (PAPI). On the future Paper/Bukkit module, this system will bridge directly to real PAPI, allowing you to use any plugin's placeholders. The built-in placeholders use the same names across all platforms for seamless module sharing.</p>
+
+            <h2>Custom Placeholders (Developer API)</h2>
+            <p>Java developers can register custom placeholder resolvers at runtime:</p>
+            <pre><code>PlaceholderManager.registerCustomPlaceholder("myplugin_balance", ctx -> {
+    return String.valueOf(getBalance(ctx.player));
+});</code></pre>
+        </main>
+    </div>
+    <footer id="footer" class="footer" role="contentinfo"></footer>
+    <script src="js/components.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>
