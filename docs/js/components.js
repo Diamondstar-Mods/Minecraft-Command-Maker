@@ -270,31 +270,126 @@ CM.footer = {
   }
 };
 
-// Search index — auto-generated from nav + sidebar
+// Helper: convert filename to display title (remove .html, replace dashes with spaces, capitalize words)
+CM.filenameToTitle = function (filename) {
+  return filename
+    .replace(/\.html$/, "")
+    .replace(/-/g, " ")
+    .replace(/\b\w/g, function (c) { return c.toUpperCase(); });
+};
+
+// Search index — includes ALL wiki pages with auto-generated titles from filenames
 CM.buildSearchIndex = function () {
-  const seen = {};
   const pages = {};
 
+  // ALL wiki pages (comprehensive list — every .html file in docs/)
+  var allPageFiles = [
+    "index.html",
+    "getting-started.html",
+    "quick-start.html",
+    "installation.html",
+    "updating.html",
+    "configuration.html",
+    "download.html",
+    "downloadClient.html",
+    "download-local.html",
+    "install-video.html",
+    "aliases.html",
+    "alias-examples.html",
+    "syntax-system.html",
+    "syntax-patterns.html",
+    "functions.html",
+    "function-catalog.html",
+    "function-writing.html",
+    "function-examples.html",
+    "variables.html",
+    "variable-reference.html",
+    "chat-formatting.html",
+    "chat-messages.html",
+    "color-codes.html",
+    "commands.html",
+    "target-selectors.html",
+    "timed-commands.html",
+    "team-commands.html",
+    "nbt-commands.html",
+    "command-safety.html",
+    "advanced-permissions-guide.html",
+    "permissions-quick-reference.html",
+    "permissions-setup.html",
+    "luckperms-integration.html",
+    "gui-system.html",
+    "multi-world.html",
+    "performance.html",
+    "economy-system.html",
+    "kit-system.html",
+    "home-system.html",
+    "shop-system.html",
+    "jail-system.html",
+    "mute-system.html",
+    "vote-system.html",
+    "rank-system.html",
+    "achievement-system.html",
+    "event-system.html",
+    "tpa-system.html",
+    "ban-system.html",
+    "warp-system.html",
+    "custom-commands.html",
+    "debugging.html",
+    "backup-restore.html",
+    "contributing-guide.html",
+    "faq.html",
+    "best-practices.html",
+    "troubleshooting.html",
+    "examples.html",
+    "forum.html",
+    "v4.0-changelog.html",
+    "v4.0-upcoming.html",
+    "cooldowns.html",
+    "conditions.html",
+    "events.html",
+    "scoreboards.html",
+    "placeholders.html",
+    "modules.html",
+    "changelog3.0.0.html",
+    "changelog3.2.0.html",
+    "license.html",
+    "donate.html"
+  ];
+
+  // Add all pages with auto-generated titles from filenames
+  for (var i = 0; i < allPageFiles.length; i++) {
+    var file = allPageFiles[i];
+    pages[CM.filenameToTitle(file)] = file;
+  }
+
+  // Override/add nicer labels from nav and sidebar
   function add(label, href) {
-    if (href === "#" || seen[href]) return;
-    seen[href] = true;
+    if (href === "#" || !href) return;
     pages[label] = href;
   }
 
   add("Home", "index.html");
-  for (const item of CM.nav.items) {
+  for (var j = 0; j < CM.nav.items.length; j++) {
+    var item = CM.nav.items[j];
     if (item.dropdown) {
-      for (const d of item.dropdown) add(d.label, d.href);
+      for (var k = 0; k < item.dropdown.length; k++) {
+        add(item.dropdown[k].label, item.dropdown[k].href);
+      }
     } else {
       add(item.label, item.href);
     }
   }
-  for (const sec of CM.sidebar.sections) {
-    for (const link of sec.links) add(link.label, link.href);
+  for (var s = 0; s < CM.sidebar.sections.length; s++) {
+    var sec = CM.sidebar.sections[s];
+    for (var l = 0; l < sec.links.length; l++) {
+      add(sec.links[l].label, sec.links[l].href);
+    }
   }
   // Additional pages not in nav/sidebar
   add("Changelog 3.0.0", "changelog3.0.0.html");
+  add("Changelog 3.2.0", "changelog3.2.0.html");
   add("License", "license.html");
+  add("Donate", "donate.html");
   add("Install Video", "install-video.html");
   add("Download (Client)", "downloadClient.html");
   add("Download (Local)", "download-local.html");
@@ -322,8 +417,8 @@ CM.buildSearchIndex = function () {
     "quest_board", "dungeon_entrance", "treasure_hunt", "boss_drop", "rpg_shop",
     "crop_farm", "animal_pen", "flower_garden"
   ];
-  for (var i = 0; i < functions.length; i++) {
-    add("Function: " + functions[i], "function-catalog.html");
+  for (var f = 0; f < functions.length; f++) {
+    add("Function: " + functions[f], "function-catalog.html");
   }
 
   return pages;

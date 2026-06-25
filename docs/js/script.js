@@ -160,7 +160,9 @@
         for (const [label, file] of Object.entries(CM.pages || {})) {
           const ll = label.toLowerCase();
           const fl = file.toLowerCase();
-          if (ll.includes(q) || fl.includes(q) || ll.split(/\s+/).some(p => p.startsWith(q))) {
+          // Also match against the filename-derived title (e.g., "getting-started.html" → "Getting Started")
+          const ft = (CM.filenameToTitle ? CM.filenameToTitle(file) : "").toLowerCase();
+          if (ll.includes(q) || fl.includes(q) || ft.includes(q) || ll.split(/\s+/).some(p => p.startsWith(q))) {
             out.push({ label, url: file });
           }
         }
