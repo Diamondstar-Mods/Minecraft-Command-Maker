@@ -255,11 +255,14 @@ public class CommandMakerRift implements InitializationListener {
                         return 0;
                     }
                     source.sendFeedback(() -> Text.literal("§6Delete Aliases Menu:"), false);
-                    int index = 1;
+                    final int[] index = {1};
                     for (String alias : snapshot.keySet()) {
                         String cmd = snapshot.get(alias);
-                        source.sendFeedback(() -> Text.literal("  §f[" + index + "] §6/" + alias + " §7-> §f" + cmd), false);
-                        index++;
+                        final int idx = index[0];
+                        final String a = alias;
+                        final String c = cmd;
+                        source.sendFeedback(() -> Text.literal("  §f[" + idx + "] §6/" + a + " §7-> §f" + c), false);
+                        index[0]++;
                     }
                     source.sendFeedback(() -> Text.literal("§7Use: §f/cmd del <alias>§7 to delete"), false);
                     return 1;

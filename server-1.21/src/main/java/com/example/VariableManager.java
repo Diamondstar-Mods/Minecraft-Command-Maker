@@ -30,6 +30,26 @@ public class VariableManager {
         for (Map.Entry<String, String> entry : vars.entrySet()) {
             command = command.replace("${" + entry.getKey() + "}", entry.getValue());
         }
+
+        // Resolve cooldown variables: ${cooldown_<alias>_remaining}
+        ServerPlayerEntity player = null;
+        try { player = source.getPlayer(); } catch (Exception ignored) {}
+        if (player != null) {
+            java.util.regex.Pattern cdPattern = java.util.regex.Pattern.compile("\\$\\{cooldown_([^}]+)_remaining\\}");
+            java.util.regex.Matcher cdMatcher = cdPattern.matcher(command);
+            StringBuffer cdSb = new StringBuffer();
+            while (cdMatcher.find()) {
+                String alias = cdMatcher.group(1);
+                long remaining = CooldownManager.getRemaining(alias, player);
+                cdMatcher.appendReplacement(cdSb, String.valueOf(remaining));
+            }
+            cdMatcher.appendTail(cdSb);
+            command = cdSb.toString();
+        }
+
+        // Resolve %placeholder% patterns via PlaceholderManager
+        command = PlaceholderManager.resolvePlaceholders(command, source);
+
         return command;
     }
 

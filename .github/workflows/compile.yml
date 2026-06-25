@@ -100,7 +100,7 @@ jobs:
 
   # Branch D
   build-client:
-    name: "  └─ client"
+    name: "  ├─ client"
     runs-on: ubuntu-latest
     needs: build-121
     steps:
@@ -117,3 +117,24 @@ jobs:
 
       - name: Build :client
         run: ./gradlew :client:build
+
+
+  # Branch E
+  build-rift:
+    name: "  └─ server-rift (RiftLoader)"
+    runs-on: ubuntu-latest
+    needs: build-121
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Build :server-rift
+        run: ./gradlew :server-rift:build

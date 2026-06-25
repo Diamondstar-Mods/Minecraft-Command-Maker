@@ -1,11 +1,13 @@
 package com.example;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.ParseResults;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
@@ -19,6 +21,7 @@ import com.example.gui.FunctionChestHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
 import net.minecraft.inventory.SimpleInventory;
+import net.minecraft.server.network.ServerPlayerEntity;
 
 public class CommandMaker implements ModInitializer {
     public static final String MOD_ID = "cmdmaker";
@@ -30,8 +33,16 @@ public class CommandMaker implements ModInitializer {
         AliasManager.loadAliases();
         SyntaxManager.loadSyntaxDefinitions();
         PermissionManager.initialize();
+        CooldownManager.initialize();
+        EventManager.initialize();
         ModScreens.register();
         UpdateChecker.check();
+
+        // Defer ScoreboardManager init until server is fully started
+        ServerLifecycleEvents.SERVER_STARTED.register(server -> {
+            ScoreboardManager.initialize(server);
+        });
+
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
             registerCmdCommand(dispatcher);
             registerAddCommand(dispatcher);
@@ -40,6 +51,10 @@ public class CommandMaker implements ModInitializer {
             registerDeleteAliasMenu(dispatcher);
             registerSyntaxCommand(dispatcher);
             registerPermissionCommand(dispatcher);
+            registerCooldownCommand(dispatcher);
+            registerEventCommand(dispatcher);
+            registerScoreboardCommand(dispatcher);
+            registerModuleCommand(dispatcher);
         });
 
         LOGGER.info("Alias mod initialized!");
@@ -286,6 +301,10 @@ public class CommandMaker implements ModInitializer {
                         source.sendFeedback(() -> Text.literal("§e/cmd downloadfunction <name> §7— Download a function from the online library"), false);
                         source.sendFeedback(() -> Text.literal("§e/cmd listdownloadablefunctions §7— List all downloadable functions"), false);
                         source.sendFeedback(() -> Text.literal("§e/cmd syntax §7— List custom syntax patterns"), false);
+                        source.sendFeedback(() -> Text.literal("§e/cmd cooldown set/clear/list §7— Manage alias cooldowns"), false);
+                        source.sendFeedback(() -> Text.literal("§e/cmd event list/reload §7— Manage event triggers"), false);
+                        source.sendFeedback(() -> Text.literal("§e/cmd scoreboard list/reload §7— Manage custom scoreboards"), false);
+                        source.sendFeedback(() -> Text.literal("§e/cmd module export/import/list/info §7— Manage .cmk modules"), false);
                         source.sendFeedback(() -> Text.literal("§e/cmd wiki §7— Open the wiki in your browser"), false);
                         source.sendFeedback(() -> Text.literal("§e/cmd help §7— Show this help message"), false);
                         source.sendFeedback(() -> Text.literal("§7Use §e/cmd help §7anytime to see this list!"), false);
@@ -416,10 +435,17 @@ public class CommandMaker implements ModInitializer {
                         source.sendFeedback(() -> Text.literal("You don't have permission to use this alias."), false);
                         return 0;
                     }
+                    // Cooldown check
+                    if (!CooldownManager.checkCooldown(alias, source)) {
+                        return 0;
+                    }
                     if (target.startsWith("function:")) {
                         return FunctionManager.executeFunction(target.substring("function:".length()), ctx);
                     }
                     String command = VariableManager.substituteVariables(target, ctx);
+                    // Condition evaluation
+                    command = ConditionManager.evaluate(command, ctx);
+                    if (command == null || command.isEmpty()) return 0;
                     var cmdDispatcher = source.getServer().getCommandManager().getDispatcher();
                     ParseResults<ServerCommandSource> parsed = cmdDispatcher.parse(command, source);
                     return cmdDispatcher.execute(parsed);
@@ -429,6 +455,10 @@ public class CommandMaker implements ModInitializer {
                         ServerCommandSource source = ctx.getSource();
                         if (!PermissionManager.canUseAlias(source, alias)) {
                             source.sendFeedback(() -> Text.literal("You don't have permission to use this alias."), false);
+                            return 0;
+                        }
+                        // Cooldown check
+                        if (!CooldownManager.checkCooldown(alias, source)) {
                             return 0;
                         }
                         if (target.startsWith("function:")) {
@@ -445,6 +475,9 @@ public class CommandMaker implements ModInitializer {
                             command = target + " " + args;
                             command = VariableManager.substituteVariables(command, ctx);
                         }
+                        // Condition evaluation
+                        command = ConditionManager.evaluate(command, ctx);
+                        if (command == null || command.isEmpty()) return 0;
                         var cmdDispatcher = source.getServer().getCommandManager().getDispatcher();
                         ParseResults<ServerCommandSource> parsed = cmdDispatcher.parse(command, source);
                         return cmdDispatcher.execute(parsed);
@@ -561,6 +594,226 @@ public class CommandMaker implements ModInitializer {
                         ctx.getSource().sendFeedback(() -> Text.literal("§aPermission config reloaded!"), false);
                         return 1;
                     })
+                )
+        );
+    }
+
+    // ---- /cmd cooldown ----
+
+    private void registerCooldownCommand(CommandDispatcher<ServerCommandSource> dispatcher) {
+        dispatcher.register(
+            CommandManager.literal("cmd")
+                .then(CommandManager.literal("cooldown")
+                    .requires(source -> PermissionManager.canManageAliases(source))
+                    .then(CommandManager.literal("set")
+                        .then(CommandManager.argument("alias", StringArgumentType.word())
+                            .then(CommandManager.argument("type", StringArgumentType.word())
+                                .then(CommandManager.argument("seconds", IntegerArgumentType.integer(1, 86400))
+                                    .then(CommandManager.argument("message", StringArgumentType.greedyString())
+                                        .executes(ctx -> {
+                                            String alias = StringArgumentType.getString(ctx, "alias");
+                                            String type = StringArgumentType.getString(ctx, "type").toLowerCase();
+                                            int seconds = IntegerArgumentType.getInteger(ctx, "seconds");
+                                            String message = StringArgumentType.getString(ctx, "message");
+                                            if (!type.equals("player") && !type.equals("global")) {
+                                                ctx.getSource().sendFeedback(() -> Text.literal("§cType must be 'player' or 'global'"), false);
+                                                return 0;
+                                            }
+                                            CooldownManager.setCooldown(alias, type, seconds, message);
+                                            ctx.getSource().sendFeedback(() -> Text.literal("§aSet " + type + " cooldown for §f/" + alias + "§a: §f" + seconds + "s"), false);
+                                            return 1;
+                                        })
+                                    )
+                                    .executes(ctx -> {
+                                        String alias = StringArgumentType.getString(ctx, "alias");
+                                        String type = StringArgumentType.getString(ctx, "type").toLowerCase();
+                                        int seconds = IntegerArgumentType.getInteger(ctx, "seconds");
+                                        if (!type.equals("player") && !type.equals("global")) {
+                                            ctx.getSource().sendFeedback(() -> Text.literal("§cType must be 'player' or 'global'"), false);
+                                            return 0;
+                                        }
+                                        CooldownManager.setCooldown(alias, type, seconds, null);
+                                        ctx.getSource().sendFeedback(() -> Text.literal("§aSet " + type + " cooldown for §f/" + alias + "§a: §f" + seconds + "s"), false);
+                                        return 1;
+                                    })
+                                )
+                            )
+                        )
+                    )
+                    .then(CommandManager.literal("clear")
+                        .then(CommandManager.argument("alias", StringArgumentType.word())
+                            .executes(ctx -> {
+                                String alias = StringArgumentType.getString(ctx, "alias");
+                                if (CooldownManager.clearCooldown(alias)) {
+                                    ctx.getSource().sendFeedback(() -> Text.literal("§aCooldown cleared for §f/" + alias), false);
+                                } else {
+                                    ctx.getSource().sendFeedback(() -> Text.literal("§cNo cooldown configured for §f/" + alias), false);
+                                }
+                                return 1;
+                            })
+                        )
+                    )
+                    .then(CommandManager.literal("list")
+                        .executes(ctx -> {
+                            Map<String, CooldownManager.CooldownConfig> cooldowns = CooldownManager.getConfiguredCooldowns();
+                            if (cooldowns.isEmpty()) {
+                                ctx.getSource().sendFeedback(() -> Text.literal("§7No cooldowns configured."), false);
+                                return 0;
+                            }
+                            ctx.getSource().sendFeedback(() -> Text.literal("§6Configured Cooldowns:"), false);
+                            for (CooldownManager.CooldownConfig cfg : cooldowns.values()) {
+                                ctx.getSource().sendFeedback(() -> Text.literal(
+                                    "  §f/" + cfg.alias + " §7→ §e" + cfg.type + "§7, §f" + cfg.seconds + "s"), false);
+                            }
+                            return 1;
+                        })
+                    )
+                )
+        );
+    }
+
+    // ---- /cmd event ----
+
+    private void registerEventCommand(CommandDispatcher<ServerCommandSource> dispatcher) {
+        dispatcher.register(
+            CommandManager.literal("cmd")
+                .then(CommandManager.literal("event")
+                    .requires(source -> PermissionManager.canManageAliases(source))
+                    .then(CommandManager.literal("list")
+                        .executes(ctx -> {
+                            Map<String, EventManager.EventConfig> events = EventManager.getConfiguredEvents();
+                            if (events.isEmpty()) {
+                                ctx.getSource().sendFeedback(() -> Text.literal("§7No events configured."), false);
+                                return 0;
+                            }
+                            ctx.getSource().sendFeedback(() -> Text.literal("§6Configured Events:"), false);
+                            for (Map.Entry<String, EventManager.EventConfig> entry : events.entrySet()) {
+                                int cmdCount = entry.getValue().commands.size();
+                                ctx.getSource().sendFeedback(() -> Text.literal(
+                                    "  §f" + entry.getKey() + " §7→ §f" + cmdCount + " §7commands"), false);
+                            }
+                            return 1;
+                        })
+                    )
+                    .then(CommandManager.literal("reload")
+                        .executes(ctx -> {
+                            EventManager.reload();
+                            ctx.getSource().sendFeedback(() -> Text.literal("§aEvents config reloaded!"), false);
+                            return 1;
+                        })
+                    )
+                )
+        );
+    }
+
+    // ---- /cmd scoreboard ----
+
+    private void registerScoreboardCommand(CommandDispatcher<ServerCommandSource> dispatcher) {
+        dispatcher.register(
+            CommandManager.literal("cmd")
+                .then(CommandManager.literal("scoreboard")
+                    .requires(source -> PermissionManager.canManageAliases(source))
+                    .then(CommandManager.literal("list")
+                        .executes(ctx -> {
+                            Map<String, ScoreboardManager.ScoreboardConfig> sbs = ScoreboardManager.getConfiguredScoreboards();
+                            if (sbs.isEmpty()) {
+                                ctx.getSource().sendFeedback(() -> Text.literal("§7No custom scoreboards configured."), false);
+                                return 0;
+                            }
+                            ctx.getSource().sendFeedback(() -> Text.literal("§6Custom Scoreboards:"), false);
+                            for (ScoreboardManager.ScoreboardConfig cfg : sbs.values()) {
+                                ctx.getSource().sendFeedback(() -> Text.literal(
+                                    "  §f" + cfg.name + " §7→ §e" + cfg.slot + "§7, update every §f" + cfg.updateInterval + "§7 ticks"), false);
+                            }
+                            return 1;
+                        })
+                    )
+                    .then(CommandManager.literal("reload")
+                        .executes(ctx -> {
+                            ScoreboardManager.reload(ctx.getSource().getServer());
+                            ctx.getSource().sendFeedback(() -> Text.literal("§aScoreboards config reloaded!"), false);
+                            return 1;
+                        })
+                    )
+                )
+        );
+    }
+
+    // ---- /cmd module ----
+
+    private void registerModuleCommand(CommandDispatcher<ServerCommandSource> dispatcher) {
+        dispatcher.register(
+            CommandManager.literal("cmd")
+                .then(CommandManager.literal("module")
+                    .requires(source -> PermissionManager.canManageAliases(source))
+                    .then(CommandManager.literal("export")
+                        .then(CommandManager.argument("name", StringArgumentType.word())
+                            .executes(ctx -> {
+                                String name = StringArgumentType.getString(ctx, "name");
+                                ModuleManager.exportModule(name, false, ctx.getSource());
+                                return 1;
+                            })
+                        )
+                    )
+                    .then(CommandManager.literal("exportall")
+                        .then(CommandManager.argument("name", StringArgumentType.word())
+                            .executes(ctx -> {
+                                String name = StringArgumentType.getString(ctx, "name");
+                                ModuleManager.exportModule(name, true, ctx.getSource());
+                                return 1;
+                            })
+                        )
+                    )
+                    .then(CommandManager.literal("import")
+                        .then(CommandManager.argument("name", StringArgumentType.word())
+                            .executes(ctx -> {
+                                String name = StringArgumentType.getString(ctx, "name");
+                                ModuleManager.importModule(name, false, ctx.getSource());
+                                return 1;
+                            })
+                            .then(CommandManager.literal("--overwrite")
+                                .executes(ctx -> {
+                                    String name = StringArgumentType.getString(ctx, "name");
+                                    ModuleManager.importModule(name, true, ctx.getSource());
+                                    return 1;
+                                })
+                            )
+                        )
+                    )
+                    .then(CommandManager.literal("list")
+                        .executes(ctx -> {
+                            List<String> modules = ModuleManager.listModules();
+                            if (modules.isEmpty()) {
+                                ctx.getSource().sendFeedback(() -> Text.literal("§7No .cmk modules found in config/CommandMaker/Modules/"), false);
+                                return 0;
+                            }
+                            ctx.getSource().sendFeedback(() -> Text.literal("§6Available .cmk Modules:"), false);
+                            for (String mod : modules) {
+                                ModuleManager.ModuleInfo info = ModuleManager.getModuleInfo(mod);
+                                String desc = info != null && !info.description.isEmpty() ? " §7- " + info.description : "";
+                                ctx.getSource().sendFeedback(() -> Text.literal("  §f" + mod + desc), false);
+                            }
+                            return 1;
+                        })
+                    )
+                    .then(CommandManager.literal("info")
+                        .then(CommandManager.argument("name", StringArgumentType.word())
+                            .executes(ctx -> {
+                                String name = StringArgumentType.getString(ctx, "name");
+                                ModuleManager.ModuleInfo info = ModuleManager.getModuleInfo(name);
+                                if (info == null) {
+                                    ctx.getSource().sendFeedback(() -> Text.literal("§cModule not found: §f" + name + ".cmk"), false);
+                                    return 0;
+                                }
+                                ctx.getSource().sendFeedback(() -> Text.literal("§6§l" + info.name + " §7v" + info.version + " §7by §f" + info.author), false);
+                                if (!info.description.isEmpty()) {
+                                    ctx.getSource().sendFeedback(() -> Text.literal("§7" + info.description), false);
+                                }
+                                ctx.getSource().sendFeedback(() -> Text.literal("§7Made for Command Maker §f" + info.cmVersion), false);
+                                return 1;
+                            })
+                        )
+                    )
                 )
         );
     }
