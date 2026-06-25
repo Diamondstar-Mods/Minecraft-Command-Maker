@@ -1,6 +1,8 @@
 package com.example.gui;
 
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.Click;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 import com.example.*;
@@ -21,12 +23,12 @@ public class FunctionManagerScreen extends Screen {
     private final Screen previousScreen;
     private int currentTab = 0; // 0=Download, 1=My Functions, 2=Create, 3=Delete Aliases
     private int currentPage = 0;
-    private Map<String, ManifestEntry> manifest = new LinkedHashMap<>();
-    private List<String> localFunctions = new ArrayList<>();
-    private boolean loading = true;
-    private String statusMessage = "";
-    private String pendingDeleteAlias = null;
+    private volatile Map<String, ManifestEntry> manifest = new LinkedHashMap<>();
+    private volatile List<String> localFunctions = new ArrayList<>();
+    private volatile boolean loading = true;
+    private volatile String statusMessage = "";
 
+    private String pendingDeleteAlias = null;
     private int guiLeft, guiTop;
 
     public FunctionManagerScreen(Screen previousScreen) {
@@ -46,15 +48,27 @@ public class FunctionManagerScreen extends Screen {
         loading = true;
         statusMessage = "§7Loading...";
         new Thread(() -> {
+            Map<String, ManifestEntry> m;
             try {
-                manifest = FunctionManager.fetchFunctionManifest();
-                statusMessage = "§aLoaded " + manifest.size() + " functions";
+                m = FunctionManager.fetchFunctionManifest();
+                statusMessage = "§aLoaded " + m.size() + " functions";
             } catch (Exception e) {
+                m = new LinkedHashMap<>();
                 statusMessage = "§cFailed to load online functions";
             }
 
-            localFunctions = FunctionManager.listLocalFunctions();
-            loading = false;
+            List<String> lf = FunctionManager.listLocalFunctions();
+
+            // Update state on render thread
+            final Map<String, ManifestEntry> finalManifest = m;
+            final List<String> finalLocal = lf;
+            final String finalStatus = statusMessage;
+            MinecraftClient.getInstance().execute(() -> {
+                manifest = finalManifest;
+                localFunctions = finalLocal;
+                statusMessage = finalStatus;
+                loading = false;
+            });
         }).start();
     }
 
@@ -126,7 +140,6 @@ public class FunctionManagerScreen extends Screen {
 
                 if (idx < slots.size()) {
                     SlotData slot = slots.get(idx);
-                    // Highlight pending delete
                     boolean highlighted = currentTab == 3 && pendingDeleteAlias != null && slot.name.equals(pendingDeleteAlias);
                     drawSlot(context, x, y, slot, mouseX, mouseY, highlighted);
                 } else {
@@ -144,20 +157,22 @@ public class FunctionManagerScreen extends Screen {
 
     private List<SlotData> getCurrentSlots() {
         List<SlotData> slots = new ArrayList<>();
+        Map<String, ManifestEntry> m = manifest;
+        List<String> lf = localFunctions;
         switch (currentTab) {
             case 0 -> {
-                for (Map.Entry<String, ManifestEntry> e : manifest.entrySet()) {
-                    if (!localFunctions.contains(e.getKey())) {
+                for (Map.Entry<String, ManifestEntry> e : m.entrySet()) {
+                    if (!lf.contains(e.getKey())) {
                         ManifestEntry me = e.getValue();
                         slots.add(new SlotData(e.getKey(), me.description, SlotAction.DOWNLOAD, me.icon));
                     }
                 }
             }
             case 1 -> {
-                List<String> sorted = new ArrayList<>(localFunctions);
+                List<String> sorted = new ArrayList<>(lf);
                 Collections.sort(sorted);
                 for (String name : sorted) {
-                    ManifestEntry me = manifest.get(name);
+                    ManifestEntry me = m.get(name);
                     String desc = me != null ? me.description : "Local function — left-click to run";
                     String icon = me != null ? me.icon : null;
                     slots.add(new SlotData(name, desc, SlotAction.RUN_DELETE, icon));
@@ -196,7 +211,6 @@ public class FunctionManagerScreen extends Screen {
         context.fill(x, y, x + SLOT_SIZE, y + SLOT_SIZE, highlighted ? 0xFF8B0000 : 0xFF373737);
         context.fill(x + 1, y + 1, x + SLOT_SIZE - 1, y + SLOT_SIZE - 1, bgColor);
 
-        // Item color indicator based on action
         int iconColor = switch (slot.action) {
             case DOWNLOAD -> 0xFF3D8B3D;
             case RUN_DELETE -> 0xFF3D3D8B;
@@ -209,11 +223,9 @@ public class FunctionManagerScreen extends Screen {
             context.fill(x + 3, y + 3, x + SLOT_SIZE - 3, y + SLOT_SIZE - 3, iconColor);
         }
 
-        // First letter of slot name as icon
         String letter = slot.name.substring(0, 1).toUpperCase();
         context.drawText(this.textRenderer, Text.literal("§f" + letter), x + 6, y + 4, 0xFFFFFF, false);
 
-        // Tooltip on hover
         if (hovered && slot.description != null && !slot.description.isEmpty()) {
             List<Text> tooltip = new ArrayList<>();
             tooltip.add(Text.literal("§e" + slot.name));
@@ -268,8 +280,13 @@ public class FunctionManagerScreen extends Screen {
         }
     }
 
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+    @Override
+    public boolean mouseClicked(Click click, boolean doubled) {
         if (loading) return false;
+
+        double mouseX = click.x();
+        double mouseY = click.y();
+        int button = click.button();
 
         // Tab clicks
         int tabY = guiTop + 18;
@@ -340,6 +357,19 @@ public class FunctionManagerScreen extends Screen {
         return false;
     }
 
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
+        if (verticalAmount < 0 && currentPage > 0) {
+            currentPage--;
+        } else if (verticalAmount > 0) {
+            int totalSlots = getCurrentSlots().size();
+            int slotRows = ROWS - 2;
+            int maxPage = Math.max(0, (totalSlots - 1) / (slotRows * COLUMNS));
+            if (currentPage < maxPage) currentPage++;
+        }
+        return true;
+    }
+
     private void handleSlotClick(SlotData slot, int button) {
         if (this.client == null || this.client.player == null) return;
 
@@ -399,18 +429,6 @@ public class FunctionManagerScreen extends Screen {
             currentTab = 1;
             currentPage = 0;
         }).start();
-    }
-
-    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
-        if (verticalAmount < 0 && currentPage > 0) {
-            currentPage--;
-        } else if (verticalAmount > 0) {
-            int totalSlots = getCurrentSlots().size();
-            int slotRows = ROWS - 2;
-            int maxPage = Math.max(0, (totalSlots - 1) / (slotRows * COLUMNS));
-            if (currentPage < maxPage) currentPage++;
-        }
-        return true;
     }
 
     @Override

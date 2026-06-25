@@ -32,3 +32,4 @@ include 'server-1.21-forge-neoforge' // MC 1.21.x Forge/NeoForge
 include 'server-1.22'              // MC 26.1
 
 include 'client'
+include 'server-rift'              // MC 1.21.x RiftLoader
