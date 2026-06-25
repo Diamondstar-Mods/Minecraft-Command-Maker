@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>v4.0 Changelog - Command Maker Wiki</title>
-    <meta name="description" content="Command Maker v4.0 full changelog — cooldowns, condition blocks, event triggers, custom scoreboards, placeholder system, .cmk modules, and more.">
+    <meta name="description" content="Command Maker v4.0 — the big one. Cooldowns, if/else blocks, event triggers, custom scoreboards, placeholders, and shareable .cmk packages.">
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="favicon.ico">
 </head>
@@ -15,138 +15,91 @@
         <main class="content" role="main">
             <section class="hero">
                 <div class="hero-content">
-                    <h1 class="hero-title">Command Maker v4.0 Changelog</h1>
-                    <p class="hero-subtitle">Six major new systems — cooldowns, condition blocks, event triggers, custom scoreboards, placeholder engine, and shareable .cmk modules.</p>
+                    <h1 class="hero-title">🎉 v4.0 — The Big One</h1>
+                    <p class="hero-subtitle">Six new systems. One JAR. Zero breaking changes. Let's go.</p>
                 </div>
             </section>
 
             <section class="content-block">
-                <h2>Release Summary</h2>
-                <p>Version <strong>4.0</strong> is the largest update since the Custom Syntax System. It adds six entirely new subsystems that transform Command Maker from an alias/syntax tool into a full server automation platform. Every feature uses JSON config files with auto-creation on first run. All features work together — conditions can check cooldowns, events can trigger aliases with placeholders, scoreboards update from server stats, and everything can be packaged into a single <code>.cmk</code> file for sharing.</p>
+                <p>v4.0 is <strong>huge</strong>. We added six entirely new systems that turn Command Maker from "that handy alias mod" into a full-blown server automation platform. And the best part? <strong>Nothing breaks.</strong> Your existing aliases, syntaxes, and permissions all keep working exactly like before. New stuff is totally opt-in.</p>
             </section>
 
-            <!-- Feature 1 -->
             <section class="content-block">
-                <h2>1. Built-in Cooldown System</h2>
-                <p><strong>New file:</strong> <code>config/CommandMaker/cooldowns.json</code> | <strong>Manager:</strong> <code>CooldownManager</code></p>
+                <h2>🕐 1. Cooldowns — No More Spam</h2>
+                <p>Ever had players spam <code>/home</code> or <code>/heal</code>? Yeah, us too. Now you can slap a cooldown on any alias.</p>
                 <ul>
-                    <li><strong>Per-player cooldowns</strong> — each player has their own timer. Configure per alias.</li>
-                    <li><strong>Global cooldowns</strong> — server-wide lockout. Once any player runs the alias, everyone waits.</li>
-                    <li><strong>Custom cooldown messages</strong> — use <code>{remaining}</code> placeholder for countdown display with full <code>&</code> color support.</li>
-                    <li><strong>Cooldown variables</strong> — <code>${cooldown_alias_remaining}</code> available in any alias command string.</li>
-                    <li><strong>Commands:</strong> <code>/cmd cooldown set</code>, <code>/cmd cooldown clear</code>, <code>/cmd cooldown list</code></li>
-                    <li><strong>Integration:</strong> Cooldowns are checked automatically before any alias executes. No extra config needed in the alias itself.</li>
+                    <li><strong>Per-player:</strong> each player has their own timer. Bob spamming <code>/home</code> only affects Bob.</li>
+                    <li><strong>Global:</strong> one player uses it, <em>everyone</em> waits. Great for server-wide events.</li>
+                    <li><strong>Custom messages:</strong> write whatever you want. <code>{remaining}</code> shows seconds left. Colors work too.</li>
                 </ul>
-                <a href="cooldowns.html" class="card-link">Full cooldown documentation →</a>
-            </section>
-
-            <!-- Feature 2 -->
-            <section class="content-block">
-                <h2>2. Condition Blocks (If / Else)</h2>
-                <p><strong>Works in:</strong> Any alias target string | <strong>Manager:</strong> <code>ConditionManager</code></p>
-                <ul>
-                    <li><strong>Inline DSL syntax:</strong> <code>if:type(args) true_command else false_command</code> — place directly in alias targets.</li>
-                    <li><strong>9 condition types:</strong> <code>xp</code>, <code>health</code>, <code>perm</code>, <code>hasitem</code>, <code>var</code>, <code>cooldown</code>, <code>player</code>, <code>dimension</code>, <code>op</code></li>
-                    <li><strong>Else branches:</strong> Optional <code>else</code> clause for failed conditions.</li>
-                    <li><strong>Variable support:</strong> Conditions work after <code>${variable}</code> substitution and before <code>%placeholder%</code> resolution.</li>
-                    <li><strong>Safe fallback:</strong> If a condition fails with no else, an empty string is returned (nothing executes) instead of a crash.</li>
-                    <li><strong>Integration:</strong> Conditions are evaluated in the alias execution pipeline — no separate command needed.</li>
-                </ul>
-                <a href="conditions.html" class="card-link">Full conditions documentation →</a>
-            </section>
-
-            <!-- Feature 3 -->
-            <section class="content-block">
-                <h2>3. Event Triggers</h2>
-                <p><strong>New file:</strong> <code>config/CommandMaker/events.json</code> | <strong>Manager:</strong> <code>EventManager</code></p>
-                <ul>
-                    <li><strong>8 event types:</strong> <code>player_join</code>, <code>player_leave</code>, <code>player_death</code>, <code>player_respawn</code>, <code>player_first_join</code>, <code>player_chat</code>, <code>player_kill</code>, <code>block_break</code></li>
-                    <li><strong>Event variables:</strong> <code>${death_cause}</code>, <code>${killer}</code>, <code>${message}</code>, <code>${block}</code>, <code>${block_x}</code>, etc. — provided automatically.</li>
-                    <li><strong>Block filters:</strong> Restrict <code>block_break</code> events to specific blocks.</li>
-                    <li><strong>Event cooldowns:</strong> Prevent event spam with per-event cooldown timers.</li>
-                    <li><strong>First-join detection:</strong> <code>player_first_join</code> fires only the very first time a player connects.</li>
-                    <li><strong>Fabric API native:</strong> Uses <code>ServerPlayConnectionEvents</code>, <code>ServerLivingEntityEvents</code>, <code>PlayerBlockBreakEvents</code>, <code>ServerMessageEvents</code>.</li>
-                    <li><strong>Commands:</strong> <code>/cmd event list</code>, <code>/cmd event reload</code></li>
-                </ul>
-                <a href="events.html" class="card-link">Full events documentation →</a>
-            </section>
-
-            <!-- Feature 4 -->
-            <section class="content-block">
-                <h2>4. Custom Scoreboards</h2>
-                <p><strong>New file:</strong> <code>config/CommandMaker/scoreboards.json</code> | <strong>Manager:</strong> <code>ScoreboardManager</code></p>
-                <ul>
-                    <li><strong>JSON-defined scoreboards:</strong> Full control over display name, slot position, update interval, and all lines.</li>
-                    <li><strong>Dynamic placeholders:</strong> <code>${player_count}</code>, <code>${server_max}</code>, <code>${tps}</code> — auto-update at the configured interval.</li>
-                    <li><strong>Display slots:</strong> <code>sidebar</code>, <code>list</code> (tab menu), <code>belowName</code>.</li>
-                    <li><strong>Configurable update interval:</strong> Set in ticks (20 = 1 second). Use <code>0</code> for static scoreboards.</li>
-                    <li><strong>Enable/disable toggle:</strong> Each scoreboard has an <code>enabled</code> field. Defaults to <code>false</code> — no unwanted scoreboards.</li>
-                    <li><strong>Multiple scoreboards:</strong> Define as many as you need. Each can target a different display slot.</li>
-                    <li><strong>Color support:</strong> Full <code>&</code> color code support in display names and all lines.</li>
-                    <li><strong>Commands:</strong> <code>/cmd scoreboard list</code>, <code>/cmd scoreboard reload</code></li>
-                </ul>
-                <a href="scoreboards.html" class="card-link">Full scoreboards documentation →</a>
-            </section>
-
-            <!-- Feature 5 -->
-            <section class="content-block">
-                <h2>5. Placeholder System</h2>
-                <p><strong>Manager:</strong> <code>PlaceholderManager</code></p>
-                <ul>
-                    <li><strong>PAPI-compatible syntax:</strong> <code>%placeholder%</code> format — familiar to anyone who's used PlaceholderAPI.</li>
-                    <li><strong>15 built-in placeholders:</strong> <code>%player%</code>, <code>%player_uuid%</code>, <code>%player_health%</code>, <code>%player_xp%</code>, <code>%player_food%</code>, <code>%player_world%</code>, <code>%player_gamemode%</code>, <code>%player_ping%</code>, <code>%server_online%</code>, <code>%server_max%</code>, <code>%server_tps%</code>, <code>%var_name%</code>, <code>%cooldown_alias%</code></li>
-                    <li><strong>Custom placeholder API:</strong> Java developers can register custom placeholder resolvers at runtime.</li>
-                    <li><strong>Works everywhere:</strong> Resolved in alias commands, event command lists, scoreboard lines, cooldown messages, and GUI text.</li>
-                    <li><strong>Cross-platform:</strong> Same placeholder names work on Fabric, with Paper/Forge bridges planned for real PAPI integration.</li>
-                </ul>
-                <a href="placeholders.html" class="card-link">Full placeholders documentation →</a>
-            </section>
-
-            <!-- Feature 6 -->
-            <section class="content-block">
-                <h2>6. Command Maker Modules (.cmk)</h2>
-                <p><strong>Manager:</strong> <code>ModuleManager</code> | <strong>Directory:</strong> <code>config/CommandMaker/Modules/</code></p>
-                <ul>
-                    <li><strong>Shareable packages:</strong> Bundle aliases, syntaxes, functions, events, scoreboards, and cooldowns into one <code>.cmk</code> file.</li>
-                    <li><strong>ZIP format:</strong> Standard ZIP with <code>module.json</code> metadata + individual config files + <code>functions/</code> directory.</li>
-                    <li><strong>One-command export:</strong> <code>/cmd module export &lt;name&gt;</code> packages everything up.</li>
-                    <li><strong>Smart import:</strong> Merges into existing config. Conflicts detected and reported. <code>--overwrite</code> flag forces replacement.</li>
-                    <li><strong>Metadata:</strong> Each module carries name, version, author, description, and target Command Maker version.</li>
-                    <li><strong>Function bundling:</strong> Functions are extracted to the Functions folder on import. Use <code>/cmd module exportall</code> to include them.</li>
-                    <li><strong>Module browser:</strong> <code>/cmd module list</code> shows available modules. <code>/cmd module info</code> shows metadata without importing.</li>
-                </ul>
-                <a href="modules.html" class="card-link">Full modules documentation →</a>
-            </section>
-
-            <!-- Bonus -->
-            <section class="content-block">
-                <h2>7. Updated Help & Commands</h2>
-                <ul>
-                    <li><code>/cmd help</code> now lists all 18+ subcommands including the 6 new feature groups.</li>
-                    <li>All new commands follow the existing <code>/cmd &lt;feature&gt; &lt;action&gt;</code> pattern for consistency.</li>
-                    <li>Config files auto-create with <code>_comment</code> fields explaining available options.</li>
-                </ul>
+                <p>Dropped in <code>config/CommandMaker/cooldowns.json</code>. Dead simple.</p>
+                <a href="cooldowns.html" class="card-link">All the cooldown details →</a>
             </section>
 
             <section class="content-block">
-                <h2>Platform Support</h2>
+                <h2>🔀 2. If/Else — Your Aliases Just Got Smarter</h2>
+                <p>Real logic. Right in your alias. No config files, no scripting — just type it inline.</p>
+                <pre><code>if:xp(30) give @s diamond else say Come back when you're level 30!</code></pre>
+                <p>You can check <strong>9 different things</strong>: XP level, health %, permissions, items in inventory, custom variables, cooldowns, player name, dimension, or whether someone's an op.</p>
+                <p>The <code>else</code> part is optional. If the condition fails and there's no else, nothing happens — no errors, no crashes.</p>
+                <a href="conditions.html" class="card-link">Every condition explained →</a>
+            </section>
+
+            <section class="content-block">
+                <h2>📡 3. Event Triggers — Set It and Forget It</h2>
+                <p>Stuff happens on your server. Now your mod can respond to it.</p>
+                <p>Player joins? <strong>Auto-welcome message.</strong> Player dies? <strong>Broadcast it.</strong> Someone breaks a diamond ore? <strong>Give 'em a bonus.</strong> First time someone connects? <strong>Roll out the red carpet.</strong></p>
+                <p>Eight event types: join, leave, death, respawn, first join, chat, kill, block break. All in <code>config/CommandMaker/events.json</code>.</p>
+                <p>Each event can have its own cooldown. You can even filter block breaks to specific blocks — only fire when someone mines diamond ore, for example.</p>
+                <a href="events.html" class="card-link">All the events →</a>
+            </section>
+
+            <section class="content-block">
+                <h2>📊 4. Custom Scoreboards — Pretty Sidebars, Zero Effort</h2>
+                <p>Define a scoreboard in JSON. It shows up. It updates itself. That's it.</p>
+                <p>Put <code>${player_count}</code> in a line and it'll always show the right number. <code>${tps}</code> for server performance. Full color support with <code>&</code> codes. Position it in the sidebar, tab list, or below player names.</p>
+                <p>And here's the thing: <strong>scoreboards are off by default.</strong> The example config has <code>"enabled": false</code> so nothing appears until you're ready. No surprise sidebars.</p>
+                <a href="scoreboards.html" class="card-link">Scoreboard deep dive →</a>
+            </section>
+
+            <section class="content-block">
+                <h2>🔤 5. Placeholders — The Glue</h2>
+                <p>Remember <code>${player}</code> and <code>${x}</code>? Meet their cooler cousins.</p>
+                <p><code>%player_health%</code> tells you how much HP someone has. <code>%player_world%</code> says which dimension they're in. <code>%server_online%</code> tells you how many people are on.</p>
+                <p>Fifteen built-in. They work <strong>everywhere</strong> — aliases, events, scoreboards, cooldown messages. Same <code>%name%</code> format as PlaceholderAPI, so if you've used PAPI before, this feels familiar.</p>
+                <a href="placeholders.html" class="card-link">Every placeholder listed →</a>
+            </section>
+
+            <section class="content-block">
+                <h2>📦 6. Shareable Packages — One File, Everything</h2>
+                <p>Spent hours setting up the perfect alias system? Package it up and share it.</p>
+                <p>A <code>.cmk</code> file is just a ZIP with all your stuff inside: aliases, functions, events, scoreboards, cooldowns — the works. Two commands and you're done:</p>
+                <pre><code>/cmd package MyCoolSetup    ← bundles everything into a .cmk
+/cmd import MyCoolSetup     ← installs it on another server</code></pre>
+                <p>Importing is <strong>safe</strong> — it won't overwrite your existing stuff unless you say <code>--overwrite</code>. Conflicts are reported, not silently replaced.</p>
+                <p>Think of it like a modpack, but for Command Maker content. Drop the file in <code>config/CommandMaker/packages/</code> and you're golden.</p>
+                <a href="modules.html" class="card-link">Everything about packages →</a>
+            </section>
+
+            <section class="content-block">
+                <h2>✨ Also New: Quick Commands</h2>
+                <p><code>/cmd help</code> now shows all 20+ subcommands. We added <code>/cmd package</code> and <code>/cmd import</code> as simpler alternatives to the module commands. Same functionality, fewer keystrokes.</p>
+            </section>
+
+            <section class="content-block">
+                <h2>📋 Platform Status</h2>
                 <table>
-                    <tr><th>Platform</th><th>Status in v4.0</th></tr>
-                    <tr><td>Fabric 1.21.9 (Java 21)</td><td>✅ Full support — all 6 features</td></tr>
-                    <tr><td>Fabric 26.1 (Java 25)</td><td>🟡 In progress — core managers ported</td></tr>
-                    <tr><td>Paper/Bukkit/Spigot 1.21</td><td>⏳ Planned — after Fabric 26.1</td></tr>
-                    <tr><td>Forge / NeoForge 1.21</td><td>⏳ Planned — after Paper</td></tr>
-                    <tr><td>Rift (MC 26.1)</td><td>⏳ Planned — after Forge</td></tr>
+                    <tr><th>Platform</th><th>v4.0 Status</th></tr>
+                    <tr><td>Fabric 1.21.9</td><td>✅ Ready to go — all 6 features</td></tr>
+                    <tr><td>Fabric 26.1</td><td>🟡 Ported, needs final polish</td></tr>
+                    <tr><td>Paper / Bukkit / Spigot</td><td>⏳ Coming after Fabric 26.1</td></tr>
+                    <tr><td>Forge / NeoForge</td><td>⏳ Coming after Paper</td></tr>
+                    <tr><td>Rift</td><td>⏳ Coming after Forge</td></tr>
                 </table>
             </section>
 
-            <section class="content-block">
-                <h2>Breaking Changes</h2>
-                <p><strong>None.</strong> All existing aliases, syntaxes, permissions, and functions continue to work exactly as before. New features are opt-in via config files — nothing activates unless you configure it.</p>
-            </section>
-
             <div class="callout callout-tip" style="margin-top:2rem;">
-                <strong>Upgrading from v3.x?</strong> Just replace the JAR. All new config files are created automatically on first run with safe defaults (all disabled). Your existing aliases, syntaxes, and permissions are untouched.
+                <strong>Upgrading from v3.x?</strong> Just swap the JAR. All the new config files appear automatically with everything set to <code>false</code> or empty. Your old stuff keeps working. No migration needed. 🎉
             </div>
         </main>
     </div>

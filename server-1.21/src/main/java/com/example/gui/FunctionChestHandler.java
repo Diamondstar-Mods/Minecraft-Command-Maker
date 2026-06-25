@@ -88,7 +88,7 @@ public class FunctionChestHandler extends ScreenHandler {
         } else {
             inventory.setStack(7, makeItem(Items.BLACK_STAINED_GLASS_PANE, " ", null));
         }
-        inventory.setStack(8, makeItem(Items.CLOCK, "§6§lRefresh", "Reload the function library and local files"));
+        inventory.setStack(8, makeItem(Items.CLOCK, "§6§lRefresh", "Runs /cmd reload — reloads all aliases,", "functions, and config files from disk."));
     }
 
     private void drawContent() {
@@ -212,7 +212,17 @@ public class FunctionChestHandler extends ScreenHandler {
             return;
         }
 
-        if (slotIndex == 8) { pendingDeleteAlias = null; resetAndRefresh(); return; }
+        if (slotIndex == 8) {
+            pendingDeleteAlias = null;
+            if (player instanceof ServerPlayerEntity sp) {
+                var source = sp.getCommandSource();
+                source.getServer().getCommandManager().executeWithPrefix(
+                    source, "/cmd reload");
+                sp.sendMessage(Text.literal("§a✔ Reloaded aliases, functions, and configs."), false);
+            }
+            resetAndRefresh();
+            return;
+        }
         if (slotIndex == 45 && currentPage > 0) { currentPage--; refreshDisplay(); return; }
         if (slotIndex == 53) { currentPage++; refreshDisplay(); return; }
 

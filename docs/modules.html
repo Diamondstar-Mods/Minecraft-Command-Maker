@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Command Maker Modules (.cmk) - Command Maker Wiki</title>
-    <meta name="description" content="Command Maker v4.0 module system — package aliases, functions, events, scoreboards, and cooldowns into shareable .cmk files for import/export.">
+    <title>Packages (.cmk) - Command Maker Wiki</title>
+    <meta name="description" content="Bundle your entire setup into one .cmk file. Share it, back it up, or install someone else's — two commands and you're done.">
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="favicon.ico">
 </head>
@@ -13,109 +13,90 @@
     <div class="layout">
         <aside id="sidebar" class="sidebar" role="complementary" aria-label="Side navigation"></aside>
         <main class="content" role="main">
-            <h1>Command Maker Modules (.cmk)</h1>
-            <p class="subtitle">Package your entire Command Maker setup — aliases, functions, events, scoreboards, cooldowns, syntaxes, and permissions — into a single <code>.cmk</code> file for sharing, backup, or distribution.</p>
+            <h1>📦 Packages (.cmk)</h1>
+            <p class="subtitle">One file. Your entire setup. Share it with friends, back it up, or install someone else's cool creation.</p>
 
             <div class="callout callout-info">
-                <strong>New in v4.0</strong> &mdash; Packages directory: <code>config/CommandMaker/packages/</code>
+                <strong>New in v4.0</strong> &mdash; Packages live in <code>config/CommandMaker/packages/</code>
             </div>
 
-            <h2>What is a .cmk Module?</h2>
-            <p>A <code>.cmk</code> file is a standard <strong>ZIP archive</strong> containing all your Command Maker configuration and function files. Think of it like a "modpack" for Command Maker — one file that contains everything someone needs to replicate your setup.</p>
+            <h2>What's a .cmk File?</h2>
+            <p>It's just a <strong>ZIP file</strong> with a fancy extension. Inside is everything that makes your Command Maker setup work:</p>
+            <ul>
+                <li>All your aliases (from <code>aliases.json</code>)</li>
+                <li>Your custom syntax patterns</li>
+                <li>Event triggers, scoreboards, cooldowns</li>
+                <li>Your <code>.mcfunction</code> files</li>
+                <li>Even permissions if you want</li>
+            </ul>
+            <p>Think of it like a modpack, but for Command Maker content. Or a playlist. Or a recipe book. Whatever analogy works for you.</p>
 
-            <h2>Module Structure</h2>
-            <pre><code>my_module.cmk/              ← ZIP archive (rename .zip to .cmk to inspect)
-├── module.json             ← Metadata (required)
-├── aliases.json            ← Alias definitions
-├── syntax.json             ← Syntax patterns
-├── events.json             ← Event triggers
-├── scoreboards.json        ← Custom scoreboards
-├── cooldowns.json          ← Cooldown configs
-├── variables.json          ← Preset variables
-├── permissions.json        ← Permission grants (optional)
+            <h2>The Two Commands You Actually Need</h2>
+            <table>
+                <tr><th>Command</th><th>Does</th></tr>
+                <tr><td><code>/cmd package MySetup</code></td><td><strong>Export everything.</strong> Packs your entire config + functions into <code>MySetup.cmk</code></td></tr>
+                <tr><td><code>/cmd import MySetup</code></td><td><strong>Install it.</strong> Safely merges into your existing config — nothing gets overwritten</td></tr>
+                <tr><td><code>/cmd import MySetup --overwrite</code></td><td>Same thing, but replaces anything that conflicts</td></tr>
+            </table>
+
+            <h2>What's Inside the ZIP</h2>
+            <pre><code>MySetup.cmk                          ← just a ZIP, rename to .zip to peek inside
+├── module.json                       ← who made it, what version, what it does
+├── aliases.json                      ← all the aliases
+├── syntax.json                       ← syntax patterns
+├── events.json                       ← event triggers
+├── scoreboards.json                  ← custom scoreboards
+├── cooldowns.json                    ← cooldown configs
+├── variables.json                    ← preset variables
+├── permissions.json                  ← permission grants (if any)
 └── functions/
-    ├── welcome.mcfunction
-    ├── starter_kit.mcfunction
-    └── cleanup.mcfunction</code></pre>
+    ├── my_cool_function.mcfunction
+    └── another_one.mcfunction</code></pre>
 
-            <h2>module.json Format</h2>
+            <h2>Importing Is Safe (Promise)</h2>
+            <p>When you import a package, the mod is <strong>careful</strong> about it:</p>
+            <ol>
+                <li>New aliases get added. Existing ones? <strong>Left alone.</strong></li>
+                <li>Syntaxes, events, scoreboards — merged in. Nothing overwritten unless you say so.</li>
+                <li>Functions get extracted to your Functions folder.</li>
+                <li>If anything would conflict, <strong>it tells you</strong> instead of silently breaking stuff.</li>
+            </ol>
+            <p>Use <code>--overwrite</code> if you actually <em>want</em> to replace existing stuff.</p>
+
+            <h2>Sharing Your Setup</h2>
+            <ol>
+                <li>Get everything dialed in — aliases, events, scoreboards, the works.</li>
+                <li>Run <code>/cmd package MyCoolSetup</code></li>
+                <li>Find <code>MyCoolSetup.cmk</code> in <code>config/CommandMaker/packages/</code></li>
+                <li>Send it to a friend. Post it online. Back it up.</li>
+                <li>They drop it in their <code>packages/</code> folder and run <code>/cmd import MyCoolSetup</code></li>
+                <li>Done. 🎉</li>
+            </ol>
+
+            <h2>Other Handy Commands</h2>
+            <table>
+                <tr><th>Command</th><th>Does</th></tr>
+                <tr><td><code>/cmd module list</code></td><td>See what .cmk files you've got</td></tr>
+                <tr><td><code>/cmd module info &lt;name&gt;</code></td><td>Preview a package without installing it</td></tr>
+                <tr><td><code>/cmd module export &lt;name&gt;</code></td><td>Export config only (skip functions)</td></tr>
+            </table>
+
+            <h2>The module.json Metadata</h2>
+            <p>Every package has a little info card at the top level:</p>
             <pre><code>{
-  "name": "WelcomeKit",
-  "version": "1.0.0",
-  "author": "YourName",
-  "description": "Welcome system with join messages, starter kit, and server info scoreboard.",
+  "name": "MyCoolSetup",
+  "version": "1.0",
+  "author": "Steve",
+  "description": "TPA system, welcome messages, and a scoreboard. Boom.",
   "cmVersion": "4.0.0"
 }</code></pre>
 
-            <table>
-                <tr><th>Field</th><th>Required</th><th>Description</th></tr>
-                <tr><td><code>name</code></td><td>Yes</td><td>Module name (shown in listings)</td></tr>
-                <tr><td><code>version</code></td><td>Yes</td><td>Semantic version (e.g., <code>1.0</code>)</td></tr>
-                <tr><td><code>author</code></td><td>No</td><td>Creator name</td></tr>
-                <tr><td><code>description</code></td><td>No</td><td>What the module does</td></tr>
-                <tr><td><code>cmVersion</code></td><td>No</td><td>Minimum Command Maker version required</td></tr>
-            </table>
-
-            <h2>Quick Commands (Recommended)</h2>
-            <table>
-                <tr><th>Command</th><th>Description</th></tr>
-                <tr><td><code>/cmd package &lt;name&gt;</code></td><td><strong>Package everything</strong> (configs + functions) into <code>config/CommandMaker/packages/&lt;name&gt;.cmk</code></td></tr>
-                <tr><td><code>/cmd import &lt;name&gt;</code></td><td>Import a <code>.cmk</code> file from the packages folder (safe merge)</td></tr>
-                <tr><td><code>/cmd import &lt;name&gt; --overwrite</code></td><td>Import with overwrite (replaces conflicts)</td></tr>
-            </table>
-
-            <h2>Advanced Module Commands</h2>
-            <table>
-                <tr><th>Command</th><th>Description</th></tr>
-                <tr><td><code>/cmd module export &lt;name&gt;</code></td><td>Export config only (no functions)</td></tr>
-                <tr><td><code>/cmd module exportall &lt;name&gt;</code></td><td>Export including all <code>.mcfunction</code> files</td></tr>
-                <tr><td><code>/cmd module import &lt;name&gt;</code></td><td>Import from packages folder (safe merge)</td></tr>
-                <tr><td><code>/cmd module list</code></td><td>List available <code>.cmk</code> files</td></tr>
-                <tr><td><code>/cmd module info &lt;name&gt;</code></td><td>Show module metadata without importing</td></tr>
-            </table>
-
-            <h2>Import Behavior</h2>
-            <h3>Safe Merge (default)</h3>
-            <ol>
-                <li>Aliases that don't exist yet are added.</li>
-                <li>Syntaxes, events, scoreboards, and cooldowns are merged — new entries added, existing ones preserved.</li>
-                <li>Functions are extracted to the <code>Functions/</code> folder.</li>
-                <li><strong>Conflicts are reported</strong> — nothing is silently overwritten.</li>
-            </ol>
-
-            <h3>Overwrite Mode (<code>--overwrite</code>)</h3>
-            <ol>
-                <li>Existing aliases, syntaxes, events, scoreboards, and cooldowns with the same name are replaced.</li>
-                <li>Use with caution — this can modify existing configurations.</li>
-            </ol>
-
-            <h2>Export Behavior</h2>
-            <p>The <code>export</code> command packages your <strong>current in-memory</strong> config into a <code>.cmk</code> file:</p>
-            <ul>
-                <li>All aliases from <code>aliases.json</code></li>
-                <li>All syntaxes from <code>syntax.json</code></li>
-                <li>Event config from <code>events.json</code></li>
-                <li>Scoreboard config from <code>scoreboards.json</code></li>
-                <li>Cooldown config from <code>cooldowns.json</code></li>
-                <li>Functions (only with <code>exportall</code> — regular export skips them to keep files small)</li>
-            </ul>
-            <p>The package is saved to <code>config/CommandMaker/packages/&lt;name&gt;.cmk</code>.</p>
-
-            <h2>Sharing Packages</h2>
-            <ol>
-                <li>Create your aliases, syntaxes, events, scoreboards, cooldowns, and functions.</li>
-                <li>Run <code>/cmd package MySetup</code>.</li>
-                <li>Find <code>MySetup.cmk</code> in <code>config/CommandMaker/packages/</code>.</li>
-                <li>Share the file — it's just a ZIP. Rename to <code>.zip</code> to inspect, or use as-is.</li>
-                <li>Recipient drops it in their <code>packages/</code> folder and runs <code>/cmd import MySetup</code>.</li>
-            </ol>
-
             <div class="callout callout-tip">
-                <strong>Future: Web GUI Editor</strong> — A browser-based drag-and-drop GUI editor is planned that will output <code>.cmk</code> files. Design GUIs visually, export as a module, and import into the server. Stay tuned!
+                <strong>🔮 On the horizon:</strong> We're building a <strong>web-based GUI editor</strong> where you can drag and drop items into slots, design in-game menus, and export it all as a <code>.cmk</code> file. No coding. Pure visual design. Stay tuned.
             </div>
 
             <div class="callout callout-warning">
-                <strong>Note:</strong> Modules do <strong>not</strong> include player-specific data (custom variables set via <code>/cmd setvar</code>). They package configuration, not runtime state.
+                <strong>Note:</strong> Packages don't include player-specific data (like custom variables set with <code>/cmd setvar</code>). They package <strong>configuration</strong>, not runtime state.
             </div>
         </main>
     </div>

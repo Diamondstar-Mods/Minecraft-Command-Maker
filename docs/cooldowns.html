@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cooldown System - Command Maker Wiki</title>
-    <meta name="description" content="Command Maker v4.0 cooldown system — per-player and global cooldowns for aliases with custom messages and variable checks.">
+    <title>Cooldowns - Command Maker Wiki</title>
+    <meta name="description" content="Slap cooldowns on any alias. Per-player or global, with custom messages. No more command spam.">
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="favicon.ico">
 </head>
@@ -13,66 +13,51 @@
     <div class="layout">
         <aside id="sidebar" class="sidebar" role="complementary" aria-label="Side navigation"></aside>
         <main class="content" role="main">
-            <h1>Cooldown System</h1>
-            <p class="subtitle">Add per-player and global cooldowns to any alias with configurable wait times and custom messages.</p>
+            <h1>🕐 Cooldowns</h1>
+            <p class="subtitle">Stop players from mashing the same command over and over. Takes 30 seconds to set up.</p>
 
             <div class="callout callout-info">
-                <strong>New in v4.0</strong> &mdash; Config file: <code>config/CommandMaker/cooldowns.json</code>
+                <strong>New in v4.0</strong> &mdash; Config lives at <code>config/CommandMaker/cooldowns.json</code>
             </div>
 
-            <h2>Quick Example</h2>
-            <pre><code>// config/CommandMaker/cooldowns.json
-{
+            <h2>The 30-Second Version</h2>
+            <pre><code>{
   "cooldowns": {
     "home": {
       "type": "player",
       "seconds": 30,
-      "message": "&cWait {remaining}s before using /home again!"
-    },
-    "heal_all": {
-      "type": "global",
-      "seconds": 300,
-      "message": "&cServer cooldown: {remaining}s — everyone must wait"
+      "message": "&cChill out — wait {remaining}s before /home again!"
     }
   }
 }</code></pre>
+            <p>That's it. Now when someone uses <code>/home</code>, they can't use it again for 30 seconds. If they try, they get your message.</p>
 
-            <h2>Cooldown Types</h2>
+            <h2>Player vs Global</h2>
             <table>
-                <tr><th>Type</th><th>Behavior</th><th>Use Case</th></tr>
-                <tr><td><code>player</code></td><td>Each player has their own independent timer. Only the player who used the alias is affected.</td><td>Teleport commands, kit claims, daily rewards</td></tr>
-                <tr><td><code>global</code></td><td>Server-wide timer. Once any player uses the alias, nobody can use it until it expires.</td><td>Server events, boss summons, world resets</td></tr>
+                <tr><th>Type</th><th>What happens</th><th>Good for</th></tr>
+                <tr><td><code>player</code></td><td>Each player gets their own timer. Only the person who ran the command has to wait.</td><td>Teleports, kits, daily rewards</td></tr>
+                <tr><td><code>global</code></td><td>One person uses it, <strong>everyone</strong> waits. Server-wide lockout.</td><td>Boss summons, server events, world resets</td></tr>
             </table>
 
             <h2>Custom Messages</h2>
-            <p>Use <code>{remaining}</code> in your message to show seconds left. Full <code>&</code> color code support:</p>
-            <pre><code>"message": "&cCooldown: &f{remaining}s &cremaining"</code></pre>
-            <p>If no message is specified, a default message is used: <code>&cPlease wait {remaining}s before using /alias again!</code></p>
+            <p>Put <code>{remaining}</code> wherever you want the countdown number. Colors work with <code>&</code> codes:</p>
+            <pre><code>"message": "&cNope! &f{remaining}s &cleft on the clock"</code></pre>
+            <p>Skip the message entirely and we'll use a sensible default.</p>
 
-            <h2>Cooldown Variables</h2>
-            <p>Check cooldown status inside any alias using:</p>
-            <pre><code>${cooldown_home_remaining}</code></pre>
-            <p>Resolves to the number of seconds remaining, or <code>0</code> if the cooldown has expired or doesn't exist. Works great with condition blocks:</p>
-            <pre><code>if:cooldown(home) say /home is on cooldown! else home</code></pre>
+            <h2>Checking Cooldowns in Other Aliases</h2>
+            <p>Use <code>${cooldown_home_remaining}</code> inside any alias to see how long is left. Returns <code>0</code> if the cooldown's done. Pairs perfectly with conditions:</p>
+            <pre><code>if:cooldown(home) say Still waiting... else home</code></pre>
 
             <h2>Commands</h2>
             <table>
-                <tr><th>Command</th><th>Description</th></tr>
-                <tr><td><code>/cmd cooldown set &lt;alias&gt; player|global &lt;seconds&gt; [message]</code></td><td>Set a cooldown on an alias</td></tr>
-                <tr><td><code>/cmd cooldown clear &lt;alias&gt;</code></td><td>Remove a cooldown configuration</td></tr>
-                <tr><td><code>/cmd cooldown list</code></td><td>List all configured cooldowns</td></tr>
+                <tr><th>Command</th><th>Does</th></tr>
+                <tr><td><code>/cmd cooldown set &lt;alias&gt; player|global &lt;seconds&gt; [message]</code></td><td>Add a cooldown</td></tr>
+                <tr><td><code>/cmd cooldown clear &lt;alias&gt;</code></td><td>Remove it</td></tr>
+                <tr><td><code>/cmd cooldown list</code></td><td>See what's configured</td></tr>
             </table>
 
-            <h2>How It Works</h2>
-            <ol>
-                <li>When a player runs an alias, <code>CooldownManager.checkCooldown()</code> is called automatically.</li>
-                <li>If the player (or global) cooldown is active, the configured message is shown and the alias does <strong>not</strong> execute.</li>
-                <li>If no cooldown is active, the alias executes normally and the timer starts.</li>
-                <li>Cooldowns are in-memory (reset on server restart). Config is persisted to <code>cooldowns.json</code>.</li>
-            </ol>
-
             <div class="callout callout-tip">
-                <strong>Tip:</strong> Combine with event triggers to add cooldowns to automated actions. Use <code>${cooldown_alias_remaining}</code> in scoreboard lines or chat messages to show status.
+                <strong>💡 Pro tip:</strong> Cooldowns reset when the server restarts (they're in-memory). But the config sticks around in <code>cooldowns.json</code> so they come right back next launch.
             </div>
         </main>
     </div>

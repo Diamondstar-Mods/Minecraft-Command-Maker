@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Placeholder System - Command Maker Wiki</title>
-    <meta name="description" content="Command Maker v4.0 placeholder system — PAPI-compatible %placeholder% syntax with 15 built-in placeholders for player data, server stats, and custom variables.">
+    <title>Placeholders - Command Maker Wiki</title>
+    <meta name="description" content="%player_health%, %server_online%, %player_world% — 15 built-in placeholders that work everywhere. PAPI-compatible syntax.">
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="favicon.ico">
 </head>
@@ -13,63 +13,58 @@
     <div class="layout">
         <aside id="sidebar" class="sidebar" role="complementary" aria-label="Side navigation"></aside>
         <main class="content" role="main">
-            <h1>Placeholder System</h1>
-            <p class="subtitle">A Fabric-native placeholder engine using PlaceholderAPI-compatible <code>%placeholder%</code> syntax. Works in aliases, events, scoreboards, and cooldown messages.</p>
+            <h1>🔤 Placeholders</h1>
+            <p class="subtitle">Type <code>%something%</code> and it magically becomes real data. Works in aliases, events, scoreboards, cooldown messages — everywhere.</p>
 
             <div class="callout callout-info">
-                <strong>New in v4.0</strong> &mdash; Integrated into all command execution. No separate config file.
+                <strong>New in v4.0</strong> &mdash; No config file needed. Just use <code>%placeholders%</code> anywhere.
             </div>
 
-            <h2>Syntax</h2>
-            <pre><code>%placeholder_name%</code></pre>
-            <p>Placeholders are resolved <strong>after</strong> <code>${variable}</code> substitution and <strong>before</strong> command execution.</p>
+            <h2>How They Work</h2>
+            <p>Remember <code>${player}</code> and <code>${x}</code>? These are like those, but they give you a lot more info. Same vibe, but with <code>%</code> instead of <code>${}</code>.</p>
+            <pre><code>// Old school
+say Hello ${player}!
 
-            <h2>Built-in Placeholders</h2>
+// New hotness
+say %player% has %player_health% HP and is level %player_xp_level%</code></pre>
+
+            <h2>The Full List</h2>
             <table>
-                <tr><th>Placeholder</th><th>Resolves To</th></tr>
-                <tr><td><code>%player%</code></td><td>Player name</td></tr>
-                <tr><td><code>%player_uuid%</code></td><td>Player UUID</td></tr>
-                <tr><td><code>%player_health%</code></td><td>Current health (e.g., <code>18.5</code>)</td></tr>
-                <tr><td><code>%player_max_health%</code></td><td>Maximum health (e.g., <code>20.0</code>)</td></tr>
-                <tr><td><code>%player_xp%</code></td><td>Total XP points</td></tr>
-                <tr><td><code>%player_xp_level%</code></td><td>XP level</td></tr>
-                <tr><td><code>%player_food%</code></td><td>Food level (0-20)</td></tr>
-                <tr><td><code>%player_world%</code></td><td>Dimension ID (e.g., <code>minecraft:overworld</code>)</td></tr>
-                <tr><td><code>%player_gamemode%</code></td><td>Game mode name</td></tr>
-                <tr><td><code>%player_ping%</code></td><td>Network latency in ms</td></tr>
-                <tr><td><code>%server_online%</code></td><td>Players currently online</td></tr>
-                <tr><td><code>%server_max%</code></td><td>Maximum player slots</td></tr>
-                <tr><td><code>%server_tps%</code></td><td>Server TPS (20.0 max)</td></tr>
-                <tr><td><code>%var_&lt;name&gt;%</code></td><td>Value of custom variable <code>&lt;name&gt;</code></td></tr>
-                <tr><td><code>%cooldown_&lt;alias&gt;%</code></td><td>Seconds remaining on cooldown for <code>&lt;alias&gt;</code></td></tr>
+                <tr><th>Placeholder</th><th>What you get</th><th>Example output</th></tr>
+                <tr><td><code>%player%</code></td><td>Player name</td><td><code>Steve</code></td></tr>
+                <tr><td><code>%player_uuid%</code></td><td>Player UUID</td><td><code>a1b2c3d4-...</code></td></tr>
+                <tr><td><code>%player_health%</code></td><td>Current HP</td><td><code>18.5</code></td></tr>
+                <tr><td><code>%player_max_health%</code></td><td>Max HP</td><td><code>20.0</code></td></tr>
+                <tr><td><code>%player_xp%</code></td><td>Total XP points</td><td><code>247</code></td></tr>
+                <tr><td><code>%player_xp_level%</code></td><td>XP level</td><td><code>12</code></td></tr>
+                <tr><td><code>%player_food%</code></td><td>Hunger bar (0-20)</td><td><code>16</code></td></tr>
+                <tr><td><code>%player_world%</code></td><td>Dimension they're in</td><td><code>minecraft:overworld</code></td></tr>
+                <tr><td><code>%player_gamemode%</code></td><td>Game mode</td><td><code>survival</code></td></tr>
+                <tr><td><code>%player_ping%</code></td><td>Connection latency</td><td><code>42</code></td></tr>
+                <tr><td><code>%server_online%</code></td><td>Players online</td><td><code>8</code></td></tr>
+                <tr><td><code>%server_max%</code></td><td>Max slots</td><td><code>20</code></td></tr>
+                <tr><td><code>%server_tps%</code></td><td>Server TPS</td><td><code>20.0</code></td></tr>
+                <tr><td><code>%var_name%</code></td><td>Custom variable</td><td>Whatever you set</td></tr>
+                <tr><td><code>%cooldown_alias%</code></td><td>Cooldown remaining</td><td><code>12</code></td></tr>
             </table>
 
-            <h2>Usage Examples</h2>
-            <pre><code>// In an alias target
-"status": "say %player% has %player_health% HP, level %player_xp_level%, in %player_world%"
-
-// In a scoreboard line
-"&7Health: &a%player_health%/%player_max_health%"
-
-// In an event command
-"title %player% title {\"text\":\"Welcome!\",\"color\":\"gold\"}"</code></pre>
-
-            <h2>Where Placeholders Work</h2>
+            <h2>They Work Everywhere</h2>
             <ul>
-                <li>Alias command targets</li>
-                <li>Event trigger commands</li>
-                <li>Scoreboard lines</li>
-                <li>Cooldown messages</li>
+                <li><strong>Alias commands</strong> — <code>"status": "say %player% is at %player_health% HP"</code></li>
+                <li><strong>Event triggers</strong> — <code>"say %player% joined from %player_world%"</code></li>
+                <li><strong>Scoreboard lines</strong> — automatically update with live data</li>
+                <li><strong>Cooldown messages</strong> — <code>"&c%cooldown_home%s until you can /home again"</code></li>
             </ul>
 
-            <h2>Cross-Platform Compatibility</h2>
-            <p>The placeholder system uses the same <code>%name%</code> format as PlaceholderAPI (PAPI). On the future Paper/Bukkit module, this system will bridge directly to real PAPI, allowing you to use any plugin's placeholders. The built-in placeholders use the same names across all platforms for seamless module sharing.</p>
-
-            <h2>Custom Placeholders (Developer API)</h2>
-            <p>Java developers can register custom placeholder resolvers at runtime:</p>
+            <h2>For Developers</h2>
+            <p>Got a mod that wants to add its own placeholders? Easy:</p>
             <pre><code>PlaceholderManager.registerCustomPlaceholder("myplugin_balance", ctx -> {
     return String.valueOf(getBalance(ctx.player));
 });</code></pre>
+
+            <div class="callout callout-tip">
+                <strong>🔮 Coming soon:</strong> On the Paper/Bukkit version, our placeholder system will bridge directly to real PlaceholderAPI. Same names, same syntax — all your PAPI placeholders from other plugins will just work.
+            </div>
         </main>
     </div>
     <footer id="footer" class="footer" role="contentinfo"></footer>

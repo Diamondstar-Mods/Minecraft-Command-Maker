@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Custom Scoreboards - Command Maker Wiki</title>
-    <meta name="description" content="Command Maker v4.0 custom scoreboards — JSON-defined dynamic scoreboards with placeholders, update intervals, and multiple display slots.">
+    <meta name="description" content="JSON-defined scoreboards that update themselves. Players online, TPS, whatever you want — just write it in the config.">
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="favicon.ico">
 </head>
@@ -13,66 +13,64 @@
     <div class="layout">
         <aside id="sidebar" class="sidebar" role="complementary" aria-label="Side navigation"></aside>
         <main class="content" role="main">
-            <h1>Custom Scoreboards</h1>
-            <p class="subtitle">Define persistent, auto-updating scoreboards with dynamic lines, placeholders, and configurable refresh intervals — all from JSON.</p>
+            <h1>📊 Custom Scoreboards</h1>
+            <p class="subtitle">Fancy sidebars that keep themselves up to date. No command blocks, no redstone, no headaches.</p>
 
             <div class="callout callout-info">
-                <strong>New in v4.0</strong> &mdash; Config file: <code>config/CommandMaker/scoreboards.json</code>
+                <strong>New in v4.0</strong> &mdash; Config lives at <code>config/CommandMaker/scoreboards.json</code>
             </div>
 
-            <h2>Quick Example</h2>
-            <pre><code>// config/CommandMaker/scoreboards.json
-{
+            <h2>Here's One We Made Earlier</h2>
+            <pre><code>{
   "scoreboards": {
     "server_info": {
-      "displayName": "&6&lServer Info",
+      "displayName": "&6&lMy Cool Server",
       "slot": "sidebar",
       "updateInterval": 20,
       "enabled": true,
       "lines": [
-        "&6&lMy Server",
+        "&6&lMy Cool Server",
         "&f",
         "&7Players: &a${player_count}/${server_max}",
         "&7TPS: &a${tps}",
         "&f",
-        "&eCommand Maker v4"
+        "&eplay.mycoolserver.com"
       ]
     }
   }
 }</code></pre>
 
-            <h2>Configuration Fields</h2>
+            <h2>What Each Setting Does</h2>
             <table>
-                <tr><th>Field</th><th>Type</th><th>Description</th></tr>
-                <tr><td><code>displayName</code></td><td>String</td><td>Title shown at top of the sidebar. Supports <code>&</code> color codes.</td></tr>
-                <tr><td><code>slot</code></td><td>String</td><td><code>sidebar</code>, <code>list</code> (tab menu), or <code>belowName</code></td></tr>
-                <tr><td><code>updateInterval</code></td><td>Integer</td><td>Ticks between refreshes (20 = 1 second). Use <code>0</code> for static.</td></tr>
-                <tr><td><code>enabled</code></td><td>Boolean</td><td><code>true</code> to show, <code>false</code> to hide. Defaults to <code>false</code>.</td></tr>
-                <tr><td><code>lines</code></td><td>Array</td><td>Up to 15 strings. Each is a line on the scoreboard.</td></tr>
+                <tr><th>Field</th><th>What it is</th></tr>
+                <tr><td><code>displayName</code></td><td>Title at the top. <code>&</code> color codes work here.</td></tr>
+                <tr><td><code>slot</code></td><td>Where it goes: <code>sidebar</code> (right side), <code>list</code> (tab menu), or <code>belowName</code> (under player names)</td></tr>
+                <tr><td><code>updateInterval</code></td><td>How often it refreshes, in ticks. <code>20</code> = every second. Set to <code>0</code> if it never changes.</td></tr>
+                <tr><td><code>enabled</code></td><td><code>true</code> shows it, <code>false</code> hides it. <strong>Defaults to false</strong> — no surprise sidebars!</td></tr>
+                <tr><td><code>lines</code></td><td>What shows up. Up to 15 lines. Colors work. Placeholders update live.</td></tr>
             </table>
 
-            <h2>Available Placeholders</h2>
+            <h2>Placeholders That Actually Update</h2>
             <table>
-                <tr><th>Placeholder</th><th>Resolves To</th></tr>
-                <tr><td><code>${player_count}</code></td><td>Number of players online</td></tr>
-                <tr><td><code>${server_online}</code></td><td>Same as player_count</td></tr>
-                <tr><td><code>${server_max}</code></td><td>Maximum player slots</td></tr>
-                <tr><td><code>${tps}</code></td><td>Server TPS (20.0 max)</td></tr>
+                <tr><th>Placeholder</th><th>Shows</th></tr>
+                <tr><td><code>${player_count}</code></td><td>How many people are online</td></tr>
+                <tr><td><code>${server_max}</code></td><td>Max player slots</td></tr>
+                <tr><td><code>${tps}</code></td><td>Server performance (20.0 = perfect)</td></tr>
             </table>
 
             <h2>Commands</h2>
             <table>
-                <tr><th>Command</th><th>Description</th></tr>
-                <tr><td><code>/cmd scoreboard list</code></td><td>Show all configured scoreboards</td></tr>
-                <tr><td><code>/cmd scoreboard reload</code></td><td>Reload from <code>scoreboards.json</code></td></tr>
+                <tr><th>Command</th><th>Does</th></tr>
+                <tr><td><code>/cmd scoreboard list</code></td><td>See what scoreboards you've got</td></tr>
+                <tr><td><code>/cmd scoreboard reload</code></td><td>Reload after editing the config</td></tr>
             </table>
 
             <div class="callout callout-warning">
-                <strong>Important:</strong> Scoreboards are <strong>disabled by default</strong>. Set <code>"enabled": true</code> to show a scoreboard. The example config is created with <code>enabled: false</code> so nothing appears unexpectedly.
+                <strong>⚠️ Heads up:</strong> Scoreboards are <strong>off by default</strong>. The example config comes with <code>"enabled": false</code>. Flip it to <code>true</code> when you're ready. Also, Minecraft only lets you have <strong>one</strong> sidebar at a time — it's a vanilla thing.
             </div>
 
             <div class="callout callout-tip">
-                <strong>Multiple scoreboards:</strong> Define multiple entries in the <code>scoreboards</code> object. Each can target a different display slot. Only one can be in the <code>sidebar</code> at a time (Minecraft limitation).
+                <strong>💡 Worth knowing:</strong> You can define multiple scoreboards in the config. Put one in the sidebar, one in the tab list, one below names. Mix and match.
             </div>
         </main>
     </div>

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Event Triggers - Command Maker Wiki</title>
-    <meta name="description" content="Command Maker v4.0 event triggers — run commands automatically on player join, death, chat, block break, and more.">
+    <meta name="description" content="Make stuff happen automatically. Welcome messages, death announcements, block break rewards — just set it and forget it.">
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="favicon.ico">
 </head>
@@ -13,49 +13,49 @@
     <div class="layout">
         <aside id="sidebar" class="sidebar" role="complementary" aria-label="Side navigation"></aside>
         <main class="content" role="main">
-            <h1>Event Triggers</h1>
-            <p class="subtitle">Automatically run commands when things happen in-game — player join, death, chat, block break, and more.</p>
+            <h1>📡 Event Triggers</h1>
+            <p class="subtitle">Stuff happens on your server. Your mod can react to it. Automatically.</p>
 
             <div class="callout callout-info">
-                <strong>New in v4.0</strong> &mdash; Config file: <code>config/CommandMaker/events.json</code>
+                <strong>New in v4.0</strong> &mdash; Config lives at <code>config/CommandMaker/events.json</code>
             </div>
 
-            <h2>Quick Example</h2>
-            <pre><code>// config/CommandMaker/events.json
-{
+            <h2>The Gist</h2>
+            <p>Player joins? Fire off a welcome message. Someone dies? Announce it. First-timer connects? Give 'em a starter kit. You just write what should happen, and the mod handles the rest.</p>
+
+            <pre><code>{
   "events": {
     "player_join": {
       "commands": ["say Welcome ${player}!", "give ${player} minecraft:bread 3"]
     },
     "player_first_join": {
-      "commands": ["say Everyone welcome ${player} — their first time on the server!", "give ${player} minecraft:diamond 1"]
+      "commands": ["say EVERYONE WELCOME ${player} — it's their first time!", "give ${player} minecraft:diamond 1"]
     }
   }
 }</code></pre>
 
-            <h2>Event Types</h2>
+            <h2>All 8 Event Types</h2>
             <table>
-                <tr><th>Event</th><th>Fires When</th><th>Context Variables</th></tr>
-                <tr><td><code>player_join</code></td><td>Player connects to the server</td><td><code>${player}</code>, <code>${uuid}</code>, <code>${x}</code>, <code>${y}</code>, <code>${z}</code>, <code>${world}</code></td></tr>
-                <tr><td><code>player_leave</code></td><td>Player disconnects</td><td>Same as join</td></tr>
-                <tr><td><code>player_death</code></td><td>Player dies</td><td><code>${death_cause}</code>, <code>${killer}</code> (if killed by another player)</td></tr>
-                <tr><td><code>player_respawn</code></td><td>Player respawns</td><td>Same as join</td></tr>
-                <tr><td><code>player_first_join</code></td><td>Player joins for the very first time</td><td>Same as join</td></tr>
-                <tr><td><code>player_chat</code></td><td>Player sends a chat message</td><td><code>${message}</code> = message text</td></tr>
+                <tr><th>Event</th><th>Fires when...</th><th>Extra info you get</th></tr>
+                <tr><td><code>player_join</code></td><td>Someone logs in</td><td><code>${player}</code>, <code>${uuid}</code>, <code>${x}</code>/<code>${y}</code>/<code>${z}</code>, <code>${world}</code></td></tr>
+                <tr><td><code>player_leave</code></td><td>Someone logs out</td><td>Same as join</td></tr>
+                <tr><td><code>player_death</code></td><td>Someone dies</td><td><code>${death_cause}</code>, <code>${killer}</code> (if another player got 'em)</td></tr>
+                <tr><td><code>player_respawn</code></td><td>Someone respawns</td><td>Same as join</td></tr>
+                <tr><td><code>player_first_join</code></td><td>Brand new player connects</td><td>Same as join</td></tr>
+                <tr><td><code>player_chat</code></td><td>Someone sends a message</td><td><code>${message}</code> (the chat text)</td></tr>
                 <tr><td><code>player_kill</code></td><td>Player kills another player</td><td><code>${killer}</code>, <code>${victim}</code></td></tr>
-                <tr><td><code>block_break</code></td><td>Player breaks a block</td><td><code>${block}</code>, <code>${block_x}</code>, <code>${block_y}</code>, <code>${block_z}</code></td></tr>
+                <tr><td><code>block_break</code></td><td>Someone breaks a block</td><td><code>${block}</code>, <code>${block_x}</code>/<code>${block_y}</code>/<code>${block_z}</code></td></tr>
             </table>
 
-            <h2>Event Cooldowns</h2>
-            <p>Prevent event spam with a <code>cooldown</code> field (in seconds):</p>
+            <h2>Preventing Spam</h2>
+            <p>Add a <code>cooldown</code> (in seconds) to any event so it doesn't fire back-to-back:</p>
             <pre><code>"player_death": {
-  "commands": ["say ${player} died! That's rough."],
+  "commands": ["say ${player} bit the dust!"],
   "cooldown": 5
 }</code></pre>
-            <p>After the event fires, it won't fire again for that player for the specified number of seconds.</p>
 
-            <h2>Block Filters</h2>
-            <p>Restrict <code>block_break</code> to specific blocks:</p>
+            <h2>Only for Certain Blocks</h2>
+            <p>Restrict <code>block_break</code> to specific blocks so it only triggers when someone mines the good stuff:</p>
             <pre><code>"block_break": {
   "commands": ["give ${player} minecraft:diamond 1"],
   "blocks": ["minecraft:diamond_ore", "minecraft:deepslate_diamond_ore"]
@@ -63,13 +63,13 @@
 
             <h2>Commands</h2>
             <table>
-                <tr><th>Command</th><th>Description</th></tr>
-                <tr><td><code>/cmd event list</code></td><td>Show all configured events and their command counts</td></tr>
-                <tr><td><code>/cmd event reload</code></td><td>Reload events from <code>events.json</code></td></tr>
+                <tr><th>Command</th><th>Does</th></tr>
+                <tr><td><code>/cmd event list</code></td><td>See what events you've set up</td></tr>
+                <tr><td><code>/cmd event reload</code></td><td>Reload after editing the config</td></tr>
             </table>
 
             <div class="callout callout-tip">
-                <strong>Tip:</strong> Events use the same variable and placeholder systems as aliases. Use <code>${player}</code>, <code>%player_health%</code>, and custom variables in event commands.
+                <strong>💡 Ideas to try:</strong> Auto-heal on respawn. Lightning strike on death. Welcome kit on first join. Chat filter that catches banned words. Diamond finder bonus. The limit is your imagination.
             </div>
         </main>
     </div>
