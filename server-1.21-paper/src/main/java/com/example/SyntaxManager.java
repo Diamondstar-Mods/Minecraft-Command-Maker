@@ -10,23 +10,29 @@ import java.util.logging.Logger;
 
 public class SyntaxManager {
     private static Logger logger;
-    private static File configFile;
-    private static Plugin plugin;
+    private static Path configFile;
+    private static Path dataFolder;
     private static final Map<String, CommandSyntax> customSyntaxes = new LinkedHashMap<>();
 
+    /** Bukkit/Paper/Folia/Purpur entry point */
     public static void init(Plugin plugin) {
-        SyntaxManager.plugin = plugin;
-        SyntaxManager.logger = plugin.getLogger();
-        configFile = new File(plugin.getDataFolder(), "syntax.json");
+        init(plugin.getDataFolder().toPath(), plugin.getLogger());
+    }
+
+    /** Sponge / generic entry point */
+    public static void init(Path dataFolder, Logger logger) {
+        SyntaxManager.logger = logger;
+        SyntaxManager.dataFolder = dataFolder;
+        configFile = dataFolder.resolve("syntax.json");
         loadSyntaxDefinitions();
     }
 
     public static void loadSyntaxDefinitions() {
         customSyntaxes.clear();
         try {
-            if (!configFile.exists()) createDefaultSyntaxConfig();
+            if (!Files.exists(configFile)) createDefaultSyntaxConfig();
 
-            String content = new String(Files.readAllBytes(configFile.toPath()));
+            String content = Files.readString(configFile);
             JsonElement element = JsonParser.parseString(content);
 
             if (element.isJsonObject()) {
@@ -53,7 +59,7 @@ public class SyntaxManager {
 
     private static void createDefaultSyntaxConfig() {
         try {
-            plugin.getDataFolder().mkdirs();
+            Files.createDirectories(dataFolder);
 
             JsonObject root = new JsonObject();
 
@@ -73,7 +79,7 @@ public class SyntaxManager {
             root.add("msg", msgObj);
 
             String json = new GsonBuilder().setPrettyPrinting().create().toJson(root);
-            Files.write(configFile.toPath(), json.getBytes(), StandardOpenOption.CREATE_NEW);
+            Files.writeString(configFile, json, StandardOpenOption.CREATE_NEW);
             logger.info("Created default syntax.json");
         } catch (Exception e) {
             logger.severe("Failed to create default syntax config: " + e.getMessage());

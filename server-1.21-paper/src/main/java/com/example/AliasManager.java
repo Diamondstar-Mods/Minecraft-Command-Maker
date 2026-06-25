@@ -9,23 +9,29 @@ import java.util.*;
 import java.util.logging.Logger;
 
 public class AliasManager {
-    private static Plugin plugin;
     private static Logger logger;
-    private static File configFile;
-    private static File functionsDir;
+    private static Path dataFolder;
+    private static Path configFile;
+    private static Path functionsDir;
     private static final Map<String, String> aliases = new LinkedHashMap<>();
 
+    /** Bukkit/Paper/Folia/Purpur entry point */
     public static void init(Plugin plugin) {
-        AliasManager.plugin = plugin;
-        AliasManager.logger = plugin.getLogger();
-        configFile = new File(plugin.getDataFolder(), "aliases.json");
-        functionsDir = new File(plugin.getDataFolder(), "Functions");
+        init(plugin.getDataFolder().toPath(), plugin.getLogger());
+    }
+
+    /** Sponge / generic entry point */
+    public static void init(Path dataFolder, Logger logger) {
+        AliasManager.logger = logger;
+        AliasManager.dataFolder = dataFolder;
+        configFile = dataFolder.resolve("aliases.json");
+        functionsDir = dataFolder.resolve("Functions");
         ensureConfigExists();
         loadAliases();
     }
 
     public static File getFunctionsDir() {
-        return functionsDir;
+        return functionsDir.toFile();
     }
 
     public static Map<String, String> getAliases() {
@@ -53,34 +59,32 @@ public class AliasManager {
 
     private static void ensureConfigExists() {
         try {
-            if (!plugin.getDataFolder().exists()) {
-                plugin.getDataFolder().mkdirs();
-            }
-            if (!functionsDir.exists()) {
-                functionsDir.mkdirs();
-                File exampleFunction = new File(functionsDir, "mobsoff.mcfunction");
-                if (!exampleFunction.exists()) {
+            Files.createDirectories(dataFolder);
+            if (!Files.exists(functionsDir)) {
+                Files.createDirectories(functionsDir);
+                Path exampleFunction = functionsDir.resolve("mobsoff.mcfunction");
+                if (!Files.exists(exampleFunction)) {
                     List<String> functionLines = Arrays.asList(
                         "# Example function: Disable monster spawns",
                         "spawn rates monster 0",
                         "say Monster spawns disabled!"
                     );
-                    Files.write(exampleFunction.toPath(), functionLines, StandardOpenOption.CREATE_NEW);
+                    Files.write(exampleFunction, functionLines, StandardOpenOption.CREATE_NEW);
                 }
             }
-            if (!configFile.exists()) {
+            if (!Files.exists(configFile)) {
                 List<String> lines = new ArrayList<>();
                 lines.add("# CommandMaker Aliases Config");
                 lines.add("# Each entry is an alias and its command target.");
                 lines.add("# You can use variables like ${player}, ${x}, ${y}, ${z} in the command.");
-                lines.add("# For functions, use \"function:name\" to reference plugins/CommandMaker/Functions/name.mcfunction");
+                lines.add("# For functions, use \"function:name\" to reference config/CommandMaker/Functions/name.mcfunction");
                 lines.add("# Example:");
                 lines.add("#   teleport=tp ${player} 0 100 0");
                 lines.add("#   greet=say Hello, ${player}!");
                 lines.add("#   mobsoff=function:mobsoff");
                 lines.add("{");
                 lines.add("}");
-                Files.write(configFile.toPath(), lines, StandardOpenOption.CREATE_NEW);
+                Files.write(configFile, lines, StandardOpenOption.CREATE_NEW);
             }
         } catch (Exception e) {
             logger.severe("Failed to create config folder or files: " + e.getMessage());
@@ -90,10 +94,10 @@ public class AliasManager {
     static void loadAliases() {
         aliases.clear();
         try {
-            if (!configFile.exists()) {
+            if (!Files.exists(configFile)) {
                 ensureConfigExists();
             }
-            List<String> lines = Files.readAllLines(configFile.toPath());
+            List<String> lines = Files.readAllLines(configFile);
             StringBuilder jsonBuilder = new StringBuilder();
             List<String> legacyLines = new ArrayList<>();
             for (String line : lines) {
@@ -158,17 +162,17 @@ public class AliasManager {
 
     private static void loadFunctionAliases() {
         try {
-            if (!functionsDir.exists()) return;
-            File[] files = functionsDir.listFiles((dir, name) -> name.endsWith(".mcfunction"));
-            if (files == null) return;
+            if (!Files.exists(functionsDir)) return;
             int count = 0;
-            for (File f : files) {
-                String fileName = f.getName();
-                String aliasName = fileName.substring(0, fileName.length() - 11);
-                String functionTarget = "function:" + aliasName;
-                if (!aliases.containsKey(aliasName)) {
-                    aliases.put(aliasName, functionTarget);
-                    count++;
+            try (DirectoryStream<Path> stream = Files.newDirectoryStream(functionsDir, "*.mcfunction")) {
+                for (Path f : stream) {
+                    String fileName = f.getFileName().toString();
+                    String aliasName = fileName.substring(0, fileName.length() - 11);
+                    String functionTarget = "function:" + aliasName;
+                    if (!aliases.containsKey(aliasName)) {
+                        aliases.put(aliasName, functionTarget);
+                        count++;
+                    }
                 }
             }
             if (count > 0) {
@@ -181,12 +185,12 @@ public class AliasManager {
 
     static void saveAliases() {
         try {
-            plugin.getDataFolder().mkdirs();
+            Files.createDirectories(dataFolder);
             List<String> lines = new ArrayList<>();
             lines.add("# CommandMaker Aliases Config");
             lines.add("# Each entry is an alias and its command target.");
             lines.add("# You can use variables like ${player}, ${x}, ${y}, ${z} in the command.");
-            lines.add("# For functions, use \"function:name\" to reference plugins/CommandMaker/Functions/name.mcfunction");
+            lines.add("# For functions, use \"function:name\" to reference config/CommandMaker/Functions/name.mcfunction");
             lines.add("# Example:");
             lines.add("#   teleport=tp ${player} 0 100 0");
             lines.add("#   greet=say Hello, ${player}!");
@@ -196,7 +200,7 @@ public class AliasManager {
                 obj.addProperty(entry.getKey(), entry.getValue());
             }
             lines.add(obj.toString());
-            Files.write(configFile.toPath(), lines, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+            Files.write(configFile, lines, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
         } catch (Exception e) {
             logger.severe("Failed to save aliases config: " + e.getMessage());
         }

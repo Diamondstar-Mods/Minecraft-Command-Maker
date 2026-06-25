@@ -3,6 +3,7 @@ package com.example.gui;
 import com.example.AliasManager;
 import com.example.FunctionManager;
 import com.example.ManifestEntry;
+import com.example.SchedulerHelper;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -47,7 +48,7 @@ public class FunctionGui implements InventoryHolder, Listener {
         new Thread(() -> {
             manifest = FunctionManager.fetchFunctionManifest();
             localFunctions = FunctionManager.listLocalFunctions();
-            Bukkit.getScheduler().runTask(
+            SchedulerHelper.runTask(
                 Bukkit.getPluginManager().getPlugin("CommandMaker"),
                 this::refreshDisplay
             );
@@ -230,7 +231,7 @@ public class FunctionGui implements InventoryHolder, Listener {
             }
             case LOCAL -> {
                 player.closeInventory();
-                Bukkit.getScheduler().runTask(
+                SchedulerHelper.runTask(
                     Bukkit.getPluginManager().getPlugin("CommandMaker"),
                     () -> Bukkit.dispatchCommand(player, "cmd function " + entry.name)
                 );
@@ -262,7 +263,7 @@ public class FunctionGui implements InventoryHolder, Listener {
     }
 
     private void scheduleRefresh() {
-        Bukkit.getScheduler().runTaskLater(
+        SchedulerHelper.runTaskLater(
             Bukkit.getPluginManager().getPlugin("CommandMaker"),
             () -> {
                 localFunctions = FunctionManager.listLocalFunctions();

@@ -8,6 +8,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
+import java.util.logging.Logger;
 
 public class UpdateChecker {
     private static final String VERSION_URL =
@@ -20,11 +21,17 @@ public class UpdateChecker {
     private static boolean checked = false;
     private static String updateMessage = null;
 
+    /** Bukkit/Paper/Folia/Purpur entry point */
     public static void check(Plugin plugin) {
+        check(plugin.getDescription().getVersion(), plugin.getLogger());
+    }
+
+    /** Sponge / generic entry point */
+    public static void check(String version, java.util.logging.Logger logger) {
         if (checked) return;
         checked = true;
 
-        currentVersion = plugin.getDescription().getVersion();
+        currentVersion = version;
 
         new Thread(() -> {
             try {
@@ -42,11 +49,11 @@ public class UpdateChecker {
                     if (isNewer(latestVersion, currentVersion)) {
                         updateMessage = "§a§l⚡ " + latestVersion + " is available! §r§aYou are on version §f"
                             + currentVersion + "§a. §nUpdate here:§r§b " + DOWNLOAD_URL;
-                        plugin.getLogger().info("Update available: " + latestVersion + " (current: " + currentVersion + ")");
+                        logger.info("Update available: " + latestVersion + " (current: " + currentVersion + ")");
                     }
                 }
             } catch (Exception e) {
-                plugin.getLogger().fine("Update check failed: " + e.getMessage());
+                logger.fine("Update check failed: " + e.getMessage());
             }
         }, "CM-UpdateChecker").start();
     }

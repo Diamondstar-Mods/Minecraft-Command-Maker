@@ -2,7 +2,10 @@ name: CommandMaker
 version: "${version}"
 main: com.example.CommandMakerPlugin
 api-version: "1.21"
-description: Create aliases, custom syntax, variables, and downloadable functions.
+folia-supported: true
+description: Create aliases, custom syntax, variables, and downloadable functions. Supports Bukkit, Spigot, Paper, Purpur, Folia, and Sponge.
+softdepend: [LuckPerms]
+load: POSTWORLD
 
 commands:
   cmd:

@@ -33,9 +33,15 @@ public class PermissionManager {
         }
     }
 
+    /** Bukkit/Paper/Folia/Purpur entry point */
     public static void init(Plugin plugin) {
-        permsFile = new File(plugin.getDataFolder(), "permissions.json");
-        plugin.getDataFolder().mkdirs();
+        init(plugin.getDataFolder().toPath());
+    }
+
+    /** Sponge / generic entry point */
+    public static void init(java.nio.file.Path dataFolder) {
+        permsFile = dataFolder.resolve("permissions.json").toFile();
+        try { java.nio.file.Files.createDirectories(dataFolder); } catch (Exception ignored) {}
         ensurePermissionsConfigExists();
         loadPermissionsConfig();
         initializeLuckPerms();

@@ -20,3 +20,4 @@
 /poopt
 /poop
 /cmd gui
+/cmd help
