@@ -34,33 +34,28 @@ public class ScoreboardManager {
         public String displayName;   // supports & color codes
         public String slot;          // "sidebar", "list", "belowName"
         public int updateInterval;   // ticks between updates (20 = 1 second)
-        public List<String> lines;   // lines 0-14 (0 = top of sidebar when sorted descending)
+        public List<String> lines;   // lines 0-14
 
         public ScoreboardConfig(String name) {
             this.name = name;
             this.displayName = "Scoreboard";
             this.slot = "sidebar";
-            this.updateInterval = 20; // 1 second
+            this.updateInterval = 20;
             this.lines = new ArrayList<>();
         }
 
+        /** Returns the int display slot constant: 0=list, 1=sidebar, 2=belowName */
         public int getDisplaySlot() {
             return switch (slot.toLowerCase()) {
-                case "list" -> ScoreboardDisplaySlot.LIST;
-                case "belowname" -> ScoreboardDisplaySlot.BELOW_NAME;
-                case "sidebar.team.black", "sidebar.team.dark_blue", "sidebar.team.dark_green",
-                     "sidebar.team.dark_aqua", "sidebar.team.dark_red", "sidebar.team.dark_purple",
-                     "sidebar.team.gold", "sidebar.team.gray", "sidebar.team.dark_gray",
-                     "sidebar.team.blue", "sidebar.team.green", "sidebar.team.aqua",
-                     "sidebar.team.red", "sidebar.team.light_purple", "sidebar.team.yellow",
-                     "sidebar.team.white" -> ScoreboardDisplaySlot.SIDEBAR;
-                default -> ScoreboardDisplaySlot.SIDEBAR;
+                case "list" -> 0;
+                case "belowname" -> 2;
+                default -> 1; // sidebar
             };
         }
     }
 
     /**
-     * Initialize the scoreboard system.
+     * Initialize the scoreboard system. Must be called after server starts.
      */
     public static void initialize(MinecraftServer server) {
         if (initialized) return;
@@ -107,89 +102,65 @@ public class ScoreboardManager {
             if (cfg.updateInterval <= 0) continue;
             if (tickCounter % cfg.updateInterval != 0) continue;
 
-            ScoreboardObjective objective = scoreboard.getNullableObjective(cfg.name);
+            ScoreboardObjective objective = scoreboard.getObjective(cfg.name);
             if (objective == null) continue;
 
-            // Update display name
+            // Update display name by recreating the objective
             String resolvedName = resolvePlaceholders(cfg.displayName, server);
-            scoreboard.updateObjective(objective,
-                Text.literal(resolvedName.replace("&", "§")),
-                objective.getCriterion(),
-                objective.getDisplayName(),
-                objective.getRenderType()
+            Text displayName = Text.literal(resolvedName.replace("&", "§"));
+            // Re-create with same slot to update display name
+            scoreboard.removeObjective(objective);
+            ScoreboardObjective newObj = scoreboard.addObjective(
+                cfg.name, ScoreboardCriterion.DUMMY,
+                displayName, ScoreboardCriterion.RenderType.INTEGER
             );
+            scoreboard.setObjectiveSlot(cfg.getDisplaySlot(), newObj);
 
             // Update dynamic lines
-            updateDynamicLines(scoreboard, objective, cfg, server);
+            updateDynamicLines(scoreboard, newObj, cfg, server);
         }
     }
 
     private static void updateDynamicLines(ServerScoreboard scoreboard, ScoreboardObjective objective,
                                             ScoreboardConfig cfg, MinecraftServer server) {
-        int onlineCount = server.getPlayerManager().getPlayerList().size();
-        int maxPlayers = server.getPlayerManager().getMaxPlayerCount();
-        float tps = getAverageTPS(server);
+        // Remove old scores for this objective (clear previous lines)
+        // We use unique fake player names per scoreboard
+        for (int i = 0; i < 15; i++) {
+            String fakePlayer = "§" + (char)('0' + (i % 10)) + "§r" + cfg.name + "_" + String.format("%02d", i);
+            scoreboard.resetPlayerScore(fakePlayer, objective);
+        }
 
-        // Minecraft scoreboards use fake player names for each line
-        // Each line needs a unique "player" name; we use color-coded entries
-        // Lines are displayed from top to bottom
-        // Score value determines ordering (higher = higher on sidebar with descending sort)
-
-        int score = cfg.lines.size();
-        for (String line : cfg.lines) {
-            // Resolve placeholders in the line text
+        int score = cfg.lines.size() - 1;
+        for (int lineIdx = 0; lineIdx < cfg.lines.size(); lineIdx++) {
+            String line = cfg.lines.get(lineIdx);
             String resolvedLine = resolvePlaceholders(line, server);
             resolvedLine = resolvedLine.replace("&", "§");
-
-            // Truncate to 40 chars (Minecraft limit)
             if (resolvedLine.length() > 40) {
                 resolvedLine = resolvedLine.substring(0, 40);
             }
 
-            // Each line in a sidebar scoreboard is a ScoreHolder (fake player)
-            // Use a color-code trick with zero-width characters to allow duplicate text lines
-            String fakePlayer = generateFakePlayerName(cfg.lines.indexOf(line), cfg.name, score);
-            ScoreAccess scoreAccess = scoreboard.getOrCreateScore(
-                scoreboard.getScoreHolder(fakePlayer),
-                objective,
-                true
-            );
+            String fakePlayer = "§" + (char)('0' + (lineIdx % 10)) + "§r" + cfg.name + "_" + String.format("%02d", score);
+
+            // Create/update team for this fake player to set display text
+            String teamName = "cm_sb_" + cfg.name.hashCode() + "_" + lineIdx;
+            Team team = scoreboard.getTeam(teamName);
+            if (team == null) {
+                team = scoreboard.addTeam(teamName);
+            }
+            team.setPrefix(Text.literal(resolvedLine));
+            team.setSuffix(Text.literal(""));
+
+            // Add fake player to team
+            if (scoreboard.getTeam(fakePlayer) == null || !teamName.equals(scoreboard.getTeam(fakePlayer).getName())) {
+                scoreboard.clearPlayerTeam(fakePlayer);
+                scoreboard.addPlayerToTeam(fakePlayer, team);
+            }
+
+            // Set score value
+            ScoreboardScore scoreAccess = scoreboard.getPlayerScore(fakePlayer, objective);
             scoreAccess.setScore(score);
-
-            // Update the display name of the team for this fake player
-            updateFakePlayerTeam(scoreboard, fakePlayer, resolvedLine);
-
             score--;
         }
-    }
-
-    /**
-     * Generate a unique fake player name for each scoreboard line.
-     * Uses Minecraft's color code trick: §0 through §f are invisible zero-width chars.
-     */
-    private static String generateFakePlayerName(int lineIndex, String scoreboardName, int score) {
-        // Use a unique but invisible name: § + color code based on index
-        // Up to 16 unique entries per line index using the 16 color codes
-        char color = (char) ('0' + (lineIndex % 10));
-        return "§" + color + "§r" + scoreboardName + "_" + String.format("%02d", score);
-    }
-
-    private static void updateFakePlayerTeam(ServerScoreboard scoreboard, String fakePlayer, String text) {
-        String teamName = "cm_" + sanitizeTeamName(fakePlayer);
-        Team team = scoreboard.getNullableTeam(teamName);
-        if (team == null) {
-            team = scoreboard.addTeam(teamName);
-            team.setDisplayName(Text.literal(text));
-        }
-        // Add the fake player to the team
-        if (scoreboard.getScoreHolderTeam(fakePlayer) == null ||
-            !teamName.equals(scoreboard.getScoreHolderTeam(fakePlayer).getName())) {
-            scoreboard.removeScoreHolderFromTeam(fakePlayer, scoreboard.getScoreHolderTeam(fakePlayer));
-            scoreboard.addScoreHolderToTeam(fakePlayer, team);
-        }
-        // Update the team prefix/suffix for the text
-        team.setPrefix(Text.literal(text));
-        team.setSuffix(Text.literal(""));
     }
 
     private static void createAllScoreboards(MinecraftServer server) {
@@ -203,7 +174,7 @@ public class ScoreboardManager {
 
     private static void createScoreboard(ServerScoreboard scoreboard, ScoreboardConfig cfg) {
         // Remove existing if present
-        ScoreboardObjective existing = scoreboard.getNullableObjective(cfg.name);
+        ScoreboardObjective existing = scoreboard.getObjective(cfg.name);
         if (existing != null) {
             scoreboard.removeObjective(existing);
         }
@@ -213,9 +184,7 @@ public class ScoreboardManager {
             cfg.name,
             ScoreboardCriterion.DUMMY,
             Text.literal(displayName.replace("&", "§")),
-            ScoreboardCriterion.RenderType.INTEGER,
-            false,
-            null
+            ScoreboardCriterion.RenderType.INTEGER
         );
 
         scoreboard.setObjectiveSlot(cfg.getDisplaySlot(), objective);
@@ -227,16 +196,11 @@ public class ScoreboardManager {
         if (scoreboard == null) return;
 
         for (ScoreboardConfig cfg : config.values()) {
-            ScoreboardObjective obj = scoreboard.getNullableObjective(cfg.name);
+            ScoreboardObjective obj = scoreboard.getObjective(cfg.name);
             if (obj != null) {
                 scoreboard.removeObjective(obj);
             }
         }
-    }
-
-    private static String sanitizeTeamName(String name) {
-        // Team names max 128 chars, alphanumeric + underscore
-        return name.replaceAll("[^a-zA-Z0-9_]", "_").substring(0, Math.min(name.length(), 128));
     }
 
     // ---- Placeholder resolution for scoreboard lines ----
@@ -244,7 +208,6 @@ public class ScoreboardManager {
     private static String resolvePlaceholders(String text, MinecraftServer server) {
         if (text == null) return "";
 
-        // Server-level placeholders
         if (server != null) {
             int online = server.getPlayerManager().getPlayerList().size();
             int max = server.getPlayerManager().getMaxPlayerCount();
@@ -254,16 +217,11 @@ public class ScoreboardManager {
             text = text.replace("${tps}", String.format("%.1f", getAverageTPS(server)));
         }
 
-        // Note: player-specific placeholders (${player_name}, ${player_health}) are not
-        // resolved here because scoreboards are server-wide. Use events or variables instead.
-
         return text;
     }
 
     private static float getAverageTPS(MinecraftServer server) {
-        // Use the server's tick time to calculate TPS
         try {
-            // Average tick time in milliseconds over the last 100 ticks
             long[] tickTimes = server.getTickTimes();
             if (tickTimes != null && tickTimes.length > 0) {
                 long sum = 0;
@@ -273,14 +231,11 @@ public class ScoreboardManager {
                     count++;
                 }
                 if (count > 0) {
-                    float avg = sum / (float) count / 1000000f; // nanos to millis
-                    float tps = avg > 0 ? Math.min(1000f / avg, 20f) : 20f;
-                    return tps;
+                    float avg = sum / (float) count / 1000000f;
+                    return avg > 0 ? Math.min(1000f / avg, 20f) : 20f;
                 }
             }
-        } catch (Exception ignored) {
-            // getTickTimes might not be accessible or may throw
-        }
+        } catch (Exception ignored) {}
         return 20.0f;
     }
 

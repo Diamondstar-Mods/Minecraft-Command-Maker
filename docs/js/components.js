@@ -88,7 +88,8 @@ CM.sidebar = {
         { label: "Getting Started", href: "getting-started.html" },
         { label: "Installation", href: "installation.html" },
         { label: "Updating Guide", href: "updating.html" },
-        { label: "Configuration", href: "configuration.html" }
+        { label: "Configuration", href: "configuration.html" },
+        { label: "🚀 v4.0 — Coming Soon", href: "v4.0-upcoming.html" }
       ]
     },
     {
