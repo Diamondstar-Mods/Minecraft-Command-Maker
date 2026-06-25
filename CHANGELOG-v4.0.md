@@ -37,13 +37,15 @@ JSON-defined dynamic scoreboards with `${placeholders}`, update intervals, and `
 
 `%player_health%` · `%player_xp%` · `%server_online%` · `%server_tps%` · `%var_name%` · `%cooldown_alias%`
 
-### 6. Command Maker Modules (.cmk)
-Shareable ZIP packages bundling aliases, functions, syntaxes, events, scoreboards, and cooldowns. Safe merge on import.
+### 6. Shareable Packages (.cmk)
+Package everything into a single `.cmk` file. Safe merge on import. Stored in `config/CommandMaker/packages/`.
 
 ```
-/cmd module export MySetup     # package everything
-/cmd module import MySetup     # install a module
-/cmd module list               # browse available modules
+/cmd package MySetup           # one-command export (configs + functions)
+/cmd import MySetup            # one-command import
+/cmd import MySetup --overwrite # import replacing conflicts
+/cmd module list               # browse available packages
+/cmd module info MySetup       # preview without importing
 ```
 
 ## Installing v4.0

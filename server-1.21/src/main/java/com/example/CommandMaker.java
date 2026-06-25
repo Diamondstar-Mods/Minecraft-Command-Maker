@@ -55,6 +55,8 @@ public class CommandMaker implements ModInitializer {
             registerEventCommand(dispatcher);
             registerScoreboardCommand(dispatcher);
             registerModuleCommand(dispatcher);
+            registerPackageCommand(dispatcher);
+            registerImportCommand(dispatcher);
         });
 
         LOGGER.info("Alias mod initialized!");
@@ -304,6 +306,8 @@ public class CommandMaker implements ModInitializer {
                         source.sendFeedback(() -> Text.literal("§e/cmd cooldown set/clear/list §7— Manage alias cooldowns"), false);
                         source.sendFeedback(() -> Text.literal("§e/cmd event list/reload §7— Manage event triggers"), false);
                         source.sendFeedback(() -> Text.literal("§e/cmd scoreboard list/reload §7— Manage custom scoreboards"), false);
+                        source.sendFeedback(() -> Text.literal("§e/cmd package <name> §7— Package everything into a .cmk file"), false);
+                        source.sendFeedback(() -> Text.literal("§e/cmd import <name> [--overwrite] §7— Import a .cmk package"), false);
                         source.sendFeedback(() -> Text.literal("§e/cmd module export/import/list/info §7— Manage .cmk modules"), false);
                         source.sendFeedback(() -> Text.literal("§e/cmd wiki §7— Open the wiki in your browser"), false);
                         source.sendFeedback(() -> Text.literal("§e/cmd help §7— Show this help message"), false);
@@ -810,6 +814,49 @@ public class CommandMaker implements ModInitializer {
                                     ctx.getSource().sendFeedback(() -> Text.literal("§7" + info.description), false);
                                 }
                                 ctx.getSource().sendFeedback(() -> Text.literal("§7Made for Command Maker §f" + info.cmVersion), false);
+                                return 1;
+                            })
+                        )
+                    )
+                )
+        );
+    }
+
+    // ---- /cmd package ----
+
+    private void registerPackageCommand(CommandDispatcher<ServerCommandSource> dispatcher) {
+        dispatcher.register(
+            CommandManager.literal("cmd")
+                .then(CommandManager.literal("package")
+                    .requires(source -> PermissionManager.canManageAliases(source))
+                    .then(CommandManager.argument("name", StringArgumentType.word())
+                        .executes(ctx -> {
+                            String name = StringArgumentType.getString(ctx, "name");
+                            ModuleManager.exportModule(name, true, ctx.getSource());
+                            return 1;
+                        })
+                    )
+                )
+        );
+    }
+
+    // ---- /cmd import ----
+
+    private void registerImportCommand(CommandDispatcher<ServerCommandSource> dispatcher) {
+        dispatcher.register(
+            CommandManager.literal("cmd")
+                .then(CommandManager.literal("import")
+                    .requires(source -> PermissionManager.canManageAliases(source))
+                    .then(CommandManager.argument("name", StringArgumentType.word())
+                        .executes(ctx -> {
+                            String name = StringArgumentType.getString(ctx, "name");
+                            ModuleManager.importModule(name, false, ctx.getSource());
+                            return 1;
+                        })
+                        .then(CommandManager.literal("--overwrite")
+                            .executes(ctx -> {
+                                String name = StringArgumentType.getString(ctx, "name");
+                                ModuleManager.importModule(name, true, ctx.getSource());
                                 return 1;
                             })
                         )

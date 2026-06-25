@@ -27,7 +27,7 @@ import java.util.zip.*;
  */
 public class ModuleManager {
     private static final Logger LOGGER = LoggerFactory.getLogger("cmdmaker-modules");
-    private static final Path MODULES_PATH = Paths.get("config", "CommandMaker", "Modules");
+    private static final Path MODULES_PATH = Paths.get("config", "CommandMaker", "packages");
 
     /**
      * Metadata for a .cmk module.

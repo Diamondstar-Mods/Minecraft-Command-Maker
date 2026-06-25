@@ -17,7 +17,7 @@
             <p class="subtitle">Package your entire Command Maker setup — aliases, functions, events, scoreboards, cooldowns, syntaxes, and permissions — into a single <code>.cmk</code> file for sharing, backup, or distribution.</p>
 
             <div class="callout callout-info">
-                <strong>New in v4.0</strong> &mdash; Modules directory: <code>config/CommandMaker/Modules/</code>
+                <strong>New in v4.0</strong> &mdash; Packages directory: <code>config/CommandMaker/packages/</code>
             </div>
 
             <h2>What is a .cmk Module?</h2>
@@ -56,14 +56,21 @@
                 <tr><td><code>cmVersion</code></td><td>No</td><td>Minimum Command Maker version required</td></tr>
             </table>
 
-            <h2>Commands</h2>
+            <h2>Quick Commands (Recommended)</h2>
             <table>
                 <tr><th>Command</th><th>Description</th></tr>
-                <tr><td><code>/cmd module export &lt;name&gt;</code></td><td>Export current config as <code>&lt;name&gt;.cmk</code></td></tr>
+                <tr><td><code>/cmd package &lt;name&gt;</code></td><td><strong>Package everything</strong> (configs + functions) into <code>config/CommandMaker/packages/&lt;name&gt;.cmk</code></td></tr>
+                <tr><td><code>/cmd import &lt;name&gt;</code></td><td>Import a <code>.cmk</code> file from the packages folder (safe merge)</td></tr>
+                <tr><td><code>/cmd import &lt;name&gt; --overwrite</code></td><td>Import with overwrite (replaces conflicts)</td></tr>
+            </table>
+
+            <h2>Advanced Module Commands</h2>
+            <table>
+                <tr><th>Command</th><th>Description</th></tr>
+                <tr><td><code>/cmd module export &lt;name&gt;</code></td><td>Export config only (no functions)</td></tr>
                 <tr><td><code>/cmd module exportall &lt;name&gt;</code></td><td>Export including all <code>.mcfunction</code> files</td></tr>
-                <tr><td><code>/cmd module import &lt;name&gt;</code></td><td>Import a <code>.cmk</code> module (safe merge)</td></tr>
-                <tr><td><code>/cmd module import &lt;name&gt; --overwrite</code></td><td>Import with overwrite (replaces conflicts)</td></tr>
-                <tr><td><code>/cmd module list</code></td><td>List available <code>.cmk</code> files in the Modules folder</td></tr>
+                <tr><td><code>/cmd module import &lt;name&gt;</code></td><td>Import from packages folder (safe merge)</td></tr>
+                <tr><td><code>/cmd module list</code></td><td>List available <code>.cmk</code> files</td></tr>
                 <tr><td><code>/cmd module info &lt;name&gt;</code></td><td>Show module metadata without importing</td></tr>
             </table>
 
@@ -92,15 +99,15 @@
                 <li>Cooldown config from <code>cooldowns.json</code></li>
                 <li>Functions (only with <code>exportall</code> — regular export skips them to keep files small)</li>
             </ul>
-            <p>The module is saved to <code>config/CommandMaker/Modules/&lt;name&gt;.cmk</code>.</p>
+            <p>The package is saved to <code>config/CommandMaker/packages/&lt;name&gt;.cmk</code>.</p>
 
-            <h2>Sharing Modules</h2>
+            <h2>Sharing Packages</h2>
             <ol>
                 <li>Create your aliases, syntaxes, events, scoreboards, cooldowns, and functions.</li>
-                <li>Run <code>/cmd module exportall MySetup</code>.</li>
-                <li>Find <code>MySetup.cmk</code> in <code>config/CommandMaker/Modules/</code>.</li>
+                <li>Run <code>/cmd package MySetup</code>.</li>
+                <li>Find <code>MySetup.cmk</code> in <code>config/CommandMaker/packages/</code>.</li>
                 <li>Share the file — it's just a ZIP. Rename to <code>.zip</code> to inspect, or use as-is.</li>
-                <li>Recipient drops it in their <code>Modules/</code> folder and runs <code>/cmd module import MySetup</code>.</li>
+                <li>Recipient drops it in their <code>packages/</code> folder and runs <code>/cmd import MySetup</code>.</li>
             </ol>
 
             <div class="callout callout-tip">

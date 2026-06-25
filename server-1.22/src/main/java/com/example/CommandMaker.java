@@ -41,6 +41,8 @@ public class CommandMaker implements ModInitializer {
             registerDeleteAliasMenu(dispatcher);
             registerSyntaxCommand(dispatcher);
             registerPermissionCommand(dispatcher);
+            registerPackageCommand(dispatcher);
+            registerImportCommand(dispatcher);
         });
 
         LOGGER.info("Alias mod initialized!");
@@ -562,6 +564,49 @@ public class CommandMaker implements ModInitializer {
                         ctx.getSource().sendSuccess(() -> Component.literal("§aPermission config reloaded!"), false);
                         return 1;
                     })
+                )
+        );
+    }
+
+    // ---- /cmd package ----
+
+    private void registerPackageCommand(CommandDispatcher<CommandSourceStack> dispatcher) {
+        dispatcher.register(
+            Commands.literal("cmd")
+                .then(Commands.literal("package")
+                    .requires(source -> PermissionManager.canManageAliases(source))
+                    .then(Commands.argument("name", StringArgumentType.word())
+                        .executes(ctx -> {
+                            String name = StringArgumentType.getString(ctx, "name");
+                            ModuleManager.exportModule(name, true, ctx.getSource());
+                            return 1;
+                        })
+                    )
+                )
+        );
+    }
+
+    // ---- /cmd import ----
+
+    private void registerImportCommand(CommandDispatcher<CommandSourceStack> dispatcher) {
+        dispatcher.register(
+            Commands.literal("cmd")
+                .then(Commands.literal("import")
+                    .requires(source -> PermissionManager.canManageAliases(source))
+                    .then(Commands.argument("name", StringArgumentType.word())
+                        .executes(ctx -> {
+                            String name = StringArgumentType.getString(ctx, "name");
+                            ModuleManager.importModule(name, false, ctx.getSource());
+                            return 1;
+                        })
+                        .then(Commands.literal("--overwrite")
+                            .executes(ctx -> {
+                                String name = StringArgumentType.getString(ctx, "name");
+                                ModuleManager.importModule(name, true, ctx.getSource());
+                                return 1;
+                            })
+                        )
+                    )
                 )
         );
     }
