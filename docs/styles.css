@@ -318,10 +318,11 @@ tr:nth-child(even) td { background: var(--bg-secondary); }
 /* Dropdown */
 .dropdown { position: relative; }
 .dropdown-menu {
-  display: none; position: absolute; top: calc(100% + 4px); left: 0;
+  display: none; position: absolute; top: 100%; left: 0;
   background: var(--bg); border: 1px solid var(--border);
   border-radius: var(--radius); box-shadow: var(--shadow-lg);
   min-width: 210px; padding: .4rem 0; z-index: 200;
+  margin-top: -1px; /* ensures no pixel gap between toggle and menu */
 }
 .dropdown-menu.show { display: block; }
 .dropdown-menu a {
