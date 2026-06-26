@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "id": "nekkycommandmaker",
+  "version": "${version}",
+  "name": "Nek's Command Maker!",
+  "environment": "server",
+  "entrypoints": { "main": ["com.example.CommandMaker"] },
+  "depends": { "fabricloader": "*", "minecraft": "*", "java": ">=8" }
+}

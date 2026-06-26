@@ -1,15 +1,7 @@
-buildscript {
-    repositories {
-        maven { url 'https://repo.legacyfabric.net/maven/' }
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'net.fabricmc:fabric-loom:1.15-SNAPSHOT'
-    }
+plugins {
+    id 'fabric-loom' version '1.15-SNAPSHOT'
+    id 'maven-publish'
 }
-
-apply plugin: 'fabric-loom'
-apply plugin: 'maven-publish'
 
 version = project.mod_version
 description = "Legacy Fabric server mod for Minecraft 1.8-1.13.2."
