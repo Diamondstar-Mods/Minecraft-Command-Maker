@@ -1,0 +1,9 @@
+{
+  "name": "Nek's Command Maker",
+  "version": "${version}",
+  "mcversion": "1.6-1.13.2",
+  "author": "NekSheep9180",
+  "description": "Create aliases, custom syntax, variables, and downloadable functions.",
+  "url": "https://commandmakerwiki.lucasgeitgey.com",
+  "class": "com.example.CommandMaker"
+}

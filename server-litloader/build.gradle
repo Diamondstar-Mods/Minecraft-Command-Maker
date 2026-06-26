@@ -21,6 +21,6 @@ dependencies {
     implementation "com.google.code.gson:gson:2.10.1"
 }
 
-processResources { filesMatching("fabric.mod.json") { expand "version": project.version } }
+processResources { filesMatching("fabric.mod.json") { expand "version": project.version }; filesMatching("liteloader.json") { expand "version": project.version } }
 tasks.withType(JavaCompile).configureEach { it.options.release = 8 }
 java { withSourcesJar(); sourceCompatibility = JavaVersion.VERSION_1_8; targetCompatibility = JavaVersion.VERSION_1_8 }
