@@ -35,6 +35,7 @@ public class CommandMaker implements ModInitializer {
         PermissionManager.initialize();
         CooldownManager.initialize();
         EventManager.initialize();
+        PlaceholderManager.initialize();
         ModScreens.register();
         UpdateChecker.check();
 

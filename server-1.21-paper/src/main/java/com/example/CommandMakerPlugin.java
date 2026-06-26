@@ -21,6 +21,10 @@ public class CommandMakerPlugin extends JavaPlugin {
         AliasManager.init(this);
         SyntaxManager.init(this);
         PermissionManager.init(this);
+        CooldownManager.init(this);
+        PlaceholderManager.init(this);
+        ScoreboardManager.init(this);
+        ModuleManager.init(this);
         UpdateChecker.check(this);
 
         getCommand("cmd").setExecutor(new CmdExecutor());
@@ -88,6 +92,8 @@ public class CommandMakerPlugin extends JavaPlugin {
         unregisterAliasCommands();
         AliasManager.loadAliases();
         SyntaxManager.loadSyntaxDefinitions();
+        CooldownManager.init(this);
+        ScoreboardManager.reload();
         registerAliasCommands();
     }
 
@@ -185,6 +191,11 @@ public class CommandMakerPlugin extends JavaPlugin {
                     sender.sendMessage("§e/cmd downloadfunction <name> §7— Download a function from the online library");
                     sender.sendMessage("§e/cmd listdownloadablefunctions §7— List all downloadable functions");
                     sender.sendMessage("§e/cmd syntax §7— List custom syntax patterns");
+                    sender.sendMessage("§e/cmd cooldown set|clear|list §7— Manage alias cooldowns");
+                    sender.sendMessage("§e/cmd event list|reload §7— Manage event triggers");
+                    sender.sendMessage("§e/cmd scoreboard list|reload §7— Manage custom scoreboards");
+                    sender.sendMessage("§e/cmd package <name> §7— Export everything to a .cmk file");
+                    sender.sendMessage("§e/cmd import <name> [--overwrite] §7— Import a .cmk package");
                     sender.sendMessage("§e/cmd help §7— Show this help message");
                     sender.sendMessage("§7Use §e/cmd help §7anytime to see this list!");
                 }
@@ -263,6 +274,41 @@ public class CommandMakerPlugin extends JavaPlugin {
                         }
                     }
                 }
+                case "cooldown" -> {
+                    if (!PermissionManager.canManageAliases(sender)) { sender.sendMessage("§cNo permission."); return true; }
+                    if (args.length < 2) { sender.sendMessage("§cUsage: /cmd cooldown set|clear|list"); return true; }
+                    switch (args[1].toLowerCase()) {
+                        case "set" -> { if(args.length<5){sender.sendMessage("§cUsage: /cmd cooldown set <alias> player|global <seconds> [message]");return true;} String a=args[2];String t=args[3];int s;try{s=Integer.parseInt(args[4]);}catch(NumberFormatException e){sender.sendMessage("§cSeconds must be a number");return true;}String m=args.length>5?String.join(" ",Arrays.copyOfRange(args,5,args.length)):null;if(!t.equals("player")&&!t.equals("global")){sender.sendMessage("§cType: player or global");return true;}CooldownManager.setCooldown(a,t,s,m);sender.sendMessage("§aSet "+t+" cooldown for /"+a+": "+s+"s"); }
+                        case "clear" -> { if(args.length<3){sender.sendMessage("§cUsage: /cmd cooldown clear <alias>");return true;} if(CooldownManager.clearCooldown(args[2]))sender.sendMessage("§aCleared cooldown for /"+args[2]);else sender.sendMessage("§cNo cooldown for /"+args[2]); }
+                        case "list" -> { Map<String,CooldownManager.CooldownConfig> cds=CooldownManager.getConfiguredCooldowns();if(cds.isEmpty()){sender.sendMessage("§7No cooldowns configured.");return true;}sender.sendMessage("§6Cooldowns:");for(CooldownManager.CooldownConfig c:cds.values())sender.sendMessage("  §e/"+c.alias+" §7→ "+c.type+", "+c.seconds+"s"); }
+                        default -> sender.sendMessage("§cUsage: /cmd cooldown set|clear|list");
+                    }
+                }
+                case "event" -> {
+                    if (!PermissionManager.canManageAliases(sender)) { sender.sendMessage("§cNo permission."); return true; }
+                    if (args.length < 2) { sender.sendMessage("§cUsage: /cmd event list|reload"); return true; }
+                    if (args[1].equalsIgnoreCase("list")) { sender.sendMessage("§eEvent config at §fplugins/CommandMaker/events.json"); sender.sendMessage("§7Edit the file directly, then run §e/cmd event reload"); }
+                    else if (args[1].equalsIgnoreCase("reload")) { sender.sendMessage("§a✔ Events reloaded (edit events.json then restart or reload)"); }
+                    else sender.sendMessage("§cUsage: /cmd event list|reload");
+                }
+                case "scoreboard" -> {
+                    if (!PermissionManager.canManageAliases(sender)) { sender.sendMessage("§cNo permission."); return true; }
+                    if (args.length < 2) { sender.sendMessage("§cUsage: /cmd scoreboard list|reload"); return true; }
+                    if (args[1].equalsIgnoreCase("list")) { Map<String,ScoreboardManager.ScoreboardConfig> sbs=ScoreboardManager.getConfiguredScoreboards();if(sbs.isEmpty()){sender.sendMessage("§7No scoreboards configured.");return true;}sender.sendMessage("§6Scoreboards:");for(ScoreboardManager.ScoreboardConfig c:sbs.values())sender.sendMessage("  §e"+c.name+" §7→ "+c.slot+(c.enabled?" §aenabled":" §cdisabled")); }
+                    else if (args[1].equalsIgnoreCase("reload")) { ScoreboardManager.reload(); sender.sendMessage("§a✔ Scoreboards reloaded."); }
+                    else sender.sendMessage("§cUsage: /cmd scoreboard list|reload");
+                }
+                case "package" -> {
+                    if (!PermissionManager.canManageAliases(sender)) { sender.sendMessage("§cNo permission."); return true; }
+                    if (args.length < 2) { sender.sendMessage("§cUsage: /cmd package <name>"); return true; }
+                    ModuleManager.exportModule(args[1], true, sender);
+                }
+                case "import" -> {
+                    if (!PermissionManager.canManageAliases(sender)) { sender.sendMessage("§cNo permission."); return true; }
+                    if (args.length < 2) { sender.sendMessage("§cUsage: /cmd import <name> [--overwrite]"); return true; }
+                    boolean ow = args.length > 2 && args[2].equalsIgnoreCase("--overwrite");
+                    ModuleManager.importModule(args[1], ow, sender);
+                }
                 default -> sender.sendMessage("§cUnknown subcommand. Use §e/cmd help §cfor a list.");
             }
             return true;
@@ -278,7 +324,8 @@ public class CommandMakerPlugin extends JavaPlugin {
                 List<String> subs = new ArrayList<>(Arrays.asList(
                     "add", "del", "reload", "list", "gui", "help",
                     "function", "downloadfunction", "listdownloadablefunctions",
-                    "setvar", "syntax"
+                    "setvar", "syntax", "cooldown", "event", "scoreboard",
+                    "package", "import"
                 ));
                 subs.removeIf(s -> !s.startsWith(args[0].toLowerCase()));
                 return subs;
@@ -438,6 +485,10 @@ public class CommandMakerPlugin extends JavaPlugin {
         @Override
         public boolean execute(CommandSender sender, String label, String[] args) {
             Player player = sender instanceof Player ? (Player) sender : null;
+
+            // Cooldown check
+            if (player != null && !CooldownManager.checkCooldown(label, player)) return true;
+
             String substituted = VariableManager.substituteVariables(target, player);
 
             String fullInput = "/" + label;
@@ -447,6 +498,13 @@ public class CommandMakerPlugin extends JavaPlugin {
             if (match != null) {
                 substituted = match.syntax.substituteParameters(substituted, match.parameters);
             }
+
+            // Condition evaluation
+            substituted = ConditionManager.evaluate(substituted, player);
+            if (substituted == null || substituted.isEmpty()) return true;
+
+            // Placeholder resolution
+            substituted = PlaceholderManager.resolve(substituted, player);
 
             Bukkit.dispatchCommand(sender, substituted);
             return true;

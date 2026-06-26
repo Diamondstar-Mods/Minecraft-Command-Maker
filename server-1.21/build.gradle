@@ -14,7 +14,7 @@ base {
 repositories {
     mavenCentral()
     maven { url 'https://maven.fabricmc.net/' }
-
+    maven { url 'https://api.modrinth.com/maven' }
 }
 
 sourceSets {
@@ -49,6 +49,9 @@ dependencies {
     
     // LuckPerms API - optional, mod will work without it
     compileOnly "net.luckperms:api:5.4"
+
+    // Placeholder API - optional, mod will work without it
+    modCompileOnly "maven.modrinth:placeholder-api:2.5.2+1.21.3"
 }
 
 processResources {

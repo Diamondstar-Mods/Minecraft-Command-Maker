@@ -62,8 +62,16 @@ say %player% has %player_health% HP and is level %player_xp_level%</code></pre>
     return String.valueOf(getBalance(ctx.player));
 });</code></pre>
 
+            <h2>Placeholder API Integration (Fabric)</h2>
+            <p>Command Maker now integrates with <a href="https://modrinth.com/mod/placeholder-api">Patbox's Placeholder API</a> mod. If you have it installed:</p>
+            <ul>
+                <li><strong>Our placeholders become available to other mods</strong> — other Fabric mods that use Placeholder API can see <code>%cmdmaker:player_health%</code>, <code>%cmdmaker:server_online%</code>, etc.</li>
+                <li><strong>Other mods' placeholders work in your aliases</strong> — any placeholder registered with Placeholder API can be used in Command Maker commands, events, and scoreboards.</li>
+            </ul>
+            <p>The integration is <strong>optional</strong> — Command Maker works fine without it. If Placeholder API is installed, we automatically hook into it.</p>
+
             <div class="callout callout-tip">
-                <strong>🔮 Coming soon:</strong> On the Paper/Bukkit version, our placeholder system will bridge directly to real PlaceholderAPI. Same names, same syntax — all your PAPI placeholders from other plugins will just work.
+                <strong>🔮 Coming to Paper/Bukkit:</strong> On the Paper version, we'll bridge to real PlaceholderAPI. Same placeholder names, same syntax — all your PAPI placeholders from other plugins will just work in Command Maker aliases.
             </div>
         </main>
     </div>

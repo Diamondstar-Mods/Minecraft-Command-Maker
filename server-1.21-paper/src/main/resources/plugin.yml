@@ -4,13 +4,13 @@ main: com.example.CommandMakerPlugin
 api-version: "1.21"
 folia-supported: true
 description: Create aliases, custom syntax, variables, and downloadable functions. Supports Bukkit, Spigot, Paper, Purpur, Folia, and Sponge.
-softdepend: [LuckPerms]
+softdepend: [LuckPerms, PlaceholderAPI]
 load: POSTWORLD
 
 commands:
   cmd:
     description: Main Command Maker command
-    usage: /cmd <add|del|reload|list|gui|help|function|downloadfunction|listdownloadablefunctions|setvar|syntax>
+    usage: /cmd <add|del|reload|list|gui|help|function|downloadfunction|listdownloadablefunctions|setvar|syntax|cooldown|event|scoreboard|module|package|import>
   addcommand:
     description: Add a command alias (legacy, op-only)
     usage: /addcommand <alias> <command>

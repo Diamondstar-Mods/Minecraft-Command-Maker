@@ -14,6 +14,7 @@ base {
 repositories {
     mavenCentral()
     maven { url 'https://maven.fabricmc.net/' }
+    maven { url 'https://api.modrinth.com/maven' }
 }
 
 sourceSets {
@@ -38,6 +39,7 @@ dependencies {
     implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     implementation "com.google.code.gson:gson:2.10.1"
     compileOnly "net.luckperms:api:5.4"
+    compileOnly "maven.modrinth:placeholder-api:3.0.0+26.1"
 }
 
 processResources {

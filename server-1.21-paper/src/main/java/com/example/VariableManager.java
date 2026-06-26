@@ -28,6 +28,14 @@ public class VariableManager {
         for (Map.Entry<String, String> entry : vars.entrySet()) {
             command = command.replace("${" + entry.getKey() + "}", entry.getValue());
         }
+        // Cooldown variables
+        if (player != null) {
+            java.util.regex.Pattern p = java.util.regex.Pattern.compile("\\$\\{cooldown_([^}]+)_remaining\\}");
+            java.util.regex.Matcher m = p.matcher(command);
+            StringBuffer sb = new StringBuffer();
+            while (m.find()) { m.appendReplacement(sb, String.valueOf(CooldownManager.getRemaining(m.group(1), player))); }
+            m.appendTail(sb); command = sb.toString();
+        }
         return command;
     }
 

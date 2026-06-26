@@ -21,3 +21,7 @@
 /poop
 /cmd gui
 /cmd help
+/cmd gui
+/cmd listdownloadablefunctions
+/cmd downloadfunction funnybutton
+/cmd help
