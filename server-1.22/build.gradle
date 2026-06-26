@@ -19,6 +19,10 @@ repositories {
 
 sourceSets {
     main {
+        java {
+            exclude 'com/example/gui/**'
+            exclude 'com/example/CommandMakerClient.java'
+        }
         resources {
             srcDirs = ['src/main/resources']
         }

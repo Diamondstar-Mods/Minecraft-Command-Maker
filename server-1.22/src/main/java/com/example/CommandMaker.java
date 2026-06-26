@@ -15,11 +15,7 @@ import java.nio.file.*;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
-import com.example.gui.ModScreens;
-import com.example.gui.FunctionChestHandler;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.SimpleMenuProvider;
-import net.minecraft.world.SimpleContainer;
 
 public class CommandMaker implements ModInitializer {
     public static final String MOD_ID = "cmdmaker";
@@ -31,7 +27,6 @@ public class CommandMaker implements ModInitializer {
         AliasManager.loadAliases();
         SyntaxManager.loadSyntaxDefinitions();
         PermissionManager.initialize();
-        ModScreens.register();
         UpdateChecker.check();
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
             registerCmdCommand(dispatcher);
@@ -133,30 +128,14 @@ public class CommandMaker implements ModInitializer {
                 .then(Commands.literal("gui")
                     .executes(ctx -> {
                         UpdateChecker.sendUpdateMessage(ctx.getSource());
-                        Player player = ctx.getSource().getPlayer();
-                        if (player != null) {
-                            player.openMenu(new SimpleMenuProvider(
-                                (syncId, inv, p) -> new FunctionChestHandler(syncId, inv),
-                                Component.literal("Command Maker - Functions")
-                            ));
-                        } else {
-                            ctx.getSource().sendSuccess(() -> Component.literal("§cThis command can only be used by a player"), false);
-                        }
+                        ctx.getSource().sendSuccess(() -> Component.literal("§eGUI coming soon for MC 26.1 — use §f/cmd help §efor available commands."), false);
                         return 1;
                     })
                 )
                 // functions - open function manager GUI
                 .then(Commands.literal("functions")
                     .executes(ctx -> {
-                        Player player = ctx.getSource().getPlayer();
-                        if (player != null) {
-                            player.openMenu(new SimpleMenuProvider(
-                                (syncId, inv, p) -> new FunctionChestHandler(syncId, inv),
-                                Component.literal("Command Maker - Functions")
-                            ));
-                        } else {
-                            ctx.getSource().sendSuccess(() -> Component.literal("§cThis command can only be used by a player"), false);
-                        }
+                        ctx.getSource().sendSuccess(() -> Component.literal("§eGUI coming soon for MC 26.1 — use §f/cmd help §efor available commands."), false);
                         return 1;
                     })
                 )

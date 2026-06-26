@@ -3,30 +3,30 @@ package com.example.gui;
 import com.example.FunctionManager;
 import com.example.AliasManager;
 import com.example.ManifestEntry;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.LoreComponent;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.ScreenHandlerType;
-import net.minecraft.screen.slot.Slot;
-import net.minecraft.screen.slot.SlotActionType;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.PlayerInventory;
+import net.minecraft.world.inventory.SimpleContainer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.core.component.DataComponentTypes;
+import net.minecraft.core.component.type.LoreComponent;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.AbstractContainerMenuType;
+import net.minecraft.world.inventory.slot.Slot;
+import net.minecraft.world.inventory.slot.SlotActionType;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.chat.Component;
 
 import java.nio.file.*;
 import java.util.*;
 
-public class FunctionChestHandler extends ScreenHandler {
+public class FunctionChestHandler extends AbstractContainerMenu {
     public static final int ROWS = 6;
     public static final int COLS = 9;
     public static final int CONTAINER_SIZE = ROWS * COLS;
 
-    private final SimpleInventory inventory;
-    private final PlayerEntity player;
+    private final SimpleContainer inventory;
+    private final Player player;
     private int currentTab = 0;
     private int currentPage = 0;
     private Map<String, ManifestEntry> manifest = new LinkedHashMap<>();
@@ -34,9 +34,9 @@ public class FunctionChestHandler extends ScreenHandler {
     private String pendingDeleteAlias = null;
 
     public FunctionChestHandler(int syncId, PlayerInventory playerInventory) {
-        super(ScreenHandlerType.GENERIC_9X6, syncId);
+        super(MenuType.GENERIC_9X6, syncId);
         this.player = playerInventory.player;
-        this.inventory = new SimpleInventory(CONTAINER_SIZE);
+        this.inventory = new SimpleContainer(CONTAINER_SIZE);
 
         for (int i = 0; i < CONTAINER_SIZE; i++) {
             int row = i / COLS;
@@ -106,11 +106,11 @@ public class FunctionChestHandler extends ScreenHandler {
                 // Highlight pending delete alias
                 if (currentTab == 3 && pendingDeleteAlias != null && entry.name.equals(pendingDeleteAlias)) {
                     ItemStack highlighted = new ItemStack(Items.RED_STAINED_GLASS_PANE);
-                    highlighted.set(DataComponentTypes.CUSTOM_NAME, Text.literal("§c§l⚠ DELETE: /" + entry.name));
+                    highlighted.set(DataComponentTypes.CUSTOM_NAME, Component.literal("§c§l⚠ DELETE: /" + entry.name));
                     List<Text> lore = new ArrayList<>();
-                    lore.add(Text.literal("§7Command: " + AliasManager.getAliases().get(entry.name)));
-                    lore.add(Text.literal("§c§lClick slot 7 (redstone block) to confirm deletion"));
-                    lore.add(Text.literal("§cThis action cannot be undone!"));
+                    lore.add(Component.literal("§7Command: " + AliasManager.getAliases().get(entry.name)));
+                    lore.add(Component.literal("§c§lClick slot 7 (redstone block) to confirm deletion"));
+                    lore.add(Component.literal("§cThis action cannot be undone!"));
                     highlighted.set(DataComponentTypes.LORE, new LoreComponent(lore));
                     inventory.setStack(slotIdx, highlighted);
                 } else {
@@ -170,12 +170,12 @@ public class FunctionChestHandler extends ScreenHandler {
 
     private ItemStack makeItem(net.minecraft.item.Item item, String name, String... loreLines) {
         ItemStack stack = new ItemStack(item);
-        stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal(name));
+        stack.set(DataComponentTypes.CUSTOM_NAME, Component.literal(name));
         if (loreLines != null && loreLines.length > 0 && loreLines[0] != null) {
             List<Text> lore = new ArrayList<>();
             for (String line : loreLines) {
                 if (line != null) {
-                    lore.add(Text.literal(line));
+                    lore.add(Component.literal(line));
                 }
             }
             if (!lore.isEmpty()) {
@@ -186,7 +186,7 @@ public class FunctionChestHandler extends ScreenHandler {
     }
 
     @Override
-    public void onSlotClick(int slotIndex, int button, SlotActionType actionType, PlayerEntity player) {
+    public void onSlotClick(int slotIndex, int button, SlotActionType actionType, Player player) {
         if (actionType != SlotActionType.PICKUP) return;
         if (slotIndex < 0 || slotIndex >= this.slots.size()) return;
         if (!(this.slots.get(slotIndex) instanceof LockedSlot)) return;
@@ -205,8 +205,8 @@ public class FunctionChestHandler extends ScreenHandler {
                 pendingDeleteAlias = null;
                 refreshDisplay();
                 // Send feedback to the player
-                if (player instanceof ServerPlayerEntity sp) {
-                    sp.sendMessage(Text.literal("§c✖ Deleted alias §f/" + deleted + "§c. Run §f/cmd reload§c to update commands."), false);
+                if (player instanceof ServerPlayer sp) {
+                    sp.sendMessage(Component.literal("§c✖ Deleted alias §f/" + deleted + "§c. Run §f/cmd reload§c to update commands."), false);
                 }
             }
             return;
@@ -214,10 +214,10 @@ public class FunctionChestHandler extends ScreenHandler {
 
         if (slotIndex == 8) {
             pendingDeleteAlias = null;
-            if (player instanceof ServerPlayerEntity sp) {
-                sp.getServer().getCommandManager().executeWithPrefix(
+            if (player instanceof ServerPlayer sp) {
+                sp.getServer().getCommands().executeWithPrefix(
                     sp.getCommandSource(), "/cmd reload");
-                sp.sendMessage(Text.literal("§a✔ Reloaded aliases, functions, and configs."), false);
+                sp.sendMessage(Component.literal("§a✔ Reloaded aliases, functions, and configs."), false);
             }
             resetAndRefresh();
             return;
@@ -244,15 +244,15 @@ public class FunctionChestHandler extends ScreenHandler {
 
         FunctionEntry entry = entries.get(entryIdx);
 
-        if (player instanceof ServerPlayerEntity sp) {
+        if (player instanceof ServerPlayer sp) {
             switch (entry.type) {
                 case DOWNLOAD -> {
                     FunctionManager.downloadFunction(entry.name, sp.getCommandSource());
                     scheduleRefresh();
                 }
                 case LOCAL -> {
-                        net.minecraft.server.command.ServerCommandSource source = sp.getCommandSource();
-                        source.getServer().getCommandManager().executeWithPrefix(
+                        net.minecraft.server.command.CommandSourceStack source = sp.getCommandSource();
+                        source.getServer().getCommands().executeWithPrefix(
                             source, "/cmd function " + entry.name);
                     }
                 case CREATE_EMPTY, CREATE_CMD, CREATE_MOB, CREATE_BUILD -> {
@@ -296,12 +296,12 @@ public class FunctionChestHandler extends ScreenHandler {
     }
 
     @Override
-    public ItemStack quickMove(PlayerEntity player, int slot) {
+    public ItemStack quickMove(Player player, int slot) {
         return ItemStack.EMPTY;
     }
 
     @Override
-    public boolean canUse(PlayerEntity player) {
+    public boolean canUse(Player player) {
         return true;
     }
 
@@ -331,7 +331,7 @@ public class FunctionChestHandler extends ScreenHandler {
                 // Parse "minecraft:diamond_shovel"
                 String id = iconId.contains(":") ? iconId.substring(iconId.indexOf(':') + 1) : iconId;
                 net.minecraft.item.Item resolved = net.minecraft.registry.Registries.ITEM.get(
-                    net.minecraft.util.Identifier.of("minecraft", id));
+                    net.minecraft.util.Identifier.fromNamespaceAndPath("minecraft", id));
                 if (resolved != Items.AIR) {
                     // Verify icon file exists in CDN icons folder
                     Path iconFile = Paths.get("docs", "cdn", "icons", id + ".png");
@@ -359,7 +359,7 @@ public class FunctionChestHandler extends ScreenHandler {
                 default -> "§e";
             };
             ItemStack stack = new ItemStack(item);
-            stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal(prefix + name));
+            stack.set(DataComponentTypes.CUSTOM_NAME, Component.literal(prefix + name));
 
             // Add description as tooltip lore — shows on hover in-game
             if (description != null && !description.isEmpty()) {
@@ -367,18 +367,18 @@ public class FunctionChestHandler extends ScreenHandler {
                 // Word-wrap the description into ~40-char lines for readability
                 String desc = description;
                 if (type == EntryType.DELETE_ALIAS) {
-                    lore.add(Text.literal("§7Command: " + desc));
-                    lore.add(Text.literal(""));
-                    lore.add(Text.literal("§c§l⚠ Click to select for deletion"));
-                    lore.add(Text.literal("§7Then click the redstone block (slot 8) to confirm"));
+                    lore.add(Component.literal("§7Command: " + desc));
+                    lore.add(Component.literal(""));
+                    lore.add(Component.literal("§c§l⚠ Click to select for deletion"));
+                    lore.add(Component.literal("§7Then click the redstone block (slot 8) to confirm"));
                 } else {
-                    lore.add(Text.literal("§7" + desc));
+                    lore.add(Component.literal("§7" + desc));
                     if (type == EntryType.DOWNLOAD) {
-                        lore.add(Text.literal(""));
-                        lore.add(Text.literal("§aClick to download & install"));
+                        lore.add(Component.literal(""));
+                        lore.add(Component.literal("§aClick to download & install"));
                     } else if (type == EntryType.LOCAL) {
-                        lore.add(Text.literal(""));
-                        lore.add(Text.literal("§eLeft-click: Run function"));
+                        lore.add(Component.literal(""));
+                        lore.add(Component.literal("§eLeft-click: Run function"));
                     }
                 }
                 stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
@@ -388,12 +388,12 @@ public class FunctionChestHandler extends ScreenHandler {
     }
 
     private static class LockedSlot extends Slot {
-        LockedSlot(SimpleInventory inventory, int index, int x, int y) {
+        LockedSlot(SimpleContainer inventory, int index, int x, int y) {
             super(inventory, index, x, y);
         }
 
         @Override
-        public boolean canTakeItems(PlayerEntity playerEntity) {
+        public boolean canTakeItems(Player playerEntity) {
             return false;
         }
 
