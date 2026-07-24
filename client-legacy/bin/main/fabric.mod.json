@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "nekkycommandmaker-legacy-client",
+  "version": "${version}",
+  "name": "Nek's Command Maker Legacy Client",
+  "description": "[DEPRECATED] Legacy Fabric client support for Minecraft 1.8-1.13.2. No longer maintained. Use the server mod (server-1.21+) instead — no client mod required.",
+  "authors": ["NekSheep9180 aka lucgei231"],
+  "contact": {
+    "homepage": "https://github.com/Diamondstar-Mods/",
+    "sources": "https://github.com/Diamondstar-Mods/Minecraft-Command-Maker",
+    "issues": "https://github.com/Diamondstar-Mods/Minecraft-Command-Maker/issues"
+  },
+  "license": "CC-BY-SA-4.0",
+  "environment": "client",
+  "entrypoints": {
+    "client": ["com.example.CommandMaker"]
+  },
+  "depends": {
+    "fabricloader": ">=0.18.4",
+    "minecraft": ">=1.6 <=1.13.2",
+    "java": ">=8"
+  }
+}

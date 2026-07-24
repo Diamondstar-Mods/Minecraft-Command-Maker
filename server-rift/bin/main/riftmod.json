@@ -1,0 +1,15 @@
+{
+  "id": "cmdmaker",
+  "name": "Command Maker",
+  "version": "${version}",
+  "authors": ["NekSheep9180 aka lucgei231"],
+  "description": "Create aliases, custom syntax, variables, and downloadable functions. RiftLoader edition.",
+  "listeners": [
+    {
+      "className": "com.example.CommandMakerRift",
+      "side": "server",
+      "priority": 0
+    }
+  ],
+  "mixin": "riftmod.mixins.json"
+}

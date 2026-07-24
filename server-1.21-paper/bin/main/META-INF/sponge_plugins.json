@@ -1,0 +1,11 @@
+{
+  "plugins": [
+    {
+      "id": "cmdmaker",
+      "name": "Command Maker",
+      "version": "3.2.1",
+      "entrypoint": "com.example.CommandMakerSponge",
+      "description": "Create aliases, custom syntax, variables, and downloadable functions."
+    }
+  ]
+}
