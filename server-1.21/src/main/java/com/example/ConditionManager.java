@@ -227,6 +227,6 @@ public class ConditionManager {
     }
 
     private static boolean checkOp(ServerCommandSource source) {
-        return source.hasPermissionLevel(2);
+        return PermissionManager.hasPermissionLevel(source, 2);
     }
 }

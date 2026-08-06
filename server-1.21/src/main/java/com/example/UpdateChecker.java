@@ -76,6 +76,24 @@ public class UpdateChecker {
         return updateMessage;
     }
 
+    public static String getCurrentVersion() {
+        if (currentVersion == null) {
+            currentVersion = FabricLoader.getInstance()
+                .getModContainer("nekkycommandmaker")
+                .map(m -> m.getMetadata().getVersion().getFriendlyString())
+                .orElse("unknown");
+        }
+        return currentVersion;
+    }
+
+    public static String getLatestVersion() {
+        return latestVersion;
+    }
+
+    public static boolean isUpdateAvailable() {
+        return latestVersion != null && isNewer(latestVersion, getCurrentVersion());
+    }
+
     public static void sendUpdateMessage(ServerCommandSource source) {
         if (updateMessage != null) {
             source.sendFeedback(() -> Text.literal(updateMessage), false);

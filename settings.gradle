@@ -31,7 +31,7 @@ include 'server-1.21-paper'        // MC 1.21.x Paper/Bukkit/Spigot
 include 'server-1.21-forge-neoforge' // MC 1.21.x Forge/NeoForge
 include 'server-1.22'              // MC 26.1
 
-//include 'client' // Temporarily disabled — pre-existing build issue unrelated to server fix
+include 'client'
 include 'client-legacy'           // MC 1.8-1.13.2 Legacy Fabric Client
 include 'server-legacy'           // MC 1.8-1.13.2 Legacy Fabric Server
 include 'server-litloader'        // MC 1.12.2 LiteLoader

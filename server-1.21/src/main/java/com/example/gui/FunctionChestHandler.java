@@ -76,7 +76,7 @@ public class FunctionChestHandler extends ScreenHandler {
         inventory.setStack(2, makeItem(currentTab == 2 ? Items.YELLOW_STAINED_GLASS_PANE : Items.ORANGE_STAINED_GLASS_PANE, "§e§lCreate New", "Create a new function from a template"));
         inventory.setStack(3, makeItem(currentTab == 3 ? Items.RED_STAINED_GLASS_PANE : Items.PINK_STAINED_GLASS_PANE, "§c§lDelete Aliases", "Remove command aliases — requires confirmation"));
         for (int i = 4; i < 7; i++) {
-            inventory.setStack(i, makeItem(Items.BLACK_STAINED_GLASS_PANE, " ", null));
+            inventory.setStack(i, makeItem(Items.BLACK_STAINED_GLASS_PANE, " ", (String[]) null));
         }
         // Slot 7: Confirm delete button (visible in delete aliases tab)
         if (currentTab == 3 && pendingDeleteAlias != null) {
@@ -86,7 +86,7 @@ public class FunctionChestHandler extends ScreenHandler {
         } else if (currentTab == 3) {
             inventory.setStack(7, makeItem(Items.BARRIER, "§7Confirm Delete", "§7Select an alias first, then confirm here"));
         } else {
-            inventory.setStack(7, makeItem(Items.BLACK_STAINED_GLASS_PANE, " ", null));
+            inventory.setStack(7, makeItem(Items.BLACK_STAINED_GLASS_PANE, " ", (String[]) null));
         }
         inventory.setStack(8, makeItem(Items.CLOCK, "§6§lRefresh", "Runs /cmd reload — reloads all aliases,", "functions, and config files from disk."));
     }
@@ -163,9 +163,9 @@ public class FunctionChestHandler extends ScreenHandler {
         int total = getCurrentEntries().size();
         int contentSlots = COLS * 4;
         int maxPage = Math.max(0, (total - 1) / contentSlots);
-        inventory.setStack(49, makeItem(Items.PAPER, "§6Page " + (currentPage + 1) + " / " + (maxPage + 1), null));
-        if (currentPage > 0) inventory.setStack(45, makeItem(Items.ARROW, "§a§l← Previous", null));
-        if (currentPage < maxPage) inventory.setStack(53, makeItem(Items.ARROW, "§a§lNext →", null));
+        inventory.setStack(49, makeItem(Items.PAPER, "§6Page " + (currentPage + 1) + " / " + (maxPage + 1), (String[]) null));
+        if (currentPage > 0) inventory.setStack(45, makeItem(Items.ARROW, "§a§l← Previous", (String[]) null));
+        if (currentPage < maxPage) inventory.setStack(53, makeItem(Items.ARROW, "§a§lNext →", (String[]) null));
     }
 
     private ItemStack makeItem(net.minecraft.item.Item item, String name, String... loreLines) {
@@ -216,8 +216,11 @@ public class FunctionChestHandler extends ScreenHandler {
             pendingDeleteAlias = null;
             if (player instanceof ServerPlayerEntity sp) {
                 var source = sp.getCommandSource();
-                source.getServer().getCommandManager().executeWithPrefix(
-                    source, "/cmd reload");
+                var dispatcher = source.getServer().getCommandManager().getDispatcher();
+                try {
+                    var parsed = dispatcher.parse("/cmd reload", source);
+                    dispatcher.execute(parsed);
+                } catch (Exception ignored) {}
                 sp.sendMessage(Text.literal("§a✔ Reloaded aliases, functions, and configs."), false);
             }
             resetAndRefresh();
@@ -253,8 +256,11 @@ public class FunctionChestHandler extends ScreenHandler {
                 }
                 case LOCAL -> {
                         net.minecraft.server.command.ServerCommandSource source = sp.getCommandSource();
-                        source.getServer().getCommandManager().executeWithPrefix(
-                            source, "/cmd function " + entry.name);
+                        var dispatcher = source.getServer().getCommandManager().getDispatcher();
+                        try {
+                            var parsed = dispatcher.parse("/cmd function " + entry.name, source);
+                            dispatcher.execute(parsed);
+                        } catch (Exception ignored) {}
                     }
                 case CREATE_EMPTY, CREATE_CMD, CREATE_MOB, CREATE_BUILD -> {
                     String prefix = switch (entry.type) {

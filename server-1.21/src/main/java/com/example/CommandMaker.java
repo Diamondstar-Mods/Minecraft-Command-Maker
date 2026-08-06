@@ -286,6 +286,22 @@ public class CommandMaker implements ModInitializer {
                         return 1;
                     })
                 )
+                // version
+                .then(CommandManager.literal("version")
+                    .executes(ctx -> {
+                        ServerCommandSource source = ctx.getSource();
+                        String currentVer = UpdateChecker.getCurrentVersion();
+                        source.sendFeedback(() -> Text.literal("§6§lNek's Command Maker §7v" + currentVer), false);
+                        if (UpdateChecker.isUpdateAvailable()) {
+                            String latestVer = UpdateChecker.getLatestVersion();
+                            source.sendFeedback(() -> Text.literal("§6⚠ Update available: §fv" + latestVer), false);
+                        } else {
+                            source.sendFeedback(() -> Text.literal("§a✔ Latest version"), false);
+                        }
+                        UpdateChecker.sendUpdateMessage(source);
+                        return 1;
+                    })
+                )
                 // help
                 .then(CommandManager.literal("help")
                     .executes(ctx -> {
@@ -560,7 +576,7 @@ public class CommandMaker implements ModInitializer {
     private void registerPermissionCommand(CommandDispatcher<ServerCommandSource> dispatcher) {
         dispatcher.register(
             CommandManager.literal("cmmakerperm")
-                .requires(source -> source.hasPermissionLevel(4))
+                .requires(source -> PermissionManager.hasPermissionLevel(source, 4))
                 .then(CommandManager.literal("grant")
                     .then(CommandManager.argument("player", StringArgumentType.word())
                         .then(CommandManager.argument("permission", StringArgumentType.greedyString())

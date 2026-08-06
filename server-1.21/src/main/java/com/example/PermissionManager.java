@@ -1,5 +1,7 @@
 package com.example;
 
+import net.minecraft.command.permission.Permission;
+import net.minecraft.command.permission.PermissionLevel;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.slf4j.Logger;
@@ -72,7 +74,7 @@ public class PermissionManager {
             if (player == null) return false;
             
             // Check vanilla op level first (level 2+)
-            if (source.hasPermissionLevel(2)) {
+            if (hasPermissionLevel(source, 2)) {
                 return true;
             }
             
@@ -108,7 +110,7 @@ public class PermissionManager {
             if (player == null) return false;
             
             // Ops always can use aliases
-            if (source.hasPermissionLevel(2)) {
+            if (hasPermissionLevel(source, 2)) {
                 return true;
             }
             
@@ -128,7 +130,7 @@ public class PermissionManager {
     public static boolean canUseCmdCommand(ServerCommandSource source) {
         if (source == null) return false;
         if (source.getEntity() == null) return true; // Console
-        if (source.hasPermissionLevel(2)) return true; // Ops
+        if (hasPermissionLevel(source, 2)) return true; // Ops
         return hasPermission(source, "cmdmaker.cmd");
     }
     
@@ -138,7 +140,7 @@ public class PermissionManager {
     public static boolean canUseAddCommand(ServerCommandSource source) {
         if (source == null) return false;
         if (source.getEntity() == null) return true; // Console
-        if (source.hasPermissionLevel(2)) return true; // Ops
+        if (hasPermissionLevel(source, 2)) return true; // Ops
         return hasPermission(source, "cmdmaker.addcommand");
     }
     
@@ -148,7 +150,7 @@ public class PermissionManager {
     public static boolean canManageAliases(ServerCommandSource source) {
         if (source == null) return false;
         if (source.getEntity() == null) return true; // Console
-        if (source.hasPermissionLevel(2)) return true; // Ops
+        if (hasPermissionLevel(source, 2)) return true; // Ops
         return hasPermission(source, "cmdmaker.manage.alias");
     }
     
@@ -413,6 +415,16 @@ public class PermissionManager {
     }
     
     /**
+     * Check if a command source has at least the given permission level.
+     * MC 1.21.5+ replaced hasPermissionLevel(int) with a PermissionPredicate system.
+     */
+    public static boolean hasPermissionLevel(ServerCommandSource source, int requiredLevel) {
+        net.minecraft.command.permission.PermissionLevel level =
+            net.minecraft.command.permission.PermissionLevel.fromLevel(requiredLevel);
+        return source.getPermissions().hasPermission(new Permission.Level(level));
+    }
+
+    /**
      * Get player's permission level
      */
     public static PermissionLevel getPermissionLevel(ServerCommandSource source) {
@@ -421,7 +433,7 @@ public class PermissionManager {
                 return PermissionLevel.ADMIN; // Console
             }
             
-            if (source.hasPermissionLevel(2)) {
+            if (hasPermissionLevel(source, 2)) {
                 return PermissionLevel.ADMIN;
             }
             
