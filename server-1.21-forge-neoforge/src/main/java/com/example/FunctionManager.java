@@ -1,7 +1,10 @@
 package com.example;
 
 import com.google.gson.*;
+import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.ParseResults;
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 import org.slf4j.Logger;
@@ -38,7 +41,16 @@ public class FunctionManager {
                 if (line.isEmpty() || line.startsWith("#")) continue;
                 try {
                     String command = VariableManager.substituteVariables(line, ctx);
-                    var parsed = cmdDispatcher.parse(command, ctx.getSource());
+                    ParseResults<CommandSourceStack> parsed;
+                    try {
+                        parsed = cmdDispatcher.parse(command, ctx.getSource());
+                    } catch (Exception ex) {
+                        final int lineNum = idx + 1;
+                        final String errorMsg = describeLineError(cmdDispatcher, command, ctx.getSource(), ex);
+                        LOGGER.error("Failed to execute function '{}' at line {}: {}", functionName, lineNum, line, ex);
+                        ctx.getSource().sendSuccess(() -> Component.literal("§c✖ Error in §f" + functionName + "§c at line §f" + lineNum + "§c: §7" + errorMsg), false);
+                        return executed;
+                    }
                     cmdDispatcher.execute(parsed);
                     executed++;
                 } catch (Exception ex) {
@@ -55,6 +67,25 @@ public class FunctionManager {
             ctx.getSource().sendSuccess(() -> Component.literal("§c✖ Failed to run §f" + functionName + "§c: §7" + e.getMessage()), false);
             return 0;
         }
+    }
+
+    /**
+     * Turns a line-execution exception into a user-facing message. Brigadier silently skips
+     * command nodes the source lacks permission for, so a permission failure surfaces as
+     * "Unknown or incomplete command". Re-parses with function-level permission (2) to tell
+     * the two cases apart.
+     */
+    private static String describeLineError(CommandDispatcher<CommandSourceStack> dispatcher,
+                                            String command, CommandSourceStack source, Exception ex) {
+        if (ex instanceof CommandSyntaxException) {
+            try {
+                dispatcher.parse(command, source.withPermission(2));
+                return "you don't have permission to run this command";
+            } catch (Exception ignored) {
+                // genuinely invalid command — fall through to the original message
+            }
+        }
+        return ex.getMessage();
     }
 
     public static void downloadFunction(String functionName, CommandSourceStack source) {

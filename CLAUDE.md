@@ -4,114 +4,94 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Build Commands
 
-The Gradle wrapper scripts (`gradlew` / `gradlew.bat`) use Gradle 9.5.1 with JDK paths from `gradle.properties`. The project uses **Fabric Loom** (v1.16.2) as the Gradle plugin. Note: Loom versions below ~1.14 are incompatible with Gradle 9.x — server-1.22 overrides the root `loom_version` in its own `gradle.properties`.
+The Gradle wrapper scripts (`gradlew` / `gradlew.bat`) use Gradle 9.5.1. The project uses **Fabric Loom 1.16.2**. `build.bat` is a convenience wrapper for `gradlew.bat build`. There are **no automated tests** — `./gradlew check` only validates compilation. Output JARs land in `<subproject>/build/libs/`.
 
-### Active subprojects (registered in `settings.gradle`)
+### Subprojects registered in `settings.gradle`
 
 ```bash
-./gradlew :server-1.21:build    # Fabric server, MC 1.21.9, Java 17
-./gradlew :server-1.22:build    # Fabric server, MC 26.1, Java 25 [WIP — does NOT compile yet]
+./gradlew :server-1.21:build    # Fabric server, MC 1.21.11, Java 17 (primary 1.21 module)
+./gradlew :server-1.22:build    # Fabric server, MC 26.1.2, Java 25 (primary 26.x module)
+./gradlew :client:build         # Fabric client-only, MC 1.21.11, Java 17
+./gradlew :client-1.22:build    # Fabric client-only, MC 26.1.2, Java 25
 ./gradlew build                 # Build all registered subprojects
-./gradlew check                 # Run all checks (compilation + validation)
 ```
 
-`build.bat` is a convenience wrapper that runs `gradlew.bat build`.
+Also registered: `server-1.21-paper`, `server-1.21-forge-neoforge`, `server-rift` (1.21 loader ports), `client-legacy`, `server-legacy` (Legacy Fabric, MC 1.8-1.13.2, Java 8), `server-litloader`, `server-nilloader`, `server-ornithe` (old loader ports).
 
-**server-1.22 WIP note:** The source is copied from server-1.21 but has NOT been updated for MC 26.1 API changes. MC 26.1 renamed/moved many classes (e.g., `ScreenHandler` → different package, `DrawContext` renamed). Expect ~100 compilation errors until the migration is done. The gradle config also differs: no Yarn mappings, uses `implementation` instead of `modImplementation` for fabric-loader/fabric-api.
+On disk but **not** in `settings.gradle`: `server-1.17`, `server-1.18-1.19-1.20`, `quilt-client`, `quilt-server`. Add them to `settings.gradle` before building.
 
-### Inactive/standalone subprojects (on disk but not in `settings.gradle`)
+Run the game: `./gradlew :client:runClient` or `./gradlew :client-1.22:runClient`.
 
-These must be built independently by adding them to `settings.gradle` first, or moving into their directory:
+Known Gradle quirk: if a module's `:jar` task fails with `java.nio.file.ClosedFileSystemException` right after a compile error, run `./gradlew --stop` and rebuild — a crashed build leaves poisoned zipfs state in the daemon.
 
-```bash
-# cd into the subproject directory and run gradlew from root:
-./gradlew :client:build          # Fabric client-only mod, MC 1.21.9, Java 17
-./gradlew :quilt-client:build    # Quilt client, MC 1.21.9, Java 17
-./gradlew :quilt-server:build    # Quilt server, MC 26.1, Java 17
-./gradlew :client-legacy:build   # Legacy Fabric client, MC 1.8-1.13.2, Java 8
-./gradlew :server-legacy:build   # Legacy Fabric server, MC 1.8-1.13.2, Java 8
-```
-Note that minecraft 1.20-1.20.4 runs java 17, but minecraft 1.20.5 runs java 21.
+## CRITICAL: MC 26.x has no Yarn / intermediary mappings
 
-Output JARs land in `<subproject>/build/libs/`.
+Fabric for MC 26.1+ (the new versioning scheme after 1.21.11) uses **Mojang official (Mojmap) names natively**. There is no intermediary for any 26.x version (Fabric's meta API returns a `0.0.0` placeholder; intermediary maven artifacts stop at `25w46a`).
 
-### Run Minecraft with the mod
-
-```bash
-./gradlew :client:runClient       # Fabric client
-./gradlew :server-1.21:runClient  # Fabric server + client
-```
-
-### Website (Static html!)
-
----
+Consequences for the 26.x modules (`server-1.22`, `client-1.22`):
+- Build config must **not** declare `mappings` (no Yarn), and uses `implementation` instead of `modImplementation` for fabric-loader/fabric-api.
+- Source is written in Mojmap names (`net.minecraft.client.Minecraft`, `net.minecraft.network.chat.Component`), not Yarn names.
+- A jar built with the 1.21-style Yarn pipeline for 26.x contains `net/minecraft/class_NNNN` references that cannot be resolved at runtime → `NoClassDefFoundError` on startup. This was the root cause of issue #33 (client edition crash on MC 26.2).
+- `fabric.mod.json` must constrain `"minecraft": ">=26.1"` — never a 1.x floor like `>=1.20`, which lets the jar install on incompatible versions.
 
 ## Project Architecture
 
-This is **Minecraft Command Maker** (mod version 3.1.0), a Fabric/Quilt mod that adds custom aliases, parameterized command syntax, and downloadable `.mcfunction` execution to Minecraft. It's a Gradle multi-module monorepo with per-version source trees.
+This is **Minecraft Command Maker** (v4.0.0 line; root `mod_version=4.0.0-rc.1`), a Fabric mod that adds custom aliases, parameterized command syntax, and downloadable `.mcfunction` execution. Gradle multi-module monorepo with per-version source trees; every module has a full copy of the Java source under `src/main/java/com/example/`.
 
-### Module matrix
+### Version / module matrix
 
-Each module contains a full copy of the Java source under `src/main/java/com/example/`, adapted for its target Minecraft version:
+Root `gradle.properties`: `minecraft_version=1.21.11`, `yarn_mappings=1.21.11+build.6`, `mod_version=4.0.0-rc.1` — used by all 1.21 modules. The 26.x modules have their own `gradle.properties` (`minecraft_version=26.1.2`, `loader_version=0.19.2`, `fabric_version=0.149.1+26.1.2`) and Java 25 toolchains.
 
-| Module | Loader | MC Version | Java | Side |
-|--------|--------|-----------|------|------|
-| `server-1.21/` | Fabric | 1.21.9 | 17 | Server |
-| `server-1.22/` | Fabric | 26.1 | 25 | Server |
-| `server-1.17/` | Fabric | 1.17.1 | 17 | Server |
-| `server-1.18-1.19-1.20/` | Fabric | 1.20.1 | 17 | Server |
-| `server-legacy/` | Legacy Fabric | 1.8-1.13.2 | 8 | Server |
-| `client/` | Fabric | 1.21.9 | 17 | Client-only |
-| `client-legacy/` | Legacy Fabric | 1.8-1.13.2 | 8 | Client-only |
-| `quilt-server/` | Quilt | 26.1 | 17 | Server |
-| `quilt-client/` | Quilt | 1.21.9 | 17 | Client |
+| Module | Loader | MC | Side |
+|--------|--------|-----|------|
+| `server-1.21/` | Fabric | 1.21.11 | Server |
+| `server-1.22/` | Fabric | 26.1.2 | Server |
+| `client/` | Fabric | 1.21.11 | Client-only |
+| `client-1.22/` | Fabric | 26.1.2 | Client-only |
+| `client-legacy/`, `server-legacy/` | Legacy Fabric | 1.8-1.13.2 | Both |
 
-`server-1.21/` is the primary/current module. `server-1.22/` is for minecraft 26.1.
+Mod IDs: server edition `nekkycommandmaker` (entrypoint `com.example.CommandMaker`, `ModInitializer`), client edition `nekkycommandmakerclient` (entrypoint `com.example.CMDMakerClient`, `ClientModInitializer`).
 
-The mod's mod ID is `nekkycommandmaker`. The main Fabric entry point is `CommandMaker` (implements `ModInitializer`), and the client entry point is `CommandMakerClient` (implements `ClientModInitializer`). Quilt modules re-use the same entry point class.
+### Core manager classes (static singletons in `com.example`)
 
-### Core manager classes (feature-based static singletons)
+- **`CommandMaker` / `CMDMakerClient`** — Entry points; register all commands and delegate to managers.
+- **`AliasManager`** — Alias CRUD in `config/CommandMaker/aliases.json`; auto-registers `.mcfunction` files as `function:` aliases.
+- **`SyntaxManager`** + **`CommandSyntax`** — Pattern matching: `/tpa <player>` patterns in `syntax.json` become regex capture groups; `${syntaxName_param}` placeholders are substituted.
+- **`VariableManager`** — Two-layer substitution: built-in `${player}`, `${x}`, `${y}`, `${z}` + per-player custom variables.
+- **`PermissionManager`** — `NONE → ALIAS_USER → COMMAND_USER → MODERATOR → ADMIN`; falls back through vanilla op level → LuckPerms (compileOnly) → `permissions.json`.
+- **`FunctionManager`** — Downloads and executes `.mcfunction` files from the GitHub CDN manifest; local files under `config/CommandMaker/Functions/`.
+- **`TelemetryManager`** — No-op stub (telemetry removed; old code in `oldtel/`).
 
-All core logic lives in `com.example` package. Each feature is a static manager class:
+`server-1.22` additionally has the v4.0 managers: `ModuleManager`, `ConditionManager`, `CooldownManager`, `EventManager`, `PlaceholderManager`, `ScoreboardManager`. Its build.gradle excludes `com/example/gui/**` and `CommandMakerClient.java` from compilation.
 
-- **`CommandMaker`** — Mod entry point. Registers all Brigadier commands (`/cmd`, `/addcommand`, `/setcmdvariable`, `/syntax`, `/cmmakerperm`, `/deletealias`) and delegates alias execution to manager classes.
-- **`AliasManager`** — Alias CRUD. Reads/writes `config/CommandMaker/aliases.json`. Registers each alias as a first-class Brigadier literal command. Supports `.mcfunction` file aliases (prefix `function:`).
-- **`SyntaxManager`** + **`CommandSyntax`** — Custom pattern matching system. Users define patterns like `/tpa <player>` in `syntax.json`. `CommandSyntax` converts `<param>` placeholders to regex capture groups. `SyntaxManager` matches incoming input against all registered syntaxes and returns extracted parameters.
-- **`VariableManager`** — Two-layer variable substitution: built-in (`${player}`, `${x}`, `${y}`, `${z}`) and per-player custom variables set via `/setcmdvariable`.
-- **`PermissionManager`** — Hierarchical permission system: `NONE → ALIAS_USER → COMMAND_USER → MODERATOR → ADMIN`. Falls back through: vanilla op level → LuckPerms (optional, compileOnly) → `permissions.json`. Supports per-alias permissions and wildcards.
-- **`FunctionManager`** — Downloads and executes `.mcfunction` files from a GitHub CDN manifest. Lists local functions under `config/CommandMaker/Functions/`.
-- **`TelemetryManager`** — No-op stub (telemetry was removed; original code archived in `oldtel/`).
+### Client edition specifics (`client-1.22`)
 
-### Command execution flow
+- **No GUI.** The Function Manager screen was removed — it crashed the game (issue #33 follow-up). There is no `/cmd gui` command in this edition. (`client/`, the 1.21 edition, still has `gui/FunctionManagerScreen.java`.)
+- **Command execution** goes through `CMDMakerClient.executeClientCommand()`: commands registered client-side (fabric client commands, including aliases that target other aliases) run locally through `ClientCommands.getActiveDispatcher().execute()`; everything else is sent to the server with `ClientPacketListener.sendCommand()` so it *executes* instead of being typed into chat. Note: the fabric client dispatcher mirrors server commands only for tab-completion — their local nodes are no-ops returning 0, so executing them locally does nothing.
+- `.mcfunction` lines run through the same `executeClientCommand()` helper.
 
-1. Player runs an alias (registered as a Brigadier literal command).
-2. Input is passed to `SyntaxManager.matchInput()` — if it matches a custom syntax pattern, parameters are extracted (e.g., `<player>` → `"steve"`).
-3. `CommandSyntax.substituteParameters()` replaces `${syntaxName_paramName}` placeholders in the alias target.
-4. `VariableManager.substituteVariables()` replaces built-in and custom variables.
-5. The final command string is parsed and executed via Minecraft's `CommandDispatcher`.
+### MC 26.1 API differences vs 1.21 (for migrating source between modules)
 
-### GUI system
+- Fabric client commands: `ClientCommandManager` → `ClientCommands` (same package, static `literal()`/`argument()`).
+- Screens: `Screen.render(DrawContext, ...)` replaced by `extractRenderState(GuiGraphicsExtractor, ...)` (background is drawn by the framework's `extractRenderStateWithTooltipAndSubtitles` wrapper); `close()` → `onClose()`; tooltips via `GuiGraphicsExtractor.setTooltipForNextFrame(...)`.
+- Mouse events: `net.minecraft.client.gui.Click` record → `net.minecraft.client.input.MouseButtonEvent` (`mouseClicked(MouseButtonEvent, boolean)`).
+- Yarn → Mojmap renames: `MinecraftClient` → `Minecraft`, `Text` → `Component`, `DrawContext` → `GuiGraphicsExtractor`, `textRenderer` → `font`, `client` field → `minecraft`, `networkHandler` → `connection`, `sendMessage(Text, boolean)` → `sendSystemMessage(Component)`, `getUuid()` → `getUUID()`.
 
-Located in `gui/` subpackage:
-- `FunctionChestHandler` / `FunctionChestScreen` — Server-side screen handler with 54-slot chest inventory, tabbed interface (Download / My Functions / Create New), pagination, item-based interaction.
-- `FunctionManagerScreen` — Client-only full custom screen (~400 lines) used by the `client/` module.
-- `AliasDeleteScreen` — Click-to-delete alias browser.
+### GUI system (server modules)
+
+In `gui/`: `FunctionChestHandler`/`FunctionChestScreen` (54-slot chest GUI, tabs, pagination), `AliasDeleteScreen` (click-to-delete aliases), `ModScreens`. Not compiled in `server-1.22`.
 
 ### Config file layout (runtime, under `config/CommandMaker/`)
 
-- `aliases.json` — Alias name → command target
-- `syntax.json` — Syntax name → { pattern, description }
-- `permissions.json` — Permission configuration
-- `Functions/*.mcfunction` — Multi-line function files
+- `aliases.json` — alias name → command target
+- `syntax.json` — syntax name → { pattern, description }
+- `permissions.json` — permission configuration
+- `Functions/*.mcfunction` — multi-line function files
 
-### Website
+### Other
 
-Pure static HTML docs in `docs/`. Key files:
-- `components.js` — Shared UI (nav, sidebar, footer injected via JS)
-- `styles.css` — Design system with light/dark themes
-- `script.js` — Theme toggle, mobile menu, search, ToC, code copy
-
-Each page contains only article content — chrome is injected by `components.js`. No build step; works on any static host.
+- `CompiledFiles/` — prebuilt release jars at the repo root (release artifacts, e.g. `CMDMaker-Fabric-client-26.1.jar`).
+- **Website**: pure static HTML in `docs/` — `components.js` injects nav/sidebar/footer, `styles.css` is the design system, `script.js` handles theme/search/ToC. No build step.
 
 ## Branch conventions (from CONTRIBUTING.md)
 
@@ -128,10 +108,6 @@ Commit messages start with a verb (Add, Fix, Update, Improve).
 - 4-space indent or 1 tab, max 120 chars per line
 - Javadoc on public methods/classes
 
-## Testing
-
-There are **no automated tests**. All testing is manual in-game via `./gradlew :server-1.21:runClient` (or `:client:runClient` for the client module). The `./gradlew check` command only validates compilation — it runs no unit tests.
-
 ## Mixins
 
-Each module has `modid.mixins.json` and `modid.client.mixins.json` in `src/main/resources/`, referenced by `fabric.mod.json`. These are Fabric Mixin configs used to inject into vanilla Minecraft code at runtime. Check these configs (and any mixin Java classes) when dealing with cross-cutting concerns or class transformation issues.
+Each module has `modid.mixins.json` (and some have `modid.client.mixins.json`) in `src/main/resources/`, referenced by `fabric.mod.json`. Currently empty mixin lists — check these configs when dealing with class-transformation work.

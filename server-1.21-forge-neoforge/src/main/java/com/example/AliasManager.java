@@ -55,7 +55,7 @@ public class AliasManager {
                 if (!Files.exists(exampleFunction)) {
                     List<String> functionLines = Arrays.asList(
                         "# Example function: Disable monster spawns",
-                        "spawn rates monster 0",
+                        "gamerule doMobSpawning false",
                         "say Monster spawns disabled!"
                     );
                     Files.write(exampleFunction, functionLines, StandardOpenOption.CREATE_NEW);

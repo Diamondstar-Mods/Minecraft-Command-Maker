@@ -103,6 +103,72 @@ public class CommandMaker {
                         return 1;
                     })
                 )
+                .then(Commands.literal("function")
+                    .then(Commands.argument("functionName", StringArgumentType.word())
+                        .suggests((ctx, builder) -> {
+                            for (String name : FunctionManager.listLocalFunctions()) {
+                                builder.suggest(name);
+                            }
+                            return builder.buildFuture();
+                        })
+                        .executes(ctx -> {
+                            String functionName = StringArgumentType.getString(ctx, "functionName");
+                            return FunctionManager.executeFunction(functionName, ctx);
+                        })
+                    )
+                    .then(Commands.literal("create")
+                        .then(Commands.argument("name", StringArgumentType.word())
+                            .executes(ctx -> {
+                                String name = StringArgumentType.getString(ctx, "name");
+                                if (name.contains("..") || name.contains("/") || name.contains("\\")) {
+                                    ctx.getSource().sendSuccess(() -> Component.literal("§c✖ Invalid function name — don't use §f.. / \\ §cin names"), false);
+                                    return 0;
+                                }
+                                try {
+                                    Path file = AliasManager.getFunctionsPath().resolve(name + ".mcfunction");
+                                    if (Files.exists(file)) {
+                                        ctx.getSource().sendSuccess(() -> Component.literal("§c✖ Function §f" + name + "§c already exists"), false);
+                                        return 0;
+                                    }
+                                    Files.createDirectories(file.getParent());
+                                    String content = "# " + name + "\n# Created with Command Maker\n\n# Add your Minecraft commands below\n# Lines starting with # are comments\n";
+                                    Files.writeString(file, content);
+                                    ctx.getSource().sendSuccess(() -> Component.literal("§a✔ Created §f" + name + " §7| Edit: config/CommandMaker/Functions/" + name + ".mcfunction"), false);
+                                    return 1;
+                                } catch (Exception e) {
+                                    ctx.getSource().sendSuccess(() -> Component.literal("§c✖ Error: §7" + e.getMessage()), false);
+                                    return 0;
+                                }
+                            })
+                        )
+                    )
+                    .then(Commands.literal("delete")
+                        .then(Commands.argument("name", StringArgumentType.word())
+                            .suggests((ctx, builder) -> {
+                                for (String name : FunctionManager.listLocalFunctions()) {
+                                    builder.suggest(name);
+                                }
+                                return builder.buildFuture();
+                            })
+                            .executes(ctx -> {
+                                String name = StringArgumentType.getString(ctx, "name");
+                                try {
+                                    Path file = AliasManager.getFunctionsPath().resolve(name + ".mcfunction");
+                                    if (Files.deleteIfExists(file)) {
+                                        ctx.getSource().sendSuccess(() -> Component.literal("§c🗑 Deleted §f" + name), false);
+                                        return 1;
+                                    } else {
+                                        ctx.getSource().sendSuccess(() -> Component.literal("§c✖ Function §f" + name + "§c not found"), false);
+                                        return 0;
+                                    }
+                                } catch (Exception e) {
+                                    ctx.getSource().sendSuccess(() -> Component.literal("§c✖ Error: §7" + e.getMessage()), false);
+                                    return 0;
+                                }
+                            })
+                        )
+                    )
+                )
                 .then(Commands.literal("list")
                     .executes(ctx -> {
                         UpdateChecker.sendUpdateMessage(ctx.getSource());
@@ -152,6 +218,62 @@ public class CommandMaker {
                         source.sendSuccess(() -> Component.literal("§e/cmd syntax §7— List custom syntax patterns"), false);
                         source.sendSuccess(() -> Component.literal("§e/cmd help §7— Show this help message"), false);
                         source.sendSuccess(() -> Component.literal("§7Use §e/cmd help §7anytime to see this list!"), false);
+                        return 1;
+                    })
+                )
+                .then(Commands.literal("downloadfunction")
+                    .then(Commands.argument("function", StringArgumentType.word())
+                        .suggests((ctx, builder) -> CompletableFuture.supplyAsync(() -> {
+                            Map<String, ManifestEntry> manifest = FunctionManager.fetchFunctionManifest();
+                            for (Map.Entry<String, ManifestEntry> entry : manifest.entrySet()) {
+                                String name = entry.getKey();
+                                String desc = entry.getValue().description;
+                                if (desc != null && !desc.isEmpty()) {
+                                    builder.suggest(name, Component.literal("§7" + desc));
+                                } else {
+                                    builder.suggest(name);
+                                }
+                            }
+                            return builder.build();
+                        }))
+                        .executes(ctx -> {
+                            String function = StringArgumentType.getString(ctx, "function");
+                            FunctionManager.downloadFunction(function, ctx.getSource());
+                            return 1;
+                        })
+                    )
+                )
+                .then(Commands.literal("listdownloadablefunctions")
+                    .executes(ctx -> {
+                        FunctionManager.listDownloadableFunctions(ctx.getSource());
+                        return 1;
+                    })
+                )
+                .then(Commands.literal("setvar")
+                    .then(Commands.argument("key", StringArgumentType.word())
+                        .then(Commands.argument("value", StringArgumentType.greedyString())
+                            .executes(ctx -> {
+                                String key = StringArgumentType.getString(ctx, "key");
+                                String value = StringArgumentType.getString(ctx, "value");
+                                return VariableManager.setVariable(ctx.getSource(), key, value);
+                            })
+                        )
+                    )
+                )
+                .then(Commands.literal("syntax")
+                    .executes(ctx -> {
+                        UpdateChecker.sendUpdateMessage(ctx.getSource());
+                        CommandSourceStack source = ctx.getSource();
+                        Map<String, CommandSyntax> syntaxes = SyntaxManager.getAllSyntaxes();
+                        if (syntaxes.isEmpty()) {
+                            source.sendSuccess(() -> Component.literal("§cNo custom syntaxes defined."), false);
+                            return 0;
+                        }
+                        source.sendSuccess(() -> Component.literal("§6§lCustom Syntax Patterns:"), false);
+                        for (CommandSyntax syntax : syntaxes.values()) {
+                            String desc = syntax.getDescription();
+                            source.sendSuccess(() -> Component.literal("§e  " + syntax.getPattern() + " §7— " + (desc != null ? desc : "No description")), false);
+                        }
                         return 1;
                     })
                 )

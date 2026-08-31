@@ -1,0 +1,103 @@
+---- Minecraft Crash Report ----
+// Hi. I'm Minecraft, and I'm a crashaholic.
+
+Time: 2026-08-31 15:15:50
+Description: Exception in server tick loop
+
+java.lang.IllegalStateException: Failed to initialize server
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.server.MinecraftServer.runServer(MinecraftServer.java:671) ~[neoforge-21.1.233.jar%23195!/:?] {re:classloading,pl:accesstransformer:B}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.server.MinecraftServer.lambda$spin$2(MinecraftServer.java:267) ~[neoforge-21.1.233.jar%23195!/:?] {re:classloading,pl:accesstransformer:B}
+	at java.base/java.lang.Thread.run(Thread.java:1583) [?:?] {}
+
+
+A detailed walkthrough of the error, its code path and all known details is as follows:
+---------------------------------------------------------------------------------------
+
+-- System Details --
+Details:
+	Minecraft Version: 1.21.1
+	Minecraft Version ID: 1.21.1
+	Operating System: Windows 11 (amd64) version 10.0
+	Java Version: 21.0.2, Microsoft
+	Java VM Version: OpenJDK 64-Bit Server VM (mixed mode, sharing), Microsoft
+	Memory: 65631920 bytes (62 MiB) / 562036736 bytes (536 MiB) up to 8568963072 bytes (8172 MiB)
+	CPUs: 8
+	Processor Vendor: GenuineIntel
+	Processor Name: Intel(R) Core(TM) i7-6700K CPU @ 4.00GHz
+	Identifier: Intel64 Family 6 Model 94 Stepping 3
+	Microarchitecture: Skylake (Client)
+	Frequency (GHz): 4.01
+	Number of physical packages: 1
+	Number of physical CPUs: 4
+	Number of logical CPUs: 8
+	Graphics card #0 name: NVIDIA TITAN RTX
+	Graphics card #0 vendor: NVIDIA
+	Graphics card #0 VRAM (MiB): 24576.00
+	Graphics card #0 deviceId: VideoController1
+	Graphics card #0 versionInfo: 32.0.15.7283
+	Graphics card #1 name: NVIDIA TITAN RTX
+	Graphics card #1 vendor: NVIDIA
+	Graphics card #1 VRAM (MiB): 24576.00
+	Graphics card #1 deviceId: VideoController2
+	Graphics card #1 versionInfo: 32.0.15.7283
+	Graphics card #2 name: Intel(R) HD Graphics 530
+	Graphics card #2 vendor: Intel Corporation
+	Graphics card #2 VRAM (MiB): 1024.00
+	Graphics card #2 deviceId: VideoController3
+	Graphics card #2 versionInfo: 31.0.101.2111
+	Graphics card #3 name: NVIDIA GeForce RTX 3070
+	Graphics card #3 vendor: NVIDIA
+	Graphics card #3 VRAM (MiB): 8192.00
+	Graphics card #3 deviceId: VideoController4
+	Graphics card #3 versionInfo: 32.0.15.6094
+	Memory slot #0 capacity (MiB): 8192.00
+	Memory slot #0 clockSpeed (GHz): 2.20
+	Memory slot #0 type: DDR4
+	Memory slot #1 capacity (MiB): 8192.00
+	Memory slot #1 clockSpeed (GHz): 2.20
+	Memory slot #1 type: DDR4
+	Memory slot #2 capacity (MiB): 8192.00
+	Memory slot #2 clockSpeed (GHz): 2.20
+	Memory slot #2 type: DDR4
+	Memory slot #3 capacity (MiB): 8192.00
+	Memory slot #3 clockSpeed (GHz): 2.20
+	Memory slot #3 type: DDR4
+	Virtual memory max (MiB): 48047.55
+	Virtual memory used (MiB): 36031.39
+	Swap memory total (MiB): 15360.00
+	Swap memory used (MiB): 147.46
+	Space in storage for jna.tmpdir (MiB): <path not set>
+	Space in storage for org.lwjgl.system.SharedLibraryExtractPath (MiB): <path not set>
+	Space in storage for io.netty.native.workdir (MiB): <path not set>
+	Space in storage for java.io.tmpdir (MiB): available: 13945.26, total: 475956.25
+	Space in storage for workdir (MiB): available: 647446.75, total: 976745.25
+	JVM Flags: 0 total; 
+	Server Running: true
+	Active Data Packs: vanilla, mod_data, mod/nekkycommandmaker, mod/neoforge
+	Available Data Packs: bundle, trade_rebalance, vanilla, mod/nekkycommandmaker, mod/neoforge, mod_data
+	Enabled Feature Flags: minecraft:vanilla
+	World Generation: Stable
+	World Seed: -7844285792739529154
+	Is Modded: Definitely; Server brand changed to 'neoforge'
+	Type: Dedicated Server (map_server.txt)
+	ModLauncher: 11.0.5+main.901c6ea8
+	ModLauncher launch target: forgeserverdev
+	ModLauncher services: 
+		sponge-mixin-0.15.2+mixin.0.8.7.jar mixin PLUGINSERVICE 
+		loader-4.0.42.jar slf4jfixer PLUGINSERVICE 
+		loader-4.0.42.jar runtime_enum_extender PLUGINSERVICE 
+		at-modlauncher-10.0.1.jar accesstransformer PLUGINSERVICE 
+		loader-4.0.42.jar runtimedistcleaner PLUGINSERVICE 
+		modlauncher-11.0.5.jar mixin TRANSFORMATIONSERVICE 
+		modlauncher-11.0.5.jar fml TRANSFORMATIONSERVICE 
+	FML Language Providers: 
+		javafml@4.0
+		lowcodefml@4.0
+		minecraft@4.0
+	Mod List: 
+		neoforge-21.1.233.jar                             |Minecraft                     |minecraft                     |1.21.1              |Manifest: NOSIGNATURE
+		main                                              |Nek's Command Maker!          |nekkycommandmaker             |3.2.1               |Manifest: NOSIGNATURE
+		neoforge-21.1.233.jar                             |NeoForge                      |neoforge                      |21.1.233            |Manifest: NOSIGNATURE
+	Crash Report UUID: 46377202-1b65-4725-9625-4da216b8172f
+	FML: 4.0.42
+	NeoForge: 21.1.233

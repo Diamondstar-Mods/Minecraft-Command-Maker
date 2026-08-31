@@ -1,0 +1,69 @@
+plugins {
+    id 'net.fabricmc.fabric-loom' version "${loom_version}"
+    id 'maven-publish'
+}
+
+version = project.mod_version
+description = "Compatible with Fabric. Supports Minecraft 26.x. Client-only version."
+group = 'io.github.diamondstar_mods'
+
+base {
+    archivesName = project.archives_base_name + "-client-1.22"
+}
+
+repositories {
+    mavenCentral()
+    maven { url 'https://maven.fabricmc.net/' }
+    maven { url 'https://api.modrinth.com/maven' }
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDirs = ['src/main/resources']
+        }
+    }
+}
+
+loom {
+    mods {
+        "modid" {
+            sourceSet sourceSets.main
+        }
+    }
+}
+
+dependencies {
+    // MC 26.x has no yarn/intermediary mappings — classes are compiled
+    // against Mojang official names directly (same as server-1.22).
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    implementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    implementation "com.google.code.gson:gson:2.10.1"
+}
+
+processResources {
+    inputs.property "version", project.version
+    filesMatching("fabric.mod.json") {
+        expand "version": inputs.properties["version"]
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    it.options.release = 21
+}
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
+    withSourcesJar()
+    sourceCompatibility = JavaVersion.toVersion(25)
+    targetCompatibility = JavaVersion.toVersion(25)
+}
+
+jar {
+    from("LICENSE") {
+        rename { "CMDMakerFabric-client-1.22" }
+    }
+}
+

@@ -25,3 +25,8 @@
 /cmd listdownloadablefunctions
 /cmd downloadfunction funnybutton
 /cmd help
+/cmd gui
+/cmd add hello say hi
+/hello
+/cmd add person summon sheep
+/person
