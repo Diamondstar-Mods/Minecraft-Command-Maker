@@ -96,7 +96,7 @@ Details:
 		minecraft@4.0
 	Mod List: 
 		neoforge-21.1.233.jar                             |Minecraft                     |minecraft                     |1.21.1              |Manifest: NOSIGNATURE
-		main                                              |Nek's Command Maker!          |nekkycommandmaker             |3.2.1               |Manifest: NOSIGNATURE
+		main                                              |Nek's Command Maker!          |nekkycommandmaker             |4.0.0-rc.1               |Manifest: NOSIGNATURE
 		neoforge-21.1.233.jar                             |NeoForge                      |neoforge                      |21.1.233            |Manifest: NOSIGNATURE
 	Crash Report UUID: 46377202-1b65-4725-9625-4da216b8172f
 	FML: 4.0.42

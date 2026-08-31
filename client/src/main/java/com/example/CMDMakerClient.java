@@ -39,7 +39,7 @@ public class CMDMakerClient implements ClientModInitializer {
             registerCmdCommandCompat(dispatcher);
         });
 
-        LOGGER.info("CMDMaker Client mod initialized! (v3.2.1)");
+        LOGGER.info("CMDMaker Client mod initialized! (v4.0.0-rc.1)");
     }
 
     // ---- /cmd (consolidated) ----

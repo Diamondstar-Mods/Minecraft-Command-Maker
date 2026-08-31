@@ -71,7 +71,7 @@ public class ModuleManager {
                 meta.addProperty("version", "1.0");
                 meta.addProperty("author", source.getTextName());
                 meta.addProperty("description", "Exported from Command Maker");
-                meta.addProperty("cmVersion", "3.2.1");
+                meta.addProperty("cmVersion", "4.0.0-rc.1");
                 addZipEntry(zos, "module.json", new GsonBuilder().setPrettyPrinting().create().toJson(meta).getBytes());
 
                 // aliases.json
